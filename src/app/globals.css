@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Gallery transition effects */
+.transition-fade {
+  transition: opacity 500ms ease-in-out;
+}
+
+.transition-slide {
+  transition: transform 500ms ease-in-out;
+}
+
+.transition-scale {
+  transition: transform 500ms ease-in-out;
+}
+
+.transition-rotate {
+  transition: transform 500ms ease-in-out;
+}
+
+/* Add more transition effects here */
