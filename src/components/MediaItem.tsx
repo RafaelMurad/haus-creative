@@ -64,7 +64,8 @@ export default function MediaItem({
             className="w-full h-full object-cover"
             onLoad={onLoad}
             priority={false}
-            sizes="(max-width: 768px) 100vw, 700px"
+            // Responsive sizes: 100vw on mobile, 50vw on tablet, 33vw on desktop
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         );
     }

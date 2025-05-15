@@ -104,14 +104,14 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const getLayoutClass = (): string => {
     switch (gallery.layout) {
       case "grid":
-        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-screen";
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[60vh] md:min-h-screen w-full";
       case "masonry":
-        return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 h-screen";
+        return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 min-h-[60vh] md:min-h-screen w-full";
       case "carousel":
       case "fullscreen":
-        return "relative h-screen w-full";
+        return "relative min-h-[60vh] md:min-h-screen w-full";
       default:
-        return "flex flex-wrap gap-4 h-screen";
+        return "flex flex-wrap gap-4 min-h-[60vh] md:min-h-screen w-full";
     }
   };
 
@@ -189,7 +189,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
         return (
           <div className="relative h-full w-full overflow-hidden flex items-center justify-center">
-            <div className="media-item relative overflow-hidden w-full h-full flex items-center justify-center">
+            <div className="media-item relative overflow-hidden w-full h-full flex items-center justify-center min-h-[60vh] md:min-h-screen">
               {activeItem.type === "video" ? (
                 <video
                   src={activeItem.url}
@@ -281,11 +281,10 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   };
 
   return (
-    <section className="gallery-row h-screen w-screen m-0 p-0">
+    <section className="gallery-row w-full m-0 p-0 min-h-[60vh] md:min-h-screen">
       <div
         ref={containerRef}
         className={getLayoutClass() + " h-full w-full m-0 p-0"}
-        style={{ height: "100vh", width: "100vw" }}
       >
         {renderLayout()}
       </div>
