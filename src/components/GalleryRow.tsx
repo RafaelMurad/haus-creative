@@ -5,6 +5,7 @@ import MediaItem from "./MediaItem";
 import useGsapAnimation from "../hooks/useGsapAnimation";
 import { GalleryConfig, MediaItem as MediaItemType } from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
+import gsap from "gsap";
 
 interface GalleryRowProps {
   gallery: GalleryConfig;
@@ -12,6 +13,8 @@ interface GalleryRowProps {
 
 export default function GalleryRow({ gallery }: GalleryRowProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLDivElement>(null);
+  const prevRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
@@ -138,18 +141,46 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return () => clearInterval(interval);
   }, [isTransitioning, prevIndex, gallery.layout, isReady]);
 
-  // Improved crossfade transition logic
+  // Improved GSAP crossfade transition logic
   const triggerNextSlide = (): void => {
     if (isTransitioning || !gallery.items.length) return;
     const next = (activeIndex + 1) % gallery.items.length;
     setPrevIndex(activeIndex);
     setActiveIndex(next);
     setIsTransitioning(true);
-    setTimeout(() => {
-      setPrevIndex(null);
-      setIsTransitioning(false);
-    }, 400); // 400ms crossfade
   };
+
+  // Animate crossfade when prevIndex changes
+  useEffect(() => {
+    if (prevIndex === null || !isTransitioning) return;
+    if (!prevRef.current || !activeRef.current) return;
+    // Set initial state for new image
+    gsap.set(activeRef.current, {
+      opacity: 0,
+      scale: 1.05,
+      filter: "blur(4px)",
+    });
+    // Animate previous out
+    gsap.to(prevRef.current, {
+      opacity: 0,
+      scale: 0.95,
+      filter: "blur(8px)",
+      duration: 0.5,
+      ease: "power2.inOut",
+    });
+    // Animate current in
+    gsap.to(activeRef.current, {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px)",
+      duration: 0.5,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setPrevIndex(null);
+        setIsTransitioning(false);
+      },
+    });
+  }, [prevIndex, isTransitioning]);
 
   // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {
@@ -168,9 +199,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
             {/* Previous image (fading out) */}
             {prevItem && (
               <div
-                className={`media-item absolute inset-0 transition-opacity duration-400 ${
-                  isTransitioning ? "opacity-0" : "opacity-100"
-                }`}
+                ref={prevRef}
+                className="media-item absolute inset-0"
                 style={{ zIndex: 1 }}
               >
                 <MediaItem
@@ -181,7 +211,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
             )}
             {/* Current image (fading in) */}
             <div
-              className={`media-item absolute inset-0 transition-opacity duration-400 opacity-100`}
+              ref={activeRef}
+              className="media-item absolute inset-0"
               style={{ zIndex: 2 }}
             >
               <MediaItem
