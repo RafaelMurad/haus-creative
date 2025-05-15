@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useLayoutEffect, useState, useRef, useEffect } from "react";
 import MediaItem from "./MediaItem";
 import useGsapAnimation from "../hooks/useGsapAnimation";
 import { GalleryConfig, MediaItem as MediaItemType } from "../types";
@@ -136,7 +136,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       if (!isTransitioning && prevIndex === null) {
         triggerNextSlide();
       }
-    }, 4000);
+    }, 1500); // Show each image for 2 seconds
 
     return () => clearInterval(interval);
   }, [isTransitioning, prevIndex, gallery.layout, isReady]);
@@ -151,31 +151,37 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   };
 
   // Animate crossfade when prevIndex changes
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (prevIndex === null || !isTransitioning) return;
     if (!prevRef.current || !activeRef.current) return;
-    // Use config-driven crossfade values
     const crossfade = gallery.animation.crossfade || {};
-    const duration = gallery.animation.duration || 0.25;
-    const ease = gallery.animation.ease || 'power2.inOut';
-    // Set initial state for new image
-    gsap.set(activeRef.current, crossfade.from || { opacity: 0, scale: 1.05, filter: 'blur(4px)' });
-    // Animate previous out
-    gsap.to(prevRef.current, {
-      ...(crossfade.prevOut || { opacity: 0, scale: 0.95, filter: 'blur(8px)' }),
-      duration,
-      ease,
-    });
-    // Animate current in
-    gsap.to(activeRef.current, {
-      ...(crossfade.to || { opacity: 1, scale: 1, filter: 'blur(0px)' }),
-      duration,
-      ease,
+    const duration = 0.7; // longer fade for smoother effect
+    const overlap = duration; // full overlap for true crossfade
+    const ease = gallery.animation.ease || "power2.inOut";
+    gsap.set(activeRef.current, crossfade.from || { opacity: 0 });
+    const tl = gsap.timeline({
       onComplete: () => {
         setPrevIndex(null);
         setIsTransitioning(false);
       },
     });
+    tl.to(
+      prevRef.current,
+      {
+        ...(crossfade.prevOut || { opacity: 0 }),
+        duration,
+        ease,
+      },
+      0
+    ).to(
+      activeRef.current,
+      {
+        ...(crossfade.to || { opacity: 1 }),
+        duration,
+        ease,
+      },
+      0 // start fade in at the same time as fade out
+    );
   }, [prevIndex, isTransitioning]);
 
   // Define a no-op function for onLoad to satisfy the type requirements
@@ -191,7 +197,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
         return (
-          <div className="relative h-full w-full overflow-hidden flex items-center justify-center">
+          <div className="relative h-full w-full overflow-hidden flex items-center justify-center bg-black">
             {/* Previous image (fading out) */}
             {prevItem && (
               <div
