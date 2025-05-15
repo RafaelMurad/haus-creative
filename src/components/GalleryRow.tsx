@@ -13,6 +13,7 @@ interface GalleryRowProps {
 export default function GalleryRow({ gallery }: GalleryRowProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [gsapInstance, setGsapInstance] = useState<any>(null);
@@ -27,6 +28,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       isMounted = false;
     };
   }, []);
+
+  // Set isReady immediately for carousel/fullscreen layouts
+  useEffect(() => {
+    if (gallery.layout === "carousel" || gallery.layout === "fullscreen") {
+      setIsReady(true);
+    }
+  }, [gallery.layout]);
 
   // Set up the elements ref without ScrollTrigger initially
   const { elementsRef } = useGsapAnimation(
@@ -122,56 +130,25 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (!isReady) return;
 
     const interval = setInterval(() => {
-      if (!isTransitioning) {
-        nextSlide();
+      if (!isTransitioning && prevIndex === null) {
+        triggerNextSlide();
       }
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isTransitioning, gallery.layout, isReady]);
+  }, [isTransitioning, prevIndex, gallery.layout, isReady]);
 
-  // Carousel transition logic
-  const nextSlide = (): void => {
+  // Improved crossfade transition logic
+  const triggerNextSlide = (): void => {
     if (isTransitioning || !gallery.items.length) return;
-
+    const next = (activeIndex + 1) % gallery.items.length;
+    setPrevIndex(activeIndex);
+    setActiveIndex(next);
     setIsTransitioning(true);
-    const nextIndex = (activeIndex + 1) % gallery.items.length;
-
-    // Use GSAP to create a fade effect
-    const container = containerRef.current?.querySelector(".media-item");
-
-    if (container && gsapInstance) {
-      // Create a timeline for smooth transition
-      const timeline = gsapInstance.timeline({
-        onComplete: () => {
-          setActiveIndex(nextIndex);
-          // Immediately update the image source by triggering a state change
-
-          // Then fade the new image back in
-          gsapInstance.to(container, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            ease: "power2.inOut",
-            onComplete: () => {
-              setIsTransitioning(false);
-            },
-          });
-        },
-      });
-
-      // Fade out current image
-      timeline.to(container, {
-        opacity: 0,
-        scale: 0.97,
-        duration: 0.6,
-        ease: "power2.inOut",
-      });
-    } else {
-      // Fallback if container not found
-      setActiveIndex(nextIndex);
+    setTimeout(() => {
+      setPrevIndex(null);
       setIsTransitioning(false);
-    }
+    }, 400); // 400ms crossfade
   };
 
   // Define a no-op function for onLoad to satisfy the type requirements
@@ -183,46 +160,38 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const renderLayout = () => {
     switch (gallery.layout) {
       case "carousel":
-      case "fullscreen":
-        // Use a single container with a single image that changes source
+      case "fullscreen": {
         const activeItem = gallery.items[activeIndex];
-
+        const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
         return (
           <div className="relative h-full w-full overflow-hidden flex items-center justify-center">
-            <div className="media-item relative overflow-hidden w-full h-full flex items-center justify-center min-h-[60vh] md:min-h-screen">
-              {activeItem.type === "video" ? (
-                <video
-                  src={activeItem.url}
-                  poster={activeItem.thumbUrl}
-                  controls={false}
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  playsInline={true}
+            {/* Previous image (fading out) */}
+            {prevItem && (
+              <div
+                className={`media-item absolute inset-0 transition-opacity duration-400 ${
+                  isTransitioning ? "opacity-0" : "opacity-100"
+                }`}
+                style={{ zIndex: 1 }}
+              >
+                <MediaItem
+                  item={prevItem}
                   className="w-full h-full object-cover"
-                  ref={(el) => {
-                    if (elementsRef.current) {
-                      elementsRef.current[activeIndex] = el;
-                    }
-                  }}
-                  onLoadedData={handleMediaLoad}
                 />
-              ) : (
-                <img
-                  src={activeItem.url || activeItem.imageUrl}
-                  alt={activeItem.title || ""}
-                  className="w-full h-full object-cover"
-                  ref={(el) => {
-                    if (elementsRef.current) {
-                      elementsRef.current[activeIndex] = el;
-                    }
-                  }}
-                  onLoad={handleMediaLoad}
-                />
-              )}
+              </div>
+            )}
+            {/* Current image (fading in) */}
+            <div
+              className={`media-item absolute inset-0 transition-opacity duration-400 opacity-100`}
+              style={{ zIndex: 2 }}
+            >
+              <MediaItem
+                item={activeItem}
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         );
+      }
 
       case "grid":
       case "masonry": {
