@@ -39,6 +39,11 @@ export interface AnimationConfig {
     stagger?: number;
     from?: Record<string, any>;
     to?: Record<string, any>;
+    crossfade?: {
+        from?: Record<string, any>;
+        to?: Record<string, any>;
+        prevOut?: Record<string, any>;
+    };
 }
 
 export interface GalleryConfig {

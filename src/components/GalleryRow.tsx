@@ -154,27 +154,23 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   useEffect(() => {
     if (prevIndex === null || !isTransitioning) return;
     if (!prevRef.current || !activeRef.current) return;
+    // Use config-driven crossfade values
+    const crossfade = gallery.animation.crossfade || {};
+    const duration = gallery.animation.duration || 0.25;
+    const ease = gallery.animation.ease || 'power2.inOut';
     // Set initial state for new image
-    gsap.set(activeRef.current, {
-      opacity: 0,
-      scale: 1.05,
-      filter: "blur(4px)",
-    });
+    gsap.set(activeRef.current, crossfade.from || { opacity: 0, scale: 1.05, filter: 'blur(4px)' });
     // Animate previous out
     gsap.to(prevRef.current, {
-      opacity: 0,
-      scale: 0.95,
-      filter: "blur(8px)",
-      duration: 0.5,
-      ease: "power2.inOut",
+      ...(crossfade.prevOut || { opacity: 0, scale: 0.95, filter: 'blur(8px)' }),
+      duration,
+      ease,
     });
     // Animate current in
     gsap.to(activeRef.current, {
-      opacity: 1,
-      scale: 1,
-      filter: "blur(0px)",
-      duration: 0.5,
-      ease: "power2.inOut",
+      ...(crossfade.to || { opacity: 1, scale: 1, filter: 'blur(0px)' }),
+      duration,
+      ease,
       onComplete: () => {
         setPrevIndex(null);
         setIsTransitioning(false);

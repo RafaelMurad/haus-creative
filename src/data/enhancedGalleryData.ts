@@ -9,15 +9,12 @@ const enhancedGalleryData: GalleryConfig[] = [
         layout: 'carousel',
         animation: {
             effect: 'fade',
-            duration: 0.8,
+            duration: 0.25,
             ease: 'power2.inOut',
-            from: {
-                opacity: 0,
-                scale: 0.97
-            },
-            to: {
-                opacity: 1,
-                scale: 1
+            crossfade: {
+                from: { opacity: 0, scale: 1.05, filter: 'blur(4px)' },
+                to: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+                prevOut: { opacity: 0, scale: 0.95, filter: 'blur(8px)' }
             }
         },
         items: [
