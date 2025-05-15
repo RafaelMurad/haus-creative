@@ -9,6 +9,9 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        times: ['var(--font-times)', 'Times New Roman', 'serif'],
+        diatype: ['var(--font-diatype)', 'sans-serif'],
+        'monument-grotesk-mono': ['var(--font-monument-grotesk-mono)', 'monospace'],
       },
       colors: {
         cream: '#f5f5f0',
