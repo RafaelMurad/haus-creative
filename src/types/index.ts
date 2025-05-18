@@ -31,10 +31,36 @@ export interface MediaItem {
     };
 }
 
+// Define animation effects as string literals
+export type AnimationEffectType = 'fade' | 'slide' | 'scale' | 'none';
+
+// Define ease functions as string literals
+export type EaseFunctionType = 'power1.in' | 'power1.out' | 'power1.inOut' |
+    'power2.in' | 'power2.out' | 'power2.inOut' | 'none';
+
+// Constants for compile-time safety and runtime use
+export const AnimationEffects = {
+    FADE: 'fade',
+    SLIDE: 'slide',
+    SCALE: 'scale',
+    NONE: 'none'
+} as const;
+
+export const EaseFunctions = {
+    POWER1_IN: 'power1.in',
+    POWER1_OUT: 'power1.out',
+    POWER1_INOUT: 'power1.inOut',
+    POWER2_IN: 'power2.in',
+    POWER2_OUT: 'power2.out',
+    POWER2_INOUT: 'power2.inOut',
+    NONE: 'none'
+} as const;
+
+// Update AnimationConfig interface
 export interface AnimationConfig {
-    effect: string;
+    effect: AnimationEffectType;
     duration: number;
-    ease: string;
+    ease: EaseFunctionType;
     delay?: number;
     stagger?: number;
     from?: Record<string, any>;
@@ -48,7 +74,17 @@ export interface AnimationConfig {
 
 interface ContainerConfig {
     width?: string;  // e.g. '61%'
-    alignment?: 'left' | 'right' | 'center';
+    minWidth?: string; // e.g. '300px'
+    maxWidth?: string; // e.g. '61vw'
+    height?: string; // e.g. '50vh'
+    minHeight?: string; // e.g. '200px'
+    maxHeight?: string; // e.g. '80vh'
+    aspectRatio?: string; // e.g. '16/9'
+    alignment?: 'left' | 'right' | 'center'; // Corresponds to margin: auto for center
+    background?: string; // e.g. 'rgba(255,255,255,0.9)'
+    padding?: string; // e.g. '1rem' or '10px 20px'
+    margin?: string; // e.g. '0 auto' or '1rem'
+    borderRadius?: string; // e.g. '12px' or '50%'
 }
 
 export interface GalleryConfig {

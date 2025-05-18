@@ -24,10 +24,12 @@ interface ScrollTriggerOptions {
     [key: string]: any;
 }
 
+import { AnimationEffectType, EaseFunctionType } from '../types';
+
 interface AnimationOptions {
-    effect?: string;
+    effect?: AnimationEffectType;
     duration?: number;
-    ease?: string;
+    ease?: EaseFunctionType;
     delay?: number;
     stagger?: number;
     from?: Record<string, any>;

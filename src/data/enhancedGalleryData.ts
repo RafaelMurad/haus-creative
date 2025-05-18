@@ -1,5 +1,5 @@
 // Enhanced gallery data structure with support for multiple media types and GSAP animations
-import { GalleryConfig } from '../types';
+import { GalleryConfig, AnimationEffects, EaseFunctions } from '../types';
 
 const enhancedGalleryData: GalleryConfig[] = [
     {
@@ -8,26 +8,36 @@ const enhancedGalleryData: GalleryConfig[] = [
         description: 'First gallery showcase',
         layout: 'carousel',
         animation: {
-            effect: 'fade',
+            effect: AnimationEffects.FADE,
             duration: 0.7,
-            ease: 'power2.inOut'
+            ease: EaseFunctions.POWER2_INOUT
         },
         items: []  // Initialize empty array to satisfy TypeScript
     },
     {
         id: 'gallery2',
-        title: 'Gallery 2',
-        description: 'Second gallery showcase',
+        title: 'Product Collection',
+        description: 'Full catalog of available products',
         layout: 'carousel',
         animation: {
-            effect: 'fade',
-            duration: 0.7,
-            ease: 'power2.inOut'
+            effect: AnimationEffects.NONE,
+            duration: 0,
+            ease: EaseFunctions.NONE
         },
         container: {
-            width: '61%',
-            alignment: 'right'
+            width: '80%',
+            maxWidth: '100vw',
+            height: '70vh',
+            minHeight: '400px',
+            maxHeight: '90vh',
+            aspectRatio: 'auto',
+            alignment: 'center',
+            background: 'rgba(255,255,255,0.9)',
+            borderRadius: '12px',
+            padding: '1rem',
+            margin: '0 auto',
         },
+        transitionTime: 700,
         items: []  // Initialize empty array to satisfy TypeScript
     }
 ];

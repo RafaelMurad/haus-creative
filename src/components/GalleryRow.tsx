@@ -3,7 +3,11 @@
 import { useLayoutEffect, useState, useRef, useEffect } from "react";
 import MediaItem from "./MediaItem";
 import useGsapAnimation from "../hooks/useGsapAnimation";
-import { GalleryConfig, MediaItem as MediaItemType } from "../types";
+import {
+  GalleryConfig,
+  MediaItem as MediaItemType,
+  AnimationEffects,
+} from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
 import gsap from "gsap";
 
@@ -115,45 +119,103 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     const baseClasses = "relative";
     if (!gallery.container) return baseClasses + " w-full";
 
-    const classes = [baseClasses];
+    return baseClasses;
+  };
 
-    // Add width if specified
+  const getContainerStyle = (): React.CSSProperties => {
+    if (!gallery.container) return { width: "100%", height: "100%" };
+
+    const styles: React.CSSProperties = {};
+
+    // Width properties
     if (gallery.container.width) {
-      classes.push(`w-[${gallery.container.width}]`);
+      styles.width = gallery.container.width;
     } else {
-      classes.push("w-full");
+      styles.width = "100%";
     }
 
-    // Add alignment classes
+    if (gallery.container.minWidth) {
+      styles.minWidth = gallery.container.minWidth;
+    }
+
+    if (gallery.container.maxWidth) {
+      styles.maxWidth = gallery.container.maxWidth;
+    }
+
+    // Height properties
+    if (gallery.container.height) {
+      styles.height = gallery.container.height;
+    } else {
+      // Default height if not specified - needed for proper layout
+      styles.height = "100%";
+    }
+
+    if (gallery.container.minHeight) {
+      styles.minHeight = gallery.container.minHeight;
+    }
+
+    if (gallery.container.maxHeight) {
+      styles.maxHeight = gallery.container.maxHeight;
+    }
+
+    // Aspect ratio
+    if (gallery.container.aspectRatio) {
+      styles.aspectRatio = gallery.container.aspectRatio;
+    }
+
+    // Add alignment styles
     switch (gallery.container.alignment) {
       case "right":
-        classes.push("ml-auto mr-0");
+        styles.marginLeft = "auto";
+        styles.marginRight = "0";
         break;
       case "center":
-        classes.push("mx-auto");
+        styles.marginLeft = "auto";
+        styles.marginRight = "auto";
         break;
       case "left":
-        classes.push("mr-auto ml-0");
-        break;
-      default:
-        // Default to full width with no special alignment
+        styles.marginRight = "auto";
+        styles.marginLeft = "0";
         break;
     }
 
-    return classes.join(" ");
+    // Additional style properties
+    if (gallery.container.padding) {
+      styles.padding = gallery.container.padding;
+    }
+
+    if (
+      gallery.container.margin &&
+      typeof gallery.container.margin === "string"
+    ) {
+      styles.margin = gallery.container.margin;
+    }
+
+    if (gallery.container.background) {
+      styles.background = gallery.container.background;
+    }
+
+    if (gallery.container.borderRadius) {
+      styles.borderRadius = gallery.container.borderRadius;
+    }
+
+    return styles;
   };
 
   // Handle different gallery layouts
   const getLayoutClass = (): string => {
     switch (gallery.layout) {
       case "grid":
+        // Grid layout handles its own width/height internally or via parent constraints
         return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[60vh] md:min-h-screen w-full";
       case "masonry":
         return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 min-h-[60vh] md:min-h-screen w-full";
       case "carousel":
       case "fullscreen":
+        // For carousel, always ensure it gets full height and handles overflow
         return "relative h-full w-full overflow-hidden flex items-center justify-center";
       default:
+        // Default layout also handles its own width or relies on parent
         return "flex flex-wrap gap-4 min-h-[60vh] md:min-h-screen w-full";
     }
   };
@@ -199,7 +261,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
     // Apply the animation based on the effect type
     switch (gallery.animation.effect) {
-      case "slide": {
+      case AnimationEffects.SLIDE: {
         gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
         const tl = gsapInstance.timeline({
           onComplete: () => {
@@ -230,7 +292,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         break;
       }
 
-      case "scale": {
+      case AnimationEffects.SCALE: {
         gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
         const tl = gsapInstance.timeline({
           onComplete: () => {
@@ -303,9 +365,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       case "fullscreen": {
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
+
         return (
-          <div className="relative h-full w-full overflow-hidden flex items-center justify-center bg-black">
-            {/* Previous image (fading out) */}
+          <div
+            className="relative overflow-hidden flex items-center justify-center"
+            style={{ height: "100%", width: "100%" }}
+          >
+            {/* Previous slide (fading out) */}
             {prevItem && (
               <div
                 ref={prevRef}
@@ -318,7 +384,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 />
               </div>
             )}
-            {/* Current image (fading in) */}
+            {/* Current slide (fading in) */}
             <div
               ref={activeRef}
               className="media-item absolute inset-0"
@@ -389,13 +455,20 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     }
   };
 
+  // For the outer gallery-row container, we always ensure it's full width
+  // But the inner content container can be styled with custom properties
+  const sectionHeight = gallery.container?.height
+    ? undefined // If container has explicit height, don't set min-height on section
+    : "min-h-[60vh] md:min-h-screen";
+
   return (
-    <section className="gallery-row w-full m-0 p-0 min-h-[60vh] md:min-h-screen">
+    <section className={`gallery-row w-full m-0 p-0 ${sectionHeight}`}>
       <div
         ref={containerRef}
-        className={`${getContainerClass()} ${getLayoutClass()}`}
+        className={getContainerClass()}
+        style={getContainerStyle()}
       >
-        {renderLayout()}
+        <div className={getLayoutClass()}>{renderLayout()}</div>
       </div>
     </section>
   );

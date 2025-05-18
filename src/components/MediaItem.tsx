@@ -7,15 +7,32 @@ import { MediaItem as MediaItemType } from "../types";
 interface MediaItemProps {
   item: MediaItemType;
   className?: string;
-  onLoad?: () => void; // Changed from required to optional
+  onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
+  containerConfig?: {
+    width?: string;
+    minWidth?: string;
+    maxWidth?: string;
+    height?: string;
+    minHeight?: string;
+    maxHeight?: string;
+    aspectRatio?: string;
+    alignment?: "center" | "left" | "right";
+    background?: string;
+    padding?: string;
+    margin?: string;
+    borderRadius?: string;
+  };
 }
 
-export default function MediaItem({
+import { memo } from "react";
+
+export default memo(function MediaItem({
   item,
   className = "",
   onLoad,
   forwardedRef,
+  containerConfig,
 }: MediaItemProps) {
   const isFullViewport = useRef<boolean>(false);
   const localRef = useRef<HTMLElement | null>(null);
@@ -46,10 +63,10 @@ export default function MediaItem({
             src={item.url || item.imageUrl || ""}
             alt={item.title}
             fill
-            style={{ objectFit: "cover" }}
-            className="w-full h-full object-cover"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            className="w-full h-full"
             onLoad={onLoad}
-            priority={true} // Always prioritize images in carousel/fullscreen layouts
+            priority={true}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         );
@@ -76,14 +93,66 @@ export default function MediaItem({
     ? { minHeight: "100vh", minWidth: "100vw", height: "100vh", width: "100vw" }
     : {};
 
+  // Container style builder
+  const getContentContainerStyle = () => {
+    if (!containerConfig) return {};
+    const styles: React.CSSProperties = {};
+    if (containerConfig.width) styles.width = containerConfig.width;
+    if (containerConfig.minWidth) styles.minWidth = containerConfig.minWidth;
+    if (containerConfig.maxWidth) styles.maxWidth = containerConfig.maxWidth;
+    if (containerConfig.height) styles.height = containerConfig.height;
+    if (containerConfig.minHeight) styles.minHeight = containerConfig.minHeight;
+    if (containerConfig.maxHeight) styles.maxHeight = containerConfig.maxHeight;
+    if (containerConfig.aspectRatio)
+      styles.aspectRatio = containerConfig.aspectRatio;
+    if (containerConfig.padding) styles.padding = containerConfig.padding;
+    if (containerConfig.background)
+      styles.background = containerConfig.background;
+    if (containerConfig.borderRadius)
+      styles.borderRadius = containerConfig.borderRadius;
+    if (containerConfig.margin) styles.margin = containerConfig.margin;
+
+    // If height is not explicitly set, add a min-height to ensure content is visible
+    if (!containerConfig.height && !containerConfig.minHeight) {
+      styles.minHeight = "300px"; // Add a default minimum height
+    }
+
+    // Ensure alignment is handled correctly for centering if specified
+    if (containerConfig.alignment === "center" && !containerConfig.margin) {
+      styles.marginLeft = "auto";
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "left" &&
+      !containerConfig.margin
+    ) {
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "right" &&
+      !containerConfig.margin
+    ) {
+      styles.marginLeft = "auto";
+    }
+    return styles;
+  };
+
+  // Simplify structure - one main container with content
+  if (containerConfig) {
+    return (
+      <div
+        className="media-content relative w-full h-full"
+        style={{
+          position: "relative",
+          minHeight: containerConfig.minHeight || "300px",
+          ...getContentContainerStyle(),
+        }}
+      >
+        {renderMedia()}
+      </div>
+    );
+  }
+
+  // No container: simple structure with just the necessary positioning
   return (
-    <div
-      className={`media-item relative overflow-hidden w-full h-full ${
-        isFullViewport.current ? "h-screen w-screen" : ""
-      } ${className}`}
-      style={style}
-    >
-      {renderMedia()}
-    </div>
+    <div className="media-content relative w-full h-full">{renderMedia()}</div>
   );
-}
+});
