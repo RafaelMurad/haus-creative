@@ -5,6 +5,10 @@ type AnimationPresets = {
 };
 
 export const animationPresets: AnimationPresets = {
+    none: {
+        duration: 0,
+        ease: 'none'
+    },
     fade: {
         duration: 0.8,
         ease: 'power2.inOut',

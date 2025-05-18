@@ -111,6 +111,38 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     preload((activeIndex - 1 + gallery.items.length) % gallery.items.length);
   }, [activeIndex, gallery.layout, gallery.items]);
 
+  const getContainerClass = (): string => {
+    const baseClasses = "relative";
+    if (!gallery.container) return baseClasses + " w-full";
+
+    const classes = [baseClasses];
+
+    // Add width if specified
+    if (gallery.container.width) {
+      classes.push(`w-[${gallery.container.width}]`);
+    } else {
+      classes.push("w-full");
+    }
+
+    // Add alignment classes
+    switch (gallery.container.alignment) {
+      case "right":
+        classes.push("ml-auto mr-0");
+        break;
+      case "center":
+        classes.push("mx-auto");
+        break;
+      case "left":
+        classes.push("mr-auto ml-0");
+        break;
+      default:
+        // Default to full width with no special alignment
+        break;
+    }
+
+    return classes.join(" ");
+  };
+
   // Handle different gallery layouts
   const getLayoutClass = (): string => {
     switch (gallery.layout) {
@@ -120,7 +152,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 min-h-[60vh] md:min-h-screen w-full";
       case "carousel":
       case "fullscreen":
-        return "relative min-h-[60vh] md:min-h-screen w-full";
+        return "relative h-full w-full overflow-hidden flex items-center justify-center";
       default:
         return "flex flex-wrap gap-4 min-h-[60vh] md:min-h-screen w-full";
     }
@@ -136,10 +168,16 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       if (!isTransitioning && prevIndex === null) {
         triggerNextSlide();
       }
-    }, 2000); // Show each image for 2 seconds
+    }, gallery.transitionTime || 2000); // Use configured time or default to 2 seconds
 
     return () => clearInterval(interval);
-  }, [isTransitioning, prevIndex, gallery.layout, isReady]);
+  }, [
+    isTransitioning,
+    prevIndex,
+    gallery.layout,
+    isReady,
+    gallery.transitionTime,
+  ]);
 
   // Improved GSAP crossfade transition logic
   const triggerNextSlide = (): void => {
@@ -355,7 +393,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     <section className="gallery-row w-full m-0 p-0 min-h-[60vh] md:min-h-screen">
       <div
         ref={containerRef}
-        className={getLayoutClass() + " h-full w-full m-0 p-0"}
+        className={`${getContainerClass()} ${getLayoutClass()}`}
       >
         {renderLayout()}
       </div>

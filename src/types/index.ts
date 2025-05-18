@@ -46,6 +46,11 @@ export interface AnimationConfig {
     };
 }
 
+interface ContainerConfig {
+    width?: string;  // e.g. '61%'
+    alignment?: 'left' | 'right' | 'center';
+}
+
 export interface GalleryConfig {
     id: string;
     title: string;
@@ -53,4 +58,6 @@ export interface GalleryConfig {
     layout?: 'grid' | 'carousel' | 'masonry' | 'fullscreen';
     animation: AnimationConfig;
     items: MediaItem[];
+    transitionTime?: number;  // Add transition time for carousel
+    container?: ContainerConfig;  // Add container configuration
 }

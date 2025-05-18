@@ -9,6 +9,7 @@ interface GalleryMeta {
         animation?: {
             effect: string;
         };
+        transitionTime?: number;  // New property for carousel transition timing
     };
 }
 
@@ -23,13 +24,18 @@ export class GalleryMetadataService {
                 description: 'Our most popular items this season',
                 layout: 'carousel',
                 animation: {
-                    effect: 'scale'
-                }
+                    effect: 'fade'
+                },
+                transitionTime: 2000  // 2 seconds for gallery1
             },
             'gallery2': {
                 title: 'Product Collection',
                 description: 'Full catalog of available products',
-                layout: 'grid'
+                layout: 'carousel',
+                animation: {
+                    effect: 'none'
+                },
+                transitionTime: 700  // 0.7 seconds for gallery2
             }
         };
     }

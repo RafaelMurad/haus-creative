@@ -74,6 +74,7 @@ export function generateGalleryConfig(
         description?: string;
         layout?: 'grid' | 'carousel' | 'masonry' | 'fullscreen';
         animation?: Partial<AnimationConfig>;
+        transitionTime?: number;
     }
 ): GalleryConfig {
     // Create media items from files
@@ -82,9 +83,9 @@ export function generateGalleryConfig(
     );
 
     // Get the animation config based on the effect
-    const effect = options?.animation?.effect || 'fade';
+    const effect = options?.animation?.effect || 'none';
     const defaultAnimation = getAnimationConfig(effect);
-    
+
     // Merge any custom animation options
     const mergedAnimation = {
         ...defaultAnimation,
@@ -97,6 +98,7 @@ export function generateGalleryConfig(
         description: options?.description || "",
         layout: options?.layout || 'grid',
         animation: mergedAnimation,
+        transitionTime: options?.transitionTime,
         items
     };
 }
