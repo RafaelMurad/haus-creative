@@ -87,6 +87,15 @@ interface ContainerConfig {
     borderRadius?: string; // e.g. '12px' or '50%'
 }
 
+interface GalleryContainerConfig {
+    padding?: string;
+    display?: string;
+    alignItems?: string;
+    justifyContent?: string;
+    minHeight?: string;
+    [key: string]: any;
+}
+
 export interface GalleryConfig {
     id: string;
     title: string;
@@ -96,4 +105,5 @@ export interface GalleryConfig {
     items: MediaItem[];
     transitionTime?: number;  // Add transition time for carousel
     container?: ContainerConfig;  // Add container configuration
+    galleryContainer?: GalleryContainerConfig;
 }

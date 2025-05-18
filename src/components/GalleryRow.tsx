@@ -10,6 +10,7 @@ import {
 } from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
 import gsap from "gsap";
+import { debugGalleryStructure } from "../utils/debugHelper";
 
 interface GalleryRowProps {
   gallery: GalleryConfig;
@@ -24,6 +25,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [gsapInstance, setGsapInstance] = useState<any>(null);
+
+  // Debug gallery structure in development
+  useEffect(() => {
+    debugGalleryStructure(gallery.id, gallery);
+  }, [gallery]);
 
   // Dynamically import gsap on mount
   useEffect(() => {
@@ -369,13 +375,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         return (
           <div
             className="relative overflow-hidden flex items-center justify-center"
-            style={{ height: "100%", width: "100%" }}
+            style={{ height: "100%", width: "100%", position: "relative" }}
           >
             {/* Previous slide (fading out) */}
             {prevItem && (
               <div
                 ref={prevRef}
-                className="media-item absolute inset-0"
+                className="media-item absolute inset-0 w-full h-full"
                 style={{ zIndex: 1 }}
               >
                 <MediaItem
@@ -387,7 +393,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
             {/* Current slide (fading in) */}
             <div
               ref={activeRef}
-              className="media-item absolute inset-0"
+              className="media-item absolute inset-0 w-full h-full"
               style={{ zIndex: 2 }}
             >
               <MediaItem
@@ -456,19 +462,37 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   };
 
   // For the outer gallery-row container, we always ensure it's full width
-  // But the inner content container can be styled with custom properties
+  // The inner content container is only rendered if gallery.container exists
   const sectionHeight = gallery.container?.height
     ? undefined // If container has explicit height, don't set min-height on section
     : "min-h-[60vh] md:min-h-screen";
 
   return (
     <section className={`gallery-row w-full m-0 p-0 ${sectionHeight}`}>
+      {/* Outer full-width container, configurable per gallery */}
       <div
+        className="w-full"
         ref={containerRef}
-        className={getContainerClass()}
-        style={getContainerStyle()}
+        style={gallery.galleryContainer ? { ...gallery.galleryContainer } : {}}
       >
-        <div className={getLayoutClass()}>{renderLayout()}</div>
+        <div
+          className="gallery-content"
+          style={
+            gallery.container
+              ? { ...getContainerStyle() }
+              : { position: "relative", width: "100%", height: "100%" }
+          }
+        >
+          <div className={getLayoutClass()}>
+            {gallery.items.length > 0 ? (
+              renderLayout()
+            ) : (
+              <div className="flex items-center justify-center h-full w-full text-gray-500">
+                No images found for this gallery
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

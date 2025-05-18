@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
+import { debugImageLoad } from "../utils/debugHelper";
 
 interface MediaItemProps {
   item: MediaItemType;
@@ -63,9 +64,28 @@ export default memo(function MediaItem({
             src={item.url || item.imageUrl || ""}
             alt={item.title}
             fill
-            style={{ objectFit: "cover", objectPosition: "center" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
             className="w-full h-full"
-            onLoad={onLoad}
+            onLoad={() => {
+              if (onLoad) onLoad();
+              // Log successful image load in development
+              if (process.env.NODE_ENV === "development") {
+                console.debug(
+                  `Successfully loaded image: ${item.url || item.imageUrl}`
+                );
+              }
+            }}
+            onError={() => {
+              // Log failed image load in development
+              if (process.env.NODE_ENV === "development") {
+                console.error(
+                  `Failed to load image: ${item.url || item.imageUrl}`
+                );
+              }
+            }}
             priority={true}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
@@ -84,14 +104,15 @@ export default memo(function MediaItem({
     }
   }, []);
 
+  // Style based on item size or container context
   const style = item.size
     ? {
         width: item.size.width,
         height: item.size.height,
       }
     : isFullViewport.current
-    ? { minHeight: "100vh", minWidth: "100vw", height: "100vh", width: "100vw" }
-    : {};
+    ? { height: "100%", width: "100%", position: "relative" }
+    : { position: "relative" };
 
   // Container style builder
   const getContentContainerStyle = () => {
@@ -153,6 +174,11 @@ export default memo(function MediaItem({
 
   // No container: simple structure with just the necessary positioning
   return (
-    <div className="media-content relative w-full h-full">{renderMedia()}</div>
+    <div
+      className="media-content relative w-full h-full"
+      style={{ position: "relative", minHeight: "200px", ...style }}
+    >
+      {renderMedia()}
+    </div>
   );
 });

@@ -41,9 +41,12 @@ async function loadGalleryConfigurations(): Promise<GalleryConfig[]> {
           ...dynamicConfig, // Start with dynamic config
           ...staticConfig, // Override with static config properties
           items: dynamicConfig.items, // Keep the dynamic items
-          // Ensure container config is properly handled
+          // Ensure container configs are properly handled
           container: staticConfig.container
             ? { ...staticConfig.container }
+            : undefined,
+          galleryContainer: staticConfig.galleryContainer
+            ? { ...staticConfig.galleryContainer }
             : undefined,
           // Ensure animation config is properly handled
           animation: staticConfig.animation
