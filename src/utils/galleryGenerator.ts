@@ -1,5 +1,6 @@
 import { GalleryConfig, MediaItem, AnimationConfig } from '../types';
 import { getAssetPath } from './assetPath';
+import { getAnimationConfig } from './animationConfigs';
 
 /**
  * Detects file type based on extension
@@ -54,14 +55,7 @@ export function createMediaItemFromFile(
  * @returns Default animation configuration
  */
 export function getDefaultAnimationConfig(): AnimationConfig {
-    return {
-        effect: 'fade',
-        duration: 0.8,
-        ease: 'power2.out',
-        stagger: 0.15,
-        from: { opacity: 0, y: 20 },
-        to: { opacity: 1, y: 0 }
-    };
+    return getAnimationConfig('fade');
 }
 
 /**
@@ -87,20 +81,22 @@ export function generateGalleryConfig(
         createMediaItemFromFile(galleryId, file, index)
     );
 
-    // Create default animation config
-    const defaultAnimation = getDefaultAnimationConfig();
+    // Get the animation config based on the effect
+    const effect = options?.animation?.effect || 'fade';
+    const defaultAnimation = getAnimationConfig(effect);
+    
+    // Merge any custom animation options
+    const mergedAnimation = {
+        ...defaultAnimation,
+        ...(options?.animation || {})
+    };
 
     return {
         id: galleryId,
-        // Keep title and description as empty strings to maintain data structure
-        // but ensure they won't be displayed
-        title: "",
-        description: "",
+        title: options?.title || "",
+        description: options?.description || "",
         layout: options?.layout || 'grid',
-        animation: {
-            ...defaultAnimation,
-            ...options?.animation
-        },
+        animation: mergedAnimation,
         items
     };
 }

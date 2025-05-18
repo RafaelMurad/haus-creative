@@ -136,7 +136,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       if (!isTransitioning && prevIndex === null) {
         triggerNextSlide();
       }
-    }, 1500); // Show each image for 2 seconds
+    }, 2000); // Show each image for 2 seconds
 
     return () => clearInterval(interval);
   }, [isTransitioning, prevIndex, gallery.layout, isReady]);
@@ -154,35 +154,104 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   useLayoutEffect(() => {
     if (prevIndex === null || !isTransitioning) return;
     if (!prevRef.current || !activeRef.current) return;
-    const crossfade = gallery.animation.crossfade || {};
-    const duration = 0.7; // longer fade for smoother effect
-    const overlap = duration; // full overlap for true crossfade
+    if (!gsapInstance) return;
+
+    const duration = gallery.animation.duration || 0.7;
     const ease = gallery.animation.ease || "power2.inOut";
-    gsap.set(activeRef.current, crossfade.from || { opacity: 0 });
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setPrevIndex(null);
-        setIsTransitioning(false);
-      },
-    });
-    tl.to(
-      prevRef.current,
-      {
-        ...(crossfade.prevOut || { opacity: 0 }),
-        duration,
-        ease,
-      },
-      0
-    ).to(
-      activeRef.current,
-      {
-        ...(crossfade.to || { opacity: 1 }),
-        duration,
-        ease,
-      },
-      0 // start fade in at the same time as fade out
-    );
-  }, [prevIndex, isTransitioning]);
+
+    // Apply the animation based on the effect type
+    switch (gallery.animation.effect) {
+      case "slide": {
+        gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
+        const tl = gsapInstance.timeline({
+          onComplete: () => {
+            setPrevIndex(null);
+            setIsTransitioning(false);
+          },
+        });
+
+        tl.to(
+          prevRef.current,
+          {
+            x: "-100%",
+            opacity: 1,
+            duration,
+            ease,
+          },
+          0
+        ).to(
+          activeRef.current,
+          {
+            x: "0%",
+            opacity: 1,
+            duration,
+            ease,
+          },
+          0
+        );
+        break;
+      }
+
+      case "scale": {
+        gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
+        const tl = gsapInstance.timeline({
+          onComplete: () => {
+            setPrevIndex(null);
+            setIsTransitioning(false);
+          },
+        });
+
+        tl.to(
+          prevRef.current,
+          {
+            opacity: 0,
+            scale: 0.8,
+            duration,
+            ease,
+          },
+          0
+        ).to(
+          activeRef.current,
+          {
+            opacity: 1,
+            scale: 1,
+            duration,
+            ease,
+          },
+          0
+        );
+        break;
+      }
+
+      default: {
+        gsapInstance.set(activeRef.current, { opacity: 0 });
+        const tl = gsapInstance.timeline({
+          onComplete: () => {
+            setPrevIndex(null);
+            setIsTransitioning(false);
+          },
+        });
+
+        tl.to(
+          prevRef.current,
+          {
+            opacity: 0,
+            duration,
+            ease,
+          },
+          0
+        ).to(
+          activeRef.current,
+          {
+            opacity: 1,
+            duration,
+            ease,
+          },
+          0
+        );
+      }
+    }
+  }, [prevIndex, isTransitioning, gallery.animation, gsapInstance]);
 
   // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {

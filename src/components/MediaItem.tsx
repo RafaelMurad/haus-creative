@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
 
@@ -17,33 +17,19 @@ export default function MediaItem({
   onLoad,
   forwardedRef,
 }: MediaItemProps) {
+  const isFullViewport = useRef<boolean>(false);
   const localRef = useRef<HTMLElement | null>(null);
+
   const ref =
     forwardedRef ||
     ((el: HTMLElement | null) => {
       localRef.current = el;
     });
 
-  // Handle media type rendering
+  // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
-      case "video":
-        return (
-          <video
-            ref={ref as (instance: HTMLVideoElement | null) => void}
-            src={item.url}
-            poster={item.thumbUrl}
-            controls={false}
-            autoPlay={true}
-            loop={true}
-            muted={true}
-            playsInline={true}
-            className="w-full h-full object-cover"
-            onLoadedData={onLoad}
-          />
-        );
       case "gif":
-        // GIFs are treated as images in HTML, but Next.js Image does not support animated GIFs
         return (
           <img
             ref={ref as (instance: HTMLImageElement | null) => void}
@@ -63,8 +49,7 @@ export default function MediaItem({
             style={{ objectFit: "cover" }}
             className="w-full h-full object-cover"
             onLoad={onLoad}
-            priority={false}
-            // Responsive sizes: 100vw on mobile, 50vw on tablet, 33vw on desktop
+            priority={true} // Always prioritize images in carousel/fullscreen layouts
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         );
@@ -72,21 +57,29 @@ export default function MediaItem({
   };
 
   // Determine if we need to force full viewport for carousel/fullscreen
-  const isFullViewport =
-    className.includes("carousel") || className.includes("fullscreen");
+  useEffect(() => {
+    const element = localRef.current;
+    if (element) {
+      const parent = element.parentElement;
+      if (parent) {
+        isFullViewport.current = parent.classList.contains("media-item");
+      }
+    }
+  }, []);
+
   const style = item.size
     ? {
         width: item.size.width,
         height: item.size.height,
       }
-    : isFullViewport
+    : isFullViewport.current
     ? { minHeight: "100vh", minWidth: "100vw", height: "100vh", width: "100vw" }
     : {};
 
   return (
     <div
       className={`media-item relative overflow-hidden w-full h-full ${
-        isFullViewport ? "h-screen w-screen" : ""
+        isFullViewport.current ? "h-screen w-screen" : ""
       } ${className}`}
       style={style}
     >
