@@ -99,7 +99,9 @@ export default memo(function MediaItem({
     if (element) {
       const parent = element.parentElement;
       if (parent) {
-        isFullViewport.current = parent.classList.contains("media-item");
+        // Check if this is part of a fullscreen layout
+        isFullViewport.current = parent.classList.contains("media-item") || 
+                                 parent.closest('.fullscreen-gallery') !== null;
       }
     }
   }, []);
@@ -111,7 +113,13 @@ export default memo(function MediaItem({
         height: item.size.height,
       }
     : isFullViewport.current
-    ? { height: "100%", width: "100%", position: "relative" }
+    ? { 
+        height: "100%", 
+        width: "100%", 
+        position: "relative",
+        minHeight: "100vh", // For fullscreen mode
+        maxHeight: "100vh",  // For fullscreen mode
+      }
     : { position: "relative" };
 
   // Container style builder

@@ -216,9 +216,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[60vh] md:min-h-screen w-full";
       case "masonry":
         return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 min-h-[60vh] md:min-h-screen w-full";
-      case "carousel":
       case "fullscreen":
-        // For carousel, always ensure it gets full height and handles overflow
+        // Fullscreen mode - take over entire viewport with no margins or padding
+        return "relative h-full w-full overflow-hidden flex items-center justify-center";
+      case "carousel":
+        // For carousel, ensure it gets proper height and handles overflow
         return "relative h-full w-full overflow-hidden flex items-center justify-center";
       default:
         // Default layout also handles its own width or relies on parent
@@ -371,11 +373,23 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       case "fullscreen": {
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
+        
+        // Add special styles for fullscreen mode
+        const isFullscreen = gallery.layout === 'fullscreen';
+        const containerStyle: React.CSSProperties = isFullscreen 
+          ? { 
+              height: "100vh", 
+              width: "100vw", 
+              position: "relative", 
+              margin: 0,
+              padding: 0
+            } 
+          : { height: "100%", width: "100%", position: "relative" as "relative" };
 
         return (
           <div
-            className="relative overflow-hidden flex items-center justify-center"
-            style={{ height: "100%", width: "100%", position: "relative" }}
+            className={`relative overflow-hidden flex items-center justify-center ${isFullscreen ? 'fullscreen-container' : ''}`}
+            style={containerStyle}
           >
             {/* Previous slide (fading out) */}
             {prevItem && (
@@ -467,23 +481,26 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     ? undefined // If container has explicit height, don't set min-height on section
     : "min-h-[60vh] md:min-h-screen";
 
+  // Add fullscreen-gallery class if layout is fullscreen
+  const isFullscreen = gallery.layout === 'fullscreen';
+  
   return (
-    <section className={`gallery-row w-full m-0 p-0 ${sectionHeight}`}>
+    <section className={`gallery-row w-full m-0 p-0 ${sectionHeight} ${isFullscreen ? 'fullscreen-gallery' : ''}`}>
       {/* Outer full-width container, configurable per gallery */}
       <div
-        className="w-full"
+        className={`w-full ${isFullscreen ? 'h-screen' : ''}`}
         ref={containerRef}
         style={gallery.galleryContainer ? { ...gallery.galleryContainer } : {}}
       >
         <div
-          className="gallery-content"
+          className={`gallery-content ${isFullscreen ? 'h-full' : ''}`}
           style={
             gallery.container
               ? { ...getContainerStyle() }
               : { position: "relative", width: "100%", height: "100%" }
           }
         >
-          <div className={getLayoutClass()}>
+          <div className={`${getLayoutClass()} ${isFullscreen ? 'h-full' : ''}`}>
             {gallery.items.length > 0 ? (
               renderLayout()
             ) : (

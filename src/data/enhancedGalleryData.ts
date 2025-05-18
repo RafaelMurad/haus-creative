@@ -6,30 +6,31 @@ const enhancedGalleryData: GalleryConfig[] = [
         id: 'gallery1',
         title: 'Gallery 1',
         description: 'First gallery showcase',
-        layout: 'carousel',
+        layout: 'fullscreen', // Changed to fullscreen layout
         animation: {
             effect: AnimationEffects.FADE,
             duration: 0.7,
             ease: EaseFunctions.POWER2_INOUT
         },
         galleryContainer: {
-            padding: '4rem 2rem 0 2rem', // top, right, bottom, left
+            padding: '0', // No padding for full viewport
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '80vh',
+            minHeight: '100vh', // Full viewport height
         },
+        // Remove container styling to make it take the full viewport
         container: {
-            width: '80%',
+            width: '100%',
             maxWidth: '100vw',
-            height: '70vh',
-            minHeight: '400px',
-            maxHeight: '90vh',
+            height: '100vh',
+            minHeight: '100vh',
+            maxHeight: '100vh',
             aspectRatio: 'auto',
             alignment: 'center',
-            background: 'rgba(255,255,255,0.9)',
-            borderRadius: '12px',
-            padding: '1rem',
+            background: 'transparent', // No background
+            borderRadius: '0', // No border radius
+            padding: '0', // No padding
         },
         transitionTime: 700,
         items: []  // Initialize empty array to satisfy TypeScript
