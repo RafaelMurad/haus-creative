@@ -1,4 +1,4 @@
-// Enhanced gallery data structure with support for multiple media types and GSAP animations
+
 import { GalleryConfig, AnimationEffects, EaseFunctions } from '../types';
 
 const enhancedGalleryData: GalleryConfig[] = [
@@ -6,20 +6,20 @@ const enhancedGalleryData: GalleryConfig[] = [
         id: 'gallery1',
         title: 'Gallery 1',
         description: 'First gallery showcase',
-        layout: 'fullscreen', // Changed to fullscreen layout
+        layout: 'fullscreen',
         animation: {
             effect: AnimationEffects.FADE,
             duration: 0.7,
             ease: EaseFunctions.POWER2_INOUT
         },
         galleryContainer: {
-            padding: '0', // No padding for full viewport
+            padding: '0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '100vh', // Full viewport height
+            minHeight: '100vh',
         },
-        // Remove container styling to make it take the full viewport
+
         container: {
             width: '100%',
             maxWidth: '100vw',
@@ -28,12 +28,12 @@ const enhancedGalleryData: GalleryConfig[] = [
             maxHeight: '100vh',
             aspectRatio: 'auto',
             alignment: 'center',
-            background: 'transparent', // No background
-            borderRadius: '0', // No border radius
-            padding: '0', // No padding
+            background: '#fff',
+            borderRadius: '0',
+            padding: '0',
         },
         transitionTime: 700,
-        items: []  // Initialize empty array to satisfy TypeScript
+        items: []
     },
     {
         id: 'gallery2',
@@ -46,11 +46,11 @@ const enhancedGalleryData: GalleryConfig[] = [
             ease: EaseFunctions.NONE
         },
         galleryContainer: {
-            padding: '4rem 2rem 0 2rem', // top, right, bottom, left
             display: 'flex',
-            alignItems: 'flex-start', // or 'center', 'flex-end'
-            justifyContent: 'center', // or 'flex-start', 'flex-end'
-            minHeight: '80vh',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
         },
         container: {
             width: '80%',
@@ -60,13 +60,12 @@ const enhancedGalleryData: GalleryConfig[] = [
             maxHeight: '90vh',
             aspectRatio: 'auto',
             alignment: 'center',
-            background: 'rgba(255,255,255,0.9)',
+            background: '#fff',
             borderRadius: '12px',
             padding: '1rem',
-            // No margin here, handled by outer container
         },
         transitionTime: 700,
-        items: []  // Initialize empty array to satisfy TypeScript
+        items: []
     }
 ];
 
