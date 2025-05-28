@@ -16,8 +16,16 @@ export function getAssetPath(galleryId: string, fileName: string): string {
     // Clean the gallery ID to ensure it's a valid folder name
     const safeGalleryId = galleryId.replace(/[^a-z0-9-_]/gi, '').toLowerCase();
 
-    // Construct and return the full path
-    return `${basePath}/${safeGalleryId}/${fileName}`;
+    // Construct the full path
+    const fullPath = `${basePath}/${safeGalleryId}/${fileName}`;
+
+    // Optional: Log paths in development environment
+    if (process.env.NODE_ENV === 'development') {
+        // Use console.debug to avoid cluttering the console too much
+        console.debug(`Asset path generated: ${fullPath}`);
+    }
+
+    return fullPath;
 }
 
 /**

@@ -1,44 +1,53 @@
-'use client'
+"use client";
 
-import { useRef } from 'react'
-import { MediaItem as MediaItemType } from '../types'
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import { MediaItem as MediaItemType } from "../types";
+import { debugImageLoad } from "../utils/debugHelper";
 
 interface MediaItemProps {
   item: MediaItemType;
   className?: string;
-  onLoad?: () => void; // Changed from required to optional
+  onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
+  containerConfig?: {
+    width?: string;
+    minWidth?: string;
+    maxWidth?: string;
+    height?: string;
+    minHeight?: string;
+    maxHeight?: string;
+    aspectRatio?: string;
+    alignment?: "center" | "left" | "right";
+    background?: string;
+    padding?: string;
+    margin?: string;
+    borderRadius?: string;
+  };
 }
 
-export default function MediaItem({ 
-  item, 
-  className = '', 
-  onLoad, 
-  forwardedRef 
-}: MediaItemProps) {
-  const localRef = useRef<HTMLElement | null>(null)
-  const ref = forwardedRef || ((el: HTMLElement | null) => { localRef.current = el })
+import { memo } from "react";
 
-  // Handle media type rendering
+export default memo(function MediaItem({
+  item,
+  className = "",
+  onLoad,
+  forwardedRef,
+  containerConfig,
+}: MediaItemProps) {
+  const isFullViewport = useRef<boolean>(false);
+  const localRef = useRef<HTMLElement | null>(null);
+
+  const ref =
+    forwardedRef ||
+    ((el: HTMLElement | null) => {
+      localRef.current = el;
+    });
+
+  // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
-      case 'video':
-        return (
-          <video
-            ref={ref as (instance: HTMLVideoElement | null) => void}
-            src={item.url}
-            poster={item.thumbUrl}
-            controls={false}
-            autoPlay={true}
-            loop={true}
-            muted={true}
-            playsInline={true}
-            className="w-full h-full object-cover"
-            onLoadedData={onLoad}
-          />
-        )
-      case 'gif':
-        // GIFs are treated as images in HTML
+      case "gif":
         return (
           <img
             ref={ref as (instance: HTMLImageElement | null) => void}
@@ -47,32 +56,138 @@ export default function MediaItem({
             className="w-full h-full object-cover"
             onLoad={onLoad}
           />
-        )
-      case 'image':
+        );
+      case "image":
       default:
         return (
-          <img
-            ref={ref as (instance: HTMLImageElement | null) => void}
-            src={item.url || item.imageUrl} // Handle both url and imageUrl for backward compatibility
+          <Image
+            src={item.url || item.imageUrl || ""}
             alt={item.title}
-            className="w-full h-full object-cover"
-            onLoad={onLoad}
+            fill
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            className="w-full h-full"
+            onLoad={() => {
+              if (onLoad) onLoad();
+              // Log successful image load in development
+              if (process.env.NODE_ENV === "development") {
+                console.debug(
+                  `Successfully loaded image: ${item.url || item.imageUrl}`
+                );
+              }
+            }}
+            onError={() => {
+              // Log failed image load in development
+              if (process.env.NODE_ENV === "development") {
+                console.error(
+                  `Failed to load image: ${item.url || item.imageUrl}`
+                );
+              }
+            }}
+            priority={true}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-        )
+        );
     }
+  };
+
+  // Determine if we need to force full viewport for carousel/fullscreen
+  useEffect(() => {
+    const element = localRef.current;
+    if (element) {
+      const parent = element.parentElement;
+      if (parent) {
+        // Check if this is part of a fullscreen layout
+        isFullViewport.current =
+          parent.classList.contains("media-item") ||
+          parent.closest(".fullscreen-gallery") !== null;
+      }
+    }
+  }, []);
+
+  // Style based on item size or container context
+  const style = item.size
+    ? {
+        width: item.size.width,
+        height: item.size.height,
+      }
+    : isFullViewport.current
+    ? {
+        height: "100%",
+        width: "100%",
+        position: "relative" as const,
+        minHeight: "100vh", // For fullscreen mode
+        maxHeight: "100vh", // For fullscreen mode
+      }
+    : { position: "relative" as const };
+
+  // Container style builder
+  const getContentContainerStyle = () => {
+    if (!containerConfig) return {};
+    const styles: React.CSSProperties = {};
+    if (containerConfig.width) styles.width = containerConfig.width;
+    if (containerConfig.minWidth) styles.minWidth = containerConfig.minWidth;
+    if (containerConfig.maxWidth) styles.maxWidth = containerConfig.maxWidth;
+    if (containerConfig.height) styles.height = containerConfig.height;
+    if (containerConfig.minHeight) styles.minHeight = containerConfig.minHeight;
+    if (containerConfig.maxHeight) styles.maxHeight = containerConfig.maxHeight;
+    if (containerConfig.aspectRatio)
+      styles.aspectRatio = containerConfig.aspectRatio;
+    if (containerConfig.padding) styles.padding = containerConfig.padding;
+    if (containerConfig.background)
+      styles.background = containerConfig.background;
+    if (containerConfig.borderRadius)
+      styles.borderRadius = containerConfig.borderRadius;
+    if (containerConfig.margin) styles.margin = containerConfig.margin;
+
+    // If height is not explicitly set, add a min-height to ensure content is visible
+    if (!containerConfig.height && !containerConfig.minHeight) {
+      styles.minHeight = "300px"; // Add a default minimum height
+    }
+
+    // Ensure alignment is handled correctly for centering if specified
+    if (containerConfig.alignment === "center" && !containerConfig.margin) {
+      styles.marginLeft = "auto";
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "left" &&
+      !containerConfig.margin
+    ) {
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "right" &&
+      !containerConfig.margin
+    ) {
+      styles.marginLeft = "auto";
+    }
+    return styles;
+  };
+
+  // Simplify structure - one main container with content
+  if (containerConfig) {
+    return (
+      <div
+        className="media-content relative w-full h-full"
+        style={{
+          position: "relative" as const,
+          minHeight: containerConfig.minHeight || "300px",
+          ...getContentContainerStyle(),
+        }}
+      >
+        {renderMedia()}
+      </div>
+    );
   }
 
-  const style = item.size ? {
-    width: item.size.width,
-    height: item.size.height
-  } : {}
-
+  // No container: simple structure with just the necessary positioning
   return (
-    <div 
-      className={`media-item relative overflow-hidden ${className}`}
-      style={style}
+    <div
+      className="media-content relative w-full h-full"
+      style={{ position: "relative" as const, minHeight: "200px", ...style }}
     >
       {renderMedia()}
     </div>
-  )
-}
+  );
+});

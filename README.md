@@ -1,283 +1,981 @@
-# Haus Creative NextJS Repository Manual
+# Studio Haus - Configurable Gallery Generator
 
-This manual explains how the Haus Creative NextJS repository works, with a specific focus on how to add and configure galleries.
+A powerful, production-ready Next.js application for creating dynamic, animated gallery experiences. Built with TypeScript, Tailwind CSS, and GSAP animations for professional-grade visual presentations.
 
-## Table of Contents
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+Visit `http://localhost:3000` to see your gallery in action.
+
+## 📋 Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Gallery System Structure](#gallery-system-structure)
-3. [Adding Galleries](#adding-galleries)
-4. [Gallery Configuration Options](#gallery-configuration-options)
-5. [Animation Effects](#animation-effects)
-6. [Media Types](#media-types)
-7. [Adding New Pages](#adding-new-pages)
+2. [System Architecture](#system-architecture)
+3. [Getting Started](#getting-started)
+4. [Gallery Configuration](#gallery-configuration)
+5. [Layout Types](#layout-types)
+6. [Animation System](#animation-system)
+7. [Media Management](#media-management)
+8. [Advanced Configuration](#advanced-configuration)
+9. [API Reference](#api-reference)
+10. [Deployment](#deployment)
+11. [Troubleshooting](#troubleshooting)
+
+## 🎯 Project Overview
+
+Studio Haus is a configurable gallery generator that enables you to create stunning visual experiences with minimal setup. The system supports multiple media types, advanced animations, and flexible layouts - perfect for portfolios, product showcases, and creative presentations.
+
+### ✨ Key Features
+
+- **🎨 Multiple Layout Types**: Grid, Carousel, Masonry, and Fullscreen layouts
+- **🎬 Advanced Animations**: GSAP-powered smooth transitions and effects
+- **📱 Responsive Design**: Mobile-first approach with Tailwind CSS
+- **🎥 Multi-Media Support**: Images, videos, and GIFs with optimized loading
+- **⚡ Performance Optimized**: Virtualized rendering for large galleries
+- **🔧 Type-Safe**: Full TypeScript support with comprehensive type definitions
+- **🎛️ Flexible Configuration**: Static and dynamic configuration options
+
+### 🛠️ Technology Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript for type safety
+- **Styling**: Tailwind CSS for responsive design
+- **Animations**: GSAP with ScrollTrigger
+- **Performance**: React Window for virtualization
+- **Icons**: Lucide React for UI elements
 
 ---
 
-## Project Overview
+## 🏗️ System Architecture
 
-Haus Creative is a NextJS application built with TypeScript, TailwindCSS, and GSAP animations. The project uses Next.js App Router and is structured to showcase visual media in various dynamic gallery formats.
+The gallery system is built with a modular architecture that separates concerns and enables easy customization:
 
-The main technologies used are:
-- **Next.js** (React framework)
-- **TypeScript** (Type safety)
-- **TailwindCSS** (Styling)
-- **GSAP** with ScrollTrigger (Animations)
+### 📁 Core Components
+
+```
+src/
+├── components/
+│   ├── Gallery.tsx           # Main gallery container
+│   ├── GalleryLoader.tsx     # Dynamic loading system
+│   ├── GalleryRow.tsx        # Individual gallery sections
+│   └── MediaItem.tsx         # Media rendering component
+├── data/
+│   ├── enhancedGalleryData.ts # Static gallery configurations
+│   └── galleryData.ts        # Legacy gallery data
+├── services/
+│   ├── galleryFileService.ts    # File system operations
+│   └── galleryMetadataService.ts # Configuration management
+├── hooks/
+│   └── useGsapAnimation.ts   # Animation hook
+├── types/
+│   └── index.ts              # TypeScript definitions
+└── utils/
+    ├── animationConfigs.ts   # Animation presets
+    ├── galleryGenerator.ts   # Dynamic generation
+    └── assetPath.ts         # Asset management
+```
+
+### 🔄 Data Flow
+
+1. **Static Configuration**: Define galleries in `enhancedGalleryData.ts`
+2. **Dynamic Loading**: `GalleryLoader` scans `/public/assets/` folders
+3. **Configuration Merge**: Static configs override dynamic ones
+4. **Rendering**: Components render with animation and layout systems
 
 ---
 
-## Gallery System Structure
+## 🏁 Getting Started
 
-The gallery system consists of three main parts:
+### Method 1: Static Configuration (Recommended for MVP)
 
-1. **Data Files** - Located in `/src/data/` directory:
-   - `galleryData.ts` - Basic gallery data
-   - `enhancedGalleryData.ts` - Extended gallery data with support for multiple media types and animation configurations
-
-2. **Components** - Located in `/src/components/` directory:
-   - `Gallery.tsx` - Main gallery container component
-   - `GalleryRow.tsx` - Individual gallery row/section component
-   - `MediaItem.tsx` - Handles different media types (images, videos, GIFs)
-
-3. **Hooks** - Located in `/src/hooks/` directory:
-   - `useGsapAnimation.ts` - Custom hook for GSAP animations with ScrollTrigger
-
----
-
-## Adding Galleries
-
-To add new galleries, you need to edit the `enhancedGalleryData.ts` file. This is the preferred way as it supports all features including different media types and advanced animations.
-
-Here's how to add a new gallery:
-
-1. Open `/src/data/enhancedGalleryData.ts`
-2. Add a new gallery object to the array by following this template:
+Create galleries by adding configurations to `/src/data/enhancedGalleryData.ts`:
 
 ```typescript
-{
-    id: 'unique-gallery-id',
-    title: 'Gallery Title',
-    description: 'Gallery Description',
-    layout: 'grid', // Choose from: 'grid', 'carousel', 'masonry', 'fullscreen'
+import { GalleryConfig, AnimationEffects, EaseFunctions } from "../types";
+
+const enhancedGalleryData: GalleryConfig[] = [
+  {
+    id: "my-portfolio",
+    title: "My Creative Portfolio",
+    description: "A showcase of my best work",
+    layout: "masonry",
     animation: {
-        effect: 'fade', // Animation effect (see Animation Effects section)
-        duration: 0.8,
-        ease: 'power2.inOut',
-        stagger: 0.15, // Delay between animating items
-        from: {
-            opacity: 0,
-            scale: 0.97
-        },
-        to: {
-            opacity: 1,
-            scale: 1
-        }
+      effect: "fade",
+      duration: 0.8,
+      ease: "power2.inOut",
+      stagger: 0.15,
     },
     items: [
-        // Add your media items here (see example below)
-        {
-            id: 'item-1',
-            title: 'Item Title',
-            description: 'Item Description',
-            type: 'image', // 'image', 'video', or 'gif'
-            url: 'https://example.com/image.jpg',
-            category: 'Category'
-        },
-        // Add more items as needed
-    ]
+      {
+        id: "project-1",
+        title: "Project Alpha",
+        description: "Modern web design",
+        type: "image",
+        url: "/assets/portfolio/project-1.jpg",
+        category: "Web Design",
+      },
+      {
+        id: "project-2",
+        title: "Brand Video",
+        description: "Corporate branding video",
+        type: "video",
+        url: "/assets/portfolio/brand-video.mp4",
+        thumbUrl: "/assets/portfolio/brand-video-thumb.jpg",
+        category: "Video",
+      },
+    ],
+  },
+];
+
+export default enhancedGalleryData;
+```
+
+### Method 2: Dynamic File-Based Loading
+
+1. **Create Asset Folders**: Add folders to `/public/assets/`
+
+   ```
+   public/assets/
+   ├── portfolio/
+   │   ├── image1.jpg
+   │   ├── image2.png
+   │   └── video.mp4
+   └── gallery2/
+       ├── photo1.jpg
+       └── animation.gif
+   ```
+
+2. **Configure Metadata**: Add configuration in `galleryMetadataService.ts`
+
+   ```typescript
+   const galleryMeta: GalleryMeta = {
+     portfolio: {
+       title: "My Portfolio",
+       description: "Creative works showcase",
+       layout: "masonry",
+       animation: {
+         effect: "scale",
+         duration: 0.9,
+       },
+     },
+   };
+   ```
+
+3. **The system automatically**:
+   - Scans folders for media files
+   - Detects file types (images, videos, GIFs)
+   - Merges with static configurations
+   - Generates optimized galleries
+
+---
+
+## 🎨 Gallery Configuration
+
+### Basic Gallery Structure
+
+```typescript
+interface GalleryConfig {
+  id: string; // Unique identifier
+  title: string; // Display title
+  description: string; // Gallery description
+  layout?: LayoutType; // Layout type (see below)
+  animation: AnimationConfig; // Animation settings
+  items: MediaItem[]; // Media items
+  transitionTime?: number; // Carousel transition time (ms)
+  container?: ContainerConfig; // Container styling
+  galleryContainer?: GalleryContainerConfig; // Outer container
 }
 ```
 
-3. Add this gallery to the `enhancedGalleryData` array and save the file.
+### Container Configuration
+
+Control the gallery appearance with container settings:
+
+```typescript
+container: {
+  width: '80%',              // Container width
+  maxWidth: '1200px',        // Maximum width
+  height: '70vh',            // Container height
+  minHeight: '400px',        // Minimum height
+  aspectRatio: '16/9',       // Aspect ratio
+  alignment: 'center',       // 'left', 'center', 'right'
+  background: '#f8f9fa',     // Background color
+  borderRadius: '12px',      // Border radius
+  padding: '2rem',           // Internal padding
+  margin: '1rem auto'        // External margin
+}
+```
+
+### Gallery Container Configuration
+
+Control the outer wrapper:
+
+```typescript
+galleryContainer: {
+  padding: '4rem 2rem',      // Outer padding
+  display: 'flex',           // Display type
+  alignItems: 'center',      // Vertical alignment
+  justifyContent: 'center',  // Horizontal alignment
+  minHeight: '100vh',        // Minimum height
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+}
+```
 
 ---
 
-## Gallery Configuration Options
+## 📐 Layout Types
 
-### Layout Options
+The gallery system supports four distinct layout types, each optimized for different use cases:
 
-The gallery system supports four layout types:
+### 1. 🏗️ Grid Layout (`'grid'`)
 
-1. **`grid`**: Traditional grid layout with responsive columns
-   - Best for collections of images with similar dimensions
-   - Arranges items in a clean, uniform grid
+**Perfect for**: Product catalogs, uniform image collections, structured presentations
 
-2. **`carousel`**: Interactive slideshow with navigation controls
-   - Great for showcasing featured work
-   - Includes automatic sliding with pause on hover
-   - Provides navigation arrows and indicator dots
+```typescript
+{
+  layout: 'grid',
+  // Responsive grid: 1 column on mobile, 2 on tablet, 3 on desktop
+  // Clean, uniform spacing with hover effects
+}
+```
 
-3. **`masonry`**: Pinterest-style layout with varied heights
-   - Perfect for mixed content with different dimensions
-   - Automatically arranges items optimally based on their height
+**Features**:
 
-4. **`fullscreen`**: Edge-to-edge display that takes up the entire viewport
-   - Ideal for immersive, high-impact visuals
-   - Best with high-resolution images or videos
+- Responsive columns (1→2→3 based on screen size)
+- Equal-height items for visual consistency
+- Hover effects and smooth transitions
+- Optimized for images with similar aspect ratios
 
-### Item Properties
+### 2. 🎠 Carousel Layout (`'carousel'`)
 
-Each gallery item supports the following properties:
+**Perfect for**: Hero sections, featured work, storytelling sequences
 
-- `id` (string): Unique identifier
-- `title` (string): Item title
-- `description` (string): Item description
-- `type` (string): Media type - 'image', 'video', or 'gif'
-- `url` (string): URL to the media
-- `thumbUrl` (string, optional): Thumbnail URL (for videos)
-- `category` (string): Category label
-- `size` (object, optional): Custom size settings
-  - `width` (string|number, optional)
-  - `height` (string|number, optional)
+```typescript
+{
+  layout: 'carousel',
+  transitionTime: 3000,  // Auto-advance every 3 seconds
+  animation: {
+    effect: 'slide',     // Smooth slide transitions
+    duration: 0.8
+  }
+}
+```
+
+**Features**:
+
+- Auto-advancing slideshow
+- Smooth crossfade/slide transitions
+- Pause on hover interaction
+- Preloading for performance
+- Fullscreen support
+
+### 3. 🧱 Masonry Layout (`'masonry'`)
+
+**Perfect for**: Pinterest-style galleries, mixed content, artistic portfolios
+
+```typescript
+{
+  layout: 'masonry',
+  // Automatically arranges items based on natural dimensions
+  // Perfect for mixed media and varying aspect ratios
+}
+```
+
+**Features**:
+
+- Dynamic height-based arrangement
+- Break-inside-avoid for clean breaks
+- Responsive column count
+- Optimal space utilization
+- Works with mixed media types
+
+### 4. 🖥️ Fullscreen Layout (`'fullscreen'`)
+
+**Perfect for**: Immersive experiences, hero images, dramatic presentations
+
+```typescript
+{
+  layout: 'fullscreen',
+  container: {
+    width: '100%',
+    height: '100vh'       // Full viewport height
+  },
+  galleryContainer: {
+    padding: '0'          // Edge-to-edge display
+  }
+}
+```
+
+**Features**:
+
+- Edge-to-edge display
+- 100% viewport utilization
+- Cinematic presentation
+- Auto-advancing carousel
+- Optimized for high-impact visuals
 
 ---
 
-## Animation Effects
+## 🎬 Animation System
 
-The gallery system supports various animation effects through GSAP. You can specify these in the `effect` property of the animation configuration.
+The animation system is powered by GSAP and provides smooth, professional-grade transitions.
 
-### Built-in Animation Effects:
+### Built-in Animation Effects
 
-1. **`fade`**: Simple fade-in animation
-2. **`slide-up`**: Elements slide upward while fading in
-3. **`slide-down`**: Elements slide downward while fading in
-4. **`slide-left`**: Elements slide from right to left
-5. **`slide-right`**: Elements slide from left to right
-6. **`scale`**: Elements scale up while fading in
-7. **`clip-reveal`**: Elements reveal with a clipping animation
-8. **`blur-in`**: Elements fade in with a blur effect (requires additional CSS)
-9. **`flip-in`**: Elements flip into view (requires additional CSS)
-10. **`stagger-in`**: Elements appear one after another with a staggered delay
-11. **`zoom-in`**: Elements zoom in from a smaller scale
-12. **`bounce-in`**: Elements bounce in with a spring effect
-13. **`perspective-in`**: Elements animate in with a perspective effect
+| Effect         | Description                 | Best For                      |
+| -------------- | --------------------------- | ----------------------------- |
+| `'fade'`       | Simple opacity transition   | Clean, subtle entrances       |
+| `'slide'`      | Horizontal slide transition | Carousel navigation           |
+| `'slide-up'`   | Slide from bottom with fade | Content reveals               |
+| `'slide-down'` | Slide from top with fade    | Header animations             |
+| `'scale'`      | Scale up with fade          | Product showcases             |
+| `'none'`       | No animation                | Performance-critical sections |
 
-### Custom Animations:
-
-You can also create custom animations by specifying the `from` and `to` properties in the animation configuration:
+### Animation Configuration
 
 ```typescript
 animation: {
-    effect: 'custom',
-    duration: 1.0,
-    ease: 'power2.inOut',
-    stagger: 0.2,
-    from: {
-        opacity: 0,
-        y: 100,
-        rotation: -5
-    },
-    to: {
-        opacity: 1,
-        y: 0,
-        rotation: 0
-    }
+  effect: 'fade',           // Animation type
+  duration: 0.8,            // Duration in seconds
+  ease: 'power2.inOut',     // GSAP easing function
+  stagger: 0.15,            // Delay between items (seconds)
+  delay: 0,                 // Initial delay (seconds)
+
+  // Custom animation properties
+  from: {
+    opacity: 0,
+    scale: 0.9,
+    y: 30                   // Start 30px below
+  },
+  to: {
+    opacity: 1,
+    scale: 1,
+    y: 0                    // End at natural position
+  }
 }
 ```
 
-### Animation Timing
+### Available Easing Functions
 
-- `duration`: Animation duration in seconds
-- `ease`: GSAP easing function (e.g., 'power2.out', 'back.inOut')
-- `stagger`: Delay between items in seconds
-- `delay`: Initial delay before animation starts
-
----
-
-## Media Types
-
-The gallery system supports three media types:
-
-1. **Images**:
 ```typescript
-{
-    id: 'image-item-1',
-    title: 'Image Title',
-    description: 'Image Description',
-    type: 'image',
-    url: 'https://example.com/image.jpg',
-    category: 'Category'
-}
+// Power easings (most common)
+"power1.in", "power1.out", "power1.inOut";
+"power2.in", "power2.out", "power2.inOut";
+"power3.in", "power3.out", "power3.inOut";
+
+// Special easings
+("none"); // Linear, no easing
 ```
 
-2. **Videos**:
+### Advanced Animation Example
+
 ```typescript
-{
-    id: 'video-item-1',
-    title: 'Video Title',
-    description: 'Video Description',
-    type: 'video',
-    url: 'https://example.com/video.mp4',
-    thumbUrl: 'https://example.com/video-thumbnail.jpg', // Optional thumbnail
-    category: 'Video'
+// Custom bounce-in effect
+animation: {
+  effect: 'scale',
+  duration: 1.2,
+  ease: 'power2.out',
+  stagger: 0.1,
+  from: {
+    opacity: 0,
+    scale: 0.3,
+    rotation: -10,
+    y: 50
+  },
+  to: {
+    opacity: 1,
+    scale: 1,
+    rotation: 0,
+    y: 0
+  }
 }
-```
-
-3. **GIFs**:
-```typescript
-{
-    id: 'gif-item-1',
-    title: 'GIF Title',
-    description: 'GIF Description',
-    type: 'gif',
-    url: 'https://example.com/animation.gif',
-    category: 'Animation'
-}
-```
-
-### Important Note on Video URLs
-
-For videos, ensure you're using HTTPS URLs with valid SSL certificates to avoid browser security warnings. Here's an example of a reliable video URL source:
-
-```
-https://assets.mixkit.co/videos/preview/mixkit-product-moving-through-a-production-line-11069-large.mp4
 ```
 
 ---
 
-## Adding New Pages
+## 📸 Media Management
 
-To add a new page that uses galleries:
+The system supports multiple media types with automatic optimization and loading strategies.
 
-1. Create a new page file in the `/src/app/` directory, for example `/src/app/portfolio/page.tsx`
-2. Import the Gallery component:
+### Supported Media Types
+
+#### 🖼️ Images
 
 ```typescript
-import Gallery from '../../components/Gallery';
-import enhancedGalleryData from '../../data/enhancedGalleryData';
+{
+  id: 'image-item',
+  title: 'Beautiful Landscape',
+  description: 'A stunning mountain view',
+  type: 'image',
+  url: '/assets/gallery/landscape.jpg',
+  category: 'Nature',
+  size: {
+    width: '100%',
+    height: 'auto'
+  }
+}
+```
+
+**Supported formats**: JPG, PNG, WebP, AVIF, SVG
+**Best practices**:
+
+- Use WebP/AVIF for better compression
+- Optimize images to 1920px max width
+- Provide alt text via title/description
+
+#### 🎥 Videos
+
+```typescript
+{
+  id: 'video-item',
+  title: 'Product Demo',
+  description: 'Interactive product showcase',
+  type: 'video',
+  url: '/assets/gallery/demo.mp4',
+  thumbUrl: '/assets/gallery/demo-thumb.jpg',  // Optional thumbnail
+  category: 'Demo'
+}
+```
+
+**Supported formats**: MP4, WebM, OGV
+**Best practices**:
+
+- Use MP4 with H.264 encoding for compatibility
+- Provide poster/thumbnail images
+- Keep file sizes under 50MB for web
+
+#### 🎞️ GIFs
+
+```typescript
+{
+  id: 'gif-item',
+  title: 'Loading Animation',
+  description: 'Smooth loading indicator',
+  type: 'gif',
+  url: '/assets/gallery/loader.gif',
+  category: 'Animation'
+}
+```
+
+**Best practices**:
+
+- Optimize GIFs for web (reduce colors, frames)
+- Consider converting to video for larger animations
+- Use for short, looping animations only
+
+### Asset Organization
+
+```
+public/assets/
+├── gallery1/              # Gallery folder name = gallery ID
+│   ├── hero-image.jpg     # Images auto-detected
+│   ├── product-video.mp4  # Videos auto-detected
+│   └── animation.gif      # GIFs auto-detected
+├── portfolio/
+│   ├── project1.jpg
+│   ├── project2.png
+│   └── showcase.mp4
+└── shared/               # Shared assets
+    ├── logo.svg
+    └── background.jpg
+```
+
+### Performance Features
+
+- **Lazy Loading**: Images load as they enter viewport
+- **Preloading**: Next/previous carousel items preload
+- **Virtualization**: Large galleries use React Window
+- **Responsive Images**: Automatic srcset generation (planned)
+- **Format Detection**: Automatic WebP/AVIF serving (planned)
+
+---
+
+## ⚙️ Advanced Configuration
+
+### Custom Page Implementation
+
+Create a custom page that uses the gallery system:
+
+```typescript
+// src/app/portfolio/page.tsx
+import Gallery from "../../components/Gallery";
+import enhancedGalleryData from "../../data/enhancedGalleryData";
 
 export default function PortfolioPage() {
-  // You can filter galleries by ID or create a separate data file
-  const portfolioGalleries = enhancedGalleryData.filter(gallery => 
-    ['fashion-gallery', 'video-showcase'].includes(gallery.id)
+  // Filter galleries for this page
+  const portfolioGalleries = enhancedGalleryData.filter((gallery) =>
+    ["portfolio", "featured-work"].includes(gallery.id)
   );
-  
+
   return (
-    <main>
-      <h1>Portfolio</h1>
-      <Gallery galleries={portfolioGalleries} />
+    <main className="min-h-screen">
+      {/* Custom header */}
+      <header className="bg-gray-900 text-white py-16">
+        <div className="container mx-auto px-4">
+          <h1 className="text-5xl font-bold mb-4">My Portfolio</h1>
+          <p className="text-xl opacity-80">
+            A curated selection of my best creative work
+          </p>
+        </div>
+      </header>
+
+      {/* Gallery component */}
+      <Gallery galleries={portfolioGalleries} className="portfolio-galleries" />
+
+      {/* Custom footer */}
+      <footer className="bg-gray-100 py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p>© 2024 Studio Haus. All rights reserved.</p>
+        </div>
+      </footer>
     </main>
   );
 }
 ```
 
-3. Optionally, you can create a separate data file for each page if you have many different galleries.
+### Environment-Specific Configuration
+
+```typescript
+// src/config/gallery.config.ts
+const galleryConfig = {
+  development: {
+    autoAdvance: false, // Disable auto-advance in dev
+    showDebugInfo: true, // Show debug information
+    preloadRadius: 1, // Preload 1 item ahead/behind
+  },
+  production: {
+    autoAdvance: true, // Enable auto-advance
+    showDebugInfo: false, // Hide debug information
+    preloadRadius: 3, // Preload 3 items ahead/behind
+  },
+};
+
+export default galleryConfig[process.env.NODE_ENV || "development"];
+```
+
+### Custom Animation Presets
+
+Add your own animation presets:
+
+```typescript
+// src/utils/customAnimations.ts
+export const customAnimationPresets = {
+  "elastic-in": {
+    duration: 1.2,
+    ease: "elastic.out(1, 0.5)",
+    from: { opacity: 0, scale: 0.5, rotation: -15 },
+    to: { opacity: 1, scale: 1, rotation: 0 },
+  },
+  magnetic: {
+    duration: 0.8,
+    ease: "power2.out",
+    from: { opacity: 0, x: -100, skewX: 10 },
+    to: { opacity: 1, x: 0, skewX: 0 },
+  },
+};
+```
+
+### TypeScript Integration
+
+Extend types for custom properties:
+
+```typescript
+// src/types/custom.ts
+import { MediaItem as BaseMediaItem } from "./index";
+
+export interface ExtendedMediaItem extends BaseMediaItem {
+  tags?: string[]; // Add custom tags
+  featured?: boolean; // Mark as featured
+  metadata?: {
+    camera?: string; // Camera information
+    location?: string; // Photo location
+    date?: string; // Creation date
+  };
+}
+```
 
 ---
 
-## Development Tips
+## 📚 API Reference
 
-1. **Gallery Performance**:
-   - Optimize image sizes for web (use WebP or AVIF formats if possible)
-   - Consider lazy loading for galleries with many items
-   - Use appropriate video formats and compress them for web use
+### Core Interfaces
 
-2. **Animation Timing**:
-   - Keep animations subtle and brief for professional use
-   - Heavy animations can affect performance on lower-end devices
-   - Test on mobile to ensure good performance
+#### GalleryConfig
 
-3. **Responsive Design**:
-   - The gallery layouts are already responsive using TailwindCSS
-   - Test on various screen sizes to ensure proper display
-   - Adjust the column counts in `getLayoutClass()` if needed
+```typescript
+interface GalleryConfig {
+  id: string; // Unique gallery identifier
+  title: string; // Display title
+  description: string; // Gallery description
+  layout?: "grid" | "carousel" | "masonry" | "fullscreen";
+  animation: AnimationConfig; // Animation settings
+  items: MediaItem[]; // Media items array
+  transitionTime?: number; // Carousel auto-advance time (ms)
+  container?: ContainerConfig; // Inner container styling
+  galleryContainer?: GalleryContainerConfig; // Outer container styling
+}
+```
+
+#### MediaItem
+
+```typescript
+interface MediaItem {
+  id: string; // Unique item identifier
+  title: string; // Item title
+  description: string; // Item description
+  type: "image" | "video" | "gif"; // Media type
+  url: string; // Media URL
+  imageUrl?: string; // Backward compatibility
+  thumbUrl?: string; // Video thumbnail URL
+  category: string; // Category label
+  size?: {
+    // Custom sizing
+    width?: string | number;
+    height?: string | number;
+  };
+}
+```
+
+#### AnimationConfig
+
+```typescript
+interface AnimationConfig {
+  effect: AnimationEffectType; // Animation effect
+  duration: number; // Duration in seconds
+  ease: EaseFunctionType; // GSAP easing function
+  delay?: number; // Initial delay
+  stagger?: number; // Stagger delay between items
+  from?: Record<string, any>; // Starting properties
+  to?: Record<string, any>; // Ending properties
+  crossfade?: {
+    // Crossfade-specific settings
+    from?: Record<string, any>;
+    to?: Record<string, any>;
+    prevOut?: Record<string, any>;
+  };
+}
+```
+
+### Component Props
+
+#### Gallery Component
+
+```typescript
+interface GalleryProps {
+  galleries?: GalleryConfig[]; // Gallery configurations
+  className?: string; // Additional CSS classes
+}
+
+// Usage
+<Gallery galleries={myGalleries} className="custom-gallery-wrapper" />;
+```
+
+#### GalleryRow Component
+
+```typescript
+interface GalleryRowProps {
+  gallery: GalleryConfig; // Single gallery configuration
+}
+
+// Usage
+<GalleryRow gallery={singleGalleryConfig} />;
+```
+
+### Utility Functions
+
+#### Animation Utilities
+
+```typescript
+// Get animation configuration by effect name
+getAnimationConfig(effect: string): AnimationConfig
+
+// Available in: src/utils/animationConfigs.ts
+import { getAnimationConfig } from '../utils/animationConfigs';
+
+const fadeConfig = getAnimationConfig('fade');
+```
+
+#### Gallery Generation
+
+```typescript
+// Generate gallery from file list
+generateGalleryConfig(
+  galleryId: string,
+  files: string[],
+  options?: {
+    title?: string;
+    description?: string;
+    layout?: 'grid' | 'carousel' | 'masonry' | 'fullscreen';
+    animation?: Partial<AnimationConfig>;
+    transitionTime?: number;
+  }
+): GalleryConfig
+
+// Usage
+import { generateGalleryConfig } from '../utils/galleryGenerator';
+
+const gallery = generateGalleryConfig('my-gallery', fileList, {
+  title: 'My Dynamic Gallery',
+  layout: 'masonry'
+});
+```
+
+### Service Classes
+
+#### GalleryFileService
+
+```typescript
+class GalleryFileService {
+  ensureAssetsDirectory(): Promise<void>;
+  getGalleryDirectories(): Promise<string[]>;
+  getGalleryFiles(galleryId: string): Promise<string[]>;
+}
+```
+
+#### GalleryMetadataService
+
+```typescript
+class GalleryMetadataService {
+  generateGalleryConfig(galleryId: string, files: string[]): GalleryConfig;
+}
+```
+
+---
+
+## 🚀 Deployment
+
+### Production Build
+
+```bash
+# Create optimized production build
+npm run build
+
+# Start production server
+npm start
+```
+
+### Environment Variables
+
+Create `.env.local` for environment-specific settings:
+
+```bash
+# .env.local
+NEXT_PUBLIC_GALLERY_BASE_URL=https://your-domain.com
+NEXT_PUBLIC_ASSET_PREFIX=/gallery-assets
+NEXT_PUBLIC_ANALYTICS_ID=your-analytics-id
+```
+
+### Deployment Platforms
+
+#### Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Configure custom domain
+vercel --prod
+```
+
+#### Netlify
+
+```bash
+# Build command
+npm run build
+
+# Publish directory
+.next
+
+# Environment variables
+NEXT_PUBLIC_GALLERY_BASE_URL=https://your-site.netlify.app
+```
+
+#### Traditional Hosting
+
+```bash
+# Build static export (if needed)
+npm run build
+npm run export
+
+# Upload .next/out/ directory to your hosting provider
+```
+
+### Performance Optimization
+
+#### Image Optimization
+
+```javascript
+// next.config.js
+module.exports = {
+  images: {
+    domains: ["your-image-domain.com"],
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 60,
+  },
+};
+```
+
+#### Bundle Analysis
+
+```bash
+# Analyze bundle size
+npm install --save-dev @next/bundle-analyzer
+
+# Add to package.json scripts
+"analyze": "ANALYZE=true next build"
+
+# Run analysis
+npm run analyze
+```
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### ❌ "Gallery not found" Error
+
+**Problem**: Gallery ID doesn't match folder name or configuration
+
+**Solution**:
+
+```typescript
+// Check that gallery ID matches exactly
+const gallery = {
+  id: "portfolio", // Must match /public/assets/portfolio/
+  // ...
+};
+```
+
+#### ❌ Images Not Loading
+
+**Problem**: Incorrect asset paths or missing files
+
+**Solution**:
+
+```typescript
+// Use absolute paths from public directory
+url: "/assets/gallery/image.jpg"; // ✅ Correct
+url: "assets/gallery/image.jpg"; // ❌ Incorrect
+url: "./assets/gallery/image.jpg"; // ❌ Incorrect
+```
+
+#### ❌ Animations Not Working
+
+**Problem**: GSAP not loaded or ScrollTrigger not registered
+
+**Solution**:
+
+```typescript
+// Ensure GSAP is properly imported
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
+```
+
+#### ❌ Build Failures
+
+**Problem**: TypeScript errors or missing dependencies
+
+**Solution**:
+
+```bash
+# Check for TypeScript errors
+npm run build
+
+# Install missing dependencies
+npm install
+
+# Clear Next.js cache
+rm -rf .next
+npm run build
+```
+
+### Debug Mode
+
+Enable debug mode for development:
+
+```typescript
+// src/utils/debugHelper.ts
+export const DEBUG = process.env.NODE_ENV === "development";
+
+if (DEBUG) {
+  console.log("Gallery structure:", gallery);
+}
+```
+
+### Performance Issues
+
+#### Large Gallery Optimization
+
+```typescript
+// Use virtualization for galleries with 100+ items
+const VirtualizedGallery = React.lazy(
+  () => import("../components/VirtualizedGallery")
+);
+
+// Implement in GalleryRow.tsx for grid/masonry layouts
+{
+  gallery.items.length > 100 ? (
+    <VirtualizedGallery items={gallery.items} />
+  ) : (
+    <StandardGallery items={gallery.items} />
+  );
+}
+```
+
+#### Memory Management
+
+```typescript
+// Cleanup animations on unmount
+useEffect(() => {
+  return () => {
+    animations.forEach((anim) => {
+      if (anim.scrollTrigger) anim.scrollTrigger.kill();
+      anim.kill();
+    });
+  };
+}, []);
+```
+
+### Browser Support
+
+- **Modern Browsers**: Full support (Chrome 90+, Firefox 88+, Safari 14+)
+- **Older Browsers**: Graceful degradation (animations may be simplified)
+- **Mobile**: Optimized for touch interactions and performance
+
+### Getting Help
+
+- 📧 **Issues**: Check existing issues or create new ones
+- 📖 **Documentation**: Refer to inline code comments
+- 🔍 **Debug**: Use browser DevTools and console logs
+- 🚀 **Performance**: Use React DevTools Profiler
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See LICENSE file for details.
+
+---
+
+**Studio Haus Gallery Generator** - Creating beautiful, performant gallery experiences with ease.
