@@ -1,4 +1,4 @@
-import { AnimationConfig } from '../types';
+import { AnimationConfig, AnimationEffectType } from '../types';
 
 type AnimationPresets = {
     [key: string]: Omit<AnimationConfig, 'effect'>;
@@ -43,9 +43,10 @@ export const animationPresets: AnimationPresets = {
 };
 
 export function getAnimationConfig(effect: string): AnimationConfig {
-    const preset = animationPresets[effect] || animationPresets.fade;
+    const validEffect = (effect in animationPresets) ? effect as AnimationEffectType : 'fade';
+    const preset = animationPresets[validEffect];
     return {
-        effect,
+        effect: validEffect,
         ...preset
     };
 }

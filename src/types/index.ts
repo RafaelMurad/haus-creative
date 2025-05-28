@@ -32,11 +32,12 @@ export interface MediaItem {
 }
 
 // Define animation effects as string literals
-export type AnimationEffectType = 'fade' | 'slide' | 'scale' | 'none';
+export type AnimationEffectType = 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'scale' | 'none';
 
 // Define ease functions as string literals
 export type EaseFunctionType = 'power1.in' | 'power1.out' | 'power1.inOut' |
-    'power2.in' | 'power2.out' | 'power2.inOut' | 'none';
+    'power2.in' | 'power2.out' | 'power2.inOut' |
+    'power3.in' | 'power3.out' | 'power3.inOut' | 'none';
 
 // Constants for compile-time safety and runtime use
 export const AnimationEffects = {

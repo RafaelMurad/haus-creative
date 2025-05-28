@@ -100,8 +100,9 @@ export default memo(function MediaItem({
       const parent = element.parentElement;
       if (parent) {
         // Check if this is part of a fullscreen layout
-        isFullViewport.current = parent.classList.contains("media-item") || 
-                                 parent.closest('.fullscreen-gallery') !== null;
+        isFullViewport.current =
+          parent.classList.contains("media-item") ||
+          parent.closest(".fullscreen-gallery") !== null;
       }
     }
   }, []);
@@ -113,14 +114,14 @@ export default memo(function MediaItem({
         height: item.size.height,
       }
     : isFullViewport.current
-    ? { 
-        height: "100%", 
-        width: "100%", 
-        position: "relative",
+    ? {
+        height: "100%",
+        width: "100%",
+        position: "relative" as const,
         minHeight: "100vh", // For fullscreen mode
-        maxHeight: "100vh",  // For fullscreen mode
+        maxHeight: "100vh", // For fullscreen mode
       }
-    : { position: "relative" };
+    : { position: "relative" as const };
 
   // Container style builder
   const getContentContainerStyle = () => {
@@ -170,7 +171,7 @@ export default memo(function MediaItem({
       <div
         className="media-content relative w-full h-full"
         style={{
-          position: "relative",
+          position: "relative" as const,
           minHeight: containerConfig.minHeight || "300px",
           ...getContentContainerStyle(),
         }}
@@ -184,7 +185,7 @@ export default memo(function MediaItem({
   return (
     <div
       className="media-content relative w-full h-full"
-      style={{ position: "relative", minHeight: "200px", ...style }}
+      style={{ position: "relative" as const, minHeight: "200px", ...style }}
     >
       {renderMedia()}
     </div>

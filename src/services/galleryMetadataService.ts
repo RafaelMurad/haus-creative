@@ -1,4 +1,4 @@
-import { GalleryConfig } from '../types';
+import { GalleryConfig, AnimationConfig } from '../types';
 import { generateGalleryConfig } from '../utils/galleryGenerator';
 
 interface GalleryMeta {
@@ -6,9 +6,7 @@ interface GalleryMeta {
         title?: string;
         description?: string;
         layout?: 'grid' | 'carousel' | 'masonry' | 'fullscreen';
-        animation?: {
-            effect: string;
-        };
+        animation?: Partial<AnimationConfig>;
         transitionTime?: number;  // New property for carousel transition timing
     };
 }
@@ -24,7 +22,9 @@ export class GalleryMetadataService {
                 description: 'Our most popular items this season',
                 layout: 'carousel',
                 animation: {
-                    effect: 'fade'
+                    effect: 'fade',
+                    duration: 0.7,
+                    ease: 'power2.inOut'
                 },
                 transitionTime: 2000  // 2 seconds for gallery1
             },
@@ -33,7 +33,9 @@ export class GalleryMetadataService {
                 description: 'Full catalog of available products',
                 layout: 'carousel',
                 animation: {
-                    effect: 'none'
+                    effect: 'none',
+                    duration: 0,
+                    ease: 'none'
                 },
                 transitionTime: 700  // 0.7 seconds for gallery2
             }
