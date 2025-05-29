@@ -10,6 +10,7 @@ interface MediaItemProps {
   className?: string;
   onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
+  priority?: boolean;
   containerConfig?: {
     width?: string;
     minWidth?: string;
@@ -33,6 +34,7 @@ export default memo(function MediaItem({
   className = "",
   onLoad,
   forwardedRef,
+  priority = false,
   containerConfig,
 }: MediaItemProps) {
   const isFullViewport = useRef<boolean>(false);
@@ -86,8 +88,11 @@ export default memo(function MediaItem({
                 );
               }
             }}
-            priority={true}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={priority}
+            quality={95}
+            sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1280px) 1280px, (max-width: 1600px) 1600px, (max-width: 1920px) 1920px, 2048px"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
           />
         );
     }

@@ -32,7 +32,7 @@ const enhancedGalleryData: GalleryConfig[] = [
             borderRadius: '0',
             padding: '0',
         },
-        transitionTime: 700,
+        transitionTime: 2000,
         items: []
     },
     {
@@ -41,9 +41,9 @@ const enhancedGalleryData: GalleryConfig[] = [
         description: 'Full catalog of available products',
         layout: 'carousel',
         animation: {
-            effect: AnimationEffects.NONE,
-            duration: 0,
-            ease: EaseFunctions.NONE
+            effect: AnimationEffects.FADE,
+            duration: 0.8,
+            ease: EaseFunctions.POWER2_INOUT
         },
         galleryContainer: {
             display: 'flex',
@@ -64,7 +64,7 @@ const enhancedGalleryData: GalleryConfig[] = [
             borderRadius: '12px',
             padding: '1rem',
         },
-        transitionTime: 700,
+        transitionTime: 2500,
         items: []
     }
 ];

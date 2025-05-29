@@ -1,9 +1,7 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import { ReactNode } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
+import { inter } from "../fonts/fonts";
 
 export const metadata = {
   title: "Studio Haus | Creative Direction + Design",
