@@ -63,7 +63,39 @@ const enhancedGalleryData: GalleryConfig[] = [
             borderRadius: '12px',
             padding: '1rem',
         },
-        transitionTime: 1000,
+        transitionTime: 800,
+        items: []
+    },
+    {
+        id: 'gallery3',
+        title: 'Video Gallery',
+        description: 'Showcase of video content',
+        layout: 'carousel',
+        animation: {
+            effect: AnimationEffects.FADE,
+            duration: 0.8,
+            ease: EaseFunctions.POWER2_INOUT
+        },
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '85%', // increased by 10% from 77%
+            maxWidth: '1585px', // increased proportionally
+            height: '73vh', // increased by 10% from 66vh
+            minHeight: '485px', // increased by 10% from 440px
+            maxHeight: '85vh', // increased by 10% from 77vh
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime needed for videos since they auto-play and loop
         items: []
     }
 ];

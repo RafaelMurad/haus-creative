@@ -49,6 +49,22 @@ export default memo(function MediaItem({
   // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
+      case "video":
+        return (
+          <video
+            ref={ref as (instance: HTMLVideoElement | null) => void}
+            src={item.url}
+            className="w-full h-full object-cover"
+            muted
+            autoPlay
+            loop
+            playsInline
+            poster={item.thumbUrl}
+            onLoadedData={onLoad}
+            preload="auto"
+            style={{ pointerEvents: "none" }}
+          />
+        );
       case "gif":
         return (
           <img
