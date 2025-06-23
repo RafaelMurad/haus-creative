@@ -11,6 +11,7 @@ interface MediaItemProps {
   onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
   priority?: boolean;
+  isActive?: boolean; // Add prop to control video playback
   containerConfig?: {
     width?: string;
     minWidth?: string;
@@ -35,6 +36,7 @@ export default memo(function MediaItem({
   onLoad,
   forwardedRef,
   priority = false,
+  isActive = true, // Default to active for backwards compatibility
   containerConfig,
 }: MediaItemProps) {
   const isFullViewport = useRef<boolean>(false);
@@ -46,6 +48,36 @@ export default memo(function MediaItem({
       localRef.current = el;
     });
 
+  // Control video playback based on isActive prop
+  useEffect(() => {
+    const videoElement = localRef.current as HTMLVideoElement;
+    if (videoElement && videoElement.tagName === "VIDEO") {
+      if (isActive) {
+        // Wait for video to be ready before playing
+        const attemptPlay = () => {
+          if (videoElement.isConnected && videoElement.readyState >= 3) {
+            videoElement.play().catch((error) => {
+              if (error.name !== "AbortError") {
+                console.warn("Video play failed:", error);
+              }
+            });
+          } else if (videoElement.isConnected) {
+            // If not ready, wait a bit and try again
+            setTimeout(attemptPlay, 50);
+          }
+        };
+
+        // Start attempting to play immediately
+        attemptPlay();
+      } else {
+        // Immediately pause when not active
+        if (videoElement.isConnected) {
+          videoElement.pause();
+        }
+      }
+    }
+  }, [isActive]);
+
   // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
@@ -56,13 +88,16 @@ export default memo(function MediaItem({
             src={item.url}
             className="w-full h-full object-cover"
             muted
-            autoPlay
+            autoPlay={isActive} // Only autoplay when active
             loop
             playsInline
             {...(item.thumbUrl && { poster: item.thumbUrl })}
             onLoadedData={onLoad}
-            preload="auto"
+            preload="metadata"
             style={{ pointerEvents: "none" }}
+            controls={false}
+            disablePictureInPicture={true}
+            disableRemotePlayback={true}
           />
         );
       case "gif":

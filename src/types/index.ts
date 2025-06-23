@@ -102,7 +102,7 @@ export interface GalleryConfig {
     title: string;
     description: string;
     layout?: 'grid' | 'carousel' | 'masonry' | 'fullscreen';
-    animation: AnimationConfig;
+    animation?: AnimationConfig; // Made optional - will default to NONE
     items: MediaItem[];
     transitionTime?: number;  // Add transition time for carousel
     container?: ContainerConfig;  // Add container configuration

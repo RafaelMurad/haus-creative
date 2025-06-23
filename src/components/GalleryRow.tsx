@@ -23,6 +23,20 @@ interface GalleryRowProps {
 }
 
 export default function GalleryRow({ gallery }: GalleryRowProps) {
+  // Helper function to get animation config with defaults
+  const getAnimationConfig = () => {
+    return (
+      gallery.animation || {
+        effect: AnimationEffects.NONE,
+        duration: 0,
+        ease: "none" as const,
+        stagger: 0,
+        from: {},
+        to: {},
+      }
+    );
+  };
+
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
@@ -72,12 +86,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   // Set up the elements ref without ScrollTrigger initially
   const { elementsRef } = useGsapAnimation(
     {
-      effect: gallery.animation.effect,
-      duration: gallery.animation.duration,
-      ease: gallery.animation.ease,
-      stagger: gallery.animation.stagger || 0.15,
-      from: gallery.animation.from,
-      to: gallery.animation.to,
+      effect: getAnimationConfig().effect,
+      duration: getAnimationConfig().duration,
+      ease: getAnimationConfig().ease,
+      stagger: getAnimationConfig().stagger || 0.15,
+      from: getAnimationConfig().from,
+      to: getAnimationConfig().to,
     },
     [gallery.id]
   );
@@ -96,12 +110,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     const animations = elements.map((el, index) => {
       return gsapInstance.fromTo(
         el,
-        { ...gallery.animation.from },
+        { ...getAnimationConfig().from },
         {
-          ...gallery.animation.to,
-          duration: gallery.animation.duration,
-          ease: gallery.animation.ease,
-          delay: index * (gallery.animation.stagger || 0.15),
+          ...getAnimationConfig().to,
+          duration: getAnimationConfig().duration,
+          ease: getAnimationConfig().ease,
+          delay: index * (getAnimationConfig().stagger || 0.15),
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top bottom-=100",
@@ -122,7 +136,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         anim.kill();
       });
     };
-  }, [gallery.id, gallery.animation, elementsRef, gsapInstance]);
+  }, [gallery.id, getAnimationConfig(), elementsRef, gsapInstance]);
 
   // Preload next and previous images in carousel
   useEffect(() => {
@@ -266,13 +280,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     timeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
       setPrevIndex(null);
-    }, (gallery.animation.duration || 0.7) * 1000 + 300);
+    }, (getAnimationConfig().duration || 0.7) * 1000 + 300);
   }, [
     isTransitioning,
     gallery.items.length,
     gallery.id,
     activeIndex,
-    gallery.animation.duration,
+    getAnimationConfig().duration,
   ]);
 
   // Set up carousel autoplay for carousel layouts
@@ -280,12 +294,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
       return;
     if (!isReady) return;
+    if (!gallery.transitionTime) return; // No autoplay for galleries without transitionTime (like video galleries)
 
     const interval = setInterval(() => {
       if (!isTransitioning && prevIndex === null) {
         triggerNextSlide();
       }
-    }, gallery.transitionTime || 2000); // Use configured time or default to 2 seconds
+    }, gallery.transitionTime); // Use configured time
 
     return () => clearInterval(interval);
   }, [
@@ -309,11 +324,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       timelineRef.current.kill();
     }
 
-    const duration = gallery.animation.duration || 0.7;
-    const ease = gallery.animation.ease || "power2.inOut";
+    const duration = getAnimationConfig().duration || 0.7;
+    const ease = getAnimationConfig().ease || "power2.inOut";
 
     // Apply the animation based on the effect type
-    switch (gallery.animation.effect) {
+    switch (getAnimationConfig().effect) {
       case AnimationEffects.NONE: {
         // No animation - just instantly switch
         gsapInstance.set(prevRef.current, { opacity: 0 });
@@ -431,7 +446,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
           );
       }
     }
-  }, [prevIndex, isTransitioning, gallery.animation, gsapInstance]);
+  }, [prevIndex, isTransitioning, getAnimationConfig(), gsapInstance]);
 
   // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {
@@ -480,6 +495,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                   item={prevItem}
                   className="w-full h-full object-cover"
                   priority={true}
+                  isActive={false} // Previous item should not be active (pause videos)
                 />
               </div>
             )}
@@ -493,6 +509,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 item={activeItem}
                 className="w-full h-full object-cover"
                 priority={true}
+                isActive={true} // Current item should be active (play videos)
               />
             </div>
           </div>

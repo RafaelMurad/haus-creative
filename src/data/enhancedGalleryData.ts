@@ -71,11 +71,7 @@ const enhancedGalleryData: GalleryConfig[] = [
         title: 'Video Gallery',
         description: 'Showcase of video content',
         layout: 'carousel',
-        animation: {
-            effect: AnimationEffects.FADE,
-            duration: 0.8,
-            ease: EaseFunctions.POWER2_INOUT
-        },
+        // No animation config - will default to NONE for video galleries
         galleryContainer: {
             display: 'flex',
             alignItems: 'center',
@@ -95,7 +91,7 @@ const enhancedGalleryData: GalleryConfig[] = [
             borderRadius: '12px',
             padding: '1rem',
         },
-        // No transitionTime needed for videos since they auto-play and loop
+        // No transitionTime - videos should loop continuously without interruption
         items: []
     },
     {
@@ -128,6 +124,34 @@ const enhancedGalleryData: GalleryConfig[] = [
             padding: '1rem',
         },
         transitionTime: 1000, // 1 second transition speed
+        items: []
+    },
+    {
+        id: 'gallery5',
+        title: 'Video Gallery 5',
+        description: 'Additional video content showcase',
+        layout: 'carousel',
+        // No animation config - will default to NONE for easier coding
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '72%', // reduced by 15% from 85%
+            maxWidth: '1347px', // reduced proportionally from 1585px
+            height: '73vh', // same as gallery3
+            minHeight: '485px', // same as gallery3
+            maxHeight: '85vh', // same as gallery3
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime - videos should loop continuously without interruption
         items: []
     }
 ];
