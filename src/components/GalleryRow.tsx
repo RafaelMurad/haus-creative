@@ -314,6 +314,18 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
     // Apply the animation based on the effect type
     switch (gallery.animation.effect) {
+      case AnimationEffects.NONE: {
+        // No animation - just instantly switch
+        gsapInstance.set(prevRef.current, { opacity: 0 });
+        gsapInstance.set(activeRef.current, { opacity: 1 });
+        setPrevIndex(null);
+        setIsTransitioning(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        break;
+      }
+
       case AnimationEffects.SLIDE: {
         gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
         timelineRef.current = gsapInstance.timeline({

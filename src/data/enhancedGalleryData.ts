@@ -1,4 +1,3 @@
-
 import { GalleryConfig, AnimationEffects, EaseFunctions } from '../types';
 
 const enhancedGalleryData: GalleryConfig[] = [
@@ -41,9 +40,9 @@ const enhancedGalleryData: GalleryConfig[] = [
         description: 'Full catalog of available products',
         layout: 'carousel',
         animation: {
-            effect: AnimationEffects.FADE,
-            duration: 0.8,
-            ease: EaseFunctions.POWER2_INOUT
+            effect: AnimationEffects.NONE,
+            duration: 0.9,
+            ease: EaseFunctions.NONE
         },
         galleryContainer: {
             display: 'flex',
@@ -53,18 +52,18 @@ const enhancedGalleryData: GalleryConfig[] = [
             padding: '4rem 2rem 0 2rem'
         },
         container: {
-            width: '80%',
-            maxWidth: '100vw',
-            height: '70vh',
-            minHeight: '400px',
-            maxHeight: '90vh',
+            width: '90%', // increased for more space
+            maxWidth: '1800px', // increased max width
+            height: '85vh', // increased from 70vh for better image display
+            minHeight: '500px', // increased from 400px
+            maxHeight: '95vh', // increased from 90vh
             aspectRatio: 'auto',
             alignment: 'center',
             background: '#fff',
             borderRadius: '12px',
             padding: '1rem',
         },
-        transitionTime: 2500,
+        transitionTime: 1000,
         items: []
     }
 ];
