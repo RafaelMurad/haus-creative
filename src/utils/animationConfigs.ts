@@ -43,7 +43,7 @@ export const animationPresets: AnimationPresets = {
 };
 
 export function getAnimationConfig(effect: string): AnimationConfig {
-    const validEffect = (effect in animationPresets) ? effect as AnimationEffectType : 'fade';
+    const validEffect = (effect in animationPresets) ? effect as AnimationEffectType : 'none';
     const preset = animationPresets[validEffect];
     return {
         effect: validEffect,

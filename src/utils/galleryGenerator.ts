@@ -38,13 +38,44 @@ export function createMediaItemFromFile(
     const type = detectFileType(filename);
     const url = getAssetPath(galleryId, filename);
 
+    // For videos, try to find a cover image with common naming patterns
+    let thumbUrl: string | undefined;
+    if (type === 'video') {
+        // Try different cover image naming patterns
+        const videoBaseName = filename.split('.')[0];
+        const possibleCoverNames = [
+            `thumb-${videoBaseName}.jpg`,
+            `${videoBaseName}-Cover.png`,
+            `${videoBaseName}-cover.png`,
+            `${galleryId}-Cover.png`,
+            `${galleryId}-cover.png`
+        ];
+
+        // Try to find a cover image by checking common naming patterns
+        // Check each possible cover name and use the first one that would exist
+        for (const coverName of possibleCoverNames) {
+            // For client-side, we'll make educated guesses based on known patterns
+            // since we can't easily check file existence in the browser
+            const isLikelyToExist = checkLikelyCoverExistence(galleryId, coverName);
+            if (isLikelyToExist) {
+                thumbUrl = getAssetPath(galleryId, coverName);
+                break;
+            }
+        }
+
+        // Fallback: no cover image found, video will play without poster
+        if (!thumbUrl) {
+            thumbUrl = undefined;
+        }
+    }
+
     return {
         id: `${galleryId}-${index}`,
         title: "",  // Add empty string to satisfy type requirements
         description: "", // Add empty string to satisfy type requirements
         type,
         url,
-        thumbUrl: type === 'video' ? getAssetPath(galleryId, `thumb-${filename.split('.')[0]}.jpg`) : undefined,
+        thumbUrl,
         category: galleryId
     };
 }
@@ -77,8 +108,21 @@ export function generateGalleryConfig(
         transitionTime?: number;
     }
 ): GalleryConfig {
-    // Create media items from files
-    const items = files.map((file, index) =>
+    // For video galleries, prioritize video files first, then other media
+    const sortedFiles = [...files].sort((a, b) => {
+        const aType = detectFileType(a);
+        const bType = detectFileType(b);
+
+        // Videos first, then images
+        if (aType === 'video' && bType !== 'video') return -1;
+        if (bType === 'video' && aType !== 'video') return 1;
+
+        // Within the same type, sort alphabetically
+        return a.localeCompare(b);
+    });
+
+    // Create media items from sorted files
+    const items = sortedFiles.map((file, index) =>
         createMediaItemFromFile(galleryId, file, index)
     );
 
@@ -101,4 +145,39 @@ export function generateGalleryConfig(
         transitionTime: options?.transitionTime,
         items
     };
+}
+
+/**
+ * Check if a cover image is likely to exist based on known patterns
+ * Since we can't easily check file existence in client-side code,
+ * we make educated guesses based on known gallery structures
+ * 
+ * @param galleryId - ID of the gallery
+ * @param coverName - Name of the potential cover file
+ * @returns Whether the cover is likely to exist
+ */
+function checkLikelyCoverExistence(galleryId: string, coverName: string): boolean {
+    // Known existing cover patterns for specific galleries
+    const knownCovers: Record<string, string[]> = {
+        'gallery3': ['Gallery3-Cover.png'],
+        'gallery5': ['Gallery5-Cover.png'],
+    };
+
+    // Check if this gallery has known cover files
+    if (knownCovers[galleryId]) {
+        return knownCovers[galleryId].includes(coverName);
+    }
+
+    // For other galleries, prefer the gallery-specific naming pattern
+    // e.g., "Gallery4-Cover.png" over "thumb-Gallery4-Video.jpg"
+    if (coverName.includes('-Cover.png') || coverName.includes('-cover.png')) {
+        return true;
+    }
+
+    // Thumb pattern is less likely but possible
+    if (coverName.startsWith('thumb-')) {
+        return false; // We'll avoid this pattern to prevent 404s
+    }
+
+    return false;
 }

@@ -10,6 +10,8 @@ interface MediaItemProps {
   className?: string;
   onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
+  priority?: boolean;
+  isActive?: boolean; // Add prop to control video playback
   containerConfig?: {
     width?: string;
     minWidth?: string;
@@ -33,6 +35,8 @@ export default memo(function MediaItem({
   className = "",
   onLoad,
   forwardedRef,
+  priority = false,
+  isActive = true, // Default to active for backwards compatibility
   containerConfig,
 }: MediaItemProps) {
   const isFullViewport = useRef<boolean>(false);
@@ -44,9 +48,58 @@ export default memo(function MediaItem({
       localRef.current = el;
     });
 
+  // Control video playback based on isActive prop
+  useEffect(() => {
+    const videoElement = localRef.current as HTMLVideoElement;
+    if (videoElement && videoElement.tagName === "VIDEO") {
+      if (isActive) {
+        // Wait for video to be ready before playing
+        const attemptPlay = () => {
+          if (videoElement.isConnected && videoElement.readyState >= 3) {
+            videoElement.play().catch((error) => {
+              if (error.name !== "AbortError") {
+                console.warn("Video play failed:", error);
+              }
+            });
+          } else if (videoElement.isConnected) {
+            // If not ready, wait a bit and try again
+            setTimeout(attemptPlay, 50);
+          }
+        };
+
+        // Start attempting to play immediately
+        attemptPlay();
+      } else {
+        // Immediately pause when not active
+        if (videoElement.isConnected) {
+          videoElement.pause();
+        }
+      }
+    }
+  }, [isActive]);
+
   // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
+      case "video":
+        return (
+          <video
+            ref={ref as (instance: HTMLVideoElement | null) => void}
+            src={item.url}
+            className="w-full h-full object-cover"
+            muted
+            autoPlay={isActive} // Only autoplay when active
+            loop
+            playsInline
+            {...(item.thumbUrl && { poster: item.thumbUrl })}
+            onLoadedData={onLoad}
+            preload="metadata"
+            style={{ pointerEvents: "none" }}
+            controls={false}
+            disablePictureInPicture={true}
+            disableRemotePlayback={true}
+          />
+        );
       case "gif":
         return (
           <img
@@ -86,8 +139,11 @@ export default memo(function MediaItem({
                 );
               }
             }}
-            priority={true}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={priority}
+            quality={95}
+            sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1280px) 1280px, (max-width: 1600px) 1600px, (max-width: 1920px) 1920px, 2048px"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
           />
         );
     }

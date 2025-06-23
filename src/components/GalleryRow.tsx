@@ -1,6 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useState, useRef, useEffect } from "react";
+import {
+  useLayoutEffect,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import MediaItem from "./MediaItem";
 import useGsapAnimation from "../hooks/useGsapAnimation";
 import {
@@ -17,9 +23,25 @@ interface GalleryRowProps {
 }
 
 export default function GalleryRow({ gallery }: GalleryRowProps) {
+  // Helper function to get animation config with defaults
+  const getAnimationConfig = () => {
+    return (
+      gallery.animation || {
+        effect: AnimationEffects.NONE,
+        duration: 0,
+        ease: "none" as const,
+        stagger: 0,
+        from: {},
+        to: {},
+      }
+    );
+  };
+
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<any>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
@@ -30,6 +52,18 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   useEffect(() => {
     debugGalleryStructure(gallery.id, gallery);
   }, [gallery]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Dynamically import gsap on mount
   useEffect(() => {
@@ -52,12 +86,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   // Set up the elements ref without ScrollTrigger initially
   const { elementsRef } = useGsapAnimation(
     {
-      effect: gallery.animation.effect,
-      duration: gallery.animation.duration,
-      ease: gallery.animation.ease,
-      stagger: gallery.animation.stagger || 0.15,
-      from: gallery.animation.from,
-      to: gallery.animation.to,
+      effect: getAnimationConfig().effect,
+      duration: getAnimationConfig().duration,
+      ease: getAnimationConfig().ease,
+      stagger: getAnimationConfig().stagger || 0.15,
+      from: getAnimationConfig().from,
+      to: getAnimationConfig().to,
     },
     [gallery.id]
   );
@@ -76,12 +110,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     const animations = elements.map((el, index) => {
       return gsapInstance.fromTo(
         el,
-        { ...gallery.animation.from },
+        { ...getAnimationConfig().from },
         {
-          ...gallery.animation.to,
-          duration: gallery.animation.duration,
-          ease: gallery.animation.ease,
-          delay: index * (gallery.animation.stagger || 0.15),
+          ...getAnimationConfig().to,
+          duration: getAnimationConfig().duration,
+          ease: getAnimationConfig().ease,
+          delay: index * (getAnimationConfig().stagger || 0.15),
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top bottom-=100",
@@ -102,7 +136,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         anim.kill();
       });
     };
-  }, [gallery.id, gallery.animation, elementsRef, gsapInstance]);
+  }, [gallery.id, getAnimationConfig(), elementsRef, gsapInstance]);
 
   // Preload next and previous images in carousel
   useEffect(() => {
@@ -228,17 +262,45 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     }
   };
 
+  // Improved GSAP crossfade transition logic
+  const triggerNextSlide = useCallback((): void => {
+    if (isTransitioning || !gallery.items.length) return;
+
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    const next = (activeIndex + 1) % gallery.items.length;
+    setPrevIndex(activeIndex);
+    setActiveIndex(next);
+    setIsTransitioning(true);
+
+    // Fallback timeout to prevent getting stuck
+    timeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+      setPrevIndex(null);
+    }, (getAnimationConfig().duration || 0.7) * 1000 + 300);
+  }, [
+    isTransitioning,
+    gallery.items.length,
+    gallery.id,
+    activeIndex,
+    getAnimationConfig().duration,
+  ]);
+
   // Set up carousel autoplay for carousel layouts
   useEffect(() => {
     if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
       return;
     if (!isReady) return;
+    if (!gallery.transitionTime) return; // No autoplay for galleries without transitionTime (like video galleries)
 
     const interval = setInterval(() => {
       if (!isTransitioning && prevIndex === null) {
         triggerNextSlide();
       }
-    }, gallery.transitionTime || 2000); // Use configured time or default to 2 seconds
+    }, gallery.transitionTime); // Use configured time
 
     return () => clearInterval(interval);
   }, [
@@ -247,16 +309,9 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     gallery.layout,
     isReady,
     gallery.transitionTime,
+    gallery.id,
+    triggerNextSlide,
   ]);
-
-  // Improved GSAP crossfade transition logic
-  const triggerNextSlide = (): void => {
-    if (isTransitioning || !gallery.items.length) return;
-    const next = (activeIndex + 1) % gallery.items.length;
-    setPrevIndex(activeIndex);
-    setActiveIndex(next);
-    setIsTransitioning(true);
-  };
 
   // Animate crossfade when prevIndex changes
   useLayoutEffect(() => {
@@ -264,102 +319,134 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (!prevRef.current || !activeRef.current) return;
     if (!gsapInstance) return;
 
-    const duration = gallery.animation.duration || 0.7;
-    const ease = gallery.animation.ease || "power2.inOut";
+    // Kill any existing timeline
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+    }
+
+    const duration = getAnimationConfig().duration || 0.7;
+    const ease = getAnimationConfig().ease || "power2.inOut";
 
     // Apply the animation based on the effect type
-    switch (gallery.animation.effect) {
+    switch (getAnimationConfig().effect) {
+      case AnimationEffects.NONE: {
+        // No animation - just instantly switch
+        gsapInstance.set(prevRef.current, { opacity: 0 });
+        gsapInstance.set(activeRef.current, { opacity: 1 });
+        setPrevIndex(null);
+        setIsTransitioning(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        break;
+      }
+
       case AnimationEffects.SLIDE: {
         gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
-        const tl = gsapInstance.timeline({
+        timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
             setPrevIndex(null);
             setIsTransitioning(false);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
           },
         });
 
-        tl.to(
-          prevRef.current,
-          {
-            x: "-100%",
-            opacity: 1,
-            duration,
-            ease,
-          },
-          0
-        ).to(
-          activeRef.current,
-          {
-            x: "0%",
-            opacity: 1,
-            duration,
-            ease,
-          },
-          0
-        );
+        timelineRef.current
+          .to(
+            prevRef.current,
+            {
+              x: "-100%",
+              opacity: 1,
+              duration,
+              ease,
+            },
+            0
+          )
+          .to(
+            activeRef.current,
+            {
+              x: "0%",
+              opacity: 1,
+              duration,
+              ease,
+            },
+            0
+          );
         break;
       }
 
       case AnimationEffects.SCALE: {
         gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
-        const tl = gsapInstance.timeline({
+        timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
             setPrevIndex(null);
             setIsTransitioning(false);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
           },
         });
 
-        tl.to(
-          prevRef.current,
-          {
-            opacity: 0,
-            scale: 0.8,
-            duration,
-            ease,
-          },
-          0
-        ).to(
-          activeRef.current,
-          {
-            opacity: 1,
-            scale: 1,
-            duration,
-            ease,
-          },
-          0
-        );
+        timelineRef.current
+          .to(
+            prevRef.current,
+            {
+              opacity: 0,
+              scale: 0.8,
+              duration,
+              ease,
+            },
+            0
+          )
+          .to(
+            activeRef.current,
+            {
+              opacity: 1,
+              scale: 1,
+              duration,
+              ease,
+            },
+            0
+          );
         break;
       }
 
       default: {
         gsapInstance.set(activeRef.current, { opacity: 0 });
-        const tl = gsapInstance.timeline({
+        timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
             setPrevIndex(null);
             setIsTransitioning(false);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
           },
         });
 
-        tl.to(
-          prevRef.current,
-          {
-            opacity: 0,
-            duration,
-            ease,
-          },
-          0
-        ).to(
-          activeRef.current,
-          {
-            opacity: 1,
-            duration,
-            ease,
-          },
-          0
-        );
+        timelineRef.current
+          .to(
+            prevRef.current,
+            {
+              opacity: 0,
+              duration,
+              ease,
+            },
+            0
+          )
+          .to(
+            activeRef.current,
+            {
+              opacity: 1,
+              duration,
+              ease,
+            },
+            0
+          );
       }
     }
-  }, [prevIndex, isTransitioning, gallery.animation, gsapInstance]);
+  }, [prevIndex, isTransitioning, getAnimationConfig(), gsapInstance]);
 
   // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {
@@ -373,22 +460,28 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       case "fullscreen": {
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
-        
+
         // Add special styles for fullscreen mode
-        const isFullscreen = gallery.layout === 'fullscreen';
-        const containerStyle: React.CSSProperties = isFullscreen 
-          ? { 
-              height: "100vh", 
-              width: "100vw", 
-              position: "relative", 
+        const isFullscreen = gallery.layout === "fullscreen";
+        const containerStyle: React.CSSProperties = isFullscreen
+          ? {
+              height: "100vh",
+              width: "100vw",
+              position: "relative",
               margin: 0,
-              padding: 0
-            } 
-          : { height: "100%", width: "100%", position: "relative" as "relative" };
+              padding: 0,
+            }
+          : {
+              height: "100%",
+              width: "100%",
+              position: "relative" as "relative",
+            };
 
         return (
           <div
-            className={`relative overflow-hidden flex items-center justify-center ${isFullscreen ? 'fullscreen-container' : ''}`}
+            className={`relative overflow-hidden flex items-center justify-center ${
+              isFullscreen ? "fullscreen-container" : ""
+            }`}
             style={containerStyle}
           >
             {/* Previous slide (fading out) */}
@@ -401,6 +494,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 <MediaItem
                   item={prevItem}
                   className="w-full h-full object-cover"
+                  priority={true}
+                  isActive={false} // Previous item should not be active (pause videos)
                 />
               </div>
             )}
@@ -413,6 +508,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               <MediaItem
                 item={activeItem}
                 className="w-full h-full object-cover"
+                priority={true}
+                isActive={true} // Current item should be active (play videos)
               />
             </div>
           </div>
@@ -445,7 +542,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               const item = data[index];
               return (
                 <div style={style} key={item.id} className="p-2">
-                  <MediaItem item={item} />
+                  <MediaItem item={item} priority={true} />
                 </div>
               );
             }}
@@ -463,6 +560,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
           >
             <MediaItem
               item={item}
+              priority={true}
               forwardedRef={(el) => {
                 if (elementsRef.current) {
                   elementsRef.current[index] = el;
@@ -482,25 +580,31 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     : "min-h-[60vh] md:min-h-screen";
 
   // Add fullscreen-gallery class if layout is fullscreen
-  const isFullscreen = gallery.layout === 'fullscreen';
-  
+  const isFullscreen = gallery.layout === "fullscreen";
+
   return (
-    <section className={`gallery-row w-full m-0 p-0 ${sectionHeight} ${isFullscreen ? 'fullscreen-gallery' : ''}`}>
+    <section
+      className={`gallery-row w-full m-0 p-0 ${sectionHeight} ${
+        isFullscreen ? "fullscreen-gallery" : ""
+      }`}
+    >
       {/* Outer full-width container, configurable per gallery */}
       <div
-        className={`w-full ${isFullscreen ? 'h-screen' : ''}`}
+        className={`w-full ${isFullscreen ? "h-screen" : ""}`}
         ref={containerRef}
         style={gallery.galleryContainer ? { ...gallery.galleryContainer } : {}}
       >
         <div
-          className={`gallery-content ${isFullscreen ? 'h-full' : ''}`}
+          className={`gallery-content ${isFullscreen ? "h-full" : ""}`}
           style={
             gallery.container
               ? { ...getContainerStyle() }
               : { position: "relative", width: "100%", height: "100%" }
           }
         >
-          <div className={`${getLayoutClass()} ${isFullscreen ? 'h-full' : ''}`}>
+          <div
+            className={`${getLayoutClass()} ${isFullscreen ? "h-full" : ""}`}
+          >
             {gallery.items.length > 0 ? (
               renderLayout()
             ) : (

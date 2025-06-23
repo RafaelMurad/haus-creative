@@ -1,4 +1,3 @@
-
 import { GalleryConfig, AnimationEffects, EaseFunctions } from '../types';
 
 const enhancedGalleryData: GalleryConfig[] = [
@@ -32,7 +31,7 @@ const enhancedGalleryData: GalleryConfig[] = [
             borderRadius: '0',
             padding: '0',
         },
-        transitionTime: 700,
+        transitionTime: 2000,
         items: []
     },
     {
@@ -42,7 +41,7 @@ const enhancedGalleryData: GalleryConfig[] = [
         layout: 'carousel',
         animation: {
             effect: AnimationEffects.NONE,
-            duration: 0,
+            duration: 0.9,
             ease: EaseFunctions.NONE
         },
         galleryContainer: {
@@ -53,18 +52,106 @@ const enhancedGalleryData: GalleryConfig[] = [
             padding: '4rem 2rem 0 2rem'
         },
         container: {
-            width: '80%',
-            maxWidth: '100vw',
-            height: '70vh',
-            minHeight: '400px',
-            maxHeight: '90vh',
+            width: '90%', // increased for more space
+            maxWidth: '1800px', // increased max width
+            height: '85vh', // increased from 70vh for better image display
+            minHeight: '500px', // increased from 400px
+            maxHeight: '95vh', // increased from 90vh
             aspectRatio: 'auto',
             alignment: 'center',
             background: '#fff',
             borderRadius: '12px',
             padding: '1rem',
         },
-        transitionTime: 700,
+        transitionTime: 800,
+        items: []
+    },
+    {
+        id: 'gallery3',
+        title: 'Video Gallery',
+        description: 'Showcase of video content',
+        layout: 'carousel',
+        // No animation config - will default to NONE for video galleries
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '85%', // increased by 10% from 77%
+            maxWidth: '1585px', // increased proportionally
+            height: '73vh', // increased by 10% from 66vh
+            minHeight: '485px', // increased by 10% from 440px
+            maxHeight: '85vh', // increased by 10% from 77vh
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime - videos should loop continuously without interruption
+        items: []
+    },
+    {
+        id: 'gallery4',
+        title: 'Image Slideshow',
+        description: 'Cycling image gallery',
+        layout: 'carousel',
+        animation: {
+            effect: AnimationEffects.NONE,
+            duration: 0.0,
+            ease: EaseFunctions.NONE
+        },
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '58%', // reduced by another 20% from 72%
+            maxWidth: '1150px', // reduced proportionally from 1440px
+            height: '85vh', // same as gallery2
+            minHeight: '500px', // same as gallery2
+            maxHeight: '95vh', // same as gallery2
+            aspectRatio: 'auto',
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        transitionTime: 1000, // 1 second transition speed
+        items: []
+    },
+    {
+        id: 'gallery5',
+        title: 'Video Gallery 5',
+        description: 'Additional video content showcase',
+        layout: 'carousel',
+        // No animation config - will default to NONE for easier coding
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '72%', // reduced by 15% from 85%
+            maxWidth: '1347px', // reduced proportionally from 1585px
+            height: '73vh', // same as gallery3
+            minHeight: '485px', // same as gallery3
+            maxHeight: '85vh', // same as gallery3
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime - videos should loop continuously without interruption
         items: []
     }
 ];
