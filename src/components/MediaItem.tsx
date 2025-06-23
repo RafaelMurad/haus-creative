@@ -59,7 +59,7 @@ export default memo(function MediaItem({
             autoPlay
             loop
             playsInline
-            poster={item.thumbUrl}
+            {...(item.thumbUrl && { poster: item.thumbUrl })}
             onLoadedData={onLoad}
             preload="auto"
             style={{ pointerEvents: "none" }}

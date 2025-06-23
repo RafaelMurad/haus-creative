@@ -38,13 +38,35 @@ export function createMediaItemFromFile(
     const type = detectFileType(filename);
     const url = getAssetPath(galleryId, filename);
 
+    // For videos, try to find a cover image with common naming patterns
+    let thumbUrl: string | undefined;
+    if (type === 'video') {
+        // Try different cover image naming patterns
+        const videoBaseName = filename.split('.')[0];
+        const possibleCoverNames = [
+            `thumb-${videoBaseName}.jpg`,
+            `${videoBaseName}-Cover.png`,
+            `${videoBaseName}-cover.png`,
+            `${galleryId}-Cover.png`,
+            `${galleryId}-cover.png`
+        ];
+
+        // For now, we'll use the gallery-specific cover pattern
+        // This could be enhanced to actually check file existence
+        if (galleryId === 'gallery3') {
+            thumbUrl = getAssetPath(galleryId, 'Gallery3-Cover.png');
+        } else {
+            thumbUrl = getAssetPath(galleryId, `thumb-${videoBaseName}.jpg`);
+        }
+    }
+
     return {
         id: `${galleryId}-${index}`,
         title: "",  // Add empty string to satisfy type requirements
         description: "", // Add empty string to satisfy type requirements
         type,
         url,
-        thumbUrl: type === 'video' ? getAssetPath(galleryId, `thumb-${filename.split('.')[0]}.jpg`) : undefined,
+        thumbUrl,
         category: galleryId
     };
 }

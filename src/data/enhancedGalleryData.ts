@@ -97,6 +97,38 @@ const enhancedGalleryData: GalleryConfig[] = [
         },
         // No transitionTime needed for videos since they auto-play and loop
         items: []
+    },
+    {
+        id: 'gallery4',
+        title: 'Image Slideshow',
+        description: 'Cycling image gallery',
+        layout: 'carousel',
+        animation: {
+            effect: AnimationEffects.NONE,
+            duration: 0.0,
+            ease: EaseFunctions.NONE
+        },
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '58%', // reduced by another 20% from 72%
+            maxWidth: '1150px', // reduced proportionally from 1440px
+            height: '85vh', // same as gallery2
+            minHeight: '500px', // same as gallery2
+            maxHeight: '95vh', // same as gallery2
+            aspectRatio: 'auto',
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        transitionTime: 1000, // 1 second transition speed
+        items: []
     }
 ];
 
