@@ -478,29 +478,36 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 const gap = width; // Full viewport width gap between images
                 const totalItems = gallery.items.length;
 
-                // Calculate the initial centered position (same as CSS calc)
-                const initialCenterOffset = (width - imageWidth) / 2;
+                // Helper function to calculate the exact position needed to center any image
+                const calculateCenterPosition = (
+                  imageIndex: number
+                ): number => {
+                  // Each image is at position: imageIndex * (imageWidth + gap) from track start
+                  const imagePosition = imageIndex * (imageWidth + gap);
+                  // To center this image, its left edge should be at: (width - imageWidth) / 2
+                  const centerPosition = (width - imageWidth) / 2;
+                  // Return the required track offset to achieve centering
+                  return centerPosition - imagePosition;
+                };
 
-                // Set initial position to match CSS exactly
-                gsapInstance.set(trackRef.current, {
-                  x: initialCenterOffset,
-                  force3D: true,
-                });
+                // Pre-calculate all center positions for each image
+                const centerPositions = Array.from(
+                  { length: totalItems },
+                  (_, i) => calculateCenterPosition(i + 1) // i+1 because we start with image 2
+                );
 
+                // CSS already centers the first image (image 0), so we start with subsequent images
                 const tl = gsapInstance.timeline({ repeat: -1 });
 
-                // First image stays centered for 2 seconds
+                // First image stays centered for 2 seconds (already positioned by CSS)
                 tl.to({}, { duration: 2 });
 
-                // Loop through each image transition
+                // Loop through each image transition using pre-calculated positions
                 for (let i = 0; i < totalItems; i++) {
-                  // For each subsequent image, we need to move left by (imageWidth + gap)
-                  // from the previous position to center the next image
-                  const targetPosition =
-                    initialCenterOffset - (imageWidth + gap) * (i + 1);
+                  const targetPosition = centerPositions[i];
 
                   tl.to(trackRef.current, {
-                    x: targetPosition,
+                    x: targetPosition, // Move to the pre-calculated center position
                     duration: 1.8,
                     ease: "power1.inOut",
                     force3D: true,
@@ -514,7 +521,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
                 // Reset to beginning position for seamless loop
                 tl.set(trackRef.current, {
-                  x: initialCenterOffset, // Reset to initial centered position
+                  x: 0, // Reset to CSS transform position (centered)
                   force3D: true,
                 });
 
@@ -547,6 +554,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  transform: "translateX(calc((100vw - 720px) / 2))", // Initial CSS centering to prevent flash
                   willChange: "transform",
                   gap: "100vw", // Full viewport width gap - only one image visible at a time
                   pointerEvents: "none", // Disable all interactions on track
