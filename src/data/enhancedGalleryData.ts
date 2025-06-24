@@ -185,6 +185,38 @@ const enhancedGalleryData: GalleryConfig[] = [
         },
         transitionTime: 2500, // 2.5 seconds for smooth treadmill effect
         items: []
+    },
+    {
+        id: 'gallery7',
+        title: 'Gallery 7',
+        description: 'Seventh gallery showcase',
+        layout: 'fullscreen',
+        animation: {
+            effect: AnimationEffects.FADE,
+            duration: 0.7,
+            ease: EaseFunctions.POWER2_INOUT
+        },
+        galleryContainer: {
+            padding: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+        },
+        container: {
+            width: '100%',
+            maxWidth: '100vw',
+            height: '100vh',
+            minHeight: '100vh',
+            maxHeight: '100vh',
+            aspectRatio: 'auto',
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '0',
+            padding: '0',
+        },
+        transitionTime: 2000,
+        items: []
     }
 ];
 
