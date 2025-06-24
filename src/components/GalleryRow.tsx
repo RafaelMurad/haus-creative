@@ -458,6 +458,135 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     switch (gallery.layout) {
       case "carousel":
       case "fullscreen": {
+        // Special handling for infinite scroll treadmill effect (gallery6)
+        if (gallery.id === "gallery6") {
+          const trackRef = useRef<HTMLDivElement>(null);
+          const animationRef = useRef<any>(null);
+          const [isPaused, setIsPaused] = useState(false);
+
+          useEffect(() => {
+            if (!trackRef.current || !gsapInstance) return;
+
+            const ctx = gsapInstance.context(() => {
+              // Calculate total width of one set of images
+              const totalWidth = trackRef.current!.scrollWidth / 2;
+
+              // Create infinite loop animation
+              animationRef.current = gsapInstance.to(trackRef.current, {
+                x: -totalWidth,
+                ease: "none",
+                duration: 25, // Smooth continuous scroll
+                repeat: -1,
+                paused: isPaused,
+              });
+            }, trackRef);
+
+            return () => ctx.revert();
+          }, [gsapInstance, gallery.items, isPaused]);
+
+          // Handle hover pause/resume
+          const handleMouseEnter = () => {
+            setIsPaused(true);
+            if (animationRef.current) {
+              animationRef.current.pause();
+            }
+          };
+
+          const handleMouseLeave = () => {
+            setIsPaused(false);
+            if (animationRef.current) {
+              animationRef.current.resume();
+            }
+          };
+
+          return (
+            <div
+              className="treadmill-container"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              style={{
+                width: "100vw",
+                height: "100vh",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                cursor: "pointer",
+              }}
+            >
+              <div
+                ref={trackRef}
+                className="treadmill-track"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3rem", // Responsive gap between images
+                  willChange: "transform",
+                  paddingLeft: "100vw", // Start images from off-screen right
+                }}
+              >
+                {/* Duplicate the images array for seamless loop */}
+                {[...gallery.items, ...gallery.items].map((item, index) => (
+                  <div
+                    key={`${item.id}-${index}`}
+                    className="treadmill-item"
+                    style={{
+                      flexShrink: 0,
+                      width: "clamp(300px, 40vw, 500px)", // Responsive width
+                      height: "clamp(400px, 55vw, 700px)", // Responsive height
+                      borderRadius: "16px",
+                      overflow: "hidden",
+                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+                      transform:
+                        "perspective(1000px) rotateY(-3deg) rotateX(2deg)",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform =
+                        "perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1.05)";
+                      e.currentTarget.style.boxShadow =
+                        "0 30px 80px rgba(0, 0, 0, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform =
+                        "perspective(1000px) rotateY(-3deg) rotateX(2deg) scale(1)";
+                      e.currentTarget.style.boxShadow =
+                        "0 20px 60px rgba(0, 0, 0, 0.3)";
+                    }}
+                  >
+                    <MediaItem
+                      item={item}
+                      className="w-full h-full object-cover"
+                      priority={index < 6} // Prioritize first few items
+                      isActive={true}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Pause indicator */}
+              {isPaused && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "2rem",
+                    right: "2rem",
+                    background: "rgba(0, 0, 0, 0.7)",
+                    color: "white",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "20px",
+                    fontSize: "0.9rem",
+                    fontWeight: "500",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  ⏸️ Paused
+                </div>
+              )}
+            </div>
+          );
+        }
+
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
 

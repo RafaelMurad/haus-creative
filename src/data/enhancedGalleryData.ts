@@ -153,6 +153,38 @@ const enhancedGalleryData: GalleryConfig[] = [
         },
         // No transitionTime - videos should loop continuously without interruption
         items: []
+    },
+    {
+        id: 'gallery6',
+        title: 'Magazine Cover Treadmill',
+        description: 'Small magazine covers sliding right to left like on a treadmill',
+        layout: 'carousel',
+        animation: {
+            effect: AnimationEffects.SLIDE,
+            duration: 1.2,
+            ease: EaseFunctions.POWER2_INOUT
+        },
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '0',
+            overflow: 'hidden', // Hide images sliding off-screen
+            width: '100vw' // Full viewport width for treadmill wrapper
+        },
+        container: {
+            width: '100vw', // Half viewport width for each item
+            maxWidth: '100vw',
+            height: '73vh', // Keeping magazine proportions (2:3 ratio)
+            minHeight: '73vh',
+            maxHeight: '73vh',
+            alignment: 'center',
+            background: 'transparent', // No background for magazine effect
+            padding: '0',
+        },
+        transitionTime: 2500, // 2.5 seconds for smooth treadmill effect
+        items: []
     }
 ];
 
