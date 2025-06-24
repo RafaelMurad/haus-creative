@@ -465,6 +465,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
           useEffect(() => {
             if (!trackRef.current || !gsapInstance) return;
 
+            let currentTimeline: any = null;
+
             const ctx = gsapInstance.context(() => {
               // Function to get current window dimensions
               const getWindowDimensions = () => ({
@@ -472,28 +474,31 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 imageWidth: 720,
               });
 
+              // Helper function to calculate the exact position needed to center any image
+              const calculateCenterPosition = (
+                imageIndex: number,
+                width: number,
+                imageWidth: number
+              ): number => {
+                // Each image is at position: imageIndex * (imageWidth + gap) from track start
+                const gap = width; // Full viewport width gap between images
+                const imagePosition = imageIndex * (imageWidth + gap);
+                // To center this image, its left edge should be at: (width - imageWidth) / 2
+                const centerPosition = (width - imageWidth) / 2;
+                // Return the required track offset to achieve centering
+                return centerPosition - imagePosition;
+              };
+
               // Function to create the main animation timeline
               const createTimeline = () => {
                 const { width, imageWidth } = getWindowDimensions();
                 const gap = width; // Full viewport width gap between images
                 const totalItems = gallery.items.length;
 
-                // Helper function to calculate the exact position needed to center any image
-                const calculateCenterPosition = (
-                  imageIndex: number
-                ): number => {
-                  // Each image is at position: imageIndex * (imageWidth + gap) from track start
-                  const imagePosition = imageIndex * (imageWidth + gap);
-                  // To center this image, its left edge should be at: (width - imageWidth) / 2
-                  const centerPosition = (width - imageWidth) / 2;
-                  // Return the required track offset to achieve centering
-                  return centerPosition - imagePosition;
-                };
-
-                // Pre-calculate all center positions for each image
+                // Pre-calculate all center positions for each image with current dimensions
                 const centerPositions = Array.from(
                   { length: totalItems },
-                  (_, i) => calculateCenterPosition(i + 1) // i+1 because we start with image 2
+                  (_, i) => calculateCenterPosition(i + 1, width, imageWidth) // i+1 because we start with image 2
                 );
 
                 // CSS already centers the first image (image 0), so we start with subsequent images
@@ -528,8 +533,45 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 return tl;
               };
 
-              // Create and start the timeline immediately
-              createTimeline();
+              // Function to handle resize and recreate timeline
+              const handleResize = () => {
+                // Kill existing timeline
+                if (currentTimeline) {
+                  currentTimeline.kill();
+                }
+
+                // Reset track position to CSS centered position
+                gsapInstance.set(trackRef.current, {
+                  x: 0,
+                  force3D: true,
+                });
+
+                // Create new timeline with updated dimensions
+                currentTimeline = createTimeline();
+              };
+
+              // Create initial timeline
+              currentTimeline = createTimeline();
+
+              // Add resize listener with debouncing
+              let resizeTimeout: NodeJS.Timeout;
+              const debouncedResize = () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 150); // Debounce resize events
+              };
+
+              window.addEventListener("resize", debouncedResize);
+
+              // Cleanup function
+              return () => {
+                window.removeEventListener("resize", debouncedResize);
+                if (resizeTimeout) {
+                  clearTimeout(resizeTimeout);
+                }
+                if (currentTimeline) {
+                  currentTimeline.kill();
+                }
+              };
             }, trackRef);
 
             return () => ctx.revert();
