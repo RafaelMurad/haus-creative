@@ -461,49 +461,76 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         // Special handling for infinite scroll treadmill effect (gallery6)
         if (gallery.id === "gallery6") {
           const trackRef = useRef<HTMLDivElement>(null);
-          const animationRef = useRef<any>(null);
-          const [isPaused, setIsPaused] = useState(false);
 
           useEffect(() => {
             if (!trackRef.current || !gsapInstance) return;
 
             const ctx = gsapInstance.context(() => {
-              // Calculate total width of one set of images
-              const totalWidth = trackRef.current!.scrollWidth / 2;
-
-              // Create infinite loop animation
-              animationRef.current = gsapInstance.to(trackRef.current, {
-                x: -totalWidth,
-                ease: "none",
-                duration: 25, // Smooth continuous scroll
-                repeat: -1,
-                paused: isPaused,
+              // Function to get current window dimensions
+              const getWindowDimensions = () => ({
+                width: window.innerWidth,
+                imageWidth: 720,
               });
+
+              // Function to create the main animation timeline
+              const createTimeline = () => {
+                const { width, imageWidth } = getWindowDimensions();
+                const gap = width; // Full viewport width gap between images
+                const totalItems = gallery.items.length;
+
+                // Calculate the initial centered position (same as CSS calc)
+                const initialCenterOffset = (width - imageWidth) / 2;
+
+                // Set initial position to match CSS exactly
+                gsapInstance.set(trackRef.current, {
+                  x: initialCenterOffset,
+                  force3D: true,
+                });
+
+                const tl = gsapInstance.timeline({ repeat: -1 });
+
+                // First image stays centered for 2 seconds
+                tl.to({}, { duration: 2 });
+
+                // Loop through each image transition
+                for (let i = 0; i < totalItems; i++) {
+                  // For each subsequent image, we need to move left by (imageWidth + gap)
+                  // from the previous position to center the next image
+                  const targetPosition =
+                    initialCenterOffset - (imageWidth + gap) * (i + 1);
+
+                  tl.to(trackRef.current, {
+                    x: targetPosition,
+                    duration: 1.8,
+                    ease: "power1.inOut",
+                    force3D: true,
+                  });
+
+                  // Stay centered for 2 seconds (except for the last transition)
+                  if (i < totalItems - 1) {
+                    tl.to({}, { duration: 2 });
+                  }
+                }
+
+                // Reset to beginning position for seamless loop
+                tl.set(trackRef.current, {
+                  x: initialCenterOffset, // Reset to initial centered position
+                  force3D: true,
+                });
+
+                return tl;
+              };
+
+              // Create and start the timeline immediately
+              createTimeline();
             }, trackRef);
 
             return () => ctx.revert();
-          }, [gsapInstance, gallery.items, isPaused]);
-
-          // Handle hover pause/resume
-          const handleMouseEnter = () => {
-            setIsPaused(true);
-            if (animationRef.current) {
-              animationRef.current.pause();
-            }
-          };
-
-          const handleMouseLeave = () => {
-            setIsPaused(false);
-            if (animationRef.current) {
-              animationRef.current.resume();
-            }
-          };
+          }, [gsapInstance, gallery.items]);
 
           return (
             <div
               className="treadmill-container"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
               style={{
                 width: "100vw",
                 height: "100vh",
@@ -511,7 +538,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-start",
-                cursor: "pointer",
+                pointerEvents: "none", // Disable all interactions
               }}
             >
               <div
@@ -520,69 +547,32 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "3rem", // Responsive gap between images
                   willChange: "transform",
-                  paddingLeft: "100vw", // Start images from off-screen right
+                  gap: "100vw", // Full viewport width gap - only one image visible at a time
+                  pointerEvents: "none", // Disable all interactions on track
                 }}
               >
                 {/* Duplicate the images array for seamless loop */}
                 {[...gallery.items, ...gallery.items].map((item, index) => (
                   <div
                     key={`${item.id}-${index}`}
-                    className="treadmill-item"
                     style={{
                       flexShrink: 0,
-                      width: "clamp(300px, 40vw, 500px)", // Responsive width
-                      height: "clamp(400px, 55vw, 700px)", // Responsive height
-                      borderRadius: "16px",
-                      overflow: "hidden",
-                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
-                      transform:
-                        "perspective(1000px) rotateY(-3deg) rotateX(2deg)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform =
-                        "perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1.05)";
-                      e.currentTarget.style.boxShadow =
-                        "0 30px 80px rgba(0, 0, 0, 0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform =
-                        "perspective(1000px) rotateY(-3deg) rotateX(2deg) scale(1)";
-                      e.currentTarget.style.boxShadow =
-                        "0 20px 60px rgba(0, 0, 0, 0.3)";
+                      width: "720px", // Increased by 20% from 600px
+                      height: "96vh", // Increased by 20% from 80vh
+                      maxHeight: "960px", // Increased by 20% from 800px
+                      pointerEvents: "none", // Disable all interactions on image containers
                     }}
                   >
                     <MediaItem
                       item={item}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover border-none outline-none pointer-events-none"
                       priority={index < 6} // Prioritize first few items
                       isActive={true}
                     />
                   </div>
                 ))}
               </div>
-
-              {/* Pause indicator */}
-              {isPaused && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "2rem",
-                    right: "2rem",
-                    background: "rgba(0, 0, 0, 0.7)",
-                    color: "white",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "20px",
-                    fontSize: "0.9rem",
-                    fontWeight: "500",
-                    backdropFilter: "blur(10px)",
-                  }}
-                >
-                  ⏸️ Paused
-                </div>
-              )}
             </div>
           );
         }
