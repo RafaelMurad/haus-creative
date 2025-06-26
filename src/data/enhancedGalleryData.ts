@@ -187,35 +187,35 @@ const enhancedGalleryData: GalleryConfig[] = [
         items: []
     },
     {
-        id: 'gallery7',
-        title: 'Gallery 7',
-        description: 'Seventh gallery showcase',
-        layout: 'fullscreen',
+        id: 'gallery8',
+        title: 'Static Image Gallery',
+        description: 'Static image showcase with same layout as video gallery',
+        layout: 'carousel',
         animation: {
             effect: AnimationEffects.FADE,
-            duration: 0.7,
+            duration: 0.8,
             ease: EaseFunctions.POWER2_INOUT
         },
         galleryContainer: {
-            padding: '0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
         },
         container: {
-            width: '100%',
-            maxWidth: '100vw',
-            height: '100vh',
-            minHeight: '100vh',
-            maxHeight: '100vh',
-            aspectRatio: 'auto',
+            width: '85%', // same as gallery3
+            maxWidth: '1585px', // same as gallery3
+            height: '73vh', // same as gallery3
+            minHeight: '485px', // same as gallery3
+            maxHeight: '85vh', // same as gallery3
+            aspectRatio: '16/9', // same as gallery3 for consistent layout
             alignment: 'center',
             background: '#fff',
-            borderRadius: '0',
-            padding: '0',
+            borderRadius: '12px',
+            padding: '1rem',
         },
-        transitionTime: 2000,
+        transitionTime: 3000, // 3 seconds for image transitions
         items: []
     }
 ];
