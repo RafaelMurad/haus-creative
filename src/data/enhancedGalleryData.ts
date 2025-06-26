@@ -250,6 +250,126 @@ const enhancedGalleryData: GalleryConfig[] = [
         },
         transitionTime: 3000, // 3 seconds for image transitions
         items: []
+    },
+    {
+        id: 'gallery9',
+        title: 'Video Gallery 9',
+        description: 'Video content showcase',
+        layout: 'carousel',
+        // No animation config - will default to NONE for video galleries
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '85%',
+            maxWidth: '1585px',
+            height: '73vh',
+            minHeight: '485px',
+            maxHeight: '85vh',
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime - videos should loop continuously without interruption
+        items: []
+    },
+    {
+        id: 'gallery10',
+        title: 'Video Collection 10',
+        description: 'Additional video showcase',
+        layout: 'carousel',
+        // No animation config - will default to NONE for video galleries
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '4rem 2rem 0 2rem'
+        },
+        container: {
+            width: '90%',
+            maxWidth: '1800px',
+            height: '85vh',
+            minHeight: '500px',
+            maxHeight: '95vh',
+            aspectRatio: '16/9', // Set to 16:9 for proper video ratio
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '1rem',
+        },
+        // No transitionTime - videos should loop continuously without interruption
+        items: []
+    },
+    {
+        id: 'gallery11',
+        title: 'Magazine Cover Treadmill 11',
+        description: 'Small magazine covers sliding right to left like on a treadmill',
+        layout: 'carousel',
+        animation: {
+            effect: AnimationEffects.SLIDE,
+            duration: 1.2,
+            ease: EaseFunctions.POWER2_INOUT
+        },
+        galleryContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '0',
+            overflow: 'hidden', // Hide images sliding off-screen
+            width: '100vw' // Full viewport width for treadmill wrapper
+        },
+        container: {
+            width: '100vw', // Full viewport width for each item
+            maxWidth: '100vw',
+            height: '73vh', // Keeping magazine proportions (2:3 ratio)
+            minHeight: '73vh',
+            maxHeight: '73vh',
+            alignment: 'center',
+            background: 'transparent', // No background for magazine effect
+            padding: '0',
+        },
+        transitionTime: 2500, // 2.5 seconds for smooth treadmill effect
+        items: []
+    },
+    {
+        id: 'gallery12',
+        title: 'Gallery 12',
+        description: 'Final gallery showcase',
+        layout: 'fullscreen',
+        animation: {
+            effect: AnimationEffects.FADE,
+            duration: 0.7,
+            ease: EaseFunctions.POWER2_INOUT
+        },
+        galleryContainer: {
+            padding: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+        },
+        container: {
+            width: '100%',
+            maxWidth: '100vw',
+            height: '100vh',
+            minHeight: '100vh',
+            maxHeight: '100vh',
+            aspectRatio: 'auto',
+            alignment: 'center',
+            background: '#fff',
+            borderRadius: '0',
+            padding: '0',
+        },
+        transitionTime: 2000,
+        items: []
     }
 ];
 

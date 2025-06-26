@@ -41,14 +41,15 @@ export function createMediaItemFromFile(
     // For videos, try to find a cover image with common naming patterns
     let thumbUrl: string | undefined;
     if (type === 'video') {
-        // Try different cover image naming patterns
+        // Try different cover image naming patterns in order of preference
         const videoBaseName = filename.split('.')[0];
         const possibleCoverNames = [
-            `thumb-${videoBaseName}.jpg`,
+            // First try simple gallery naming pattern (most common)
+            `${galleryId.charAt(0).toUpperCase() + galleryId.slice(1)}-Cover.png`,
+            // Then try video-specific patterns if simple pattern doesn't work
             `${videoBaseName}-Cover.png`,
             `${videoBaseName}-cover.png`,
-            `${galleryId}-Cover.png`,
-            `${galleryId}-cover.png`
+            `thumb-${videoBaseName}.jpg`
         ];
 
         // Try to find a cover image by checking common naming patterns
@@ -161,6 +162,8 @@ function checkLikelyCoverExistence(galleryId: string, coverName: string): boolea
     const knownCovers: Record<string, string[]> = {
         'gallery3': ['Gallery3-Cover.png'],
         'gallery5': ['Gallery5-Cover.png'],
+        'gallery9': ['Gallery9-Cover.png'],
+        'gallery10': ['Gallery10-Cover.png'],
     };
 
     // Check if this gallery has known cover files
@@ -168,15 +171,11 @@ function checkLikelyCoverExistence(galleryId: string, coverName: string): boolea
         return knownCovers[galleryId].includes(coverName);
     }
 
-    // For other galleries, prefer the gallery-specific naming pattern
-    // e.g., "Gallery4-Cover.png" over "thumb-Gallery4-Video.jpg"
-    if (coverName.includes('-Cover.png') || coverName.includes('-cover.png')) {
+    // For other galleries, prefer the simple gallery-specific naming pattern
+    // e.g., "Gallery4-Cover.png" (without the video name in it)
+    const simplePattern = `${galleryId.charAt(0).toUpperCase() + galleryId.slice(1)}-Cover.png`;
+    if (coverName === simplePattern) {
         return true;
-    }
-
-    // Thumb pattern is less likely but possible
-    if (coverName.startsWith('thumb-')) {
-        return false; // We'll avoid this pattern to prevent 404s
     }
 
     return false;

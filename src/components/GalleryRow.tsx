@@ -27,7 +27,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const getAnimationConfig = () => {
     return (
       gallery.animation || {
-        effect: AnimationEffects.NONE,
+        effect: "none" as const,
         duration: 0,
         ease: "none" as const,
         stagger: 0,
@@ -276,18 +276,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     setActiveIndex(next);
     setIsTransitioning(true);
 
-    // Fallback timeout to prevent getting stuck
+    // Reduced fallback timeout for better responsiveness
     timeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
       setPrevIndex(null);
-    }, (getAnimationConfig().duration || 0.7) * 1000 + 300);
-  }, [
-    isTransitioning,
-    gallery.items.length,
-    gallery.id,
-    activeIndex,
-    getAnimationConfig().duration,
-  ]);
+    }, (getAnimationConfig().duration || 0.7) * 1000 + 100);
+  }, [isTransitioning, gallery.items.length, activeIndex, getAnimationConfig]);
 
   // Set up carousel autoplay for carousel layouts
   useEffect(() => {
@@ -297,21 +291,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (!gallery.transitionTime) return; // No autoplay for galleries without transitionTime (like video galleries)
 
     const interval = setInterval(() => {
-      if (!isTransitioning && prevIndex === null) {
-        triggerNextSlide();
-      }
+      triggerNextSlide();
     }, gallery.transitionTime); // Use configured time
 
     return () => clearInterval(interval);
-  }, [
-    isTransitioning,
-    prevIndex,
-    gallery.layout,
-    isReady,
-    gallery.transitionTime,
-    gallery.id,
-    triggerNextSlide,
-  ]);
+  }, [gallery.layout, isReady, gallery.transitionTime, triggerNextSlide]);
 
   // Animate crossfade when prevIndex changes
   useLayoutEffect(() => {
@@ -329,7 +313,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
     // Apply the animation based on the effect type
     switch (getAnimationConfig().effect) {
-      case AnimationEffects.NONE: {
+      case "none": {
         // No animation - just instantly switch
         gsapInstance.set(prevRef.current, { opacity: 0 });
         gsapInstance.set(activeRef.current, { opacity: 1 });
@@ -341,7 +325,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         break;
       }
 
-      case AnimationEffects.SLIDE: {
+      case "slide": {
         gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
         timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
@@ -377,7 +361,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         break;
       }
 
-      case AnimationEffects.SCALE: {
+      case "scale": {
         gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
         timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
@@ -414,6 +398,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       }
 
       default: {
+        // Default to fade animation
         gsapInstance.set(activeRef.current, { opacity: 0 });
         timelineRef.current = gsapInstance.timeline({
           onComplete: () => {
@@ -458,8 +443,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     switch (gallery.layout) {
       case "carousel":
       case "fullscreen": {
-        // Special handling for infinite scroll treadmill effect (gallery6)
-        if (gallery.id === "gallery6") {
+        // Special handling for infinite scroll treadmill effect (gallery6 and gallery11)
+        if (gallery.id === "gallery6" || gallery.id === "gallery11") {
           const trackRef = useRef<HTMLDivElement>(null);
 
           useEffect(() => {
@@ -468,11 +453,20 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
             let currentTimeline: any = null;
 
             const ctx = gsapInstance.context(() => {
-              // Function to get current window dimensions
-              const getWindowDimensions = () => ({
-                width: window.innerWidth,
-                imageWidth: 720,
-              });
+              // Function to get current window dimensions and image size based on gallery
+              const getWindowDimensions = () => {
+                // Gallery11 uses 20% smaller images than gallery6
+                const baseImageWidth = 720;
+                const imageWidth =
+                  gallery.id === "gallery11"
+                    ? Math.round(baseImageWidth * 0.8) // 20% smaller = 576px
+                    : baseImageWidth; // 720px for gallery6
+
+                return {
+                  width: window.innerWidth,
+                  imageWidth,
+                };
+              };
 
               // Helper function to calculate the exact position needed to center any image
               const calculateCenterPosition = (
@@ -629,6 +623,15 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
         const activeItem = gallery.items[activeIndex];
         const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
+
+        // Safety check for items
+        if (!activeItem) {
+          return (
+            <div className="flex items-center justify-center h-full w-full text-gray-500">
+              No active item to display
+            </div>
+          );
+        }
 
         // Add special styles for fullscreen mode
         const isFullscreen = gallery.layout === "fullscreen";
