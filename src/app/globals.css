@@ -15,14 +15,38 @@
   }
 }
 
+/* Mobile viewport fix */
 section.gallery-row {
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   width: 100vw;
   background: #fff;
+}
+
+/* Fullscreen gallery mobile fix */
+.fullscreen-gallery {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
 }
 
 .media-item,
 .media-content {
   background: transparent !important;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  section.gallery-row {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0;
+  }
+  
+  /* Ensure treadmill galleries work on mobile */
+  .treadmill-container {
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
 }
