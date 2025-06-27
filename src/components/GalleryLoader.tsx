@@ -69,6 +69,14 @@ async function loadGalleryConfigurations(): Promise<GalleryConfig[]> {
       }
     });
 
+    // Sort galleries by numerical order (gallery1, gallery2, gallery3, etc.)
+    mergedConfigs.sort((a, b) => {
+      // Extract numbers from gallery IDs (e.g., "gallery1" -> 1)
+      const aNum = parseInt(a.id.replace("gallery", "")) || 0;
+      const bNum = parseInt(b.id.replace("gallery", "")) || 0;
+      return aNum - bNum;
+    });
+
     return mergedConfigs;
   } catch (error) {
     console.error("Error loading gallery configurations:", error);

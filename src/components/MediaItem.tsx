@@ -54,16 +54,21 @@ export default memo(function MediaItem({
     if (videoElement && videoElement.tagName === "VIDEO") {
       if (isActive) {
         // Wait for video to be ready before playing
-        const attemptPlay = () => {
-          if (videoElement.isConnected && videoElement.readyState >= 3) {
-            videoElement.play().catch((error) => {
-              if (error.name !== "AbortError") {
-                console.warn("Video play failed:", error);
-              }
-            });
-          } else if (videoElement.isConnected) {
-            // If not ready, wait a bit and try again
-            setTimeout(attemptPlay, 50);
+        const attemptPlay = async () => {
+          try {
+            if (videoElement.isConnected && videoElement.readyState >= 2) {
+              await videoElement.play();
+            } else if (videoElement.isConnected) {
+              // If not ready, wait a bit and try again
+              setTimeout(attemptPlay, 100);
+            }
+          } catch (error: any) {
+            if (
+              error.name !== "AbortError" &&
+              error.name !== "NotAllowedError"
+            ) {
+              console.warn("Video play failed:", error);
+            }
           }
         };
 
@@ -88,7 +93,6 @@ export default memo(function MediaItem({
             src={item.url}
             className="w-full h-full object-cover"
             muted
-            autoPlay={isActive} // Only autoplay when active
             loop
             playsInline
             {...(item.thumbUrl && { poster: item.thumbUrl })}
@@ -112,13 +116,20 @@ export default memo(function MediaItem({
         );
       case "image":
       default:
+        // Check if this is a treadmill gallery (gallery6 or gallery11) to use contain instead of cover
+        const isTreadmill =
+          item.url?.includes("gallery6/") ||
+          item.url?.includes("gallery11/") ||
+          item.imageUrl?.includes("gallery6/") ||
+          item.imageUrl?.includes("gallery11/");
+
         return (
           <Image
             src={item.url || item.imageUrl || ""}
             alt={item.title}
             fill
             style={{
-              objectFit: "cover",
+              objectFit: isTreadmill ? "contain" : "cover",
               objectPosition: "center",
             }}
             className="w-full h-full"
