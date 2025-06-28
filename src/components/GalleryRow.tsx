@@ -516,8 +516,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         const isFullscreen = gallery.layout === "fullscreen";
         const containerStyle: React.CSSProperties = isFullscreen
           ? {
-              height: "100vh",
-              height: "100dvh", // Dynamic viewport height for mobile
+              height: "100dvh", // Use dynamic viewport height for mobile
               width: "100vw",
               position: "relative",
               margin: 0,
