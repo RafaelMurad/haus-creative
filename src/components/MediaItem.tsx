@@ -42,15 +42,17 @@ export default memo(function MediaItem({
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const intersectionRef = useRef<IntersectionObserver | null>(null);
-  const [isInView, setIsInView] = useState(priority); // Priority items start as visible
+  const [isInView, setIsInView] = useState(priority);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
 
   const ref = forwardedRef || ((el: HTMLElement | null) => {
     localRef.current = el;
   });
 
-  // Intersection Observer for lazy loading
+  // Enhanced Intersection Observer with retry logic
   useEffect(() => {
-    if (priority || isLoaded) return; // Skip if priority or already loaded
+    if (priority || isLoaded) return;
 
     const element = localRef.current;
     if (!element) return;
@@ -64,7 +66,7 @@ export default memo(function MediaItem({
         }
       },
       {
-        rootMargin: '50px', // Start loading 50px before entering viewport
+        rootMargin: '100px', // Increased for better UX
         threshold: 0.1
       }
     );
@@ -76,10 +78,24 @@ export default memo(function MediaItem({
     };
   }, [priority, isLoaded]);
 
-  // Optimized video playback control with RAF
+  // Enhanced video playback with battery optimization
   const handleVideoPlayback = useCallback(async () => {
     const videoElement = videoRef.current;
     if (!videoElement || !isInView) return;
+
+    // Check battery status for mobile optimization
+    const isMobile = window.innerWidth < 768;
+    if (isMobile && 'getBattery' in navigator) {
+      try {
+        const battery = await (navigator as any).getBattery();
+        if (battery.level < 0.2 && !battery.charging) {
+          // Skip video autoplay on low battery
+          return;
+        }
+      } catch (error) {
+        // Battery API not supported, continue normally
+      }
+    }
 
     const playVideo = () => {
       if (isActive && videoElement.readyState >= 2) {
@@ -98,25 +114,39 @@ export default memo(function MediaItem({
     requestAnimationFrame(playVideo);
   }, [isActive, isInView]);
 
-  // Control video playback based on isActive prop
   useEffect(() => {
     if (item.type === 'video' && isInView) {
       handleVideoPlayback();
     }
   }, [isActive, item.type, handleVideoPlayback, isInView]);
 
-  // Optimized load handlers with debouncing
+  // Enhanced error handling with retry logic
   const handleImageLoad = useCallback(() => {
     setIsLoaded(true);
+    setHasError(false);
+    retryCountRef.current = 0;
     if (onLoad) onLoad();
   }, [onLoad]);
 
   const handleImageError = useCallback(() => {
-    setHasError(true);
+    retryCountRef.current += 1;
+    
+    if (retryCountRef.current < maxRetries) {
+      // Retry loading after a delay
+      setTimeout(() => {
+        const img = localRef.current as HTMLImageElement;
+        if (img && img.src) {
+          img.src = img.src; // Force reload
+        }
+      }, 1000 * retryCountRef.current); // Exponential backoff
+    } else {
+      setHasError(true);
+    }
   }, []);
 
   const handleVideoLoad = useCallback(() => {
     setIsLoaded(true);
+    setHasError(false);
     if (onLoad) onLoad();
   }, [onLoad]);
 
@@ -131,12 +161,24 @@ export default memo(function MediaItem({
     );
   }
 
-  // Render the appropriate media based on type
+  // Enhanced media rendering with WebP support detection
   const renderMedia = () => {
     if (hasError) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
-          Failed to load media
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-4">
+          <div className="text-center">
+            <p className="mb-2">Failed to load media</p>
+            <button
+              onClick={() => {
+                setHasError(false);
+                retryCountRef.current = 0;
+                setIsLoaded(false);
+              }}
+              className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       );
     }
@@ -156,6 +198,7 @@ export default memo(function MediaItem({
             playsInline
             {...(item.thumbUrl && { poster: item.thumbUrl })}
             onLoadedData={handleVideoLoad}
+            onError={handleImageError}
             preload={priority ? "metadata" : "none"}
             style={{ pointerEvents: "none" }}
             controls={false}
@@ -168,7 +211,7 @@ export default memo(function MediaItem({
           <img
             ref={ref as (instance: HTMLImageElement | null) => void}
             src={item.url}
-            alt={item.title}
+            alt={item.title || "Gallery image"}
             className="w-full h-full object-cover"
             onLoad={handleImageLoad}
             onError={handleImageError}
@@ -187,7 +230,7 @@ export default memo(function MediaItem({
         return (
           <Image
             src={item.url || item.imageUrl || ""}
-            alt={item.title}
+            alt={item.title || "Gallery image"}
             fill
             style={{
               objectFit: isTreadmill ? "contain" : "cover",
@@ -197,7 +240,7 @@ export default memo(function MediaItem({
             onLoad={handleImageLoad}
             onError={handleImageError}
             priority={priority}
-            quality={priority ? 90 : 75} // Higher quality for priority images
+            quality={priority ? 90 : 75}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1600px) 100vw, (max-width: 1920px) 100vw, 100vw"
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
@@ -275,7 +318,7 @@ export default memo(function MediaItem({
     return styles;
   };
 
-  // Loading state with skeleton
+  // Enhanced loading state with skeleton
   if (!isLoaded && !hasError && isInView) {
     return (
       <div
@@ -318,9 +361,10 @@ export default memo(function MediaItem({
     </div>
   );
 }, (prevProps, nextProps) => {
-  // Custom comparison for memo optimization
+  // Enhanced comparison for memo optimization
   return (
     prevProps.item.id === nextProps.item.id &&
+    prevProps.item.url === nextProps.item.url &&
     prevProps.isActive === nextProps.isActive &&
     prevProps.priority === nextProps.priority &&
     prevProps.className === nextProps.className

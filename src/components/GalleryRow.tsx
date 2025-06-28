@@ -10,6 +10,8 @@ import {
 } from "react";
 import { lazy, Suspense } from "react";
 import useGsapAnimation from "../hooks/useGsapAnimation";
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor";
+import { useAnalytics } from "../utils/analytics";
 import {
   GalleryConfig,
   MediaItem as MediaItemType,
@@ -26,6 +28,16 @@ interface GalleryRowProps {
 }
 
 export default function GalleryRow({ gallery }: GalleryRowProps) {
+  const { trackGallery, trackPerformance } = useAnalytics();
+  
+  // Performance monitoring
+  const performanceMetrics = usePerformanceMonitor({
+    enabled: true,
+    onMetrics: (metrics) => {
+      trackPerformance(metrics);
+    }
+  });
+
   // Memoize animation config to prevent unnecessary recalculations
   const animationConfig = useMemo(() => {
     return gallery.animation || {
@@ -50,18 +62,29 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [gsapInstance, setGsapInstance] = useState<any>(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
+  const viewStartTimeRef = useRef<number>(0);
 
   // Detect mobile and reduced motion preferences
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(false);
+  const [connectionSpeed, setConnectionSpeed] = useState<string>('unknown');
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     const checkReducedMotion = () => 
       setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    
+    // Check network connection
+    const checkConnection = () => {
+      if ('connection' in navigator) {
+        const connection = (navigator as any).connection;
+        setConnectionSpeed(connection.effectiveType || 'unknown');
+      }
+    };
 
     checkMobile();
     checkReducedMotion();
+    checkConnection();
 
     window.addEventListener('resize', checkMobile);
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -73,15 +96,42 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     };
   }, []);
 
-  // Intersection Observer for viewport detection
+  // Enhanced Intersection Observer with analytics
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        setIsVisible(entry.isIntersecting);
+        const wasVisible = isVisible;
+        const nowVisible = entry.isIntersecting;
+        
+        setIsVisible(nowVisible);
+
+        if (nowVisible && !wasVisible) {
+          viewStartTimeRef.current = Date.now();
+          trackGallery({
+            galleryId: gallery.id,
+            action: 'view',
+            data: {
+              layout: gallery.layout,
+              itemCount: gallery.items.length,
+              isMobile,
+              connectionSpeed
+            }
+          });
+        } else if (!nowVisible && wasVisible && viewStartTimeRef.current > 0) {
+          const viewDuration = Date.now() - viewStartTimeRef.current;
+          trackGallery({
+            galleryId: gallery.id,
+            action: 'interaction',
+            data: {
+              viewDuration,
+              layout: gallery.layout
+            }
+          });
+        }
       },
       {
-        rootMargin: '100px', // Start loading 100px before entering viewport
+        rootMargin: '100px',
         threshold: 0.1
       }
     );
@@ -94,7 +144,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [gallery.id, gallery.layout, gallery.items.length, isMobile, connectionSpeed, trackGallery, isVisible]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -108,6 +158,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       intersectionObserverRef.current?.disconnect();
     };
   }, []);
+
+  // Adaptive loading based on connection speed
+  const shouldReduceQuality = useMemo(() => {
+    return connectionSpeed === 'slow-2g' || connectionSpeed === '2g';
+  }, [connectionSpeed]);
 
   // Lazy load GSAP only when needed and visible
   useEffect(() => {
@@ -123,6 +178,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         }
       } catch (error) {
         console.warn('Failed to load GSAP:', error);
+        trackGallery({
+          galleryId: gallery.id,
+          action: 'error',
+          data: { error: 'GSAP load failed' }
+        });
       }
     };
 
@@ -133,7 +193,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return () => {
       isMounted = false;
     };
-  }, [gallery.layout, isVisible, prefersReducedMotion]);
+  }, [gallery.layout, isVisible, prefersReducedMotion, gallery.id, trackGallery]);
 
   // Set isReady immediately for carousel/fullscreen layouts
   useEffect(() => {
@@ -197,11 +257,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     };
   }, [gallery.id, animationConfig, elementsRef, gsapInstance, prefersReducedMotion]);
 
-  // Optimized preloading with intersection observer
+  // Optimized preloading with intersection observer and connection awareness
   useEffect(() => {
     if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
       return;
     if (!gallery.items.length || !isVisible) return;
+    if (shouldReduceQuality) return; // Skip preloading on slow connections
 
     const preloadImage = (url: string) => {
       const img = new window.Image();
@@ -218,7 +279,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         preloadImage(item.url);
       }
     });
-  }, [activeIndex, gallery.layout, gallery.items, isVisible]);
+  }, [activeIndex, gallery.layout, gallery.items, isVisible, shouldReduceQuality]);
 
   // Memoize container styles to prevent recalculation
   const containerStyles = useMemo(() => {
@@ -302,25 +363,42 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     setActiveIndex(next);
     setIsTransitioning(true);
 
+    // Track slide transition
+    trackGallery({
+      galleryId: gallery.id,
+      action: 'interaction',
+      data: {
+        action: 'slide_transition',
+        fromIndex: activeIndex,
+        toIndex: next
+      }
+    });
+
     timeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
       setPrevIndex(null);
     }, (animationConfig.duration || 0.7) * 1000 + 100);
-  }, [isTransitioning, gallery.items.length, activeIndex, animationConfig.duration]);
+  }, [isTransitioning, gallery.items.length, activeIndex, animationConfig.duration, gallery.id, trackGallery]);
 
-  // Set up carousel autoplay for carousel layouts
+  // Set up carousel autoplay for carousel layouts with adaptive timing
   useEffect(() => {
     if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
       return;
     if (!isReady || !isVisible) return;
     if (!gallery.transitionTime) return;
 
+    // Adjust timing based on connection speed
+    let adjustedTransitionTime = gallery.transitionTime;
+    if (shouldReduceQuality) {
+      adjustedTransitionTime *= 1.5; // Slower transitions on slow connections
+    }
+
     const interval = setInterval(() => {
       triggerNextSlide();
-    }, gallery.transitionTime);
+    }, adjustedTransitionTime);
 
     return () => clearInterval(interval);
-  }, [gallery.layout, isReady, gallery.transitionTime, triggerNextSlide, isVisible]);
+  }, [gallery.layout, isReady, gallery.transitionTime, triggerNextSlide, isVisible, shouldReduceQuality]);
 
   // Optimized crossfade animation with RAF
   useLayoutEffect(() => {
