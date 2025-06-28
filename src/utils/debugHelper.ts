@@ -38,3 +38,30 @@ export function debugImageLoad(galleryId: string, imageUrl: string, success: boo
         console.warn(`❌ [${galleryId}] Failed to load: ${imageUrl}`);
     }
 }
+
+/**
+ * Performance debugging helper
+ */
+export function debugPerformance(label: string, fn: () => void): void {
+    if (process.env.NODE_ENV !== 'development') return;
+    
+    const start = performance.now();
+    fn();
+    const end = performance.now();
+    console.log(`⏱️ ${label}: ${(end - start).toFixed(2)}ms`);
+}
+
+/**
+ * Memory usage debugging
+ */
+export function debugMemoryUsage(): void {
+    if (process.env.NODE_ENV !== 'development') return;
+    if (!('memory' in performance)) return;
+    
+    const memory = (performance as any).memory;
+    console.log('🧠 Memory Usage:', {
+        used: `${(memory.usedJSHeapSize / 1024 / 1024).toFixed(2)} MB`,
+        total: `${(memory.totalJSHeapSize / 1024 / 1024).toFixed(2)} MB`,
+        limit: `${(memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2)} MB`
+    });
+}

@@ -7,8 +7,6 @@ export const metadata = {
   title: "Studio Haus | Creative Direction + Design",
   description: "Creative direction and design studio specializing in fashion, beauty, and lifestyle brands",
   keywords: "creative direction, design studio, fashion, beauty, lifestyle, branding",
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
-  themeColor: "#ffffff",
   openGraph: {
     title: "Studio Haus | Creative Direction + Design",
     description: "Creative direction and design studio specializing in fashion, beauty, and lifestyle brands",
@@ -33,6 +31,14 @@ export const metadata = {
   },
 };
 
+// Separate viewport export to fix Next.js warnings
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#ffffff',
+};
+
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -41,8 +47,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#ffffff" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//images.pexels.com" />
