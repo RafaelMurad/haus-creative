@@ -1,16 +1,27 @@
 'use client'
 
-import { useEffect, useRef, DependencyList } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { useEffect, useRef, DependencyList, useCallback } from 'react'
 
-// Register ScrollTrigger plugin
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger)
-}
+// Lazy load GSAP only when needed
+let gsapInstance: any = null;
+let ScrollTriggerInstance: any = null;
+
+const loadGSAP = async () => {
+  if (!gsapInstance) {
+    const gsapModule = await import('gsap');
+    gsapInstance = gsapModule.gsap || gsapModule.default || gsapModule;
+    
+    if (typeof window !== 'undefined') {
+      const ScrollTriggerModule = await import('gsap/dist/ScrollTrigger');
+      ScrollTriggerInstance = ScrollTriggerModule.ScrollTrigger;
+      gsapInstance.registerPlugin(ScrollTriggerInstance);
+    }
+  }
+  return { gsap: gsapInstance, ScrollTrigger: ScrollTriggerInstance };
+};
 
 // Define GSAP-specific types to match their API
-type DOMTarget = gsap.DOMTarget;
+type DOMTarget = any;
 
 interface ScrollTriggerOptions {
     trigger?: HTMLElement | string | null;
@@ -42,15 +53,11 @@ interface UseGsapAnimationReturn {
     elementsRef: {
         current: (HTMLElement | null)[];
     };
-    playAnimation: (customOptions?: Partial<AnimationOptions>) => gsap.core.Tween | undefined;
+    playAnimation: (customOptions?: Partial<AnimationOptions>) => Promise<any>;
 }
 
 /**
- * Custom hook for handling GSAP animations with ScrollTrigger
- * 
- * @param options - Animation options
- * @param deps - Dependencies for useEffect
- * @returns - References and animation controller
+ * Optimized GSAP animation hook with lazy loading and proper cleanup
  */
 export default function useGsapAnimation(
     options: AnimationOptions,
@@ -58,6 +65,8 @@ export default function useGsapAnimation(
 ): UseGsapAnimationReturn {
     const elementRef = useRef<HTMLElement>(null)
     const elementsRef = useRef<(HTMLElement | null)[]>([])
+    const animationsRef = useRef<any[]>([])
+    const isLoadingRef = useRef(false)
 
     // Default animation options
     const defaultOptions: AnimationOptions = {
@@ -77,7 +86,7 @@ export default function useGsapAnimation(
     const animationOptions = { ...defaultOptions, ...options }
 
     // Effect-specific presets
-    const getEffectPreset = (effect: string): { from: Record<string, any>; to: Record<string, any> } => {
+    const getEffectPreset = useCallback((effect: string): { from: Record<string, any>; to: Record<string, any> } => {
         switch (effect) {
             case 'fade':
                 return {
@@ -120,126 +129,140 @@ export default function useGsapAnimation(
                     to: animationOptions.to || {}
                 }
         }
-    }
+    }, [animationOptions.from, animationOptions.to])
 
-    // Combine effect preset with custom options
-    const effectPreset = getEffectPreset(animationOptions.effect || 'fade')
-    const finalFrom = { ...effectPreset.from, ...animationOptions.from }
-    const finalTo = { ...effectPreset.to, ...animationOptions.to }
+    // Cleanup function
+    const cleanup = useCallback(() => {
+        animationsRef.current.forEach(animation => {
+            if (animation && typeof animation.kill === 'function') {
+                if (animation.scrollTrigger && typeof animation.scrollTrigger.kill === 'function') {
+                    animation.scrollTrigger.kill()
+                }
+                animation.kill()
+            }
+        })
+        animationsRef.current = []
+    }, [])
 
-    // Set up the animation
+    // Set up the animation with lazy loading
     useEffect(() => {
-        if (typeof window === 'undefined') return
+        if (typeof window === 'undefined' || isLoadingRef.current) return
 
-        // For single element animation
-        if (elementRef.current) {
-            // Add check to ensure element is a valid DOM element with getBoundingClientRect
-            if (!(elementRef.current instanceof Element)) {
-                return undefined;
-            }
+        const initializeAnimations = async () => {
+            isLoadingRef.current = true
+            
+            try {
+                const { gsap } = await loadGSAP()
+                
+                // Combine effect preset with custom options
+                const effectPreset = getEffectPreset(animationOptions.effect || 'fade')
+                const finalFrom = { ...effectPreset.from, ...animationOptions.from }
+                const finalTo = { ...effectPreset.to, ...animationOptions.to }
 
-            const animation = gsap.fromTo(
-                elementRef.current,
-                finalFrom,
-                {
-                    ...finalTo,
-                    duration: animationOptions.duration,
-                    ease: animationOptions.ease,
-                    scrollTrigger: {
-                        trigger: elementRef.current,
-                        ...animationOptions.scrollTrigger
+                // For single element animation
+                if (elementRef.current && elementRef.current instanceof Element) {
+                    const animation = gsap.fromTo(
+                        elementRef.current,
+                        finalFrom,
+                        {
+                            ...finalTo,
+                            duration: animationOptions.duration,
+                            ease: animationOptions.ease,
+                            scrollTrigger: {
+                                trigger: elementRef.current,
+                                ...animationOptions.scrollTrigger
+                            }
+                        }
+                    )
+                    animationsRef.current.push(animation)
+                }
+
+                // For multiple elements animation (with stagger)
+                if (elementsRef.current.length > 0) {
+                    const elements = elementsRef.current.filter(Boolean).filter(el => el instanceof Element)
+
+                    if (elements.length > 0) {
+                        const triggerElement = elements[0]
+                        const animation = gsap.fromTo(
+                            elements,
+                            finalFrom,
+                            {
+                                ...finalTo,
+                                duration: animationOptions.duration,
+                                ease: animationOptions.ease,
+                                stagger: animationOptions.stagger,
+                                scrollTrigger: {
+                                    trigger: triggerElement,
+                                    ...animationOptions.scrollTrigger
+                                }
+                            }
+                        )
+                        animationsRef.current.push(animation)
                     }
                 }
-            )
-
-            return () => {
-                animation.kill()
-                if (animation.scrollTrigger) {
-                    animation.scrollTrigger.kill()
-                }
+            } catch (error) {
+                console.warn('Failed to load GSAP:', error)
+            } finally {
+                isLoadingRef.current = false
             }
         }
 
-        // For multiple elements animation (with stagger)
-        if (elementsRef.current.length > 0) {
-            // Filter out non-DOM elements before animation
-            const elements = elementsRef.current.filter(Boolean).filter(el => el instanceof Element)
+        initializeAnimations()
 
-            if (elements.length === 0) return undefined
-
-            // Fix for the parentNode error - cast the element or use as trigger
-            const triggerElement = elements[0];
-            const animation = gsap.fromTo(
-                elements,
-                finalFrom,
-                {
-                    ...finalTo,
-                    duration: animationOptions.duration,
-                    ease: animationOptions.ease,
-                    stagger: animationOptions.stagger,
-                    scrollTrigger: {
-                        trigger: triggerElement,
-                        ...animationOptions.scrollTrigger
-                    }
-                }
-            )
-
-            return () => {
-                animation.kill()
-                if (animation.scrollTrigger) {
-                    animation.scrollTrigger.kill()
-                }
-            }
-        }
-
-        return undefined;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        return cleanup
     }, deps)
 
+    // Cleanup on unmount
+    useEffect(() => {
+        return cleanup
+    }, [cleanup])
+
     // Helper function to manually trigger animations
-    const playAnimation = (customOptions: Partial<AnimationOptions> = {}): gsap.core.Tween | undefined => {
+    const playAnimation = useCallback(async (customOptions: Partial<AnimationOptions> = {}): Promise<any> => {
         if (typeof window === 'undefined') return undefined
 
-        const mergedOptions = { ...animationOptions, ...customOptions }
+        try {
+            const { gsap } = await loadGSAP()
+            const mergedOptions = { ...animationOptions, ...customOptions }
+            const effectPreset = getEffectPreset(mergedOptions.effect || 'fade')
+            const finalFrom = { ...effectPreset.from, ...customOptions.from }
+            const finalTo = { ...effectPreset.to, ...customOptions.to }
 
-        if (elementRef.current) {
-            // Add check to ensure element is a valid DOM element with getBoundingClientRect
-            if (elementRef.current instanceof Element) {
+            if (elementRef.current && elementRef.current instanceof Element) {
                 return gsap.fromTo(
                     elementRef.current,
-                    { ...finalFrom, ...customOptions.from },
+                    finalFrom,
                     {
                         ...finalTo,
-                        ...customOptions.to,
                         duration: mergedOptions.duration,
                         ease: mergedOptions.ease
                     }
                 )
             }
+
+            if (elementsRef.current.length > 0) {
+                const elements = elementsRef.current.filter(Boolean).filter(el => el instanceof Element)
+
+                if (elements.length > 0) {
+                    return gsap.fromTo(
+                        elements,
+                        finalFrom,
+                        {
+                            ...finalTo,
+                            duration: mergedOptions.duration,
+                            ease: mergedOptions.ease,
+                            stagger: mergedOptions.stagger
+                        }
+                    )
+                }
+            }
+
+            return undefined
+        } catch (error) {
+            console.warn('Failed to play animation:', error)
             return undefined
         }
-
-        if (elementsRef.current.length > 0) {
-            // Filter out non-DOM elements before animation
-            const elements = elementsRef.current.filter(Boolean).filter(el => el instanceof Element)
-
-            if (elements.length === 0) return undefined
-
-            return gsap.fromTo(
-                elements,
-                { ...finalFrom, ...customOptions.from },
-                {
-                    ...finalTo,
-                    ...customOptions.to,
-                    duration: mergedOptions.duration,
-                    ease: mergedOptions.ease,
-                    stagger: mergedOptions.stagger
-                }
-            )
-        }
-
-        return undefined
-    }
+    }, [animationOptions, getEffectPreset])
 
     return {
         elementRef,

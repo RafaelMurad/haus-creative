@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
-import { debugImageLoad } from "../utils/debugHelper";
 
 interface MediaItemProps {
   item: MediaItemType;
@@ -11,7 +10,7 @@ interface MediaItemProps {
   onLoad?: () => void;
   forwardedRef?: (element: HTMLElement | null) => void;
   priority?: boolean;
-  isActive?: boolean; // Add prop to control video playback
+  isActive?: boolean;
   containerConfig?: {
     width?: string;
     minWidth?: string;
@@ -36,67 +35,108 @@ export default memo(function MediaItem({
   onLoad,
   forwardedRef,
   priority = false,
-  isActive = true, // Default to active for backwards compatibility
+  isActive = true,
   containerConfig,
 }: MediaItemProps) {
   const isFullViewport = useRef<boolean>(false);
   const localRef = useRef<HTMLElement | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const ref =
-    forwardedRef ||
-    ((el: HTMLElement | null) => {
-      localRef.current = el;
-    });
+  const ref = forwardedRef || ((el: HTMLElement | null) => {
+    localRef.current = el;
+  });
 
-  // Control video playback based on isActive prop
-  useEffect(() => {
-    const videoElement = localRef.current as HTMLVideoElement;
-    if (videoElement && videoElement.tagName === "VIDEO") {
-      if (isActive) {
-        // Wait for video to be ready before playing
-        const attemptPlay = async () => {
-          try {
-            if (videoElement.isConnected && videoElement.readyState >= 2) {
-              await videoElement.play();
-            } else if (videoElement.isConnected) {
-              // If not ready, wait a bit and try again
-              setTimeout(attemptPlay, 100);
+  // Optimized video playback control
+  const handleVideoPlayback = useCallback(async () => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    if (isActive) {
+      try {
+        if (videoElement.isConnected && videoElement.readyState >= 2) {
+          await videoElement.play();
+        } else if (videoElement.isConnected) {
+          // Use requestAnimationFrame for better performance
+          const attemptPlay = () => {
+            if (videoElement.readyState >= 2) {
+              videoElement.play().catch(error => {
+                if (error.name !== "AbortError" && error.name !== "NotAllowedError") {
+                  console.warn("Video play failed:", error);
+                }
+              });
+            } else {
+              requestAnimationFrame(attemptPlay);
             }
-          } catch (error: any) {
-            if (
-              error.name !== "AbortError" &&
-              error.name !== "NotAllowedError"
-            ) {
-              console.warn("Video play failed:", error);
-            }
-          }
-        };
-
-        // Start attempting to play immediately
-        attemptPlay();
-      } else {
-        // Immediately pause when not active
-        if (videoElement.isConnected) {
-          videoElement.pause();
+          };
+          requestAnimationFrame(attemptPlay);
         }
+      } catch (error: any) {
+        if (error.name !== "AbortError" && error.name !== "NotAllowedError") {
+          console.warn("Video play failed:", error);
+        }
+      }
+    } else {
+      if (videoElement.isConnected) {
+        videoElement.pause();
       }
     }
   }, [isActive]);
 
+  // Control video playback based on isActive prop
+  useEffect(() => {
+    if (item.type === 'video') {
+      handleVideoPlayback();
+    }
+  }, [isActive, item.type, handleVideoPlayback]);
+
+  // Optimized load handlers
+  const handleImageLoad = useCallback(() => {
+    setIsLoaded(true);
+    if (onLoad) onLoad();
+    if (process.env.NODE_ENV === "development") {
+      console.debug(`Successfully loaded image: ${item.url || item.imageUrl}`);
+    }
+  }, [onLoad, item.url, item.imageUrl]);
+
+  const handleImageError = useCallback(() => {
+    setHasError(true);
+    if (process.env.NODE_ENV === "development") {
+      console.error(`Failed to load image: ${item.url || item.imageUrl}`);
+    }
+  }, [item.url, item.imageUrl]);
+
+  const handleVideoLoad = useCallback(() => {
+    setIsLoaded(true);
+    if (onLoad) onLoad();
+  }, [onLoad]);
+
   // Render the appropriate media based on type
   const renderMedia = () => {
+    if (hasError) {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
+          Failed to load media
+        </div>
+      );
+    }
+
     switch (item.type) {
       case "video":
         return (
           <video
-            ref={ref as (instance: HTMLVideoElement | null) => void}
+            ref={(el) => {
+              videoRef.current = el;
+              if (ref) ref(el as HTMLElement);
+            }}
             src={item.url}
             className="w-full h-full object-cover"
             muted
             loop
             playsInline
             {...(item.thumbUrl && { poster: item.thumbUrl })}
-            onLoadedData={onLoad}
+            onLoadedData={handleVideoLoad}
             preload="metadata"
             style={{ pointerEvents: "none" }}
             controls={false}
@@ -111,7 +151,9 @@ export default memo(function MediaItem({
             src={item.url}
             alt={item.title}
             className="w-full h-full object-cover"
-            onLoad={onLoad}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            loading={priority ? "eager" : "lazy"}
           />
         );
       case "image":
@@ -133,26 +175,11 @@ export default memo(function MediaItem({
               objectPosition: "center",
             }}
             className="w-full h-full"
-            onLoad={() => {
-              if (onLoad) onLoad();
-              // Log successful image load in development
-              if (process.env.NODE_ENV === "development") {
-                console.debug(
-                  `Successfully loaded image: ${item.url || item.imageUrl}`
-                );
-              }
-            }}
-            onError={() => {
-              // Log failed image load in development
-              if (process.env.NODE_ENV === "development") {
-                console.error(
-                  `Failed to load image: ${item.url || item.imageUrl}`
-                );
-              }
-            }}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
             priority={priority}
-            quality={95}
-            sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1280px) 1280px, (max-width: 1600px) 1600px, (max-width: 1920px) 1920px, 2048px"
+            quality={85} // Reduced from 95 for better performance
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1600px) 100vw, (max-width: 1920px) 100vw, 100vw"
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
           />
@@ -166,7 +193,6 @@ export default memo(function MediaItem({
     if (element) {
       const parent = element.parentElement;
       if (parent) {
-        // Check if this is part of a fullscreen layout
         isFullViewport.current =
           parent.classList.contains("media-item") ||
           parent.closest(".fullscreen-gallery") !== null;
@@ -185,8 +211,8 @@ export default memo(function MediaItem({
         height: "100%",
         width: "100%",
         position: "relative" as const,
-        minHeight: "100vh", // For fullscreen mode
-        maxHeight: "100vh", // For fullscreen mode
+        minHeight: "100vh",
+        maxHeight: "100vh",
       }
     : { position: "relative" as const };
 
@@ -209,12 +235,10 @@ export default memo(function MediaItem({
       styles.borderRadius = containerConfig.borderRadius;
     if (containerConfig.margin) styles.margin = containerConfig.margin;
 
-    // If height is not explicitly set, add a min-height to ensure content is visible
     if (!containerConfig.height && !containerConfig.minHeight) {
-      styles.minHeight = "300px"; // Add a default minimum height
+      styles.minHeight = "300px";
     }
 
-    // Ensure alignment is handled correctly for centering if specified
     if (containerConfig.alignment === "center" && !containerConfig.margin) {
       styles.marginLeft = "auto";
       styles.marginRight = "auto";
@@ -232,6 +256,24 @@ export default memo(function MediaItem({
     return styles;
   };
 
+  // Loading state
+  if (!isLoaded && !hasError) {
+    return (
+      <div
+        className="media-content relative w-full h-full bg-gray-100 animate-pulse"
+        style={containerConfig ? {
+          position: "relative" as const,
+          minHeight: containerConfig.minHeight || "300px",
+          ...getContentContainerStyle(),
+        } : { position: "relative" as const, minHeight: "200px", ...style }}
+      >
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
+
   // Simplify structure - one main container with content
   if (containerConfig) {
     return (
@@ -248,7 +290,6 @@ export default memo(function MediaItem({
     );
   }
 
-  // No container: simple structure with just the necessary positioning
   return (
     <div
       className="media-content relative w-full h-full"
