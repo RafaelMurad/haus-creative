@@ -108,3 +108,19 @@ export interface GalleryConfig {
     container?: ContainerConfig;  // Add container configuration
     galleryContainer?: GalleryContainerConfig;
 }
+
+// Error handling types
+export interface GalleryError {
+    type: 'LOAD_ERROR' | 'ANIMATION_ERROR' | 'MEDIA_ERROR';
+    message: string;
+    galleryId?: string;
+    itemId?: string;
+}
+
+// Performance monitoring types
+export interface PerformanceMetrics {
+    loadTime: number;
+    renderTime: number;
+    animationFrameRate: number;
+    memoryUsage?: number;
+}

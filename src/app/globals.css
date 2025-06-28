@@ -15,7 +15,7 @@
   }
 }
 
-/* Mobile viewport fix */
+/* Mobile viewport fix with dynamic viewport height */
 section.gallery-row {
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile */
@@ -36,21 +36,29 @@ section.gallery-row {
   background: transparent !important;
 }
 
-/* Performance optimizations */
+/* Performance optimizations with GPU acceleration */
 .gallery-container {
   contain: layout style paint;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .gallery-row {
   contain: layout style;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .media-content {
   contain: layout style paint;
   will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* Improved loading states */
+/* Improved loading states with skeleton animation */
 .loading-skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -66,7 +74,7 @@ section.gallery-row {
   }
 }
 
-/* Mobile-specific improvements */
+/* Mobile-first responsive improvements */
 @media (max-width: 768px) {
   section.gallery-row {
     min-height: 100vh;
@@ -86,17 +94,18 @@ section.gallery-row {
     -webkit-transform: translateZ(0);
   }
 
-  /* Reduce motion for better mobile performance */
-  @media (prefers-reduced-motion: reduce) {
-    .media-content {
-      will-change: auto;
-    }
-    
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+  /* Reduce spacing on mobile */
+  .gallery-content {
+    padding: 0.5rem;
+  }
+
+  /* Mobile typography improvements */
+  .text-xl {
+    font-size: 1.125rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem;
   }
 }
 
@@ -107,6 +116,15 @@ section.gallery-row {
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+  
+  /* Smaller gaps on mobile */
+  .gap-4 {
+    gap: 0.5rem;
+  }
+  
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem;
   }
 }
 
@@ -122,8 +140,78 @@ section.gallery-row {
 /* Intersection observer optimizations */
 .gallery-row[data-visible="false"] {
   visibility: hidden;
+  pointer-events: none;
 }
 
 .gallery-row[data-visible="true"] {
   visibility: visible;
+  pointer-events: auto;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .media-content {
+    will-change: auto;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .loading-skeleton {
+    animation: none;
+    background: #f0f0f0;
+  }
+}
+
+/* Focus improvements for accessibility */
+button:focus,
+a:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Touch target improvements for mobile */
+@media (max-width: 768px) {
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Improved contrast for better readability */
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.text-gray-800 {
+  color: #1f2937;
+}
+
+/* Performance optimizations for large galleries */
+.virtualized-grid {
+  contain: strict;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

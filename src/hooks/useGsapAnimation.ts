@@ -154,6 +154,13 @@ export default function useGsapAnimation(
             try {
                 const { gsap } = await loadGSAP()
                 
+                // Check for reduced motion preference
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (prefersReducedMotion) {
+                    isLoadingRef.current = false;
+                    return;
+                }
+                
                 // Combine effect preset with custom options
                 const effectPreset = getEffectPreset(animationOptions.effect || 'fade')
                 const finalFrom = { ...effectPreset.from, ...animationOptions.from }

@@ -4,6 +4,7 @@ import { useRef, memo } from 'react'
 import { lazy, Suspense } from 'react'
 import enhancedGalleryData from '../data/enhancedGalleryData'
 import { GalleryConfig } from '../types'
+import ErrorBoundary from './ErrorBoundary'
 
 // Lazy load GalleryRow for better code splitting
 const GalleryRow = lazy(() => import('./GalleryRow'))
@@ -22,16 +23,17 @@ const Gallery = memo(({
   return (
     <div ref={galleryRef} className={`gallery-container ${className}`}>
       {galleries.map(gallery => (
-        <Suspense 
-          key={gallery.id} 
-          fallback={
-            <div className="w-full h-screen flex items-center justify-center bg-gray-100">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-            </div>
-          }
-        >
-          <GalleryRow gallery={gallery} />
-        </Suspense>
+        <ErrorBoundary key={gallery.id}>
+          <Suspense 
+            fallback={
+              <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+                <div className="loading-skeleton w-16 h-16 rounded-full"></div>
+              </div>
+            }
+          >
+            <GalleryRow gallery={gallery} />
+          </Suspense>
+        </ErrorBoundary>
       ))}
     </div>
   )
