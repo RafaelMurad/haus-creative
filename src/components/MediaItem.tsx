@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
 
@@ -27,8 +27,6 @@ interface MediaItemProps {
   };
 }
 
-import { memo } from "react";
-
 export default memo(function MediaItem({
   item,
   className = "",
@@ -43,74 +41,95 @@ export default memo(function MediaItem({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const intersectionRef = useRef<IntersectionObserver | null>(null);
+  const [isInView, setIsInView] = useState(priority); // Priority items start as visible
 
   const ref = forwardedRef || ((el: HTMLElement | null) => {
     localRef.current = el;
   });
 
-  // Optimized video playback control
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    if (priority || isLoaded) return; // Skip if priority or already loaded
+
+    const element = localRef.current;
+    if (!element) return;
+
+    intersectionRef.current = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          intersectionRef.current?.disconnect();
+        }
+      },
+      {
+        rootMargin: '50px', // Start loading 50px before entering viewport
+        threshold: 0.1
+      }
+    );
+
+    intersectionRef.current.observe(element);
+
+    return () => {
+      intersectionRef.current?.disconnect();
+    };
+  }, [priority, isLoaded]);
+
+  // Optimized video playback control with RAF
   const handleVideoPlayback = useCallback(async () => {
     const videoElement = videoRef.current;
-    if (!videoElement) return;
+    if (!videoElement || !isInView) return;
 
-    if (isActive) {
-      try {
-        if (videoElement.isConnected && videoElement.readyState >= 2) {
-          await videoElement.play();
-        } else if (videoElement.isConnected) {
-          // Use requestAnimationFrame for better performance
-          const attemptPlay = () => {
-            if (videoElement.readyState >= 2) {
-              videoElement.play().catch(error => {
-                if (error.name !== "AbortError" && error.name !== "NotAllowedError") {
-                  console.warn("Video play failed:", error);
-                }
-              });
-            } else {
-              requestAnimationFrame(attemptPlay);
-            }
-          };
-          requestAnimationFrame(attemptPlay);
-        }
-      } catch (error: any) {
-        if (error.name !== "AbortError" && error.name !== "NotAllowedError") {
-          console.warn("Video play failed:", error);
-        }
-      }
-    } else {
-      if (videoElement.isConnected) {
+    const playVideo = () => {
+      if (isActive && videoElement.readyState >= 2) {
+        videoElement.play().catch(error => {
+          if (error.name !== "AbortError" && error.name !== "NotAllowedError") {
+            console.warn("Video play failed:", error);
+          }
+        });
+      } else if (!isActive) {
         videoElement.pause();
+      } else {
+        requestAnimationFrame(playVideo);
       }
-    }
-  }, [isActive]);
+    };
+
+    requestAnimationFrame(playVideo);
+  }, [isActive, isInView]);
 
   // Control video playback based on isActive prop
   useEffect(() => {
-    if (item.type === 'video') {
+    if (item.type === 'video' && isInView) {
       handleVideoPlayback();
     }
-  }, [isActive, item.type, handleVideoPlayback]);
+  }, [isActive, item.type, handleVideoPlayback, isInView]);
 
-  // Optimized load handlers
+  // Optimized load handlers with debouncing
   const handleImageLoad = useCallback(() => {
     setIsLoaded(true);
     if (onLoad) onLoad();
-    if (process.env.NODE_ENV === "development") {
-      console.debug(`Successfully loaded image: ${item.url || item.imageUrl}`);
-    }
-  }, [onLoad, item.url, item.imageUrl]);
+  }, [onLoad]);
 
   const handleImageError = useCallback(() => {
     setHasError(true);
-    if (process.env.NODE_ENV === "development") {
-      console.error(`Failed to load image: ${item.url || item.imageUrl}`);
-    }
-  }, [item.url, item.imageUrl]);
+  }, []);
 
   const handleVideoLoad = useCallback(() => {
     setIsLoaded(true);
     if (onLoad) onLoad();
   }, [onLoad]);
+
+  // Don't render anything until in view (unless priority)
+  if (!isInView && !priority) {
+    return (
+      <div
+        ref={ref as (instance: HTMLDivElement | null) => void}
+        className="w-full h-full bg-gray-100"
+        style={{ minHeight: "200px" }}
+      />
+    );
+  }
 
   // Render the appropriate media based on type
   const renderMedia = () => {
@@ -137,11 +156,11 @@ export default memo(function MediaItem({
             playsInline
             {...(item.thumbUrl && { poster: item.thumbUrl })}
             onLoadedData={handleVideoLoad}
-            preload="metadata"
+            preload={priority ? "metadata" : "none"}
             style={{ pointerEvents: "none" }}
             controls={false}
             disablePictureInPicture={true}
-            disableRemotePlayback={true}
+            disableRemotePlaybook={true}
           />
         );
       case "gif":
@@ -154,11 +173,11 @@ export default memo(function MediaItem({
             onLoad={handleImageLoad}
             onError={handleImageError}
             loading={priority ? "eager" : "lazy"}
+            decoding="async"
           />
         );
       case "image":
       default:
-        // Check if this is a treadmill gallery (gallery6 or gallery11) to use contain instead of cover
         const isTreadmill =
           item.url?.includes("gallery6/") ||
           item.url?.includes("gallery11/") ||
@@ -178,7 +197,7 @@ export default memo(function MediaItem({
             onLoad={handleImageLoad}
             onError={handleImageError}
             priority={priority}
-            quality={85} // Reduced from 95 for better performance
+            quality={priority ? 90 : 75} // Higher quality for priority images
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1600px) 100vw, (max-width: 1920px) 100vw, 100vw"
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
@@ -256,11 +275,11 @@ export default memo(function MediaItem({
     return styles;
   };
 
-  // Loading state
-  if (!isLoaded && !hasError) {
+  // Loading state with skeleton
+  if (!isLoaded && !hasError && isInView) {
     return (
       <div
-        className="media-content relative w-full h-full bg-gray-100 animate-pulse"
+        className="media-content relative w-full h-full bg-gray-100"
         style={containerConfig ? {
           position: "relative" as const,
           minHeight: containerConfig.minHeight || "300px",
@@ -268,7 +287,7 @@ export default memo(function MediaItem({
         } : { position: "relative" as const, minHeight: "200px", ...style }}
       >
         <div className="w-full h-full flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+          <div className="loading-skeleton w-full h-full rounded"></div>
         </div>
       </div>
     );
@@ -297,5 +316,13 @@ export default memo(function MediaItem({
     >
       {renderMedia()}
     </div>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison for memo optimization
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.isActive === nextProps.isActive &&
+    prevProps.priority === nextProps.priority &&
+    prevProps.className === nextProps.className
   );
 });
