@@ -42,7 +42,7 @@ export default memo(function MediaItem({
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const intersectionRef = useRef<IntersectionObserver | null>(null);
-  const [isInView, setIsInView] = useState(priority);
+  const [isInView, setIsInView] = useState(false);
   const retryCountRef = useRef(0);
   const maxRetries = 3;
 
@@ -50,33 +50,31 @@ export default memo(function MediaItem({
     localRef.current = el;
   });
 
-  // Enhanced Intersection Observer with retry logic
+  // Set up intersection observer for lazy loading
   useEffect(() => {
-    if (priority || isLoaded) return;
-
     const element = localRef.current;
     if (!element) return;
 
-    intersectionRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
-          intersectionRef.current?.disconnect();
+          observer.disconnect();
         }
       },
-      {
-        rootMargin: '100px', // Increased for better UX
+      { 
+        rootMargin: "50px",
         threshold: 0.1
       }
     );
 
-    intersectionRef.current.observe(element);
+    observer.observe(element);
+    intersectionRef.current = observer;
 
     return () => {
-      intersectionRef.current?.disconnect();
+      observer.disconnect();
     };
-  }, [priority, isLoaded]);
+  }, []);
 
   // Enhanced video playback with battery optimization
   const handleVideoPlayback = useCallback(async () => {
@@ -150,7 +148,76 @@ export default memo(function MediaItem({
     if (onLoad) onLoad();
   }, [onLoad]);
 
-  // Don't render anything until in view (unless priority)
+  // Determine if we need to force full viewport for carousel/fullscreen
+  useEffect(() => {
+    const element = localRef.current;
+    if (element) {
+      const parent = element.parentElement;
+      if (parent) {
+        isFullViewport.current =
+          parent.classList.contains("media-item") ||
+          parent.closest(".fullscreen-gallery") !== null;
+      }
+    }
+  }, []);
+
+  // Style based on item size or container context
+  const style = item.size
+    ? {
+        width: item.size.width,
+        height: item.size.height,
+      }
+    : isFullViewport.current
+    ? {
+        height: "100%",
+        width: "100%",
+        position: "relative" as const,
+        minHeight: "100vh",
+        maxHeight: "100vh",
+      }
+    : { position: "relative" as const };
+
+  // Container style builder
+  const getContentContainerStyle = useCallback(() => {
+    if (!containerConfig) return {};
+    const styles: React.CSSProperties = {};
+    if (containerConfig.width) styles.width = containerConfig.width;
+    if (containerConfig.minWidth) styles.minWidth = containerConfig.minWidth;
+    if (containerConfig.maxWidth) styles.maxWidth = containerConfig.maxWidth;
+    if (containerConfig.height) styles.height = containerConfig.height;
+    if (containerConfig.minHeight) styles.minHeight = containerConfig.minHeight;
+    if (containerConfig.maxHeight) styles.maxHeight = containerConfig.maxHeight;
+    if (containerConfig.aspectRatio)
+      styles.aspectRatio = containerConfig.aspectRatio;
+    if (containerConfig.padding) styles.padding = containerConfig.padding;
+    if (containerConfig.background)
+      styles.background = containerConfig.background;
+    if (containerConfig.borderRadius)
+      styles.borderRadius = containerConfig.borderRadius;
+    if (containerConfig.margin) styles.margin = containerConfig.margin;
+
+    if (!containerConfig.height && !containerConfig.minHeight) {
+      styles.minHeight = "300px";
+    }
+
+    if (containerConfig.alignment === "center" && !containerConfig.margin) {
+      styles.marginLeft = "auto";
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "left" &&
+      !containerConfig.margin
+    ) {
+      styles.marginRight = "auto";
+    } else if (
+      containerConfig.alignment === "right" &&
+      !containerConfig.margin
+    ) {
+      styles.marginLeft = "auto";
+    }
+    return styles;
+  }, [containerConfig]);
+
+  // Don't render until in view (unless priority)
   if (!isInView && !priority) {
     return (
       <div
@@ -161,7 +228,7 @@ export default memo(function MediaItem({
     );
   }
 
-  // Enhanced media rendering with WebP support detection
+  // Enhanced media rendering
   const renderMedia = () => {
     if (hasError) {
       return (
@@ -203,7 +270,7 @@ export default memo(function MediaItem({
             style={{ pointerEvents: "none" }}
             controls={false}
             disablePictureInPicture={true}
-            disableRemotePlaybook={true}
+            disableRemotePlayback={true}
           />
         );
       case "gif":
@@ -227,98 +294,28 @@ export default memo(function MediaItem({
           item.imageUrl?.includes("gallery6/") ||
           item.imageUrl?.includes("gallery11/");
 
+        // Use Next.js Image component for optimization
         return (
           <Image
+            ref={ref as (instance: HTMLImageElement | null) => void}
             src={item.url || item.imageUrl || ""}
             alt={item.title || "Gallery image"}
+            className="w-full h-full object-cover"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            priority={priority}
             fill
+            sizes={isTreadmill ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
             style={{
               objectFit: isTreadmill ? "contain" : "cover",
               objectPosition: "center",
             }}
-            className="w-full h-full"
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            priority={priority}
-            quality={priority ? 90 : 75}
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1600px) 100vw, (max-width: 1920px) 100vw, 100vw"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
           />
         );
     }
   };
 
-  // Determine if we need to force full viewport for carousel/fullscreen
-  useEffect(() => {
-    const element = localRef.current;
-    if (element) {
-      const parent = element.parentElement;
-      if (parent) {
-        isFullViewport.current =
-          parent.classList.contains("media-item") ||
-          parent.closest(".fullscreen-gallery") !== null;
-      }
-    }
-  }, []);
-
-  // Style based on item size or container context
-  const style = item.size
-    ? {
-        width: item.size.width,
-        height: item.size.height,
-      }
-    : isFullViewport.current
-    ? {
-        height: "100%",
-        width: "100%",
-        position: "relative" as const,
-        minHeight: "100vh",
-        maxHeight: "100vh",
-      }
-    : { position: "relative" as const };
-
-  // Container style builder
-  const getContentContainerStyle = () => {
-    if (!containerConfig) return {};
-    const styles: React.CSSProperties = {};
-    if (containerConfig.width) styles.width = containerConfig.width;
-    if (containerConfig.minWidth) styles.minWidth = containerConfig.minWidth;
-    if (containerConfig.maxWidth) styles.maxWidth = containerConfig.maxWidth;
-    if (containerConfig.height) styles.height = containerConfig.height;
-    if (containerConfig.minHeight) styles.minHeight = containerConfig.minHeight;
-    if (containerConfig.maxHeight) styles.maxHeight = containerConfig.maxHeight;
-    if (containerConfig.aspectRatio)
-      styles.aspectRatio = containerConfig.aspectRatio;
-    if (containerConfig.padding) styles.padding = containerConfig.padding;
-    if (containerConfig.background)
-      styles.background = containerConfig.background;
-    if (containerConfig.borderRadius)
-      styles.borderRadius = containerConfig.borderRadius;
-    if (containerConfig.margin) styles.margin = containerConfig.margin;
-
-    if (!containerConfig.height && !containerConfig.minHeight) {
-      styles.minHeight = "300px";
-    }
-
-    if (containerConfig.alignment === "center" && !containerConfig.margin) {
-      styles.marginLeft = "auto";
-      styles.marginRight = "auto";
-    } else if (
-      containerConfig.alignment === "left" &&
-      !containerConfig.margin
-    ) {
-      styles.marginRight = "auto";
-    } else if (
-      containerConfig.alignment === "right" &&
-      !containerConfig.margin
-    ) {
-      styles.marginLeft = "auto";
-    }
-    return styles;
-  };
-
-  // Enhanced loading state with skeleton
+  // Show loading state while image loads
   if (!isLoaded && !hasError && isInView) {
     return (
       <div
@@ -330,13 +327,13 @@ export default memo(function MediaItem({
         } : { position: "relative" as const, minHeight: "200px", ...style }}
       >
         <div className="w-full h-full flex items-center justify-center">
-          <div className="loading-skeleton w-full h-full rounded"></div>
+          <div className="loading-skeleton w-full h-full rounded animate-pulse bg-gray-200"></div>
         </div>
       </div>
     );
   }
 
-  // Simplify structure - one main container with content
+  // Render with container configuration or simple container
   if (containerConfig) {
     return (
       <div

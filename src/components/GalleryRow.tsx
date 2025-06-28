@@ -18,8 +18,8 @@ import {
   AnimationEffects,
 } from "../types";
 
-// Lazy load heavy components
-const MediaItem = lazy(() => import("./MediaItem"));
+// Import MediaItem (not lazy loaded for better performance)
+import MediaItem from "./MediaItem";
 const VirtualizedGrid = lazy(() => import("./VirtualizedGrid"));
 const TreadmillGallery = lazy(() => import("./TreadmillGallery"));
 
@@ -193,7 +193,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return () => {
       isMounted = false;
     };
-  }, [gallery.layout, isVisible, prefersReducedMotion, gallery.id, trackGallery]);
+  }, [gallery.layout, gallery.id, isVisible, prefersReducedMotion]);
 
   // Set isReady immediately for carousel/fullscreen layouts
   useEffect(() => {
@@ -541,14 +541,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
                 className="media-item absolute inset-0 w-full h-full"
                 style={{ zIndex: 1 }}
               >
-                <Suspense fallback={<div className="w-full h-full bg-gray-100 animate-pulse" />}>
-                  <MediaItem
-                    item={prevItem}
-                    className="w-full h-full object-cover"
-                    priority={false}
-                    isActive={false}
-                  />
-                </Suspense>
+                <MediaItem
+                  item={prevItem}
+                  className="w-full h-full object-cover"
+                  priority={false}
+                  isActive={false}
+                />
               </div>
             )}
             <div
@@ -556,14 +554,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               className="media-item absolute inset-0 w-full h-full"
               style={{ zIndex: 2 }}
             >
-              <Suspense fallback={<div className="w-full h-full bg-gray-100 animate-pulse" />}>
-                <MediaItem
-                  item={activeItem}
-                  className="w-full h-full object-cover"
-                  priority={true}
-                  isActive={true}
-                />
-              </Suspense>
+              <MediaItem
+                item={activeItem}
+                className="w-full h-full object-cover"
+                priority={true}
+                isActive={true}
+              />
             </div>
           </div>
         );
@@ -587,17 +583,10 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               gallery.layout === "masonry" ? "mb-2 md:mb-4 break-inside-avoid" : ""
             }
           >
-            <Suspense fallback={<div className="w-full h-64 bg-gray-100 animate-pulse" />}>
-              <MediaItem
-                item={item}
-                priority={index < 6} // Only prioritize first 6 items
-                forwardedRef={(el) => {
-                  if (elementsRef.current) {
-                    elementsRef.current[index] = el;
-                  }
-                }}
-              />
-            </Suspense>
+            <MediaItem
+              item={item}
+              priority={index < 6} // Only prioritize first 6 items
+            />
           </div>
         ));
       }
@@ -610,17 +599,10 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               gallery.layout === "masonry" ? "mb-2 md:mb-4 break-inside-avoid" : ""
             }
           >
-            <Suspense fallback={<div className="w-full h-64 bg-gray-100 animate-pulse" />}>
-              <MediaItem
-                item={item}
-                priority={index < 6}
-                forwardedRef={(el) => {
-                  if (elementsRef.current) {
-                    elementsRef.current[index] = el;
-                  }
-                }}
-              />
-            </Suspense>
+            <MediaItem
+              item={item}
+              priority={index < 6}
+            />
           </div>
         ));
     }

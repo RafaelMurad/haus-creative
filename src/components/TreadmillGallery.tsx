@@ -1,16 +1,17 @@
 "use client";
 
 import { useRef, useEffect, useState, memo } from "react";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { GalleryConfig } from "../types";
-
-const MediaItem = lazy(() => import("./MediaItem"));
+import MediaItem from "./MediaItem";
 
 interface TreadmillGalleryProps {
   gallery: GalleryConfig;
 }
 
-export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps) {
+export default memo(function TreadmillGallery({
+  gallery,
+}: TreadmillGalleryProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [gsapInstance, setGsapInstance] = useState<any>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -18,13 +19,13 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadGsap = async () => {
       try {
         const gsapModule = await import("gsap");
@@ -32,7 +33,7 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
           setGsapInstance(gsapModule.gsap || gsapModule.default || gsapModule);
         }
       } catch (error) {
-        console.warn('Failed to load GSAP:', error);
+        console.warn("Failed to load GSAP:", error);
       }
     };
 
@@ -51,9 +52,10 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
     const ctx = gsapInstance.context(() => {
       const getWindowDimensions = () => {
         const baseImageWidth = isMobile ? 280 : 720;
-        const imageWidth = gallery.id === "gallery11" 
-          ? Math.round(baseImageWidth * 0.8) 
-          : baseImageWidth;
+        const imageWidth =
+          gallery.id === "gallery11"
+            ? Math.round(baseImageWidth * 0.8)
+            : baseImageWidth;
 
         return {
           width: window.innerWidth,
@@ -76,9 +78,8 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
         const { width, imageWidth } = getWindowDimensions();
         const totalItems = gallery.items.length;
 
-        const centerPositions = Array.from(
-          { length: totalItems },
-          (_, i) => calculateCenterPosition(i + 1, width, imageWidth)
+        const centerPositions = Array.from({ length: totalItems }, (_, i) =>
+          calculateCenterPosition(i + 1, width, imageWidth)
         );
 
         const tl = gsapInstance.timeline({ repeat: -1 });
@@ -145,16 +146,14 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
   }, [gsapInstance, gallery.items, gallery.id, isMobile]);
 
   const imageWidth = isMobile ? 280 : 720;
-  const adjustedWidth = gallery.id === "gallery11" 
-    ? Math.round(imageWidth * 0.8) 
-    : imageWidth;
+  const adjustedWidth =
+    gallery.id === "gallery11" ? Math.round(imageWidth * 0.8) : imageWidth;
 
   return (
     <div
       className="treadmill-container"
       style={{
         width: "100vw",
-        height: "100vh",
         height: "100dvh", // Dynamic viewport height for mobile
         overflow: "hidden",
         display: "flex",
@@ -186,14 +185,12 @@ export default memo(function TreadmillGallery({ gallery }: TreadmillGalleryProps
               pointerEvents: "none",
             }}
           >
-            <Suspense fallback={<div className="w-full h-full bg-gray-100 animate-pulse" />}>
-              <MediaItem
-                item={item}
-                className="w-full h-full object-cover border-none outline-none pointer-events-none"
-                priority={index < 6}
-                isActive={true}
-              />
-            </Suspense>
+            <MediaItem
+              item={item}
+              className="w-full h-full object-cover border-none outline-none pointer-events-none"
+              priority={index < 6}
+              isActive={true}
+            />
           </div>
         ))}
       </div>
