@@ -1,7 +1,6 @@
 import "./globals.css";
 import Header from "../components/Header";
 import { ReactNode } from "react";
-import { inter } from "../fonts/fonts";
 
 export const metadata = {
   title: "Studio Haus | Creative Direction + Design",
@@ -49,11 +48,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
         <link rel="dns-prefetch" href="//images.pexels.com" />
         <link rel="preload" href="/assets/gallery1/Gallery1-1.png" as="image" />
       </head>
       <body
-        className={`min-h-screen bg-neutral-50 font-sans ${inter.className} antialiased`}
+        className="min-h-screen bg-neutral-50 font-sans antialiased"
+        style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}
       >
         <Header />
         <main role="main">
