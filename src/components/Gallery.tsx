@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import GalleryRow from './GalleryRow'
+import SmartGalleryRow from './SmartGalleryRow'
 import enhancedGalleryData from '../data/enhancedGalleryData'
 import { GalleryConfig } from '../types'
 
@@ -19,7 +19,7 @@ const Gallery = ({
   return (
     <div ref={galleryRef} className={`gallery-container ${className}`}>
       {galleries.map(gallery => (
-        <GalleryRow 
+        <SmartGalleryRow 
           key={gallery.id} 
           gallery={gallery} 
         />

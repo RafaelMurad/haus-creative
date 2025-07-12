@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { GalleryConfig } from '../types';
-import Gallery from './Gallery';
+import DynamicGallery from './DynamicGallery';
 
 interface ApiResponse {
   success: boolean;
@@ -95,5 +95,5 @@ export default function GalleryClient() {
   }
 
   // Success state - render galleries
-  return <Gallery galleries={galleries} />;
+  return <DynamicGallery galleries={galleries} />;
 }
