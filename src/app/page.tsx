@@ -1,9 +1,9 @@
-import GalleryLoader from '../components/GalleryLoader'
+import GalleryClient from '../components/GalleryClient'
 
 export default function Home() {
   return (
     <main>
-      <GalleryLoader />
+      <GalleryClient />
     </main>
   )
 }
