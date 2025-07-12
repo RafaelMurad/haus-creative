@@ -1,9 +1,12 @@
 import GalleryClient from '../components/GalleryClient'
+import GalleryErrorBoundary from '../components/GalleryErrorBoundary'
 
 export default function Home() {
   return (
     <main>
-      <GalleryClient />
+      <GalleryErrorBoundary>
+        <GalleryClient />
+      </GalleryErrorBoundary>
     </main>
   )
 }
