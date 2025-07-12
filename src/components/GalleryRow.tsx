@@ -8,14 +8,13 @@ import {
   useCallback,
 } from "react";
 import MediaItem from "./MediaItem";
-import useGsapAnimation from "../hooks/useGsapAnimation";
+import useConditionalAnimation from "../hooks/useConditionalAnimation";
 import {
   GalleryConfig,
   MediaItem as MediaItemType,
   AnimationEffects,
 } from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
-import gsap from "gsap";
 import { debugGalleryStructure } from "../utils/debugHelper";
 
 interface GalleryRowProps {
@@ -46,7 +45,20 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [gsapInstance, setGsapInstance] = useState<any>(null);
+  
+  // Use conditional animation loading
+  const {
+    shouldAnimate,
+    isAnimationReady,
+    isLoadingAnimation,
+    animationError,
+    gsapInstance,
+    createAnimation,
+    killAnimations
+  } = useConditionalAnimation(gallery);
+
+  // Elements ref for animations
+  const elementsRef = useRef<(HTMLElement | null)[]>([]);
 
   // Debug gallery structure in development
   useEffect(() => {
@@ -62,70 +74,56 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      killAnimations();
     };
-  }, []);
+  }, [killAnimations]);
 
-  // Dynamically import gsap on mount
+  // Set isReady immediately for layouts that don't need animations
   useEffect(() => {
-    let isMounted = true;
-    import("gsap").then((mod) => {
-      if (isMounted) setGsapInstance(mod.gsap || mod.default || mod);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // Set isReady immediately for carousel/fullscreen layouts
-  useEffect(() => {
-    if (gallery.layout === "carousel" || gallery.layout === "fullscreen") {
+    if (!shouldAnimate || gallery.layout === "carousel" || gallery.layout === "fullscreen") {
+      setIsReady(true);
+    } else if (shouldAnimate && isAnimationReady) {
       setIsReady(true);
     }
-  }, [gallery.layout]);
+  }, [shouldAnimate, isAnimationReady, gallery.layout]);
 
-  // Set up the elements ref without ScrollTrigger initially
-  const { elementsRef } = useGsapAnimation(
-    {
-      effect: getAnimationConfig().effect,
-      duration: getAnimationConfig().duration,
-      ease: getAnimationConfig().ease,
-      stagger: getAnimationConfig().stagger || 0.15,
-      from: getAnimationConfig().from,
-      to: getAnimationConfig().to,
-    },
-    [gallery.id]
-  );
-
-  // Set up ScrollTrigger after the component mounts and refs are populated
+  // Set up animations when GSAP is ready and elements are available
   useEffect(() => {
-    if (!containerRef.current || typeof window === "undefined") return;
-    if (!gsapInstance) return;
+    if (!shouldAnimate || !isAnimationReady || !containerRef.current) return;
+    if (!gsapInstance || typeof window === "undefined") return;
 
     const elements = elementsRef.current
       .filter(Boolean)
       .filter((el) => el instanceof Element);
     if (elements.length === 0) return;
 
-    // Create animations with ScrollTrigger when the DOM is ready
-    const animations = elements.map((el, index) => {
-      return gsapInstance.fromTo(
-        el,
-        { ...getAnimationConfig().from },
-        {
-          ...getAnimationConfig().to,
-          duration: getAnimationConfig().duration,
-          ease: getAnimationConfig().ease,
-          delay: index * (getAnimationConfig().stagger || 0.15),
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top bottom-=100",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    });
+    let animations: any[] = [];
 
-    setIsReady(true);
+    try {
+      // Create animations with ScrollTrigger when the DOM is ready
+      animations = elements.map((el, index) => {
+        return gsapInstance.gsap.fromTo(
+          el,
+          { ...getAnimationConfig().from },
+          {
+            ...getAnimationConfig().to,
+            duration: getAnimationConfig().duration,
+            ease: getAnimationConfig().ease,
+            delay: index * (getAnimationConfig().stagger || 0.15),
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top bottom-=100",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      });
+
+      setIsReady(true);
+    } catch (error) {
+      console.error('Error setting up animations:', error);
+      setIsReady(true); // Still set ready even if animations fail
+    }
 
     // Clean up on unmount
     return () => {
@@ -136,7 +134,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         anim.kill();
       });
     };
-  }, [gallery.id, getAnimationConfig(), elementsRef, gsapInstance]);
+  }, [shouldAnimate, isAnimationReady, gsapInstance, gallery.id]);
 
   // Preload next and previous images in carousel
   useEffect(() => {
