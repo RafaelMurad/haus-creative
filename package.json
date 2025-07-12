@@ -5,7 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "build:analyze": "ANALYZE=true next build",
+    "start": "next start",
+    "analyze": "node scripts/analyze-bundle.js",
+    "lighthouse": "npx lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html",
+    "bundle:config": "node scripts/analyze-bundle.js --config",
+    "optimize": "npm run build:analyze && npm run analyze",
+    "performance": "node scripts/measure-performance.js",
+    "perf": "npm run build && npm run performance"
   },
   "dependencies": {
     "gsap": "^3.13.0",
@@ -16,6 +23,7 @@
     "react-window": "^1.8.11"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.3.5",
     "@types/node": "22.15.2",
     "@types/react": "19.1.2",
     "autoprefixer": "^10.4.18",

@@ -1,0 +1,39 @@
+[
+  {
+    "timestamp": "2025-07-12T17:46:03.033Z",
+    "metrics": {
+      "totalJS": 121,
+      "framework": 8,
+      "vendor": 0,
+      "gsap": 0,
+      "polyfills": 110
+    },
+    "scores": {
+      "framework": {
+        "actual": 8,
+        "budget": 40,
+        "score": 100,
+        "status": "PASS"
+      },
+      "vendor": {
+        "actual": 0,
+        "budget": 300,
+        "score": 100,
+        "status": "PASS"
+      },
+      "gsap": {
+        "actual": 0,
+        "budget": 150,
+        "score": 100,
+        "status": "PASS"
+      }
+    },
+    "optimizations": {
+      "bundleSplitting": true,
+      "treeshaking": true,
+      "compression": true,
+      "dynamicImports": true,
+      "lazyLoading": true
+    }
+  }
+]
