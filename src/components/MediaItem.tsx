@@ -4,6 +4,8 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
 import { debugImageLoad } from "../utils/debugHelper";
+import { LazyImage } from "./LazyImage";
+import { generateImageSources, getLoadingSettings, generateImageSizes } from "../utils/imageOptimization";
 
 interface MediaItemProps {
   item: MediaItemType;
@@ -123,38 +125,70 @@ export default memo(function MediaItem({
           item.imageUrl?.includes("gallery6/") ||
           item.imageUrl?.includes("gallery11/");
 
+        const imageUrl = item.url || item.imageUrl || "";
+        const sources = generateImageSources(imageUrl);
+        const loadingSettings = getLoadingSettings(imageUrl);
+        const imageSizes = generateImageSizes(isTreadmill ? "carousel" : "grid");
+
+        // Use priority loading (Next.js Image) for critical images, lazy loading for others
+        if (priority) {
+          return (
+            <Image
+              src={imageUrl}
+              alt={item.title}
+              fill
+              style={{
+                objectFit: isTreadmill ? "contain" : "cover",
+                objectPosition: "center",
+              }}
+              className="w-full h-full"
+              onLoad={() => {
+                if (onLoad) onLoad();
+                if (process.env.NODE_ENV === "development") {
+                  console.debug(`Successfully loaded priority image: ${imageUrl}`);
+                }
+              }}
+              onError={() => {
+                if (process.env.NODE_ENV === "development") {
+                  console.error(`Failed to load priority image: ${imageUrl}`);
+                }
+              }}
+              priority={true}
+              quality={95}
+              sizes={imageSizes}
+              placeholder="blur"
+              blurDataURL={sources.placeholder}
+            />
+          );
+        }
+
+        // Use lazy loading for non-priority images
         return (
-          <Image
-            src={item.url || item.imageUrl || ""}
+          <LazyImage
+            src={imageUrl}
             alt={item.title}
-            fill
+            placeholderSrc={sources.placeholder}
+            lowResSrc={sources.lowRes}
+            rootMargin={loadingSettings.rootMargin}
+            threshold={loadingSettings.threshold}
+            className="w-full h-full"
             style={{
               objectFit: isTreadmill ? "contain" : "cover",
               objectPosition: "center",
+              width: "100%",
+              height: "100%"
             }}
-            className="w-full h-full"
             onLoad={() => {
               if (onLoad) onLoad();
-              // Log successful image load in development
               if (process.env.NODE_ENV === "development") {
-                console.debug(
-                  `Successfully loaded image: ${item.url || item.imageUrl}`
-                );
+                console.debug(`Successfully loaded lazy image: ${imageUrl}`);
               }
             }}
-            onError={() => {
-              // Log failed image load in development
+            onError={(error) => {
               if (process.env.NODE_ENV === "development") {
-                console.error(
-                  `Failed to load image: ${item.url || item.imageUrl}`
-                );
+                console.error(`Failed to load lazy image: ${imageUrl}`, error);
               }
             }}
-            priority={priority}
-            quality={95}
-            sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1280px) 1280px, (max-width: 1600px) 1600px, (max-width: 1920px) 1920px, 2048px"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLDyZH9E8vI8dvwWR8WkJnKdL3c4c1/wB1/9k="
           />
         );
     }
