@@ -3,7 +3,7 @@ import GalleryErrorBoundary from "../components/GalleryErrorBoundary";
 
 export default function Home() {
   return (
-    <main>
+    <main role="main" aria-label="Main content">
       <GalleryErrorBoundary>
         <GalleryClient />
       </GalleryErrorBoundary>

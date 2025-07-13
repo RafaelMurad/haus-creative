@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Add accessibility and SEO best practices
+Sitemap: /sitemap.xml

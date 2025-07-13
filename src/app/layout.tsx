@@ -40,6 +40,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </ErrorBoundary>
           <PerformanceDebugger />
         </PerformanceMonitor>
+        {/* Register service worker for offline caching */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+              navigator.serviceWorker.register('/service-worker.js');
+            });
+          }`,
+          }}
+        />
       </body>
     </html>
   );
