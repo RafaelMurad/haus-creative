@@ -43,6 +43,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   // Use simplified GSAP loading
   const {
@@ -53,6 +54,35 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
   // Elements ref for animations
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
+
+  // Treadmill animation effect - moved to top level
+  useEffect(() => {
+    // Only run for gallery6 and gallery11 with treadmill effect
+    if (gallery.id !== "gallery6" && gallery.id !== "gallery11") return;
+    if (!isAnimationReady || !gsapInstance || !trackRef.current) return;
+
+    const track = trackRef.current;
+    const items = track.children;
+    if (items.length === 0) return;
+
+    // Calculate total width
+    let totalWidth = 0;
+    Array.from(items).forEach((item) => {
+      totalWidth += (item as HTMLElement).offsetWidth;
+    });
+
+    // Create seamless loop animation
+    const animation = gsapInstance.to(track, {
+      x: -totalWidth,
+      duration: 20,
+      ease: "none",
+      repeat: -1,
+    });
+
+    return () => {
+      if (animation) animation.kill();
+    };
+  }, [isAnimationReady, gsapInstance, gallery.id]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -297,6 +327,47 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     switch (gallery.layout) {
       case "carousel":
       case "fullscreen": {
+          // Check if this is a treadmill gallery
+          const isTreadmill = gallery.id === "gallery6" || gallery.id === "gallery11";
+
+          if (isTreadmill) {
+            return (
+              <div className="relative w-full h-full overflow-hidden">
+                <div
+                  ref={trackRef}
+                  className="flex h-full"
+                  style={{ width: `${gallery.items.length * 100}%` }}
+                >
+                  {gallery.items.map((item, index) => (
+                    <div
+                      key={`${item.id}-${index}`}
+                      className="flex-shrink-0"
+                      style={{ width: `${100 / gallery.items.length}%` }}
+                    >
+                      <MediaItem
+                        item={item}
+                        onLoad={handleMediaLoad}
+                      />
+                    </div>
+                  ))}
+                  {/* Duplicate items for seamless loop */}
+                  {gallery.items.map((item, index) => (
+                    <div
+                      key={`${item.id}-duplicate-${index}`}
+                      className="flex-shrink-0"
+                      style={{ width: `${100 / gallery.items.length}%` }}
+                    >
+                      <MediaItem
+                        item={item}
+                        onLoad={handleMediaLoad}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+
         return (
           <div className="relative w-full h-full">
             {/* Active item */}
