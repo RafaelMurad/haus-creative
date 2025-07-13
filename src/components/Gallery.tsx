@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import SmartGalleryRow from "./SmartGalleryRow";
 import PerformanceAnalytics from "./PerformanceAnalytics";
+import BundleAnalytics from "./BundleAnalytics";
 import enhancedGalleryData from "../data/enhancedGalleryData";
 import { GalleryConfig } from "../types";
 
@@ -23,6 +24,11 @@ const Gallery = ({
       <PerformanceAnalytics 
         className="fixed top-4 right-4 max-w-sm z-50"
         showDetails={false}
+      />
+      
+      {/* Bundle Analytics Dashboard - Development Only */}
+      <BundleAnalytics 
+        className="fixed top-4 left-4 max-w-sm z-50"
       />
       
       {galleries.map((gallery) => (
