@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import SmartGalleryRow from "./SmartGalleryRow";
-import AnalyticsDashboard from "./AnalyticsDashboard";
+import GalleryRow from "./GalleryRow";
 import enhancedGalleryData from "../data/enhancedGalleryData";
 import { GalleryConfig } from "../types";
 
@@ -19,11 +18,8 @@ const Gallery = ({
 
   return (
     <div ref={galleryRef} className={`gallery-container ${className}`}>
-      {/* Unified Analytics Dashboard - Development Only */}
-      <AnalyticsDashboard />
-      
       {galleries.map((gallery) => (
-        <SmartGalleryRow key={gallery.id} gallery={gallery} />
+        <GalleryRow key={gallery.id} gallery={gallery} />
       ))}
     </div>
   );

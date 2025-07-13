@@ -1,5 +1,4 @@
 "use client";
-
 import {
   useLayoutEffect,
   useState,
@@ -8,14 +7,13 @@ import {
   useCallback,
 } from "react";
 import MediaItem from "./MediaItem";
-import useConditionalAnimation from "../hooks/useConditionalAnimation";
+import useGSAP from "../hooks/useGSAP";
 import {
   GalleryConfig,
   MediaItem as MediaItemType,
   AnimationEffects,
 } from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
-import { debugGalleryStructure } from "../utils/debugHelper";
 
 interface GalleryRowProps {
   gallery: GalleryConfig;
@@ -42,28 +40,19 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const timelineRef = useRef<any>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
 
-  // Use conditional animation loading
+  // Use simplified GSAP loading
   const {
-    shouldAnimate,
-    isAnimationReady,
-    isLoadingAnimation,
-    animationError,
+    isLoaded: isAnimationReady,
     gsapInstance,
-    createAnimation,
     killAnimations,
-  } = useConditionalAnimation(gallery);
+  } = useGSAP();
 
   // Elements ref for animations
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
-
-  // Debug gallery structure in development
-  useEffect(() => {
-    debugGalleryStructure(gallery.id, gallery);
-  }, [gallery]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -78,73 +67,61 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     };
   }, [killAnimations]);
 
-  // Set isReady immediately for layouts that don't need animations
+  // Set isReady based on layout and animation needs
   useEffect(() => {
-    if (
-      !shouldAnimate ||
-      gallery.layout === "carousel" ||
-      gallery.layout === "fullscreen"
-    ) {
+    if (gallery.layout === "carousel" || gallery.layout === "fullscreen") {
       setIsReady(true);
-    } else if (shouldAnimate && isAnimationReady) {
+    } else if (isAnimationReady) {
       setIsReady(true);
     }
-  }, [shouldAnimate, isAnimationReady, gallery.layout]);
+  }, [isAnimationReady, gallery.layout]);
 
-  // Set up animations when GSAP is ready and elements are available
+  // Basic animation setup for grid/masonry layouts
   useEffect(() => {
-    if (!shouldAnimate || !isAnimationReady || !containerRef.current) return;
-    if (!gsapInstance || typeof window === "undefined") return;
+    if (gallery.layout === "carousel" || gallery.layout === "fullscreen") return;
+    if (!isAnimationReady || !containerRef.current || !gsapInstance) return;
 
     const elements = elementsRef.current
       .filter(Boolean)
       .filter((el) => el instanceof Element);
+    
     if (elements.length === 0) return;
 
     let animations: any[] = [];
-
     try {
-      // Create animations with ScrollTrigger when the DOM is ready
+      // Simple fade-in animation for grid items
       animations = elements.map((el, index) => {
-        return gsapInstance.gsap.fromTo(
+        return gsapInstance.fromTo(
           el,
-          { ...getAnimationConfig().from },
+          { opacity: 0, y: 30 },
           {
-            ...getAnimationConfig().to,
-            duration: getAnimationConfig().duration,
-            ease: getAnimationConfig().ease,
-            delay: index * (getAnimationConfig().stagger || 0.15),
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top bottom-=100",
-              toggleActions: "play none none none",
-            },
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: index * 0.1,
           }
         );
       });
-
       setIsReady(true);
     } catch (error) {
       console.error("Error setting up animations:", error);
-      setIsReady(true); // Still set ready even if animations fail
+      setIsReady(true);
     }
 
-    // Clean up on unmount
     return () => {
       animations.forEach((anim) => {
-        if (anim && anim.scrollTrigger) {
-          anim.scrollTrigger.kill();
+        if (anim && anim.kill) {
+          anim.kill();
         }
-        anim.kill();
       });
     };
-  }, [shouldAnimate, isAnimationReady, gsapInstance, gallery.id]);
+  }, [isAnimationReady, gsapInstance, gallery.layout]);
 
-  // Preload next and previous images in carousel
+  // Preload images for carousel
   useEffect(() => {
-    if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
-      return;
+    if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen") return;
     if (!gallery.items.length) return;
+
     const preload = (index: number) => {
       const item = gallery.items[index];
       if (item && item.type === "image" && item.url) {
@@ -152,7 +129,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         img.src = item.url;
       }
     };
-    // Preload next and previous images
+
     preload((activeIndex + 1) % gallery.items.length);
     preload((activeIndex - 1 + gallery.items.length) % gallery.items.length);
   }, [activeIndex, gallery.layout, gallery.items]);
@@ -160,7 +137,6 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const getContainerClass = (): string => {
     const baseClasses = "relative";
     if (!gallery.container) return baseClasses + " w-full";
-
     return baseClasses;
   };
 
@@ -175,11 +151,9 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     } else {
       styles.width = "100%";
     }
-
     if (gallery.container.minWidth) {
       styles.minWidth = gallery.container.minWidth;
     }
-
     if (gallery.container.maxWidth) {
       styles.maxWidth = gallery.container.maxWidth;
     }
@@ -188,14 +162,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (gallery.container.height) {
       styles.height = gallery.container.height;
     } else {
-      // Default height if not specified - needed for proper layout
       styles.height = "100%";
     }
-
     if (gallery.container.minHeight) {
       styles.minHeight = gallery.container.minHeight;
     }
-
     if (gallery.container.maxHeight) {
       styles.maxHeight = gallery.container.maxHeight;
     }
@@ -205,7 +176,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       styles.aspectRatio = gallery.container.aspectRatio;
     }
 
-    // Add alignment styles
+    // Alignment
     switch (gallery.container.alignment) {
       case "right":
         styles.marginLeft = "auto";
@@ -225,18 +196,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     if (gallery.container.padding) {
       styles.padding = gallery.container.padding;
     }
-
-    if (
-      gallery.container.margin &&
-      typeof gallery.container.margin === "string"
-    ) {
+    if (gallery.container.margin && typeof gallery.container.margin === "string") {
       styles.margin = gallery.container.margin;
     }
-
     if (gallery.container.background) {
       styles.background = gallery.container.background;
     }
-
     if (gallery.container.borderRadius) {
       styles.borderRadius = gallery.container.borderRadius;
     }
@@ -244,198 +209,85 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return styles;
   };
 
-  // Handle different gallery layouts
   const getLayoutClass = (): string => {
     switch (gallery.layout) {
       case "grid":
-        // Grid layout handles its own width/height internally or via parent constraints
-        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[60vh] md:min-h-screen w-full";
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
       case "masonry":
-        return "columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 min-h-[60vh] md:min-h-screen w-full";
-      case "fullscreen":
-        // Fullscreen mode - take over entire viewport with no margins or padding
-        return "relative h-full w-full overflow-hidden flex items-center justify-center";
+        return "columns-1 md:columns-2 lg:columns-3 gap-4";
       case "carousel":
-        // For carousel, ensure it gets proper height and handles overflow
-        return "relative h-full w-full overflow-hidden flex items-center justify-center";
+      case "fullscreen":
+        return "relative w-full h-full overflow-hidden";
       default:
-        // Default layout also handles its own width or relies on parent
-        return "flex flex-wrap gap-4 min-h-[60vh] md:min-h-screen w-full";
+        return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
     }
   };
 
-  // Improved GSAP crossfade transition logic
-  const triggerNextSlide = useCallback((): void => {
-    if (isTransitioning || !gallery.items.length) return;
-
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    const next = (activeIndex + 1) % gallery.items.length;
+  // Navigation handlers for carousel
+  const triggerNextSlide = useCallback(() => {
+    if (isTransitioning) return;
+    
+    const nextIndex = (activeIndex + 1) % gallery.items.length;
     setPrevIndex(activeIndex);
-    setActiveIndex(next);
+    setActiveIndex(nextIndex);
     setIsTransitioning(true);
+    
+    setTimeout(() => setIsTransitioning(false), 1000);
+  }, [activeIndex, gallery.items.length, isTransitioning]);
 
-    // Reduced fallback timeout for better responsiveness
-    timeoutRef.current = setTimeout(() => {
-      setIsTransitioning(false);
-      setPrevIndex(null);
-    }, (getAnimationConfig().duration || 0.7) * 1000 + 100);
-  }, [isTransitioning, gallery.items.length, activeIndex, getAnimationConfig]);
+  const triggerPrevSlide = useCallback(() => {
+    if (isTransitioning) return;
+    
+    const prevIdx = (activeIndex - 1 + gallery.items.length) % gallery.items.length;
+    setPrevIndex(activeIndex);
+    setActiveIndex(prevIdx);
+    setIsTransitioning(true);
+    
+    setTimeout(() => setIsTransitioning(false), 1000);
+  }, [activeIndex, gallery.items.length, isTransitioning]);
 
-  // Set up carousel autoplay for carousel layouts
+  // Auto-advance for carousel
   useEffect(() => {
-    if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
-      return;
-    if (!isReady) return;
-    if (!gallery.transitionTime) return; // No autoplay for galleries without transitionTime (like video galleries)
+    if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen") return;
+    if (!isReady || !gallery.transitionTime) return;
 
     const interval = setInterval(() => {
       triggerNextSlide();
-    }, gallery.transitionTime); // Use configured time
+    }, gallery.transitionTime);
 
     return () => clearInterval(interval);
   }, [gallery.layout, isReady, gallery.transitionTime, triggerNextSlide]);
 
-  // Animate crossfade when prevIndex changes
+  // Simple crossfade animation
   useLayoutEffect(() => {
     if (prevIndex === null || !isTransitioning) return;
-    if (!prevRef.current || !activeRef.current) return;
-    if (!gsapInstance) return;
+    if (!prevRef.current || !activeRef.current || !gsapInstance) return;
 
-    // Kill any existing timeline
     if (timelineRef.current) {
       timelineRef.current.kill();
     }
 
     const duration = getAnimationConfig().duration || 0.7;
-    const ease = getAnimationConfig().ease || "power2.inOut";
 
-    // Apply the animation based on the effect type
     switch (getAnimationConfig().effect) {
       case "none": {
-        // No animation - just instantly switch
         gsapInstance.set(prevRef.current, { opacity: 0 });
         gsapInstance.set(activeRef.current, { opacity: 1 });
         setPrevIndex(null);
-        setIsTransitioning(false);
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-        }
         break;
       }
-
-      case "slide": {
-        gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
-        timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-        });
-
-        timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              x: "-100%",
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              x: "0%",
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          );
-        break;
-      }
-
-      case "scale": {
-        gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
-        timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-        });
-
-        timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              opacity: 0,
-              scale: 0.8,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              opacity: 1,
-              scale: 1,
-              duration,
-              ease,
-            },
-            0
-          );
-        break;
-      }
-
+      case "fade":
       default: {
-        // Default to fade animation
-        gsapInstance.set(activeRef.current, { opacity: 0 });
         timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
+          onComplete: () => setPrevIndex(null)
         });
-
         timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              opacity: 0,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          );
+          .to(prevRef.current, { opacity: 0, duration: duration / 2 })
+          .to(activeRef.current, { opacity: 1, duration: duration / 2 }, "-=0.1");
       }
     }
-  }, [prevIndex, isTransitioning, getAnimationConfig(), gsapInstance]);
+  }, [prevIndex, isTransitioning, gsapInstance]);
 
-  // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {
     // No operation needed
   };
@@ -445,315 +297,81 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     switch (gallery.layout) {
       case "carousel":
       case "fullscreen": {
-        // Special handling for infinite scroll treadmill effect (gallery6 and gallery11)
-        if (gallery.id === "gallery6" || gallery.id === "gallery11") {
-          const trackRef = useRef<HTMLDivElement>(null);
-
-          useEffect(() => {
-            if (!trackRef.current || !gsapInstance) return;
-
-            let currentTimeline: any = null;
-
-            const ctx = gsapInstance.context(() => {
-              // Function to get current window dimensions and image size based on gallery
-              const getWindowDimensions = () => {
-                // Gallery11 uses 20% smaller images than gallery6
-                const baseImageWidth = 720;
-                const imageWidth =
-                  gallery.id === "gallery11"
-                    ? Math.round(baseImageWidth * 0.8) // 20% smaller = 576px
-                    : baseImageWidth; // 720px for gallery6
-
-                return {
-                  width: window.innerWidth,
-                  imageWidth,
-                };
-              };
-
-              // Helper function to calculate the exact position needed to center any image
-              const calculateCenterPosition = (
-                imageIndex: number,
-                width: number,
-                imageWidth: number
-              ): number => {
-                // Each image is at position: imageIndex * (imageWidth + gap) from track start
-                const gap = width; // Full viewport width gap between images
-                const imagePosition = imageIndex * (imageWidth + gap);
-                // To center this image, its left edge should be at: (width - imageWidth) / 2
-                const centerPosition = (width - imageWidth) / 2;
-                // Return the required track offset to achieve centering
-                return centerPosition - imagePosition;
-              };
-
-              // Function to create the main animation timeline
-              const createTimeline = () => {
-                const { width, imageWidth } = getWindowDimensions();
-                const gap = width; // Full viewport width gap between images
-                const totalItems = gallery.items.length;
-
-                // Pre-calculate all center positions for each image with current dimensions
-                const centerPositions = Array.from(
-                  { length: totalItems },
-                  (_, i) => calculateCenterPosition(i + 1, width, imageWidth) // i+1 because we start with image 2
-                );
-
-                // CSS already centers the first image (image 0), so we start with subsequent images
-                const tl = gsapInstance.timeline({ repeat: -1 });
-
-                // First image stays centered for 2 seconds (already positioned by CSS)
-                tl.to({}, { duration: 2 });
-
-                // Loop through each image transition using pre-calculated positions
-                for (let i = 0; i < totalItems; i++) {
-                  const targetPosition = centerPositions[i];
-
-                  tl.to(trackRef.current, {
-                    x: targetPosition, // Move to the pre-calculated center position
-                    duration: 1.8,
-                    ease: "power1.inOut",
-                    force3D: true,
-                  });
-
-                  // Stay centered for 2 seconds (except for the last transition)
-                  if (i < totalItems - 1) {
-                    tl.to({}, { duration: 2 });
-                  }
-                }
-
-                // Reset to beginning position for seamless loop
-                tl.set(trackRef.current, {
-                  x: 0, // Reset to CSS transform position (centered)
-                  force3D: true,
-                });
-
-                return tl;
-              };
-
-              // Function to handle resize and recreate timeline
-              const handleResize = () => {
-                // Kill existing timeline
-                if (currentTimeline) {
-                  currentTimeline.kill();
-                }
-
-                // Reset track position to CSS centered position
-                gsapInstance.set(trackRef.current, {
-                  x: 0,
-                  force3D: true,
-                });
-
-                // Create new timeline with updated dimensions
-                currentTimeline = createTimeline();
-              };
-
-              // Create initial timeline
-              currentTimeline = createTimeline();
-
-              // Add resize listener with debouncing
-              let resizeTimeout: NodeJS.Timeout;
-              const debouncedResize = () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(handleResize, 150); // Debounce resize events
-              };
-
-              window.addEventListener("resize", debouncedResize);
-
-              // Cleanup function
-              return () => {
-                window.removeEventListener("resize", debouncedResize);
-                if (resizeTimeout) {
-                  clearTimeout(resizeTimeout);
-                }
-                if (currentTimeline) {
-                  currentTimeline.kill();
-                }
-              };
-            }, trackRef);
-
-            return () => ctx.revert();
-          }, [gsapInstance, gallery.items]);
-
-          return (
-            <div
-              className="treadmill-container"
-              style={{
-                width: "100vw",
-                height: "100vh",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                pointerEvents: "none", // Disable all interactions
-              }}
-            >
-              <div
-                ref={trackRef}
-                className="treadmill-track"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  transform: "translateX(calc((100vw - 720px) / 2))", // Initial CSS centering to prevent flash
-                  willChange: "transform",
-                  gap: "100vw", // Full viewport width gap - only one image visible at a time
-                  pointerEvents: "none", // Disable all interactions on track
-                }}
-              >
-                {/* Duplicate the images array for seamless loop */}
-                {[...gallery.items, ...gallery.items].map((item, index) => (
-                  <div
-                    key={`${item.id}-${index}`}
-                    style={{
-                      flexShrink: 0,
-                      width: "720px", // Increased by 20% from 600px
-                      height: "96vh", // Increased by 20% from 80vh
-                      maxHeight: "960px", // Increased by 20% from 800px
-                      pointerEvents: "none", // Disable all interactions on image containers
-                    }}
-                  >
-                    <MediaItem
-                      item={item}
-                      className="w-full h-full object-cover border-none outline-none pointer-events-none"
-                      priority={index < 6} // Prioritize first few items
-                      isActive={true}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        }
-
-        const activeItem = gallery.items[activeIndex];
-        const prevItem = prevIndex !== null ? gallery.items[prevIndex] : null;
-
-        // Safety check for items
-        if (!activeItem) {
-          return (
-            <div className="flex items-center justify-center h-full w-full text-gray-500">
-              No active item to display
-            </div>
-          );
-        }
-
-        // Add special styles for fullscreen mode
-        const isFullscreen = gallery.layout === "fullscreen";
-        const containerStyle: React.CSSProperties = isFullscreen
-          ? {
-              height: "100vh",
-              width: "100vw",
-              position: "relative",
-              margin: 0,
-              padding: 0,
-            }
-          : {
-              height: "100%",
-              width: "100%",
-              position: "relative" as "relative",
-            };
-
         return (
-          <div
-            className={`relative overflow-hidden flex items-center justify-center ${
-              isFullscreen ? "fullscreen-container" : ""
-            }`}
-            style={containerStyle}
-          >
-            {/* Previous slide (fading out) */}
-            {prevItem && (
+          <div className="relative w-full h-full">
+            {/* Active item */}
+            <div
+              ref={activeRef}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ opacity: 1 }}
+            >
+              <MediaItem
+                item={gallery.items[activeIndex]}
+                onLoad={handleMediaLoad}
+              />
+            </div>
+
+            {/* Previous item for transitions */}
+            {prevIndex !== null && (
               <div
                 ref={prevRef}
-                className="media-item absolute inset-0 w-full h-full"
-                style={{ zIndex: 1 }}
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ opacity: 1 }}
               >
                 <MediaItem
-                  item={prevItem}
-                  className="w-full h-full object-cover"
-                  priority={true}
-                  isActive={false} // Previous item should not be active (pause videos)
+                  item={gallery.items[prevIndex]}
+                  onLoad={handleMediaLoad}
                 />
               </div>
             )}
-            {/* Current slide (fading in) */}
-            <div
-              ref={activeRef}
-              className="media-item absolute inset-0 w-full h-full"
-              style={{ zIndex: 2 }}
+
+            {/* Navigation buttons */}
+            <button
+              onClick={triggerPrevSlide}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity z-10"
+              disabled={isTransitioning}
             >
-              <MediaItem
-                item={activeItem}
-                className="w-full h-full object-cover"
-                priority={true}
-                isActive={true} // Current item should be active (play videos)
-              />
-            </div>
+              ←
+            </button>
+            <button
+              onClick={triggerNextSlide}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity z-10"
+              disabled={isTransitioning}
+            >
+              →
+            </button>
           </div>
         );
       }
 
       case "grid":
-      case "masonry": {
-        // Virtualized grid for performance
-        const columnCount = 3; // Common default for desktop
-        const rowCount = Math.ceil(gallery.items.length / columnCount);
-        const cellWidth = 300; // px
-        const cellHeight = 300; // px
-        const width = columnCount * cellWidth;
-        const height = 900; // Show 3 rows at a time (can be adjusted)
-
+      case "masonry":
+      default: {
         return (
-          <Grid
-            columnCount={columnCount}
-            rowCount={rowCount}
-            columnWidth={cellWidth}
-            rowHeight={cellHeight}
-            width={width}
-            height={height}
-            itemData={gallery.items}
-          >
-            {({ columnIndex, rowIndex, style, data }) => {
-              const index = rowIndex * columnCount + columnIndex;
-              if (index >= data.length) return null;
-              const item = data[index];
-              return (
-                <div style={style} key={item.id} className="p-2">
-                  <MediaItem item={item} priority={true} />
-                </div>
-              );
-            }}
-          </Grid>
+          <>
+            {gallery.items.map((item, index) => (
+              <div
+                key={item.id}
+                ref={(el) => { elementsRef.current[index] = el; }}
+                className="break-inside-avoid mb-4"
+              >
+                <MediaItem
+                  item={item}
+                  onLoad={handleMediaLoad}
+                />
+              </div>
+            ))}
+          </>
         );
       }
-
-      default:
-        return gallery.items.map((item, index) => (
-          <div
-            key={item.id}
-            className={
-              gallery.layout === "masonry" ? "mb-4 break-inside-avoid" : ""
-            }
-          >
-            <MediaItem
-              item={item}
-              priority={true}
-              forwardedRef={(el) => {
-                if (elementsRef.current) {
-                  elementsRef.current[index] = el;
-                }
-              }}
-              onLoad={handleMediaLoad}
-            />
-          </div>
-        ));
     }
   };
 
-  // For the outer gallery-row container, we always ensure it's full width
-  // The inner content container is only rendered if gallery.container exists
+  // Calculate section height based on container configuration
   const sectionHeight = gallery.container?.height
-    ? undefined // If container has explicit height, don't set min-height on section
+    ? undefined
     : "min-h-[60vh] md:min-h-screen";
 
-  // Add fullscreen-gallery class if layout is fullscreen
   const isFullscreen = gallery.layout === "fullscreen";
 
   return (
@@ -762,7 +380,6 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
         isFullscreen ? "fullscreen-gallery" : ""
       }`}
     >
-      {/* Outer full-width container, configurable per gallery */}
       <div
         className={`w-full ${isFullscreen ? "h-screen" : ""}`}
         ref={containerRef}
@@ -776,14 +393,12 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
               : { position: "relative", width: "100%", height: "100%" }
           }
         >
-          <div
-            className={`${getLayoutClass()} ${isFullscreen ? "h-full" : ""}`}
-          >
+          <div className={`${getLayoutClass()} ${isFullscreen ? "h-full" : ""}`}>
             {gallery.items.length > 0 ? (
               renderLayout()
             ) : (
-              <div className="flex items-center justify-center h-full w-full text-gray-500">
-                No images found for this gallery
+              <div className="flex items-center justify-center h-64 text-gray-500">
+                No media items found for {gallery.id}
               </div>
             )}
           </div>

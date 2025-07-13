@@ -9,12 +9,13 @@ import { useState } from 'react'
 import PerformanceAnalytics from './PerformanceAnalytics'
 import BundleAnalytics from './BundleAnalytics'
 import UXAnalytics from './UXAnalytics'
+import OptimizationEngine from './OptimizationEngine'
 
 interface AnalyticsDashboardProps {
     className?: string
 }
 
-type DashboardTab = 'performance' | 'bundle' | 'ux' | 'overview'
+type DashboardTab = 'performance' | 'bundle' | 'ux' | 'optimization' | 'overview'
 
 export const AnalyticsDashboard = ({ className = '' }: AnalyticsDashboardProps) => {
     const [activeTab, setActiveTab] = useState<DashboardTab>('overview')
@@ -29,6 +30,7 @@ export const AnalyticsDashboard = ({ className = '' }: AnalyticsDashboardProps) 
         { id: 'performance', label: '⚡ Performance', color: 'bg-green-500' },
         { id: 'bundle', label: '📦 Bundle', color: 'bg-purple-500' },
         { id: 'ux', label: '👥 UX', color: 'bg-teal-500' },
+        { id: 'optimization', label: '🚀 Optimize', color: 'bg-orange-500' },
     ]
 
     if (isMinimized) {
