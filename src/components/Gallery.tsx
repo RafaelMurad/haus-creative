@@ -2,8 +2,7 @@
 
 import { useRef } from "react";
 import SmartGalleryRow from "./SmartGalleryRow";
-import PerformanceAnalytics from "./PerformanceAnalytics";
-import BundleAnalytics from "./BundleAnalytics";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import enhancedGalleryData from "../data/enhancedGalleryData";
 import { GalleryConfig } from "../types";
 
@@ -20,16 +19,8 @@ const Gallery = ({
 
   return (
     <div ref={galleryRef} className={`gallery-container ${className}`}>
-      {/* Performance Analytics Dashboard - Development Only */}
-      <PerformanceAnalytics 
-        className="fixed top-4 right-4 max-w-sm z-50"
-        showDetails={false}
-      />
-      
-      {/* Bundle Analytics Dashboard - Development Only */}
-      <BundleAnalytics 
-        className="fixed top-4 left-4 max-w-sm z-50"
-      />
+      {/* Unified Analytics Dashboard - Development Only */}
+      <AnalyticsDashboard />
       
       {galleries.map((gallery) => (
         <SmartGalleryRow key={gallery.id} gallery={gallery} />
