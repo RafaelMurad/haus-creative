@@ -35,5 +35,42 @@
       "dynamicImports": true,
       "lazyLoading": true
     }
+  },
+  {
+    "timestamp": "2025-07-12T17:48:20.865Z",
+    "metrics": {
+      "totalJS": 7392,
+      "framework": 0,
+      "vendor": 0,
+      "gsap": 1213,
+      "polyfills": 110
+    },
+    "scores": {
+      "framework": {
+        "actual": 0,
+        "budget": 40,
+        "score": 100,
+        "status": "PASS"
+      },
+      "vendor": {
+        "actual": 0,
+        "budget": 300,
+        "score": 100,
+        "status": "PASS"
+      },
+      "gsap": {
+        "actual": 1213,
+        "budget": 150,
+        "score": 0,
+        "status": "FAIL"
+      }
+    },
+    "optimizations": {
+      "bundleSplitting": true,
+      "treeshaking": true,
+      "compression": true,
+      "dynamicImports": true,
+      "lazyLoading": true
+    }
   }
 ]

@@ -1,13 +1,15 @@
 import "./globals.css";
 import Header from "../components/Header";
 import ErrorBoundary from "../components/ErrorBoundary";
-import PerformanceMonitor, { PerformanceDebugger } from "../components/PerformanceMonitor";
+import PerformanceMonitor, {
+  PerformanceDebugger,
+} from "../components/PerformanceMonitor";
 import { ReactNode } from "react";
 import { inter } from "../fonts/fonts";
 
 // Import test for development
-if (process.env.NODE_ENV === 'development') {
-  import('../utils/webVitalsTest')
+if (process.env.NODE_ENV === "development") {
+  import("../utils/webVitalsTest");
 }
 
 export const metadata = {

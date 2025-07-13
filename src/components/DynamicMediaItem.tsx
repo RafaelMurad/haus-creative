@@ -1,26 +1,32 @@
-'use client'
+"use client";
 
-import dynamic from 'next/dynamic'
-import { useState, useEffect } from 'react'
-import { MediaItem as MediaItemType } from '../types'
-import { shouldLoadDynamically, logPerformanceMetrics } from '../utils/componentLoader'
-import { MediaItemLoadingFallback } from './LoadingFallbacks'
+import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
+import { MediaItem as MediaItemType } from "../types";
+import {
+  shouldLoadDynamically,
+  logPerformanceMetrics,
+} from "../utils/componentLoader";
+import { MediaItemLoadingFallback } from "./LoadingFallbacks";
 
 // Dynamically import MediaItem with performance monitoring
-const MediaItemDynamic = dynamic(() => {
-  const startTime = performance.now()
-  return import('./MediaItem').then(module => {
-    const loadTime = performance.now() - startTime
-    logPerformanceMetrics('MediaItem', loadTime)
-    return module
-  })
-}, {
-  loading: () => <MediaItemLoadingFallback />,
-  ssr: false // Disable SSR for better performance with GSAP
-})
+const MediaItemDynamic = dynamic(
+  () => {
+    const startTime = performance.now();
+    return import("./MediaItem").then((module) => {
+      const loadTime = performance.now() - startTime;
+      logPerformanceMetrics("MediaItem", loadTime);
+      return module;
+    });
+  },
+  {
+    loading: () => <MediaItemLoadingFallback />,
+    ssr: false, // Disable SSR for better performance with GSAP
+  }
+);
 
 // Static import for priority items
-import MediaItemStatic from './MediaItem'
+import MediaItemStatic from "./MediaItem";
 
 interface DynamicMediaItemProps {
   item: MediaItemType;
@@ -31,55 +37,57 @@ interface DynamicMediaItemProps {
   totalItems?: number; // Used for intelligent loading decisions
 }
 
-const DynamicMediaItem = ({ 
-  item, 
+const DynamicMediaItem = ({
+  item,
   priority = false,
-  className = '',
+  className = "",
   onLoad,
   isActive,
-  totalItems = 1
+  totalItems = 1,
 }: DynamicMediaItemProps) => {
-  const [useDynamic, setUseDynamic] = useState(true)
+  const [useDynamic, setUseDynamic] = useState(true);
 
   useEffect(() => {
     // Always use static loading for priority items
     if (priority) {
-      setUseDynamic(false)
-      return
+      setUseDynamic(false);
+      return;
     }
 
     // Decide whether to use dynamic loading based on total items
-    const shouldUseDynamic = shouldLoadDynamically(totalItems, 'media-item')
-    setUseDynamic(shouldUseDynamic)
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[DynamicMediaItem] Item ${item.id}, Priority: ${priority}, Total items: ${totalItems}, Using dynamic: ${shouldUseDynamic}`)
+    const shouldUseDynamic = shouldLoadDynamically(totalItems, "media-item");
+    setUseDynamic(shouldUseDynamic);
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `[DynamicMediaItem] Item ${item.id}, Priority: ${priority}, Total items: ${totalItems}, Using dynamic: ${shouldUseDynamic}`
+      );
     }
-  }, [item.id, priority, totalItems])
+  }, [item.id, priority, totalItems]);
 
   // Use static component for priority items or small collections
   if (!useDynamic) {
     return (
-      <MediaItemStatic 
+      <MediaItemStatic
         item={item}
         priority={priority}
         className={className}
         onLoad={onLoad}
         isActive={isActive}
       />
-    )
+    );
   }
 
   // Use dynamic component for non-priority items in large collections
   return (
-    <MediaItemDynamic 
+    <MediaItemDynamic
       item={item}
       priority={priority}
       className={className}
       onLoad={onLoad}
       isActive={isActive}
     />
-  )
-}
+  );
+};
 
-export default DynamicMediaItem
+export default DynamicMediaItem;

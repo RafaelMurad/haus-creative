@@ -45,7 +45,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
-  
+
   // Use conditional animation loading
   const {
     shouldAnimate,
@@ -54,7 +54,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     animationError,
     gsapInstance,
     createAnimation,
-    killAnimations
+    killAnimations,
   } = useConditionalAnimation(gallery);
 
   // Elements ref for animations
@@ -80,7 +80,11 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
   // Set isReady immediately for layouts that don't need animations
   useEffect(() => {
-    if (!shouldAnimate || gallery.layout === "carousel" || gallery.layout === "fullscreen") {
+    if (
+      !shouldAnimate ||
+      gallery.layout === "carousel" ||
+      gallery.layout === "fullscreen"
+    ) {
       setIsReady(true);
     } else if (shouldAnimate && isAnimationReady) {
       setIsReady(true);
@@ -121,7 +125,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
       setIsReady(true);
     } catch (error) {
-      console.error('Error setting up animations:', error);
+      console.error("Error setting up animations:", error);
       setIsReady(true); // Still set ready even if animations fail
     }
 

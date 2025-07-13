@@ -1,20 +1,22 @@
-'use client'
+"use client";
 
-import React from 'react';
-import ErrorBoundary from './ErrorBoundary';
+import React from "react";
+import ErrorBoundary from "./ErrorBoundary";
 
 interface GalleryErrorBoundaryProps {
   children: React.ReactNode;
 }
 
-export default function GalleryErrorBoundary({ children }: GalleryErrorBoundaryProps) {
+export default function GalleryErrorBoundary({
+  children,
+}: GalleryErrorBoundaryProps) {
   const handleGalleryError = (error: Error) => {
     // Log gallery-specific errors
-    console.error('Gallery Error:', {
+    console.error("Gallery Error:", {
       message: error.message,
       stack: error.stack,
       timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     });
   };
 
@@ -22,11 +24,11 @@ export default function GalleryErrorBoundary({ children }: GalleryErrorBoundaryP
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="max-w-lg w-full text-center">
         <div className="text-gray-400 text-8xl mb-6">🖼️</div>
-        
+
         <h2 className="text-2xl font-bold text-gray-900 mb-3">
           Gallery Loading Error
         </h2>
-        
+
         <p className="text-gray-600 mb-6">
           We're having trouble loading the gallery. This could be due to:
         </p>
@@ -53,7 +55,7 @@ export default function GalleryErrorBoundary({ children }: GalleryErrorBoundaryP
           >
             Reload Gallery
           </button>
-          
+
           <a
             href="/about"
             className="block w-full px-6 py-3 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
@@ -70,10 +72,7 @@ export default function GalleryErrorBoundary({ children }: GalleryErrorBoundaryP
   );
 
   return (
-    <ErrorBoundary 
-      fallback={galleryErrorFallback}
-      onError={handleGalleryError}
-    >
+    <ErrorBoundary fallback={galleryErrorFallback} onError={handleGalleryError}>
       {children}
     </ErrorBoundary>
   );

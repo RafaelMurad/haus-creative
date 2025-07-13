@@ -5,7 +5,11 @@ import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
 import { debugImageLoad } from "../utils/debugHelper";
 import { LazyImage } from "./LazyImage";
-import { generateImageSources, getLoadingSettings, generateImageSizes } from "../utils/imageOptimization";
+import {
+  generateImageSources,
+  getLoadingSettings,
+  generateImageSizes,
+} from "../utils/imageOptimization";
 
 interface MediaItemProps {
   item: MediaItemType;
@@ -128,7 +132,9 @@ export default memo(function MediaItem({
         const imageUrl = item.url || item.imageUrl || "";
         const sources = generateImageSources(imageUrl);
         const loadingSettings = getLoadingSettings(imageUrl);
-        const imageSizes = generateImageSizes(isTreadmill ? "carousel" : "grid");
+        const imageSizes = generateImageSizes(
+          isTreadmill ? "carousel" : "grid"
+        );
 
         // Use priority loading (Next.js Image) for critical images, lazy loading for others
         if (priority) {
@@ -145,7 +151,9 @@ export default memo(function MediaItem({
               onLoad={() => {
                 if (onLoad) onLoad();
                 if (process.env.NODE_ENV === "development") {
-                  console.debug(`Successfully loaded priority image: ${imageUrl}`);
+                  console.debug(
+                    `Successfully loaded priority image: ${imageUrl}`
+                  );
                 }
               }}
               onError={() => {
@@ -176,7 +184,7 @@ export default memo(function MediaItem({
               objectFit: isTreadmill ? "contain" : "cover",
               objectPosition: "center",
               width: "100%",
-              height: "100%"
+              height: "100%",
             }}
             onLoad={() => {
               if (onLoad) onLoad();

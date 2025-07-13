@@ -1,5 +1,5 @@
-import React from 'react';
-import { useImageLazyLoad } from '../hooks/useImageLazyLoad';
+import React from "react";
+import { useImageLazyLoad } from "../hooks/useImageLazyLoad";
 
 interface LazyImageProps {
   src: string;
@@ -17,14 +17,14 @@ interface LazyImageProps {
 export function LazyImage({
   src,
   alt,
-  className = '',
-  placeholderSrc = '',
+  className = "",
+  placeholderSrc = "",
   lowResSrc,
-  rootMargin = '50px',
+  rootMargin = "50px",
   threshold = 0.1,
   onLoad,
   onError,
-  style = {}
+  style = {},
 }: LazyImageProps) {
   const {
     imgRef,
@@ -32,12 +32,12 @@ export function LazyImage({
     isLoaded,
     isLoading,
     error,
-    retry
+    retry,
   } = useImageLazyLoad(src, {
     placeholderSrc,
     lowResSrc,
     rootMargin,
-    threshold
+    threshold,
   });
 
   // Notify parent components of load/error events
@@ -55,38 +55,38 @@ export function LazyImage({
 
   const imageStyle: React.CSSProperties = {
     ...style,
-    transition: 'opacity 0.3s ease-in-out',
+    transition: "opacity 0.3s ease-in-out",
     opacity: isLoaded ? 1 : 0.7,
-    filter: isLoaded ? 'none' : 'blur(2px)',
-    objectFit: 'cover'
+    filter: isLoaded ? "none" : "blur(2px)",
+    objectFit: "cover",
   };
 
   if (error) {
     return (
-      <div 
+      <div
         className={`lazy-image-error ${className}`}
         style={{
           ...style,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f5f5f5',
-          color: '#666',
-          flexDirection: 'column',
-          gap: '8px'
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#f5f5f5",
+          color: "#666",
+          flexDirection: "column",
+          gap: "8px",
         }}
       >
         <span>Failed to load image</span>
-        <button 
+        <button
           onClick={retry}
           style={{
-            padding: '4px 8px',
-            fontSize: '12px',
-            background: '#007acc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
+            padding: "4px 8px",
+            fontSize: "12px",
+            background: "#007acc",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
           }}
         >
           Retry
@@ -96,7 +96,10 @@ export function LazyImage({
   }
 
   return (
-    <div className={`lazy-image-container ${className}`} style={{ position: 'relative' }}>
+    <div
+      className={`lazy-image-container ${className}`}
+      style={{ position: "relative" }}
+    >
       <img
         ref={imgRef}
         src={currentSrc || placeholderSrc}
@@ -104,25 +107,25 @@ export function LazyImage({
         style={imageStyle}
         loading="lazy"
       />
-      
+
       {isLoading && (
-        <div 
+        <div
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            opacity: 0.7
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            opacity: 0.7,
           }}
         >
-          <div 
+          <div
             style={{
-              width: '20px',
-              height: '20px',
-              border: '2px solid #f3f3f3',
-              borderTop: '2px solid #007acc',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
+              width: "20px",
+              height: "20px",
+              border: "2px solid #f3f3f3",
+              borderTop: "2px solid #007acc",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
             }}
           />
         </div>
@@ -130,8 +133,12 @@ export function LazyImage({
 
       <style jsx>{`
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>

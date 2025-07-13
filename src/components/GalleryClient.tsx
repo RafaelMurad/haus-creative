@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import { GalleryConfig } from '../types';
-import DynamicGallery from './DynamicGallery';
+import { useState, useEffect } from "react";
+import { GalleryConfig } from "../types";
+import DynamicGallery from "./DynamicGallery";
 
 interface ApiResponse {
   success: boolean;
@@ -22,8 +22,8 @@ export default function GalleryClient() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch('/api/galleries');
-        
+        const response = await fetch("/api/galleries");
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -34,12 +34,13 @@ export default function GalleryClient() {
           setGalleries(result.data);
           console.log(`Successfully loaded ${result.count} galleries`);
         } else {
-          throw new Error(result.error || 'Failed to load galleries');
+          throw new Error(result.error || "Failed to load galleries");
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
         setError(errorMessage);
-        console.error('Error fetching galleries:', err);
+        console.error("Error fetching galleries:", err);
       } finally {
         setLoading(false);
       }
@@ -54,9 +55,7 @@ export default function GalleryClient() {
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin mb-4"></div>
         <h2 className="text-xl font-semibold mb-2">Loading Galleries...</h2>
-        <p className="text-gray-600">
-          Preparing your gallery experience
-        </p>
+        <p className="text-gray-600">Preparing your gallery experience</p>
       </div>
     );
   }
@@ -66,7 +65,9 @@ export default function GalleryClient() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
         <div className="text-red-500 text-6xl mb-4">⚠️</div>
-        <h2 className="text-xl font-semibold mb-2 text-red-600">Error Loading Galleries</h2>
+        <h2 className="text-xl font-semibold mb-2 text-red-600">
+          Error Loading Galleries
+        </h2>
         <p className="text-gray-600 mb-4">{error}</p>
         <button
           onClick={() => window.location.reload()}
@@ -84,11 +85,15 @@ export default function GalleryClient() {
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
         <h2 className="text-xl font-semibold mb-2">No galleries found</h2>
         <p className="mb-4">
-          Please create folders in the <code className="bg-gray-100 px-2 py-1 rounded">/public/assets/</code> directory to
-          automatically generate galleries.
+          Please create folders in the{" "}
+          <code className="bg-gray-100 px-2 py-1 rounded">/public/assets/</code>{" "}
+          directory to automatically generate galleries.
         </p>
         <p className="text-sm opacity-75">
-          Example: <code className="bg-gray-100 px-2 py-1 rounded">/public/assets/gallery1/</code>
+          Example:{" "}
+          <code className="bg-gray-100 px-2 py-1 rounded">
+            /public/assets/gallery1/
+          </code>
         </p>
       </div>
     );
