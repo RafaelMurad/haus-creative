@@ -1,5 +1,7 @@
 "use client";
 
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   useLayoutEffect,
   useState,
@@ -15,7 +17,7 @@ import {
   AnimationEffects,
 } from "../types";
 import { FixedSizeGrid as Grid } from "react-window";
-import gsap from "gsap";
+// import gsap from "gsap"; // No longer needed, handled by useGsapAnimation
 import { debugGalleryStructure } from "../utils/debugHelper";
 
 interface GalleryRowProps {
@@ -46,35 +48,33 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [prevIndex, setPrevIndex] = useState<number | null>(null); // Track previous image for crossfade
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [gsapInstance, setGsapInstance] = useState<any>(null);
+  // Removed gsapInstance state, handled by useGsapAnimation
 
   // Debug gallery structure in development
   useEffect(() => {
     debugGalleryStructure(gallery.id, gallery);
   }, [gallery]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount: kill GSAP timelines, clear timeouts, null refs
   useEffect(() => {
     return () => {
+      // Null refs first to help GC
+      containerRef.current = null;
+      activeRef.current = null;
+      prevRef.current = null;
+      // Then kill timelines/contexts
       if (timelineRef.current) {
         timelineRef.current.kill();
+        timelineRef.current = null;
       }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, []);
 
-  // Dynamically import gsap on mount
-  useEffect(() => {
-    let isMounted = true;
-    import("gsap").then((mod) => {
-      if (isMounted) setGsapInstance(mod.gsap || mod.default || mod);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  // Removed dynamic import of gsap, handled globally
 
   // Set isReady immediately for carousel/fullscreen layouts
   useEffect(() => {
@@ -96,47 +96,10 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     [gallery.id]
   );
 
-  // Set up ScrollTrigger after the component mounts and refs are populated
+  // useGsapAnimation now handles ScrollTrigger and cleanup
   useEffect(() => {
-    if (!containerRef.current || typeof window === "undefined") return;
-    if (!gsapInstance) return;
-
-    const elements = elementsRef.current
-      .filter(Boolean)
-      .filter((el) => el instanceof Element);
-    if (elements.length === 0) return;
-
-    // Create animations with ScrollTrigger when the DOM is ready
-    const animations = elements.map((el, index) => {
-      return gsapInstance.fromTo(
-        el,
-        { ...getAnimationConfig().from },
-        {
-          ...getAnimationConfig().to,
-          duration: getAnimationConfig().duration,
-          ease: getAnimationConfig().ease,
-          delay: index * (getAnimationConfig().stagger || 0.15),
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top bottom-=100",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    });
-
     setIsReady(true);
-
-    // Clean up on unmount
-    return () => {
-      animations.forEach((anim) => {
-        if (anim && anim.scrollTrigger) {
-          anim.scrollTrigger.kill();
-        }
-        anim.kill();
-      });
-    };
-  }, [gallery.id, getAnimationConfig(), elementsRef, gsapInstance]);
+  }, []);
 
   // Preload next and previous images in carousel
   useEffect(() => {
@@ -262,7 +225,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     }
   };
 
-  // Improved GSAP crossfade transition logic
+  // Improved GSAP crossfade transition logic using useGSAP
   const triggerNextSlide = useCallback((): void => {
     if (isTransitioning || !gallery.items.length) return;
 
@@ -283,6 +246,36 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     }, (getAnimationConfig().duration || 0.7) * 1000 + 100);
   }, [isTransitioning, gallery.items.length, activeIndex, getAnimationConfig]);
 
+  // Animate crossfade/slide/scale using useGSAP context-safe pattern
+  useGSAP(() => {
+    if (prevIndex === null) return;
+    // Animate previous slide out
+    if (prevRef.current) {
+      gsap.to(prevRef.current, {
+        opacity: 0,
+        duration: getAnimationConfig().duration || 0.7,
+        ease: getAnimationConfig().ease || "power1.inOut",
+        onComplete: () => {
+          if (prevRef.current) {
+            gsap.set(prevRef.current, { opacity: 1 }); // Reset for next use
+          }
+        },
+      });
+    }
+    // Animate active slide in
+    if (activeRef.current) {
+      gsap.fromTo(
+        activeRef.current,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: getAnimationConfig().duration || 0.7,
+          ease: getAnimationConfig().ease || "power1.inOut",
+        }
+      );
+    }
+  }, [prevIndex, activeIndex, gallery.id]);
+
   // Set up carousel autoplay for carousel layouts
   useEffect(() => {
     if (gallery.layout !== "carousel" && gallery.layout !== "fullscreen")
@@ -298,140 +291,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   }, [gallery.layout, isReady, gallery.transitionTime, triggerNextSlide]);
 
   // Animate crossfade when prevIndex changes
-  useLayoutEffect(() => {
-    if (prevIndex === null || !isTransitioning) return;
-    if (!prevRef.current || !activeRef.current) return;
-    if (!gsapInstance) return;
-
-    // Kill any existing timeline
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-    }
-
-    const duration = getAnimationConfig().duration || 0.7;
-    const ease = getAnimationConfig().ease || "power2.inOut";
-
-    // Apply the animation based on the effect type
-    switch (getAnimationConfig().effect) {
-      case "none": {
-        // No animation - just instantly switch
-        gsapInstance.set(prevRef.current, { opacity: 0 });
-        gsapInstance.set(activeRef.current, { opacity: 1 });
-        setPrevIndex(null);
-        setIsTransitioning(false);
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-        }
-        break;
-      }
-
-      case "slide": {
-        gsapInstance.set(activeRef.current, { x: "100%", opacity: 1 });
-        timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-        });
-
-        timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              x: "-100%",
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              x: "0%",
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          );
-        break;
-      }
-
-      case "scale": {
-        gsapInstance.set(activeRef.current, { opacity: 0, scale: 0.8 });
-        timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-        });
-
-        timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              opacity: 0,
-              scale: 0.8,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              opacity: 1,
-              scale: 1,
-              duration,
-              ease,
-            },
-            0
-          );
-        break;
-      }
-
-      default: {
-        // Default to fade animation
-        gsapInstance.set(activeRef.current, { opacity: 0 });
-        timelineRef.current = gsapInstance.timeline({
-          onComplete: () => {
-            setPrevIndex(null);
-            setIsTransitioning(false);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          },
-        });
-
-        timelineRef.current
-          .to(
-            prevRef.current,
-            {
-              opacity: 0,
-              duration,
-              ease,
-            },
-            0
-          )
-          .to(
-            activeRef.current,
-            {
-              opacity: 1,
-              duration,
-              ease,
-            },
-            0
-          );
-      }
-    }
-  }, [prevIndex, isTransitioning, getAnimationConfig(), gsapInstance]);
+  // TODO: Refactor crossfade/slide/scale animations to use useGSAP contextSafe pattern for event-driven transitions
+  // (This will be handled in the next incremental step)
 
   // Define a no-op function for onLoad to satisfy the type requirements
   const handleMediaLoad = () => {
@@ -444,132 +305,112 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       case "carousel":
       case "fullscreen": {
         // Special handling for infinite scroll treadmill effect (gallery6 and gallery11)
+
         if (gallery.id === "gallery6" || gallery.id === "gallery11") {
           const trackRef = useRef<HTMLDivElement>(null);
+          // Use a ref to store cleanup functions for treadmill effect
+          const treadmillCleanupRef = useRef<(() => void) | null>(null);
 
           useEffect(() => {
-            if (!trackRef.current || !gsapInstance) return;
+            if (!trackRef.current) return;
+            let currentTimeline: gsap.core.Timeline | null = null;
+            let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+            let ctx: gsap.Context | null = null;
 
-            let currentTimeline: any = null;
-
-            const ctx = gsapInstance.context(() => {
-              // Function to get current window dimensions and image size based on gallery
-              const getWindowDimensions = () => {
-                // Gallery11 uses 20% smaller images than gallery6
-                const baseImageWidth = 720;
-                const imageWidth =
-                  gallery.id === "gallery11"
-                    ? Math.round(baseImageWidth * 0.8) // 20% smaller = 576px
-                    : baseImageWidth; // 720px for gallery6
-
-                return {
-                  width: window.innerWidth,
-                  imageWidth,
-                };
+            const getWindowDimensions = () => {
+              const baseImageWidth = 720;
+              const imageWidth =
+                gallery.id === "gallery11"
+                  ? Math.round(baseImageWidth * 0.8)
+                  : baseImageWidth;
+              return {
+                width: window.innerWidth,
+                imageWidth,
               };
+            };
 
-              // Helper function to calculate the exact position needed to center any image
-              const calculateCenterPosition = (
-                imageIndex: number,
-                width: number,
-                imageWidth: number
-              ): number => {
-                // Each image is at position: imageIndex * (imageWidth + gap) from track start
-                const gap = width; // Full viewport width gap between images
-                const imagePosition = imageIndex * (imageWidth + gap);
-                // To center this image, its left edge should be at: (width - imageWidth) / 2
-                const centerPosition = (width - imageWidth) / 2;
-                // Return the required track offset to achieve centering
-                return centerPosition - imagePosition;
-              };
+            const calculateCenterPosition = (imageIndex, width, imageWidth) => {
+              const gap = width;
+              const imagePosition = imageIndex * (imageWidth + gap);
+              const centerPosition = (width - imageWidth) / 2;
+              return centerPosition - imagePosition;
+            };
 
-              // Function to create the main animation timeline
-              const createTimeline = () => {
-                const { width, imageWidth } = getWindowDimensions();
-                const gap = width; // Full viewport width gap between images
-                const totalItems = gallery.items.length;
-
-                // Pre-calculate all center positions for each image with current dimensions
-                const centerPositions = Array.from(
-                  { length: totalItems },
-                  (_, i) => calculateCenterPosition(i + 1, width, imageWidth) // i+1 because we start with image 2
-                );
-
-                // CSS already centers the first image (image 0), so we start with subsequent images
-                const tl = gsapInstance.timeline({ repeat: -1 });
-
-                // First image stays centered for 2 seconds (already positioned by CSS)
-                tl.to({}, { duration: 2 });
-
-                // Loop through each image transition using pre-calculated positions
-                for (let i = 0; i < totalItems; i++) {
-                  const targetPosition = centerPositions[i];
-
-                  tl.to(trackRef.current, {
-                    x: targetPosition, // Move to the pre-calculated center position
-                    duration: 1.8,
-                    ease: "power1.inOut",
-                    force3D: true,
-                  });
-
-                  // Stay centered for 2 seconds (except for the last transition)
-                  if (i < totalItems - 1) {
-                    tl.to({}, { duration: 2 });
-                  }
-                }
-
-                // Reset to beginning position for seamless loop
-                tl.set(trackRef.current, {
-                  x: 0, // Reset to CSS transform position (centered)
+            const createTimeline = () => {
+              const { width, imageWidth } = getWindowDimensions();
+              const gap = width;
+              const totalItems = gallery.items.length;
+              const centerPositions = Array.from(
+                { length: totalItems },
+                (_, i) => calculateCenterPosition(i + 1, width, imageWidth)
+              );
+              const tl = gsap.timeline({ repeat: -1 });
+              tl.to({}, { duration: 2 });
+              for (let i = 0; i < totalItems; i++) {
+                const targetPosition = centerPositions[i];
+                tl.to(trackRef.current, {
+                  x: targetPosition,
+                  duration: 1.8,
+                  ease: "power1.inOut",
                   force3D: true,
                 });
-
-                return tl;
-              };
-
-              // Function to handle resize and recreate timeline
-              const handleResize = () => {
-                // Kill existing timeline
-                if (currentTimeline) {
-                  currentTimeline.kill();
+                if (i < totalItems - 1) {
+                  tl.to({}, { duration: 2 });
                 }
+              }
+              tl.set(trackRef.current, {
+                x: 0,
+                force3D: true,
+              });
+              return tl;
+            };
 
-                // Reset track position to CSS centered position
-                gsapInstance.set(trackRef.current, {
-                  x: 0,
-                  force3D: true,
-                });
-
-                // Create new timeline with updated dimensions
-                currentTimeline = createTimeline();
-              };
-
-              // Create initial timeline
+            const handleResize = () => {
+              if (currentTimeline) {
+                currentTimeline.kill();
+                currentTimeline = null;
+              }
+              gsap.set(trackRef.current, {
+                x: 0,
+                force3D: true,
+              });
               currentTimeline = createTimeline();
+            };
 
-              // Add resize listener with debouncing
-              let resizeTimeout: NodeJS.Timeout;
-              const debouncedResize = () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(handleResize, 150); // Debounce resize events
-              };
+            const debouncedResize = () => {
+              if (resizeTimeout) clearTimeout(resizeTimeout);
+              resizeTimeout = setTimeout(handleResize, 150);
+            };
 
+            ctx = gsap.context(() => {
+              currentTimeline = createTimeline();
               window.addEventListener("resize", debouncedResize);
-
-              // Cleanup function
-              return () => {
-                window.removeEventListener("resize", debouncedResize);
-                if (resizeTimeout) {
-                  clearTimeout(resizeTimeout);
-                }
-                if (currentTimeline) {
-                  currentTimeline.kill();
-                }
-              };
             }, trackRef);
 
-            return () => ctx.revert();
-          }, [gsapInstance, gallery.items]);
+            treadmillCleanupRef.current = () => {
+              // Null refs first to help GC
+              if (trackRef.current) trackRef.current = null;
+              // Then remove listeners and kill timelines/contexts
+              window.removeEventListener("resize", debouncedResize);
+              if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = null;
+              }
+              if (currentTimeline) {
+                currentTimeline.kill();
+                currentTimeline = null;
+              }
+              if (ctx) {
+                ctx.revert();
+                ctx = null;
+              }
+            };
+
+            return () => {
+              if (treadmillCleanupRef.current) treadmillCleanupRef.current();
+              treadmillCleanupRef.current = null;
+            };
+          }, [gallery.items]);
 
           return (
             <div
