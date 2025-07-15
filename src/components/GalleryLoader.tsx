@@ -2,7 +2,7 @@
 import { getAllGalleries } from '../utils/galleryLoader';
 import GallerySection from './GallerySection';
 
-export default function GalleryLoader() {
+export default async function GalleryLoader() {
   const galleries = getAllGalleries();
 
   if (galleries.length === 0) {
