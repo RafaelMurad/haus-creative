@@ -1,302 +1,80 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
-import { debugImageLoad } from "../utils/debugHelper";
-import { LazyImage } from "./LazyImage";
-import {
-  generateImageSources,
-  getLoadingSettings,
-  generateImageSizes,
-} from "../utils/imageOptimization";
 
 interface MediaItemProps {
   item: MediaItemType;
+  isActive?: boolean;
   className?: string;
-  onLoad?: () => void;
-  forwardedRef?: (element: HTMLElement | null) => void;
-  priority?: boolean;
-  isActive?: boolean; // Add prop to control video playback
-  containerConfig?: {
-    width?: string;
-    minWidth?: string;
-    maxWidth?: string;
-    height?: string;
-    minHeight?: string;
-    maxHeight?: string;
-    aspectRatio?: string;
-    alignment?: "center" | "left" | "right";
-    background?: string;
-    padding?: string;
-    margin?: string;
-    borderRadius?: string;
-  };
 }
 
-import { memo } from "react";
-
-export default memo(function MediaItem({
-  item,
-  className = "",
-  onLoad,
-  forwardedRef,
-  priority = false,
-  isActive = true, // Default to active for backwards compatibility
-  containerConfig,
+export default function MediaItem({ 
+  item, 
+  isActive = true, 
+  className = "" 
 }: MediaItemProps) {
-  const isFullViewport = useRef<boolean>(false);
-  const localRef = useRef<HTMLElement | null>(null);
-
-  const ref =
-    forwardedRef ||
-    ((el: HTMLElement | null) => {
-      localRef.current = el;
-    });
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Control video playback based on isActive prop
   useEffect(() => {
-    const videoElement = localRef.current as HTMLVideoElement;
-    if (videoElement && videoElement.tagName === "VIDEO") {
+    const videoElement = videoRef.current;
+    if (videoElement && item.type === 'video') {
       if (isActive) {
-        // Wait for video to be ready before playing
         const attemptPlay = async () => {
           try {
-            if (videoElement.isConnected && videoElement.readyState >= 2) {
+            if (videoElement.readyState >= 2) {
               await videoElement.play();
-            } else if (videoElement.isConnected) {
-              // If not ready, wait a bit and try again
+            } else {
               setTimeout(attemptPlay, 100);
             }
           } catch (error: any) {
-            if (
-              error.name !== "AbortError" &&
-              error.name !== "NotAllowedError"
-            ) {
-              console.warn("Video play failed:", error);
+            if (error.name !== 'AbortError' && error.name !== 'NotAllowedError') {
+              console.warn('Video play failed:', error);
             }
           }
         };
-
-        // Start attempting to play immediately
         attemptPlay();
       } else {
-        // Immediately pause when not active
-        if (videoElement.isConnected) {
-          videoElement.pause();
-        }
+        videoElement.pause();
       }
     }
-  }, [isActive]);
+  }, [isActive, item.type]);
 
-  // Render the appropriate media based on type
   const renderMedia = () => {
     switch (item.type) {
-      case "video":
+      case 'video':
         return (
           <video
-            ref={ref as (instance: HTMLVideoElement | null) => void}
+            ref={videoRef}
             src={item.url}
-            className="w-full h-full object-cover"
+            className={`w-full h-full object-cover ${className}`}
             muted
             loop
             playsInline
-            {...(item.thumbUrl && { poster: item.thumbUrl })}
-            onLoadedData={onLoad}
+            poster={item.thumbUrl}
             preload="metadata"
-            style={{ pointerEvents: "none" }}
             controls={false}
             disablePictureInPicture={true}
             disableRemotePlayback={true}
           />
         );
-      case "gif":
+      
+      case 'image':
+      default:
         return (
           <img
-            ref={ref as (instance: HTMLImageElement | null) => void}
             src={item.url}
             alt={item.title}
-            className="w-full h-full object-cover"
-            onLoad={onLoad}
-          />
-        );
-      case "image":
-      default:
-        // Check if this is a treadmill gallery (gallery6 or gallery11) to use contain instead of cover
-        const isTreadmill =
-          item.url?.includes("gallery6/") ||
-          item.url?.includes("gallery11/") ||
-          item.imageUrl?.includes("gallery6/") ||
-          item.imageUrl?.includes("gallery11/");
-
-        const imageUrl = item.url || item.imageUrl || "";
-        const sources = generateImageSources(imageUrl);
-        const loadingSettings = getLoadingSettings(imageUrl);
-        const imageSizes = generateImageSizes(
-          isTreadmill ? "carousel" : "grid"
-        );
-
-        // Use priority loading (Next.js Image) for critical images, lazy loading for others
-        if (priority) {
-          return (
-            <Image
-              src={imageUrl}
-              alt={item.title}
-              fill
-              style={{
-                objectFit: isTreadmill ? "contain" : "cover",
-                objectPosition: "center",
-              }}
-              className="w-full h-full"
-              onLoad={() => {
-                if (onLoad) onLoad();
-                if (process.env.NODE_ENV === "development") {
-                  console.debug(
-                    `Successfully loaded priority image: ${imageUrl}`
-                  );
-                }
-              }}
-              onError={() => {
-                if (process.env.NODE_ENV === "development") {
-                  console.error(`Failed to load priority image: ${imageUrl}`);
-                }
-              }}
-              priority={true}
-              quality={95}
-              sizes={imageSizes}
-              placeholder="blur"
-              blurDataURL={sources.placeholder}
-            />
-          );
-        }
-
-        // Use lazy loading for non-priority images
-        return (
-          <LazyImage
-            src={imageUrl}
-            alt={item.title}
-            placeholderSrc={sources.placeholder}
-            lowResSrc={sources.lowRes}
-            rootMargin={loadingSettings.rootMargin}
-            threshold={loadingSettings.threshold}
-            className="w-full h-full"
-            style={{
-              objectFit: isTreadmill ? "contain" : "cover",
-              objectPosition: "center",
-              width: "100%",
-              height: "100%",
-            }}
-            onLoad={() => {
-              if (onLoad) onLoad();
-              if (process.env.NODE_ENV === "development") {
-                console.debug(`Successfully loaded lazy image: ${imageUrl}`);
-              }
-            }}
-            onError={(error) => {
-              if (process.env.NODE_ENV === "development") {
-                console.error(`Failed to load lazy image: ${imageUrl}`, error);
-              }
-            }}
+            className={`w-full h-full object-cover ${className}`}
           />
         );
     }
   };
 
-  // Determine if we need to force full viewport for carousel/fullscreen
-  useEffect(() => {
-    const element = localRef.current;
-    if (element) {
-      const parent = element.parentElement;
-      if (parent) {
-        // Check if this is part of a fullscreen layout
-        isFullViewport.current =
-          parent.classList.contains("media-item") ||
-          parent.closest(".fullscreen-gallery") !== null;
-      }
-    }
-  }, []);
-
-  // Style based on item size or container context
-  const style = item.size
-    ? {
-        width: item.size.width,
-        height: item.size.height,
-      }
-    : isFullViewport.current
-    ? {
-        height: "100%",
-        width: "100%",
-        position: "relative" as const,
-        minHeight: "100vh", // For fullscreen mode
-        maxHeight: "100vh", // For fullscreen mode
-      }
-    : { position: "relative" as const };
-
-  // Container style builder
-  const getContentContainerStyle = () => {
-    if (!containerConfig) return {};
-    const styles: React.CSSProperties = {};
-    if (containerConfig.width) styles.width = containerConfig.width;
-    if (containerConfig.minWidth) styles.minWidth = containerConfig.minWidth;
-    if (containerConfig.maxWidth) styles.maxWidth = containerConfig.maxWidth;
-    if (containerConfig.height) styles.height = containerConfig.height;
-    if (containerConfig.minHeight) styles.minHeight = containerConfig.minHeight;
-    if (containerConfig.maxHeight) styles.maxHeight = containerConfig.maxHeight;
-    if (containerConfig.aspectRatio)
-      styles.aspectRatio = containerConfig.aspectRatio;
-    if (containerConfig.padding) styles.padding = containerConfig.padding;
-    if (containerConfig.background)
-      styles.background = containerConfig.background;
-    if (containerConfig.borderRadius)
-      styles.borderRadius = containerConfig.borderRadius;
-    if (containerConfig.margin) styles.margin = containerConfig.margin;
-
-    // If height is not explicitly set, add a min-height to ensure content is visible
-    if (!containerConfig.height && !containerConfig.minHeight) {
-      styles.minHeight = "300px"; // Add a default minimum height
-    }
-
-    // Ensure alignment is handled correctly for centering if specified
-    if (containerConfig.alignment === "center" && !containerConfig.margin) {
-      styles.marginLeft = "auto";
-      styles.marginRight = "auto";
-    } else if (
-      containerConfig.alignment === "left" &&
-      !containerConfig.margin
-    ) {
-      styles.marginRight = "auto";
-    } else if (
-      containerConfig.alignment === "right" &&
-      !containerConfig.margin
-    ) {
-      styles.marginLeft = "auto";
-    }
-    return styles;
-  };
-
-  // Simplify structure - one main container with content
-  if (containerConfig) {
-    return (
-      <div
-        className="media-content relative w-full h-full"
-        style={{
-          position: "relative" as const,
-          minHeight: containerConfig.minHeight || "300px",
-          ...getContentContainerStyle(),
-        }}
-      >
-        {renderMedia()}
-      </div>
-    );
-  }
-
-  // No container: simple structure with just the necessary positioning
   return (
-    <div
-      className="media-content relative w-full h-full"
-      style={{ position: "relative" as const, minHeight: "200px", ...style }}
-    >
+    <div className="w-full h-full relative">
       {renderMedia()}
     </div>
   );
-});
+}

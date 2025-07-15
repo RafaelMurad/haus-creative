@@ -2,27 +2,20 @@
 
 import { useRef } from "react";
 import GalleryRow from "./GalleryRow";
-import enhancedGalleryData from "../data/enhancedGalleryData";
 import { GalleryConfig } from "../types";
 
 interface GalleryProps {
-  galleries?: GalleryConfig[];
-  className?: string;
+  galleries: GalleryConfig[];
 }
 
-const Gallery = ({
-  galleries = enhancedGalleryData,
-  className = "",
-}: GalleryProps) => {
+export default function Gallery({ galleries }: GalleryProps) {
   const galleryRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={galleryRef} className={`gallery-container ${className}`}>
+    <div ref={galleryRef} className="gallery-container">
       {galleries.map((gallery) => (
         <GalleryRow key={gallery.id} gallery={gallery} />
       ))}
     </div>
   );
-};
-
-export default Gallery;
+}
