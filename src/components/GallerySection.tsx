@@ -14,17 +14,19 @@ const GallerySection: React.FC<GallerySectionProps> = ({ id, items }) => {
   // Crossfade logic for gallery1
   const isCrossfade = id === "gallery1";
   const [activeIndex, setActiveIndex] = useState(0);
+  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const activeRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-advance for crossfade
+  // Flicker-free crossfade: preload next image, only update state after load, keep both images in DOM until fade-out completes
   useEffect(() => {
     if (!isCrossfade || items.length < 2) return;
     intervalRef.current = setInterval(() => {
-      setPrevIndex(activeIndex);
-      setActiveIndex((prev) => (prev + 1) % items.length);
+      const nextIndex = (activeIndex + 1) % items.length;
+      setPendingIndex(nextIndex);
     }, 2000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -32,9 +34,30 @@ const GallerySection: React.FC<GallerySectionProps> = ({ id, items }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCrossfade, items.length, activeIndex]);
 
+  // Preload pending image and only transition after it's loaded
+  useEffect(() => {
+    if (pendingIndex === null || pendingIndex === activeIndex) return;
+    let cancelled = false;
+    const img = new window.Image();
+    img.src = items[pendingIndex].url;
+    img.onload = () => {
+      if (!cancelled) {
+        setPrevIndex(activeIndex);
+        setActiveIndex(pendingIndex);
+        setIsTransitioning(true);
+        setPendingIndex(null);
+      }
+    };
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingIndex, activeIndex, items]);
+
   // GSAP crossfade animation
   useEffect(() => {
-    if (!isCrossfade || prevIndex === null) return;
+    if (!isCrossfade || prevIndex === null || !isTransitioning) return;
+    let completed = false;
     if (prevRef.current) {
       gsap.to(prevRef.current, {
         opacity: 0,
@@ -42,6 +65,9 @@ const GallerySection: React.FC<GallerySectionProps> = ({ id, items }) => {
         ease: "power2.inOut",
         onComplete: () => {
           if (prevRef.current) gsap.set(prevRef.current, { opacity: 1 });
+          completed = true;
+          setPrevIndex(null); // Remove previous image from DOM after fade-out
+          setIsTransitioning(false);
         },
       });
     }
@@ -52,7 +78,10 @@ const GallerySection: React.FC<GallerySectionProps> = ({ id, items }) => {
         { opacity: 1, duration: 0.7, ease: "power2.inOut" }
       );
     }
-  }, [isCrossfade, prevIndex, activeIndex]);
+    return () => {
+      if (!completed && prevRef.current) gsap.set(prevRef.current, { opacity: 1 });
+    };
+  }, [isCrossfade, prevIndex, activeRef, prevRef, isTransitioning]);
 
   // Clean, full-screen styling
   return (
