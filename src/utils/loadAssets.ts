@@ -37,20 +37,314 @@ function createMediaItem(galleryId: string, filename: string, index: number): Me
     };
 }
 
-// Gallery configurations - defines behavior for each gallery
+// Gallery configurations with restored styling from enhancedGalleryData
 const galleryConfigs: Omit<GalleryConfig, 'items'>[] = [
-    { id: 'gallery1', type: 'crossfade', autoAdvance: 2000 },
-    { id: 'gallery2', type: 'crossfade', autoAdvance: 800 },
-    { id: 'gallery3', type: 'video' }, // No auto-advance for videos
-    { id: 'gallery4', type: 'crossfade', autoAdvance: 1000 },
-    { id: 'gallery5', type: 'video' }, // No auto-advance for videos
-    { id: 'gallery6', type: 'treadmill' },
-    { id: 'gallery7', type: 'crossfade', autoAdvance: 2000 },
-    { id: 'gallery8', type: 'crossfade', autoAdvance: 3000 },
-    { id: 'gallery9', type: 'video' }, // No auto-advance for videos
-    { id: 'gallery10', type: 'video' }, // No auto-advance for videos
-    { id: 'gallery11', type: 'treadmill' },
-    { id: 'gallery12', type: 'crossfade', autoAdvance: 2000 }
+    {
+        id: 'gallery1',
+        type: 'crossfade',
+        autoAdvance: 2000,
+        styling: {
+            galleryContainer: {
+                padding: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+            },
+            container: {
+                width: '100%',
+                maxWidth: '100vw',
+                height: '100vh',
+                minHeight: '100vh',
+                maxHeight: '100vh',
+                aspectRatio: 'auto',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '0',
+                padding: '0',
+            }
+        }
+    },
+    {
+        id: 'gallery2',
+        type: 'crossfade',
+        autoAdvance: 800,
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '90%',
+                maxWidth: '1800px',
+                height: '85vh',
+                minHeight: '500px',
+                maxHeight: '95vh',
+                aspectRatio: 'auto',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery3',
+        type: 'video',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '85%',
+                maxWidth: '1585px',
+                height: '73vh',
+                minHeight: '485px',
+                maxHeight: '85vh',
+                aspectRatio: '16/9',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery4',
+        type: 'crossfade',
+        autoAdvance: 1000,
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '58%',
+                maxWidth: '1150px',
+                height: '85vh',
+                minHeight: '500px',
+                maxHeight: '95vh',
+                aspectRatio: 'auto',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery5',
+        type: 'video',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '72%',
+                maxWidth: '1347px',
+                height: '73vh',
+                minHeight: '485px',
+                maxHeight: '85vh',
+                aspectRatio: '16/9',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery6',
+        type: 'treadmill',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '0',
+                overflow: 'hidden',
+                width: '100vw'
+            },
+            container: {
+                width: '100vw',
+                maxWidth: '100vw',
+                height: '73vh',
+                minHeight: '73vh',
+                maxHeight: '73vh',
+                alignment: 'center',
+                background: 'transparent',
+                padding: '0',
+            }
+        }
+    },
+    {
+        id: 'gallery7',
+        type: 'crossfade',
+        autoAdvance: 2000,
+        styling: {
+            galleryContainer: {
+                padding: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+            },
+            container: {
+                width: '100%',
+                maxWidth: '100vw',
+                height: '100vh',
+                minHeight: '100vh',
+                maxHeight: '100vh',
+                aspectRatio: 'auto',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '0',
+                padding: '0',
+            }
+        }
+    },
+    {
+        id: 'gallery8',
+        type: 'crossfade',
+        autoAdvance: 3000,
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '85%',
+                maxWidth: '1585px',
+                height: '73vh',
+                minHeight: '485px',
+                maxHeight: '85vh',
+                aspectRatio: '16/9',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery9',
+        type: 'video',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '85%',
+                maxWidth: '1585px',
+                height: '73vh',
+                minHeight: '485px',
+                maxHeight: '85vh',
+                aspectRatio: '16/9',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery10',
+        type: 'video',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '4rem 2rem 0 2rem'
+            },
+            container: {
+                width: '90%',
+                maxWidth: '1800px',
+                height: '85vh',
+                minHeight: '500px',
+                maxHeight: '95vh',
+                aspectRatio: '16/9',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '1rem',
+            }
+        }
+    },
+    {
+        id: 'gallery11',
+        type: 'treadmill',
+        styling: {
+            galleryContainer: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '0',
+                overflow: 'hidden',
+                width: '100vw'
+            },
+            container: {
+                width: '100vw',
+                maxWidth: '100vw',
+                height: '73vh',
+                minHeight: '73vh',
+                maxHeight: '73vh',
+                alignment: 'center',
+                background: 'transparent',
+                padding: '0',
+            }
+        }
+    },
+    {
+        id: 'gallery12',
+        type: 'crossfade',
+        autoAdvance: 2000,
+        styling: {
+            galleryContainer: {
+                padding: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+            },
+            container: {
+                width: '100%',
+                maxWidth: '100vw',
+                height: '100vh',
+                minHeight: '100vh',
+                maxHeight: '100vh',
+                aspectRatio: 'auto',
+                alignment: 'center',
+                background: '#fff',
+                borderRadius: '0',
+                padding: '0',
+            }
+        }
+    }
 ];
 
 // Mock file lists (in real app, this would scan the file system)

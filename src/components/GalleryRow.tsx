@@ -112,6 +112,41 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
   }, [gallery.type, prevIndex, isTransitioning, gsapInstance]);
 
+  // Convert styling config to CSS styles
+  const getContainerStyles = () => {
+    const config = gallery.styling?.container;
+    if (!config) return {};
+
+    return {
+      width: config.width,
+      maxWidth: config.maxWidth,
+      height: config.height,
+      minHeight: config.minHeight,
+      maxHeight: config.maxHeight,
+      aspectRatio: config.aspectRatio,
+      background: config.background,
+      borderRadius: config.borderRadius,
+      padding: config.padding,
+      margin: config.margin,
+    };
+  };
+
+  const getGalleryContainerStyles = () => {
+    const config = gallery.styling?.galleryContainer;
+    if (!config) return {};
+
+    return {
+      padding: config.padding,
+      display: config.display,
+      alignItems: config.alignItems,
+      justifyContent: config.justifyContent,
+      minHeight: config.minHeight,
+      background: config.background,
+      overflow: config.overflow,
+      width: config.width,
+    };
+  };
+
   // Render based on gallery type
   const renderGallery = () => {
     switch (gallery.type) {
@@ -180,8 +215,15 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   };
 
   return (
-    <section className="gallery-row w-full h-screen flex items-center justify-center">
-      <div ref={containerRef} className="w-full h-full">
+    <section 
+      className="gallery-row w-full h-screen"
+      style={getGalleryContainerStyles()}
+    >
+      <div 
+        ref={containerRef} 
+        className="w-full h-full"
+        style={getContainerStyles()}
+      >
         {gallery.items.length > 0 ? renderGallery() : (
           <div className="flex items-center justify-center h-full text-gray-500">
             No items found for {gallery.id}
