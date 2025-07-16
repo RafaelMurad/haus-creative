@@ -2,7 +2,8 @@
 
 import { useLayoutEffect, useState, useRef, useEffect, useCallback } from "react";
 import MediaItem from "./MediaItem";
-import useGSAP from "../hooks/useGSAP";
+import { useGSAP } from "../contexts/GSAPContext";
+import useGSAPTimeline from "../hooks/useGSAPTimeline";
 import { GalleryConfig } from "../types";
 
 interface GalleryRowProps {
@@ -14,31 +15,28 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const activeRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<any>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
-  const { isLoaded: isGSAPReady, gsapInstance, killAnimations } = useGSAP();
+  const { gsap, isReady } = useGSAP();
+  const { createTimeline, kill: killTimeline } = useGSAPTimeline();
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-      }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      killAnimations();
+      killTimeline();
     };
-  }, [killAnimations]);
+  }, [killTimeline]);
 
   // Treadmill animation effect for gallery6 and gallery11
   useEffect(() => {
-    if (gallery.type !== 'treadmill' || !isGSAPReady || !gsapInstance || !trackRef.current) return;
+    if (gallery.type !== 'treadmill' || !isReady || !trackRef.current) return;
 
     const track = trackRef.current;
     const items = track.children;
@@ -51,7 +49,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     });
 
     // Create continuous scroll animation
-    const animation = gsapInstance.to(track, {
+    const animation = gsap.to(track, {
       x: -totalWidth / 2, // Move half the distance (since we duplicate items)
       duration: 20,
       ease: "none",
@@ -61,7 +59,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     return () => {
       if (animation) animation.kill();
     };
-  }, [gallery.type, isGSAPReady, gsapInstance]);
+  }, [gallery.type, isReady, gsap]);
 
   // Auto-advance for crossfade galleries
   const triggerNextSlide = useCallback(() => {
@@ -73,7 +71,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     setIsTransitioning(true);
     
     // Reset transition state after animation
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
       setPrevIndex(null);
     }, 1000);
@@ -89,28 +87,29 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
   // Crossfade animation
   useLayoutEffect(() => {
-    if (gallery.type !== 'crossfade' || prevIndex === null || !isTransitioning) return;
-    if (!prevRef.current || !activeRef.current || !gsapInstance) return;
+    if (gallery.type !== 'crossfade' || prevIndex === null || !isTransitioning || !isReady) return;
+    if (!prevRef.current || !activeRef.current) return;
 
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-    }
+    // Kill any existing timeline
+    killTimeline();
 
-    // Simple crossfade animation
-    gsapInstance.set(activeRef.current, { opacity: 0 });
-    
-    timelineRef.current = gsapInstance.timeline({
+    // Create new timeline for crossfade
+    const timeline = createTimeline({
       onComplete: () => {
         setPrevIndex(null);
         setIsTransitioning(false);
       }
     });
 
-    timelineRef.current
+    // Set initial state
+    gsap.set(activeRef.current, { opacity: 0 });
+    
+    // Add crossfade animations to timeline
+    timeline
       .to(prevRef.current, { opacity: 0, duration: 0.7 })
       .to(activeRef.current, { opacity: 1, duration: 0.7 }, "-=0.3");
 
-  }, [gallery.type, prevIndex, isTransitioning, gsapInstance]);
+  }, [gallery.type, prevIndex, isTransitioning, isReady, gsap, createTimeline, killTimeline]);
 
   // Convert styling config to CSS styles
   const getContainerStyles = () => {
