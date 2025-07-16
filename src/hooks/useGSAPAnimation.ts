@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useCallback, DependencyList, useState } from 'react'
-import { useGSAP } from '../contexts/GSAPContext'
+import { useRef, useCallback, DependencyList, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 import { AnimationEffectType, EaseFunctionType } from '../types'
 
 interface ScrollTriggerOptions {
@@ -13,6 +13,13 @@ interface ScrollTriggerOptions {
   pin?: boolean | string | HTMLElement
   markers?: boolean
   id?: string
+  onEnter?: () => void
+  onLeave?: () => void
+  onEnterBack?: () => void
+  onLeaveBack?: () => void
+  onUpdate?: (self: any) => void
+  onRefresh?: () => void
+  onRefreshInit?: () => void
   [key: string]: any
 }
 
@@ -39,13 +46,12 @@ interface UseGSAPAnimationReturn {
 }
 
 /**
- * Custom hook for handling GSAP animations with proper React patterns
+ * Custom hook for handling GSAP animations using the official useGSAP hook
  */
 export default function useGSAPAnimation(
   options: AnimationOptions,
   deps: DependencyList = []
 ): UseGSAPAnimationReturn {
-  const { gsap, isReady } = useGSAP()
   const elementRef = useRef<HTMLElement | null>(null)
   const elementsRef = useRef<(HTMLElement | null)[]>([])
   const animationRef = useRef<gsap.core.Tween | null>(null)
@@ -61,7 +67,7 @@ export default function useGSAPAnimation(
     to: { opacity: 1, y: 0 },
     scrollTrigger: {
       start: 'top bottom-=100',
-      toggleActions: 'play none none none'
+      toggleActions: 'play none none reverse'
     }
   }
 
@@ -128,10 +134,8 @@ export default function useGSAPAnimation(
     setIsAnimating(false)
   }, [])
 
-  // Set up the animation
-  useEffect(() => {
-    if (!isReady || typeof window === 'undefined') return
-
+  // Use the official useGSAP hook
+  useGSAP(() => {
     // Kill any existing animation
     killAnimation()
 
@@ -166,13 +170,6 @@ export default function useGSAPAnimation(
       )
 
       animationRef.current = animation
-
-      return () => {
-        animation.kill()
-        if (animation.scrollTrigger) {
-          animation.scrollTrigger.kill()
-        }
-      }
     }
 
     // For multiple elements animation (with stagger)
@@ -208,22 +205,11 @@ export default function useGSAPAnimation(
       )
 
       animationRef.current = animation
-
-      return () => {
-        animation.kill()
-        if (animation.scrollTrigger) {
-          animation.scrollTrigger.kill()
-        }
-      }
     }
-
-    return undefined
-  }, [isReady, gsap, killAnimation, ...deps])
+  }, deps)
 
   // Helper function to manually trigger animations
   const playAnimation = useCallback((customOptions: Partial<AnimationOptions> = {}): gsap.core.Tween | undefined => {
-    if (!isReady || typeof window === 'undefined') return undefined
-
     // Kill existing animation
     killAnimation()
 
@@ -289,14 +275,7 @@ export default function useGSAPAnimation(
     }
 
     return undefined
-  }, [isReady, gsap, killAnimation, animationOptions])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      killAnimation()
-    }
-  }, [killAnimation])
+  }, [killAnimation, animationOptions])
 
   return {
     elementRef,

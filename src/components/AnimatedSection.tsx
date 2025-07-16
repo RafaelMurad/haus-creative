@@ -39,7 +39,7 @@ export default function AnimatedSection({
 
   return (
     <div
-      ref={elementRef}
+      ref={elementRef as React.RefObject<HTMLDivElement>}
       className={`animated-section ${className}`}
       style={style}
       data-animating={isAnimating}
@@ -72,7 +72,7 @@ export function ScrollTriggerSection({
 
   return (
     <div
-      ref={triggerRef}
+      ref={triggerRef as React.RefObject<HTMLDivElement>}
       className={`scroll-trigger-section ${className}`}
       style={style}
     >

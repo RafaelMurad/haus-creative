@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useCallback, DependencyList, useState } from 'react'
-import { useGSAP } from '../contexts/GSAPContext'
+import { useRef, useCallback, DependencyList, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 
 interface TimelineOptions {
   paused?: boolean
@@ -27,20 +27,17 @@ interface UseGSAPTimelineReturn {
 }
 
 /**
- * Custom hook for handling GSAP timeline animations
+ * Custom hook for handling GSAP timeline animations using the official useGSAP hook
  */
 export default function useGSAPTimeline(
   options: TimelineOptions = {},
   deps: DependencyList = []
 ): UseGSAPTimelineReturn {
-  const { gsap, isReady } = useGSAP()
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
   // Create timeline
   const createTimeline = useCallback((timelineOptions: TimelineOptions = {}) => {
-    if (!isReady) return null as any
-
     // Kill existing timeline
     if (timelineRef.current) {
       timelineRef.current.kill()
@@ -67,14 +64,14 @@ export default function useGSAPTimeline(
 
     timelineRef.current = timeline
     return timeline
-  }, [isReady, gsap, options])
+  }, [options])
 
   // Add animation to timeline
   const addToTimeline = useCallback((target: any, vars: any, position?: any) => {
-    if (!timelineRef.current || !isReady) return timelineRef.current as any
+    if (!timelineRef.current) return timelineRef.current as any
     
     return timelineRef.current.to(target, vars, position)
-  }, [isReady])
+  }, [])
 
   // Timeline controls
   const play = useCallback(() => {
@@ -112,19 +109,10 @@ export default function useGSAPTimeline(
     }
   }, [])
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      kill()
-    }
-  }, [kill])
-
-  // Recreate timeline when dependencies change
-  useEffect(() => {
-    if (isReady) {
-      createTimeline()
-    }
-  }, [isReady, createTimeline, ...deps])
+  // Use the official useGSAP hook
+  useGSAP(() => {
+    createTimeline()
+  }, deps)
 
   return {
     timeline: timelineRef,

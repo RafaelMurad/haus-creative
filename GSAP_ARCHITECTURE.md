@@ -1,42 +1,66 @@
-# GSAP Architecture - React Best Practices
+# GSAP Architecture - Official React Integration
 
-This document outlines the improved GSAP architecture that follows React best practices and resolves the previous implementation issues.
+This document outlines the improved GSAP architecture that uses the official `@gsap/react` package and follows GSAP's recommended React best practices.
 
 ## Overview
 
 The new architecture provides:
-- **Centralized GSAP management** through React Context
-- **Proper cleanup** and memory leak prevention
+- **Official GSAP React integration** using `@gsap/react` and `useGSAP` hook
+- **Automatic cleanup** using `gsap.context()` 
+- **SSR-safe** animations with proper hydration
+- **React 18 Strict Mode** compatibility
+- **Memory leak prevention** with automatic animation reversion
 - **Type-safe** animations with TypeScript
-- **Server-side rendering** compatibility
-- **Modular hooks** for different animation types
-- **Performance optimizations** with proper dependency management
+- **Performance optimizations** with proper scoping
+
+## Official GSAP React Package
+
+### Installation
+```bash
+npm install @gsap/react
+```
+
+### Registration
+```tsx
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Register the hook and plugins
+gsap.registerPlugin(useGSAP, ScrollTrigger)
+```
 
 ## Architecture Components
 
-### 1. GSAP Context (`src/contexts/GSAPContext.tsx`)
+### 1. Direct useGSAP Usage
 
-The central provider that manages GSAP instances and ensures proper initialization.
+The simplest and most recommended approach is to use the `useGSAP` hook directly in your components:
 
 ```tsx
-import { GSAPProvider, useGSAP } from '../contexts/GSAPContext'
+import { useRef } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
 
-// Wrap your app
-<GSAPProvider>
-  <YourApp />
-</GSAPProvider>
+export default function MyComponent() {
+  const container = useRef<HTMLDivElement>(null)
+  const elementRef = useRef<HTMLDivElement>(null)
 
-// Use in components
-const { gsap, isReady } = useGSAP()
+  useGSAP(() => {
+    // All GSAP animations here are automatically cleaned up
+    gsap.to(elementRef.current, { x: 100, duration: 1 })
+  }, { scope: container })
+
+  return (
+    <div ref={container}>
+      <div ref={elementRef}>Animate me</div>
+    </div>
+  )
+}
 ```
 
-**Key Features:**
-- Single GSAP instance shared across the app
-- Proper plugin registration (ScrollTrigger)
-- Server-side rendering safety
-- Ready state management
+### 2. Custom Animation Hooks
 
-### 2. Animation Hooks
+For reusable animation patterns, we've created custom hooks that wrap the official `useGSAP`:
 
 #### `useGSAPAnimation` (`src/hooks/useGSAPAnimation.ts`)
 
@@ -117,9 +141,41 @@ const {
 
 ### 3. Example Components
 
+#### `GSAPExample` (`src/components/GSAPExample.tsx`)
+
+A simple example demonstrating direct `useGSAP` usage:
+
+```tsx
+import { useRef } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+
+export default function GSAPExample() {
+  const container = useRef<HTMLDivElement>(null)
+  const boxRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    gsap.to(boxRef.current, {
+      x: 200,
+      rotation: 360,
+      duration: 2,
+      ease: 'power2.inOut',
+      repeat: -1,
+      yoyo: true
+    })
+  }, { scope: container })
+
+  return (
+    <div ref={container}>
+      <div ref={boxRef}>Animated Box</div>
+    </div>
+  )
+}
+```
+
 #### `AnimatedSection` (`src/components/AnimatedSection.tsx`)
 
-A reusable component that demonstrates the new architecture.
+A reusable component using the custom animation hook:
 
 ```tsx
 import AnimatedSection from '../components/AnimatedSection'
@@ -135,135 +191,162 @@ import AnimatedSection from '../components/AnimatedSection'
 </AnimatedSection>
 ```
 
-## Migration Guide
+## Key Benefits of Official Integration
 
-### Before (Old Architecture)
-
+### 1. Automatic Cleanup
 ```tsx
-// ❌ Direct GSAP imports
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-// ❌ Manual plugin registration
-gsap.registerPlugin(ScrollTrigger)
-
-// ❌ Direct GSAP usage in components
-useEffect(() => {
-  gsap.to(element, { opacity: 1 })
+useGSAP(() => {
+  // All animations created here are automatically reverted on unmount
+  gsap.to('.element', { x: 100 })
+  gsap.timeline().to('.element2', { y: 50 })
 }, [])
 ```
 
-### After (New Architecture)
-
+### 2. Scoping
 ```tsx
-// ✅ Use GSAP context
+const container = useRef()
+
+useGSAP(() => {
+  // Selector text is scoped to container descendants
+  gsap.to('.box', { x: 100 }) // Only affects .box inside container
+}, { scope: container })
+```
+
+### 3. Context-Safe Interactions
+```tsx
+const { contextSafe } = useGSAP({ scope: container })
+
+const handleClick = contextSafe(() => {
+  // This animation will be cleaned up properly
+  gsap.to('.clicked', { scale: 1.2 })
+})
+
+return <button onClick={handleClick}>Click me</button>
+```
+
+### 4. Dependency Management
+```tsx
+const [endX, setEndX] = useState(100)
+
+useGSAP(() => {
+  gsap.to('.element', { x: endX })
+}, { dependencies: [endX] }) // Re-runs when endX changes
+```
+
+## Migration from Custom Architecture
+
+### Before (Custom Context)
+```tsx
+// ❌ Custom context approach
 import { useGSAP } from '../contexts/GSAPContext'
 
-// ✅ Use specialized hooks
-import useGSAPAnimation from '../hooks/useGSAPAnimation'
+const { gsap, isReady } = useGSAP()
 
-// ✅ Proper React patterns
-const { elementRef } = useGSAPAnimation({
-  effect: 'fade',
-  duration: 0.8
-})
+useEffect(() => {
+  if (!isReady) return
+  gsap.to(element, { x: 100 })
+}, [isReady, gsap])
+```
+
+### After (Official useGSAP)
+```tsx
+// ✅ Official GSAP React approach
+import { useGSAP } from '@gsap/react'
+
+useGSAP(() => {
+  gsap.to(element, { x: 100 })
+}, [])
 ```
 
 ## Best Practices
 
-### 1. Always Use the Context
-
+### 1. Always Use useGSAP for Animations
 ```tsx
 // ✅ Correct
-const { gsap, isReady } = useGSAP()
+useGSAP(() => {
+  gsap.to('.element', { x: 100 })
+})
 
-// ❌ Avoid direct imports
-import { gsap } from 'gsap'
-```
-
-### 2. Proper Cleanup
-
-```tsx
-// ✅ Automatic cleanup with hooks
-const { killAnimation } = useGSAPAnimation(options)
-
-// ✅ Manual cleanup when needed
+// ❌ Avoid direct useEffect with GSAP
 useEffect(() => {
-  return () => {
-    killAnimation()
-  }
-}, [killAnimation])
+  gsap.to('.element', { x: 100 })
+}, [])
 ```
 
-### 3. Dependency Management
-
+### 2. Use Scoping for Selector Text
 ```tsx
-// ✅ Proper dependencies
-const { elementRef } = useGSAPAnimation(
-  { effect: 'fade', duration: 0.8 },
-  [effect, duration] // Include all animation options
-)
+const container = useRef()
+
+useGSAP(() => {
+  gsap.to('.box', { x: 100 }) // Scoped to container
+}, { scope: container })
 ```
 
-### 4. Server-Side Rendering Safety
-
+### 3. Handle Interactive Animations
 ```tsx
-// ✅ Safe SSR
-const { isReady } = useGSAP()
+const { contextSafe } = useGSAP({ scope: container })
 
-if (!isReady) return <div>Loading...</div>
-
-// ✅ Check for window
-if (typeof window === 'undefined') return
+const handleClick = contextSafe(() => {
+  gsap.to('.element', { scale: 1.2 })
+})
 ```
 
-### 5. Performance Optimization
-
+### 4. Proper Dependency Arrays
 ```tsx
-// ✅ Use useCallback for animation functions
-const playAnimation = useCallback(() => {
-  // Animation logic
-}, [dependencies])
+const [value, setValue] = useState(0)
 
-// ✅ Use useRef for DOM elements
-const elementRef = useRef<HTMLElement>(null)
+useGSAP(() => {
+  gsap.to('.element', { x: value })
+}, { dependencies: [value] })
+```
+
+### 5. SSR Safety
+```tsx
+// ✅ The useGSAP hook is automatically SSR-safe
+useGSAP(() => {
+  // This only runs on the client
+  gsap.to('.element', { x: 100 })
+})
 ```
 
 ## Common Patterns
 
 ### 1. Scroll-Triggered Animations
-
 ```tsx
-const { elementRef } = useGSAPAnimation({
-  effect: 'slide-up',
-  scrollTrigger: {
-    start: 'top bottom-=100',
-    toggleActions: 'play none none reverse'
-  }
+useGSAP(() => {
+  gsap.fromTo('.element', 
+    { opacity: 0, y: 50 },
+    {
+      opacity: 1,
+      y: 0,
+      scrollTrigger: {
+        trigger: '.element',
+        start: 'top bottom-=100',
+        toggleActions: 'play none none reverse'
+      }
+    }
+  )
 })
 ```
 
 ### 2. Timeline Animations
-
 ```tsx
-const { createTimeline, addToTimeline } = useGSAPTimeline()
-
-const timeline = createTimeline()
-timeline
-  .addToTimeline(element1, { opacity: 0, duration: 0.5 })
-  .addToTimeline(element2, { y: 50, duration: 0.5 }, '-=0.3')
+useGSAP(() => {
+  const tl = gsap.timeline()
+  tl.to('.element1', { opacity: 0, duration: 0.5 })
+    .to('.element2', { y: 50, duration: 0.5 }, '-=0.3')
+})
 ```
 
 ### 3. Conditional Animations
-
 ```tsx
-const { elementRef, playAnimation } = useGSAPAnimation(options)
+const [shouldAnimate, setShouldAnimate] = useState(false)
 
-useEffect(() => {
+useGSAP(() => {
   if (shouldAnimate) {
-    playAnimation()
+    gsap.to('.element', { x: 100 })
   }
-}, [shouldAnimate, playAnimation])
+}, { dependencies: [shouldAnimate] })
 ```
 
 ## Troubleshooting
@@ -271,26 +354,25 @@ useEffect(() => {
 ### Common Issues
 
 1. **Animations not working**
-   - Ensure `isReady` is true from GSAP context
-   - Check that element refs are properly set
-   - Verify ScrollTrigger is registered
+   - Ensure `useGSAP` is imported from `@gsap/react`
+   - Check that the hook is registered: `gsap.registerPlugin(useGSAP)`
+   - Verify element refs are properly set
 
 2. **Memory leaks**
-   - Always use the provided cleanup functions
-   - Don't create animations outside of hooks
-   - Use proper dependency arrays
+   - All animations in `useGSAP` are automatically cleaned up
+   - Use `contextSafe` for interactive animations
+   - Don't create animations outside of `useGSAP`
 
 3. **SSR issues**
-   - Check for `typeof window !== 'undefined'`
-   - Use `isReady` state from context
-   - Avoid direct GSAP imports
+   - The `useGSAP` hook is automatically SSR-safe
+   - No need for manual window checks
 
 ### Debug Mode
 
 Enable debug mode for development:
 
 ```tsx
-// In GSAPContext.tsx
+// In your app initialization
 if (process.env.NODE_ENV === 'development') {
   gsap.config({ nullTargetWarn: false })
 }
@@ -298,15 +380,15 @@ if (process.env.NODE_ENV === 'development') {
 
 ## Performance Tips
 
-1. **Use `willChange` CSS property** for elements that will animate
-2. **Batch animations** using timelines instead of individual tweens
+1. **Use scoping** to limit selector text scope
+2. **Batch animations** using timelines
 3. **Use `transform` and `opacity`** for better performance
 4. **Limit concurrent animations** to prevent frame drops
 5. **Use `ScrollTrigger.refresh()`** when content changes dynamically
 
 ## TypeScript Support
 
-All hooks and components are fully typed:
+All hooks and components are fully typed and work seamlessly with TypeScript:
 
 ```tsx
 interface AnimationOptions {
@@ -324,4 +406,4 @@ interface AnimationOptions {
 }
 ```
 
-This architecture provides a solid foundation for GSAP animations in React while following best practices and maintaining excellent performance.
+This architecture provides the most robust, future-proof, and idiomatic React+GSAP integration using the official GSAP React package.

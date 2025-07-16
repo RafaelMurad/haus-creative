@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useState, useRef, useEffect, useCallback } from "react";
 import MediaItem from "./MediaItem";
-import { useGSAP } from "../contexts/GSAPContext";
+import { useGSAP } from "@gsap/react";
 import useGSAPTimeline from "../hooks/useGSAPTimeline";
 import { GalleryConfig } from "../types";
 
@@ -21,7 +21,6 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
-  const { gsap, isReady } = useGSAP();
   const { createTimeline, kill: killTimeline } = useGSAPTimeline();
 
   // Cleanup on unmount
@@ -35,8 +34,8 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
   }, [killTimeline]);
 
   // Treadmill animation effect for gallery6 and gallery11
-  useEffect(() => {
-    if (gallery.type !== 'treadmill' || !isReady || !trackRef.current) return;
+  useGSAP(() => {
+    if (gallery.type !== 'treadmill' || !trackRef.current) return;
 
     const track = trackRef.current;
     const items = track.children;
@@ -49,17 +48,13 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
     });
 
     // Create continuous scroll animation
-    const animation = gsap.to(track, {
+    gsap.to(track, {
       x: -totalWidth / 2, // Move half the distance (since we duplicate items)
       duration: 20,
       ease: "none",
       repeat: -1,
     });
-
-    return () => {
-      if (animation) animation.kill();
-    };
-  }, [gallery.type, isReady, gsap]);
+  }, [gallery.type]);
 
   // Auto-advance for crossfade galleries
   const triggerNextSlide = useCallback(() => {
@@ -87,7 +82,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
 
   // Crossfade animation
   useLayoutEffect(() => {
-    if (gallery.type !== 'crossfade' || prevIndex === null || !isTransitioning || !isReady) return;
+    if (gallery.type !== 'crossfade' || prevIndex === null || !isTransitioning) return;
     if (!prevRef.current || !activeRef.current) return;
 
     // Kill any existing timeline
@@ -109,7 +104,7 @@ export default function GalleryRow({ gallery }: GalleryRowProps) {
       .to(prevRef.current, { opacity: 0, duration: 0.7 })
       .to(activeRef.current, { opacity: 1, duration: 0.7 }, "-=0.3");
 
-  }, [gallery.type, prevIndex, isTransitioning, isReady, gsap, createTimeline, killTimeline]);
+  }, [gallery.type, prevIndex, isTransitioning, createTimeline, killTimeline]);
 
   // Convert styling config to CSS styles
   const getContainerStyles = () => {

@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useCallback, DependencyList } from 'react'
-import { useGSAP } from '../contexts/GSAPContext'
+import { useRef, useCallback, DependencyList } from 'react'
+import { useGSAP } from '@gsap/react'
 
 interface ScrollTriggerOptions {
   trigger?: HTMLElement | string | null
@@ -33,19 +33,18 @@ interface UseScrollTriggerReturn {
 }
 
 /**
- * Custom hook for handling GSAP ScrollTrigger animations
+ * Custom hook for handling GSAP ScrollTrigger animations using the official useGSAP hook
  */
 export default function useScrollTrigger(
   options: ScrollTriggerOptions = {},
   deps: DependencyList = []
 ): UseScrollTriggerReturn {
-  const { gsap, isReady } = useGSAP()
   const triggerRef = useRef<HTMLElement>(null)
   const scrollTriggerRef = useRef<any>(null)
 
   // Create ScrollTrigger
   const createScrollTrigger = useCallback((scrollTriggerOptions: ScrollTriggerOptions = {}) => {
-    if (!isReady || !triggerRef.current) return null
+    if (!triggerRef.current) return null
 
     // Kill existing ScrollTrigger
     if (scrollTriggerRef.current) {
@@ -63,7 +62,7 @@ export default function useScrollTrigger(
 
     scrollTriggerRef.current = scrollTrigger.scrollTrigger
     return scrollTrigger.scrollTrigger
-  }, [isReady, gsap, options])
+  }, [options])
 
   // Kill ScrollTrigger
   const kill = useCallback(() => {
@@ -94,19 +93,10 @@ export default function useScrollTrigger(
     }
   }, [])
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      kill()
-    }
-  }, [kill])
-
-  // Recreate ScrollTrigger when dependencies change
-  useEffect(() => {
-    if (isReady) {
-      createScrollTrigger()
-    }
-  }, [isReady, createScrollTrigger, ...deps])
+  // Use the official useGSAP hook
+  useGSAP(() => {
+    createScrollTrigger()
+  }, deps)
 
   return {
     triggerRef,
