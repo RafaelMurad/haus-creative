@@ -8,20 +8,11 @@
  */
 
 import { ReactNode } from "react";
-import {
-  FeatureFlagProvider,
-  FeatureFlagDebugPanel,
-} from "@/lib/feature-flags";
 
 interface ProvidersProps {
   children: ReactNode;
 }
 
 export function Providers({ children }: ProvidersProps) {
-  return (
-    <FeatureFlagProvider>
-      {children}
-      <FeatureFlagDebugPanel />
-    </FeatureFlagProvider>
-  );
+  return <>{children}</>;
 }
