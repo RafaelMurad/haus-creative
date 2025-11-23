@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import {
+  generateAnimatedGradientStyle,
+  gradientPresets,
+} from "@/utils/gradientGenerator";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -9,10 +13,17 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  // Generate gradient style - easy to change by updating the preset or colours
+  const gradientStyle = generateAnimatedGradientStyle({
+    colours: gradientPresets.monochrome,
+    direction: 135,
+    animationDuration: 5,
+  });
+
   return (
     <div
       className={`
-        fixed inset-0 z-40 bg-black text-white
+        fixed inset-0 z-40 text-white
         pt-[60px] px-4 pb-10
         flex flex-col
         transition-all duration-300 ease-out
@@ -21,6 +32,10 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           : "opacity-0 pointer-events-none"
         }
       `}
+      style={{
+        ...gradientStyle,
+        animation: isOpen ? gradientStyle.animation as string : "none",
+      }}
       aria-hidden={!isOpen}
     >
       {/* Main Navigation */}
