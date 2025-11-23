@@ -23,9 +23,9 @@ export function Header() {
     <>
       <header
         className={`
-          fixed top-0 left-0 right-0 z-50 h-[60px]
+          fixed top-0 left-0 right-0 z-50
           flex items-center justify-between
-          px-4 md:px-5
+          px-5 py-6 md:px-12
           transition-all duration-300 ease-out
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
           text-white
@@ -38,17 +38,17 @@ export function Header() {
           className="relative z-10 transition-opacity duration-250 hover:opacity-50"
           onClick={() => setIsMenuOpen(false)}
         >
-          <Logo className="h-7 w-auto" />
+          <Logo className="h-10 w-auto" />
         </Link>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="relative z-10 p-2 -mr-2 md:hidden transition-opacity duration-250 hover:opacity-50"
+          className="relative z-10 md:hidden transition-opacity duration-250 hover:opacity-50"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMenuOpen}
         >
-          <MenuIcon isOpen={isMenuOpen} />
+          <MenuIcon isOpen={isMenuOpen} className="h-10 w-10" />
         </button>
 
         {/* Desktop Navigation */}
