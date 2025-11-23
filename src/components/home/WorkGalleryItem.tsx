@@ -36,7 +36,7 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
         {/* Media Background */}
         <MediaRenderer
           media={project.media}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover"
         />
 
         {/* Campaign Title - GPU-accelerated with Framer Motion */}

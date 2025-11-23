@@ -25,7 +25,7 @@ export default function WorkPage() {
               {/* Project thumbnail */}
               {project.heroVideo ? (
                 <video
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover"
                   src={project.heroVideo.desktop}
                   poster={project.heroVideo.poster}
                   muted
@@ -38,7 +38,7 @@ export default function WorkPage() {
                 <img
                   src={project.heroImage.desktop}
                   alt={project.heroImage.alt}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : null}
 

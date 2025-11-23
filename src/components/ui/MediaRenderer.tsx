@@ -31,6 +31,7 @@ export function MediaRenderer({
         <VideoMedia
           media={media}
           className={baseClassName}
+          priority={priority}
         />
       );
     case "gif":
@@ -64,29 +65,35 @@ export function MediaRenderer({
 interface VideoMediaProps {
   media: MediaSource;
   className?: string;
+  priority?: boolean;
 }
 
-function VideoMedia({ media, className }: VideoMediaProps) {
+function VideoMedia({ media, className, priority = false }: VideoMediaProps) {
   return (
-    <video
-      className={className}
-      playsInline
-      autoPlay={media.autoPlay !== false}
-      loop={media.loop !== false}
-      muted={media.muted !== false}
-      poster={media.poster}
-    >
-      {/* Mobile video source */}
-      {media.srcMobile && (
-        <source
-          src={media.srcMobile}
-          type="video/mp4"
-          media="(max-width: 768px)"
-        />
+    <>
+      {priority && media.poster && (
+        <link rel="preload" as="image" href={media.poster} />
       )}
-      {/* Desktop video source */}
-      <source src={media.src} type={getVideoMimeType(media.src)} />
-    </video>
+      <video
+        className={className}
+        playsInline
+        autoPlay={media.autoPlay !== false}
+        loop={media.loop !== false}
+        muted={media.muted !== false}
+        poster={media.poster}
+      >
+        {/* Mobile video source */}
+        {media.srcMobile && (
+          <source
+            src={media.srcMobile}
+            type="video/mp4"
+            media="(max-width: 768px)"
+          />
+        )}
+        {/* Desktop video source */}
+        <source src={media.src} type={getVideoMimeType(media.src)} />
+      </video>
+    </>
   );
 }
 
