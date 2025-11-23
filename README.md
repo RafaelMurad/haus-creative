@@ -21,11 +21,11 @@ Visit `http://localhost:3000`
 - **Multi-Media Support** - Optimized images, videos, and GIFs with Next.js Image
 - **Dynamic Routes** - Automated project pages with fallback generation
 - **Performance Optimized** - Video poster preload, GPU transforms, zero re-renders
-- **Accessible** - WCAG compliant with error boundaries and skip links
+- **Accessible** - WCAG compliant with error boundaries
 
 ## Tech Stack
 
-- **Framework**: Next.js 14.2.28 (App Router)
+- **Framework**: Next.js 14.1.0 (App Router)
 - **Language**: TypeScript 5.8.3
 - **Styling**: Tailwind CSS 3.4.1
 - **Animations**: Framer Motion 12.23.24
@@ -37,14 +37,14 @@ Visit `http://localhost:3000`
 - ✅ GPU-accelerated animations (zero React re-renders)
 - ✅ 152 kB homepage bundle
 - ✅ LCP optimized with priority loading
-- ✅ 19 static routes pre-generated
+- ✅ 12 static routes pre-generated
 
 ## Project Structure
 
 ```
 src/
 ├── app/                     # Pages
-│   ├── page.tsx            # Homepage with IntroHero + WorkGalleryItems
+│   ├── page.tsx            # Homepage with IntroHero + WorkGalleryItem
 │   ├── work/               # Work showcase
 │   │   ├── page.tsx        # Work grid
 │   │   └── [slug]/         # Dynamic project pages
@@ -52,31 +52,34 @@ src/
 │   └── about/              # About page
 ├── components/
 │   ├── home/               # Homepage components
-│   │   ├── IntroHero       # Full-viewport intro
-│   │   ├── WorkGalleryItem # Scroll-animated gallery
-│   │   ├── VideoHero       # Video hero section
-│   │   └── CTALinks        # Call-to-action links
+│   │   ├── IntroHero.tsx   # Full-viewport intro
+│   │   ├── WorkGalleryItem.tsx # Scroll-animated gallery
+│   │   ├── VideoHero.tsx   # Video hero section
+│   │   └── CTALinks.tsx    # Call-to-action links
 │   ├── layout/             # Layout components
-│   │   ├── Header          # Auto-hide navigation
-│   │   ├── Footer          # Site footer
-│   │   └── MobileMenu      # Animated mobile menu
+│   │   ├── Header.tsx      # Auto-hide navigation
+│   │   ├── Footer.tsx      # Site footer
+│   │   └── MobileMenu.tsx  # Animated mobile menu
 │   ├── ui/                 # UI primitives
-│   │   ├── Logo            # SVG logo
-│   │   ├── MediaRenderer   # Optimized media component
-│   │   └── MenuIcon        # Hamburger icon
-│   └── ErrorBoundary.tsx   # Error handling
+│   │   ├── Logo.tsx        # SVG logo
+│   │   ├── MediaRenderer.tsx # Optimized media component
+│   │   └── MenuIcon.tsx    # Hamburger icon
+│   ├── ErrorBoundary.tsx   # Error handling
+│   └── Providers.tsx       # Client-side providers
 ├── config/
 │   ├── site.ts             # Site configuration
 │   ├── projects.ts         # Project data + fallback system
-│   └── animations.ts       # Centralized animation constants
+│   └── animations.ts       # Animation timing constants
 ├── hooks/
 │   ├── useStickyScrollAnimation.ts  # GPU-accelerated scroll
 │   ├── useScrollDirection.ts        # Header auto-hide logic
 │   ├── useBodyScrollLock.ts         # Menu scroll prevention
 │   └── useIntersectionObserver.ts   # Viewport detection
 └── utils/
+    ├── animationConfigs.ts  # CSS animation configurations
     ├── gradientGenerator.ts # Animated gradient utility
-    └── assetPath.ts        # Asset path helpers
+    ├── assetPath.ts         # Asset path helpers
+    └── debugHelper.ts       # Development debugging tools
 ```
 
 ## Configuration
@@ -99,11 +102,11 @@ Edit `src/config/animations.ts` for animation timing:
 
 ```typescript
 export const ANIMATIONS = {
-  hero: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  gallery: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  stickyText: { slideDuration: 600, textHeight: 64 },
-  nav: { duration: 300 },
-  mobileMenu: { animationDuration: 20 },
+  hero: { fadeIn: { duration: 1, ease: 'easeOut' } },
+  gallery: { fadeIn: { duration: 0.8, ease: 'easeOut' } },
+  stickyText: { slideDuration: 0.6, textHeight: 100 },
+  nav: { fadeIn: { duration: 0.4 } },
+  mobileMenu: { animationDuration: 5 },
 } as const;
 ```
 
