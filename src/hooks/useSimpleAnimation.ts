@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface UseSimpleAnimationOptions {
     trigger?: 'load' | 'scroll' | 'hover';
@@ -32,7 +32,7 @@ export function useSimpleAnimation(
 
     const elementRef = useRef<HTMLElement>(null);
 
-    const animate = () => {
+    const animate = useCallback(() => {
         if (!elementRef.current) return;
 
         const element = elementRef.current;
@@ -56,9 +56,9 @@ export function useSimpleAnimation(
                 element.style.transform = 'scale(1)';
                 break;
         }
-    };
+    }, [animationType, duration, delay, easing]);
 
-    const reset = () => {
+    const reset = useCallback(() => {
         if (!elementRef.current) return;
 
         const element = elementRef.current;
@@ -76,7 +76,7 @@ export function useSimpleAnimation(
                 element.style.transform = 'scale(0.95)';
                 break;
         }
-    };
+    }, [animationType]);
 
     useEffect(() => {
         if (!elementRef.current) return;
@@ -120,7 +120,7 @@ export function useSimpleAnimation(
                 element.removeEventListener('mouseleave', handleMouseLeave);
             };
         }
-    }, [trigger, animationType, duration, delay, easing]);
+    }, [trigger, animate, reset]);
 
     return {
         ref: elementRef,

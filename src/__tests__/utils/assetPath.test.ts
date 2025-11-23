@@ -4,7 +4,9 @@ describe("getAssetPath", () => {
   const originalEnv = process.env.NODE_ENV;
 
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv;
+    if (originalEnv !== undefined) {
+      (process.env as { NODE_ENV?: string }).NODE_ENV = originalEnv;
+    }
   });
 
   it("returns correct path for gallery and filename", () => {
@@ -35,7 +37,7 @@ describe("getAssetPath", () => {
 
   it("logs debug message in development mode", () => {
     const consoleSpy = jest.spyOn(console, "debug").mockImplementation();
-    process.env.NODE_ENV = "development";
+    (process.env as { NODE_ENV?: string }).NODE_ENV = "development";
 
     getAssetPath("gallery1", "image.jpg");
 
@@ -48,7 +50,7 @@ describe("getAssetPath", () => {
 
   it("does not log in production mode", () => {
     const consoleSpy = jest.spyOn(console, "debug").mockImplementation();
-    process.env.NODE_ENV = "production";
+    (process.env as { NODE_ENV?: string }).NODE_ENV = "production";
 
     getAssetPath("gallery1", "image.jpg");
 

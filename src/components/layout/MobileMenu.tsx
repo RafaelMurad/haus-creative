@@ -12,7 +12,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   return (
     <div
       className={`
-        fixed inset-0 z-40 bg-white text-black
+        fixed inset-0 z-40 bg-black text-white
         pt-[60px] px-4 pb-10
         flex flex-col
         transition-all duration-300 ease-out

@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
+import "@testing-library/jest-dom";
 
 // Mock data for tests
 export const mockGalleryItem = {

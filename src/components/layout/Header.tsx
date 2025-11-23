@@ -54,6 +54,7 @@ export function Header({ variant = "light" }: HeaderProps) {
               : "bg-white text-black"
           }
           ${isScrolled && !isTransparent ? "shadow-sm" : ""}
+          ${isTransparent ? "mix-blend-difference" : ""}
         `}
       >
         {/* Logo */}
