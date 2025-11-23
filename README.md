@@ -120,17 +120,6 @@ npm run build
 npm start
 ```
 
-## Related Branches
-
-This is the **stable production website**. Other branches contain:
-
-| Branch | Purpose |
-|--------|---------|
-| `cms-studio` | CMS builder application (separate repo) |
-| `cms-playground` | CMS integration testing |
-| `learning-lab` | Web development learning guides |
-| `freelance-framework` | Project bootstrap framework |
-
 ## Scripts
 
 ```bash
