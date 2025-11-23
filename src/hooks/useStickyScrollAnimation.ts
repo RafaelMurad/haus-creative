@@ -32,15 +32,41 @@ interface StickyScrollMotion {
 }
 
 /**
- * Optimized sticky scroll animation using Framer Motion
+ * GPU-accelerated sticky scroll animation hook for gallery titles
  * 
- * Performance: Uses motion values (GPU-accelerated, no re-renders)
- * Only tracks two key moments:
- * 1. Text reaches viewport middle → stick
- * 2. Gallery bottom catches text → pull up
+ * Creates a three-state scroll animation:
+ * 1. **Slide in**: Text enters from left when gallery appears
+ * 2. **Sticky middle**: Text follows scroll, locked to viewport centre
+ * 3. **Pull up**: Text locks to gallery when bottom enters view
  * 
- * @param config - Configuration options
- * @returns Motion values and ref
+ * **Performance characteristics:**
+ * - Zero React re-renders (uses Framer Motion values)
+ * - Single shared scroll listener (not per-instance)
+ * - GPU-accelerated transforms (opacity, x, top)
+ * - Viewport height cached to avoid layout thrashing
+ * 
+ * @param config - Animation configuration options
+ * @param config.slideDuration - Slide-in animation duration in ms (default: 0.6s)
+ * @param config.textHeight - Text element height for bottom calculations (default: 64px)
+ * @param config.topPadding - Distance from section top when stuck (default: 0px)
+ * @param config.bottomPadding - Distance from section bottom when locked (default: 100px)
+ * 
+ * @returns Motion values and refs for animating the sticky text element
+ * 
+ * @example
+ * ```tsx
+ * const { ref, opacity, x, y, transition } = useStickyScrollAnimation({
+ *   slideDuration: 600,
+ *   textHeight: 80,
+ *   topPadding: 50,
+ * });
+ * 
+ * <section ref={ref}>
+ *   <motion.h2 style={{ opacity, x, top: y }} transition={transition}>
+ *     Gallery Title
+ *   </motion.h2>
+ * </section>
+ * ```
  */
 export function useStickyScrollAnimation(
   config: StickyScrollConfig = {}

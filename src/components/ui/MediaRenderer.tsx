@@ -2,6 +2,7 @@
 
 import { MediaSource } from "@/config/site";
 import Image from "next/image";
+import { useState } from "react";
 
 interface MediaRendererProps {
   media: MediaSource;
@@ -13,7 +14,7 @@ interface MediaRendererProps {
 
 /**
  * MediaRenderer - Universal component for rendering different media types
- * Supports: video, image, and gif
+ * Supports: video, image, and gif with loading states
  */
 export function MediaRenderer({
   media,
@@ -108,6 +109,8 @@ function ImageMedia({
   fill,
   sizes,
 }: ImageMediaProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
   // For responsive images with mobile variant
   if (media.srcMobile) {
     return (
@@ -118,6 +121,7 @@ function ImageMedia({
           alt={media.alt || ""}
           className={className}
           loading={priority ? "eager" : "lazy"}
+          onLoad={() => setIsLoading(false)}
         />
       </picture>
     );
@@ -126,28 +130,40 @@ function ImageMedia({
   // Use Next.js Image for optimization when no mobile variant
   if (fill) {
     return (
-      <Image
-        src={media.src}
-        alt={media.alt || ""}
-        fill
-        className={className}
-        priority={priority}
-        sizes={sizes}
-        style={{ objectFit: "cover" }}
-      />
+      <>
+        {isLoading && (
+          <div className="absolute inset-0 animate-pulse bg-gray-900" />
+        )}
+        <Image
+          src={media.src}
+          alt={media.alt || ""}
+          fill
+          className={className}
+          priority={priority}
+          sizes={sizes}
+          style={{ objectFit: "cover" }}
+          onLoad={() => setIsLoading(false)}
+        />
+      </>
     );
   }
 
   return (
-    <Image
-      src={media.src}
-      alt={media.alt || ""}
-      width={1920}
-      height={1080}
-      className={className}
-      priority={priority}
-      sizes={sizes}
-    />
+    <>
+      {isLoading && (
+        <div className="absolute inset-0 animate-pulse bg-gray-900" />
+      )}
+      <Image
+        src={media.src}
+        alt={media.alt || ""}
+        width={1920}
+        height={1080}
+        className={className}
+        priority={priority}
+        sizes={sizes}
+        onLoad={() => setIsLoading(false)}
+      />
+    </>
   );
 }
 
