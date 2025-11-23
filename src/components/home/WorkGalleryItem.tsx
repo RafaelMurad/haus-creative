@@ -36,7 +36,7 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
         {/* Media Background */}
         <MediaRenderer
           media={project.media}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
         />
 
         {/* Campaign Title - GPU-accelerated with Framer Motion */}
@@ -53,9 +53,6 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
             {project.title}
           </h2>
         </motion.div>
-
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/20 transition-opacity group-hover:bg-black/30" />
       </Link>
     </section>
   );
