@@ -6,10 +6,10 @@ interface MenuIconProps {
 }
 
 /**
- * Animated plus/close icon for mobile menu
+ * Animated hamburger/close icon for mobile menu
  *
- * Transforms between a plus sign (+) and an X (close)
- * with a smooth 45-degree rotation
+ * Transforms between a hamburger menu (≡) and an X (close)
+ * with smooth animations
  */
 export function MenuIcon({ isOpen, className = "" }: MenuIconProps) {
   return (
@@ -21,26 +21,37 @@ export function MenuIcon({ isOpen, className = "" }: MenuIconProps) {
       className={className}
       aria-hidden="true"
     >
-      {/* Horizontal line */}
+      {/* Top line */}
+      <path
+        d="M4 7h16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        className={`transition-all duration-300 origin-center ${
+          isOpen ? "rotate-45 translate-y-[5px]" : ""
+        }`}
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+      />
+
+      {/* Middle line */}
       <path
         d="M4 12h16"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-        className={`transition-transform duration-300 origin-center ${
-          isOpen ? "rotate-45" : ""
+        className={`transition-opacity duration-300 ${
+          isOpen ? "opacity-0" : "opacity-100"
         }`}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
       />
 
-      {/* Vertical line */}
+      {/* Bottom line */}
       <path
-        d="M12 4v16"
+        d="M4 17h16"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-        className={`transition-transform duration-300 origin-center ${
-          isOpen ? "rotate-45" : ""
+        className={`transition-all duration-300 origin-center ${
+          isOpen ? "-rotate-45 -translate-y-[5px]" : ""
         }`}
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
       />
