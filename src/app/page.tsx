@@ -6,9 +6,8 @@ export default function Home() {
     <>
       {/* Hero Video Section */}
       <VideoHero
-        videoSrc="/videos/hero-reel.mp4"
-        posterSrc="/images/hero-poster.jpg"
-        fullVideoSrc="/videos/hero-full.mp4"
+        videoSrc="/assets/gallery10/Gallery10-Ouronyx.mp4"
+        posterSrc="/assets/gallery10/Gallery10-Cover.png"
       />
 
       {/* Featured Projects */}
