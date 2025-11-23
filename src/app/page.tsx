@@ -1,17 +1,21 @@
-import ImmersiveHero from '../components/ImmersiveHero'
-import GalleryLoader from '../components/GalleryLoader'
+import { VideoHero, VideoCollection, CTALinks } from "@/components/home";
+import { featuredProjects, ctaLinks } from "@/config/site";
 
 export default function Home() {
   return (
-    <main>
-      <ImmersiveHero
-        imageUrl="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=2400"
-        title="STUDIO HAUS"
-        subtitle="Visual narratives for luxury brands"
+    <>
+      {/* Hero Video Section */}
+      <VideoHero
+        videoSrc="/videos/hero-reel.mp4"
+        posterSrc="/images/hero-poster.jpg"
+        fullVideoSrc="/videos/hero-full.mp4"
       />
-      <div id="work">
-        <GalleryLoader />
-      </div>
-    </main>
-  )
+
+      {/* Featured Projects */}
+      <VideoCollection projects={featuredProjects} />
+
+      {/* Call to Action Links */}
+      <CTALinks links={ctaLinks} />
+    </>
+  );
 }
