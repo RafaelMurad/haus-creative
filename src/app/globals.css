@@ -6,6 +6,7 @@
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y proximity;
+  overscroll-behavior-y: none;
 }
 
 /* Custom smooth scroll with easing - matching Lenis feel */
@@ -27,6 +28,7 @@ body {
   color: #fff;
   /* iOS momentum scrolling */
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
 }
 
 /* Remove default margins */

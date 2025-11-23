@@ -3,7 +3,7 @@ import { projects } from "@/config/projects";
 
 export default function WorkPage() {
   return (
-    <main className="min-h-screen pt-[60px]">
+    <main className="min-h-screen">
       {/* Header section */}
       <section className="px-4 md:px-5 py-20 md:py-32">
         <h1 className="text-4xl md:text-6xl font-normal mb-4">Our Work</h1>

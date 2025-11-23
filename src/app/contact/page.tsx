@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen pt-[60px]">
+    <main className="min-h-screen">
       <section className="px-4 md:px-5 py-20 md:py-32">
         <div className="max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-normal mb-8">Get in Touch</h1>

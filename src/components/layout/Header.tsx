@@ -13,11 +13,31 @@ interface HeaderProps {
 export function Header({ variant = "light" }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
-  // Handle scroll for header background
+  // Handle scroll for header visibility and background
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      const currentScrollY = window.scrollY;
+      const scrollDifference = currentScrollY - lastScrollY;
+
+      // Update scrolled state
+      setIsScrolled(currentScrollY > 10);
+
+      // Show header when at top or scrolling up
+      if (currentScrollY < 50) {
+        setIsHeaderVisible(true);
+      } else if (scrollDifference < 0) {
+        // Scrolling up
+        setIsHeaderVisible(true);
+      } else if (scrollDifference > 0 && currentScrollY > 100) {
+        // Scrolling down and past threshold
+        setIsHeaderVisible(false);
+      }
+
+      lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -38,6 +58,7 @@ export function Header({ variant = "light" }: HeaderProps) {
 
   const isTransparent = variant === "transparent" && !isScrolled && !isMenuOpen;
   const isDark = variant === "dark";
+  const showHeader = isHeaderVisible || isMenuOpen;
 
   return (
     <>
@@ -47,13 +68,13 @@ export function Header({ variant = "light" }: HeaderProps) {
           flex items-center justify-between
           px-4 md:px-5
           transition-all duration-300 ease-out
+          ${showHeader ? "translate-y-0" : "-translate-y-full"}
           ${isTransparent
-            ? "bg-transparent text-white"
+            ? "text-white"
             : isDark
-              ? "bg-black text-white"
-              : "bg-white text-black"
+              ? "text-white"
+              : "text-black"
           }
-          ${isScrolled && !isTransparent ? "shadow-sm" : ""}
           ${isTransparent ? "mix-blend-difference" : ""}
         `}
       >
