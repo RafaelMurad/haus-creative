@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ANIMATIONS } from "@/config/animations";
 
 export default function MinimalNav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -100,7 +101,7 @@ export default function MinimalNav() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={ANIMATIONS.nav.fadeIn}
             className="fixed inset-0 z-40 bg-black flex items-center justify-center"
           >
             <nav aria-label="Main menu">
@@ -112,7 +113,7 @@ export default function MinimalNav() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                    transition={{ delay: index * ANIMATIONS.nav.staggerDelay, duration: ANIMATIONS.nav.fadeIn.duration }}
                     className="motion-reduce:transition-none"
                   >
                     {item.href.startsWith("mailto:") ? (

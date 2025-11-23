@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Project, createMediaSource } from "@/config/site";
 import { MediaRenderer } from "@/components/ui";
+import { ANIMATIONS } from "@/config/animations";
 
 interface MediaSectionProps {
   project: Project;
@@ -49,7 +50,7 @@ export function MediaSection({ project, index = 0, total = 1 }: MediaSectionProp
             initial={{ opacity: 0, x: -60 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={ANIMATIONS.gallery.fadeIn}
             className="p-8 md:p-12 lg:p-16 pb-20 md:pb-24 lg:pb-28"
           >
             <div className="space-y-4">
@@ -58,7 +59,7 @@ export function MediaSection({ project, index = 0, total = 1 }: MediaSectionProp
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[0], ease: ANIMATIONS.gallery.staggered.ease }}
                 className="text-white/50 text-xs tracking-[0.3em] uppercase font-light"
               >
                 {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -69,7 +70,7 @@ export function MediaSection({ project, index = 0, total = 1 }: MediaSectionProp
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[1], ease: ANIMATIONS.gallery.staggered.ease }}
                 className="text-white text-3xl md:text-4xl lg:text-5xl font-light leading-tight"
               >
                 {project.title}
@@ -81,7 +82,7 @@ export function MediaSection({ project, index = 0, total = 1 }: MediaSectionProp
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                  transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[2], ease: ANIMATIONS.gallery.staggered.ease }}
                   className="text-white/70 text-lg md:text-xl font-light"
                 >
                   {project.subtitle}
@@ -93,7 +94,7 @@ export function MediaSection({ project, index = 0, total = 1 }: MediaSectionProp
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[3], ease: ANIMATIONS.gallery.staggered.ease }}
                 className="pt-4"
               >
                 <span className="inline-flex items-center gap-2 text-white text-sm uppercase tracking-wide group-hover:opacity-70 transition-opacity">

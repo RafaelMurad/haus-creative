@@ -6,6 +6,7 @@ import {
   generateAnimatedGradientStyle,
   gradientPresets,
 } from "@/utils/gradientGenerator";
+import { ANIMATIONS } from "@/config/animations";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const gradientStyle = generateAnimatedGradientStyle({
     colours: gradientPresets.monochrome,
     direction: 135,
-    animationDuration: 5,
+    animationDuration: ANIMATIONS.mobileMenu.animationDuration,
   });
 
   return (

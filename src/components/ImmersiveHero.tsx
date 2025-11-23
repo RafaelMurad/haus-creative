@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { ANIMATIONS } from "@/config/animations";
 
 interface ImmersiveHeroProps {
   videoUrl?: string;
@@ -57,11 +59,13 @@ export default function ImmersiveHero({
           </div>
         ) : imageUrl ? (
           <>
-            <img
+            <Image
               src={imageUrl}
               alt={`Hero background image for ${title}`}
-              loading="eager"
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-black/20" />
           </>
@@ -79,7 +83,7 @@ export default function ImmersiveHero({
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={ANIMATIONS.hero.fadeInWithDelay}
             className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight text-white mb-6 motion-reduce:transition-none"
           >
             {title}
@@ -88,7 +92,7 @@ export default function ImmersiveHero({
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
+              transition={ANIMATIONS.hero.fadeInDelayed}
               className="text-base md:text-lg text-white/80 tracking-wide font-light motion-reduce:transition-none"
             >
               {subtitle}
@@ -105,7 +109,7 @@ export default function ImmersiveHero({
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          transition={ANIMATIONS.hero.pulse}
           className="flex flex-col items-center motion-reduce:animate-none"
         >
           <div className="w-px h-16 bg-gradient-to-b from-white/60 to-transparent" />

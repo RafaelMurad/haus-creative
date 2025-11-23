@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import MediaItem from "./MediaItem";
 import { GalleryConfig } from "../types";
+import { ANIMATIONS } from "@/config/animations";
 
 interface ImmersiveGalleryProps {
   galleries: GalleryConfig[];
@@ -13,7 +14,7 @@ export default function ImmersiveGallery({ galleries }: ImmersiveGalleryProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: _scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
@@ -103,14 +104,14 @@ function GalleryItem({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
+        transition={ANIMATIONS.nav.fadeIn}
         className="absolute inset-0 bg-black/60 flex items-center justify-center"
       >
         <div className="text-center px-8">
           <motion.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: isHovered ? 0 : 20, opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[0] }}
             className="text-xs tracking-[0.2em] uppercase text-white/60 mb-3"
           >
             {gallery.layout}
@@ -118,7 +119,7 @@ function GalleryItem({
           <motion.h3
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: isHovered ? 0 : 20, opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: ANIMATIONS.gallery.staggered.duration, delay: ANIMATIONS.gallery.staggered.delays[1] }}
             className="text-3xl md:text-4xl font-light text-white tracking-tight"
           >
             {gallery.title}
@@ -147,7 +148,7 @@ function HorizontalScroll({ galleries }: HorizontalScrollProps) {
     <div ref={containerRef} className="relative h-screen overflow-hidden">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <motion.div style={{ x }} className="flex">
-          {galleries.map((gallery, index) => {
+          {galleries.map((gallery, _index) => {
             const firstItem = gallery.items[0];
             if (!firstItem) return null;
 

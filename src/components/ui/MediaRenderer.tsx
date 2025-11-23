@@ -1,6 +1,6 @@
 "use client";
 
-import { MediaSource, MediaType } from "@/config/site";
+import { MediaSource } from "@/config/site";
 import Image from "next/image";
 
 interface MediaRendererProps {

@@ -3,7 +3,6 @@
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { MediaItem as MediaItemType } from "../types";
-import { debugImageLoad } from "../utils/debugHelper";
 
 interface MediaItemProps {
   item: MediaItemType;
@@ -28,11 +27,9 @@ interface MediaItemProps {
   };
 }
 
-import { memo } from "react";
-
-export default memo(function MediaItem({
+export default function MediaItem({
   item,
-  className = "",
+  className: _className = "",
   onLoad,
   forwardedRef,
   priority = false,
@@ -106,16 +103,24 @@ export default memo(function MediaItem({
             disableRemotePlayback={true}
           />
         );
-      case "gif":
+      case "gif": {
+        const gifSrc = item.url || item.imageUrl;
+        if (!gifSrc) return null;
+
         return (
-          <img
+          <Image
             ref={ref as (instance: HTMLImageElement | null) => void}
-            src={item.url}
+            src={gifSrc}
             alt={item.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            unoptimized
             onLoad={onLoad}
+            priority={priority}
           />
         );
+      }
       case "image":
       default:
         // Check if this is a treadmill gallery (gallery6 or gallery11) to use contain instead of cover
@@ -259,4 +264,4 @@ export default memo(function MediaItem({
       {renderMedia()}
     </div>
   );
-});
+}

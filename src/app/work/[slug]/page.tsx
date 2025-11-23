@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { projects, getProjectBySlug } from "@/config/projects";
+import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -7,9 +7,7 @@ interface ProjectPageProps {
 }
 
 export async function generateStaticParams() {
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  return getAllProjectSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {

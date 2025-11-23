@@ -1,3 +1,6 @@
+import type { Project as FeaturedProject } from "@/config/site";
+import { featuredProjects } from "@/config/site";
+
 /**
  * Project/Campaign Data Configuration
  * 
@@ -152,16 +155,88 @@ export const projects: ProjectDetail[] = [
   },
 ];
 
+function slugFromHref(href: string): string | null {
+  if (!href) return null;
+  const trimmed = href.replace(/^\/+/, "");
+  if (!trimmed.startsWith("work/")) return null;
+  return trimmed.replace(/^work\//, "");
+}
+
+function createProjectDetailFromFeatured(featured: FeaturedProject): ProjectDetail {
+  const slug = slugFromHref(featured.href);
+  if (!slug) {
+    throw new Error(`Invalid work href for featured project: ${featured.href}`);
+  }
+
+  const mediaAlt = featured.media.alt || `${featured.title} showcase`;
+  const description = `${featured.title} experience highlighting ${featured.subtitle || "our creative capabilities"}.`;
+
+  const baseDetail: ProjectDetail = {
+    id: slug,
+    slug,
+    client: featured.title,
+    title: featured.title,
+    subtitle: featured.subtitle,
+    description,
+    year: new Date().getFullYear().toString(),
+    services: ["Creative Direction", "Design", "Experience"],
+    media: [
+      {
+        type: featured.media.type === "video" ? "video" : "image",
+        desktop: featured.media.src,
+        mobile: featured.media.srcMobile,
+        alt: mediaAlt,
+      },
+    ],
+    metaTitle: `${featured.title} | HAUS Creative`,
+    metaDescription: description,
+    ogImage: featured.media.poster || featured.media.src,
+  };
+
+  if (featured.media.type === "video") {
+    baseDetail.heroVideo = {
+      desktop: featured.media.src,
+      mobile: featured.media.srcMobile,
+      poster: featured.media.poster,
+    };
+  } else {
+    baseDetail.heroImage = {
+      desktop: featured.media.src,
+      mobile: featured.media.srcMobile,
+      alt: mediaAlt,
+    };
+  }
+
+  return baseDetail;
+}
+
+const derivedFeaturedProjects: Record<string, ProjectDetail> = featuredProjects.reduce(
+  (acc, featured) => {
+    const slug = slugFromHref(featured.href);
+    if (!slug) return acc;
+    if (acc[slug] || projects.some((project) => project.slug === slug)) {
+      return acc;
+    }
+    acc[slug] = createProjectDetailFromFeatured(featured);
+    return acc;
+  },
+  {} as Record<string, ProjectDetail>
+);
+
 /**
  * Get project by slug
  */
 export function getProjectBySlug(slug: string): ProjectDetail | undefined {
-  return projects.find((project) => project.slug === slug);
+  const existing = projects.find((project) => project.slug === slug);
+  if (existing) return existing;
+  return derivedFeaturedProjects[slug];
 }
 
 /**
  * Get all project slugs for static generation
  */
 export function getAllProjectSlugs(): string[] {
-  return projects.map((project) => project.slug);
+  const baseSlugs = projects.map((project) => project.slug);
+  const derivedSlugs = Object.keys(derivedFeaturedProjects);
+  return Array.from(new Set([...baseSlugs, ...derivedSlugs]));
 }

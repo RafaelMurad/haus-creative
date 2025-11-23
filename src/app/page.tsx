@@ -1,20 +1,19 @@
-import { VideoHero, VideoCollection, CTALinks } from "@/components/home";
-import { featuredProjects, ctaLinks } from "@/config/site";
+import { IntroHero, WorkGalleryItem } from "@/components/home";
+import { featuredProjects } from "@/config/site";
 
 export default function Home() {
+  // First project is the intro hero
+  const [introProject, ...workProjects] = featuredProjects;
+
   return (
     <>
-      {/* Hero Video Section */}
-      <VideoHero
-        videoSrc="/assets/gallery10/Gallery10-Ouronyx.mp4"
-        posterSrc="/assets/gallery10/Gallery10-Cover.png"
-      />
+      {/* Introductory Hero - Full viewport, no text */}
+      <IntroHero media={introProject.media} />
 
-      {/* Featured Projects */}
-      <VideoCollection projects={featuredProjects} />
-
-      {/* Call to Action Links */}
-      <CTALinks links={ctaLinks} />
+      {/* Work Gallery Items - Each navigable to its own page */}
+      {workProjects.map((project) => (
+        <WorkGalleryItem key={project.id} project={project} />
+      ))}
     </>
   );
 }
