@@ -6,25 +6,17 @@ import { siteConfig } from "@/config/site";
 import { MobileMenu } from "./MobileMenu";
 import { Logo } from "../ui/Logo";
 
-interface HeaderProps {
-  variant?: "light" | "dark" | "transparent";
-}
-
-export function Header({ variant = "light" }: HeaderProps) {
+export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
-  // Handle scroll for header visibility and background
+  // Handle scroll for header visibility
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDifference = currentScrollY - lastScrollY;
-
-      // Update scrolled state
-      setIsScrolled(currentScrollY > 10);
 
       // Show header when at top or scrolling up
       if (currentScrollY < 50) {
@@ -56,8 +48,6 @@ export function Header({ variant = "light" }: HeaderProps) {
     };
   }, [isMenuOpen]);
 
-  const isTransparent = variant === "transparent" && !isScrolled && !isMenuOpen;
-  const isDark = variant === "dark";
   const showHeader = isHeaderVisible || isMenuOpen;
 
   return (
@@ -69,13 +59,8 @@ export function Header({ variant = "light" }: HeaderProps) {
           px-4 md:px-5
           transition-all duration-300 ease-out
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
-          ${isTransparent
-            ? "text-white"
-            : isDark
-              ? "text-white"
-              : "text-black"
-          }
-          ${isTransparent ? "mix-blend-difference" : ""}
+          text-white
+          mix-blend-difference
         `}
       >
         {/* Logo */}

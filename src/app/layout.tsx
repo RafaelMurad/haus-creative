@@ -25,7 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           >
             Skip to main content
           </a>
-          <Header variant="transparent" />
+          <Header />
           <main id="main-content" tabIndex={-1} className="min-h-screen">
             {children}
           </main>
