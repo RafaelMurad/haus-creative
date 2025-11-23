@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Native Scroll Snap - Clean and performant */
+/* Enhanced Smooth Scrolling - Lenis-like experience with native CSS */
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
+}
+
+/* Custom smooth scroll with easing - matching Lenis feel */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  * {
+    scroll-behavior: smooth;
+    scroll-timeline: --page-scroll block;
+  }
 }
 
 body {
@@ -13,6 +25,8 @@ body {
   letter-spacing: -0.01em;
   background: #000;
   color: #fff;
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Remove default margins */

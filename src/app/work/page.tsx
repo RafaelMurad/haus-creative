@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { featuredProjects } from "@/config/site";
+import { projects } from "@/config/projects";
 
 export default function WorkPage() {
   return (
@@ -16,31 +16,31 @@ export default function WorkPage() {
       {/* Projects grid */}
       <section className="px-4 md:px-5 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-          {featuredProjects.map((project) => (
+          {projects.map((project) => (
             <Link
               key={project.id}
-              href={project.href}
+              href={`/work/${project.slug}`}
               className="group relative aspect-[4/3] bg-gray-100 overflow-hidden"
             >
               {/* Project thumbnail */}
-              {project.media.type === "video" ? (
+              {project.heroVideo ? (
                 <video
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  src={project.media.src}
-                  poster={project.media.poster}
+                  src={project.heroVideo.desktop}
+                  poster={project.heroVideo.poster}
                   muted
                   playsInline
                   loop
                   autoPlay
                 />
-              ) : (
+              ) : project.heroImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={project.media.src}
-                  alt={project.media.alt || project.title}
+                  src={project.heroImage.desktop}
+                  alt={project.heroImage.alt}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              )}
+              ) : null}
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
