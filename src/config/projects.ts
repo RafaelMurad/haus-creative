@@ -44,6 +44,9 @@ export interface ProjectDetail {
     mobile?: string;
     alt: string;
   };
+
+  // Client logo overlay on hero
+  clientLogo?: string;
   
   // Metadata
   year?: string;
