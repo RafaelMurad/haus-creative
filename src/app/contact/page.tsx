@@ -1,82 +1,65 @@
-import { siteConfig } from "@/config/site";
-
 export default function ContactPage() {
   return (
-    <main className="min-h-screen">
-      <section className="px-4 md:px-5 py-20 md:py-32">
-        <div className="max-w-4xl">
-          <h1 className="text-4xl md:text-6xl font-normal mb-8">Get in Touch</h1>
-
-          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl">
-            We&apos;re always interested in hearing about new projects and opportunities.
-            Drop us a line and let&apos;s create something amazing together.
-          </p>
-
-          {/* Contact info */}
-          <div className="space-y-8">
-            {/* Email */}
-            <div>
-              <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">
-                Email
-              </h2>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-2xl md:text-3xl hover:opacity-50 transition-opacity duration-250"
-              >
-                {siteConfig.email}
-              </a>
+    <main className="min-h-screen bg-white text-black pt-20 md:pt-28">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-12 lg:px-20">
+        {/* Contact section */}
+        <div className="pt-16 md:pt-20">
+          <div className="flex flex-col md:flex-row md:gap-20">
+            <div className="w-full md:w-60 flex-shrink-0 mb-4 md:mb-0">
+              <h1 className="text-sm font-semibold uppercase tracking-wide text-black">
+                Contact
+              </h1>
             </div>
-
-            {/* Social */}
-            <div>
-              <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-4">
-                Follow Us
-              </h2>
-              <div className="flex gap-6">
-                {siteConfig.socialLinks.map((social) => (
-                  <a
-                    key={social.href}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lg hover:opacity-50 transition-opacity duration-250"
-                  >
-                    {social.title}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Careers section */}
-            <div id="careers" className="pt-12 border-t border-gray-200">
-              <h2 className="text-2xl md:text-3xl font-normal mb-4">Careers</h2>
-              <p className="text-gray-600 mb-4">
-                We&apos;re always looking for talented individuals to join our team.
-                If you&apos;re passionate about design and technology, we&apos;d love to hear from you.
-              </p>
-              <a
-                href={`mailto:${siteConfig.email}?subject=Career Inquiry`}
-                className="inline-flex items-center gap-2 text-black hover:opacity-50 transition-opacity duration-250"
-              >
-                Send your portfolio
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 8H13M13 8L8 3M13 8L8 13"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  />
-                </svg>
-              </a>
+            <div className="flex-1">
+              <p className="text-[15px]">contact@studiohauscreative.com</p>
             </div>
           </div>
         </div>
-      </section>
+
+        {/* Divider line */}
+        <div className="w-full h-px bg-gray-300 my-16 md:my-20"></div>
+
+        {/* New Business section */}
+        <div className="mb-16 md:mb-20">
+          <div className="flex flex-col md:flex-row md:gap-20">
+            <div className="w-full md:w-60 flex-shrink-0 mb-4 md:mb-0">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-black">
+                New Business
+              </h2>
+            </div>
+            <div className="flex-1">
+              <p className="text-lg md:text-[23px] leading-relaxed">
+                We operate globally with hubs in London and São Paulo, building and scaling up bespoke teams to provide the best talent for each client. From strategy, creative direction, design through Production and Post Production. Get in touch to discuss how we can collaborate together.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Divider line */}
+        <div className="w-full h-px bg-gray-300 mb-16 md:mb-20"></div>
+
+        {/* For Talent section */}
+        <div className="mb-20">
+          <div className="flex flex-col md:flex-row md:gap-20">
+            <div className="w-full md:w-60 flex-shrink-0 mb-4 md:mb-0">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-black">
+                For Talent
+              </h2>
+            </div>
+            <div className="flex-1">
+              <p className="text-lg md:text-[23px] leading-relaxed">
+                We are always looking to connect with creatives globally. We operate hybrid in remote between London and São Paulo. Reach out via contact@studiohauscreative.com at any time.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom social links */}
+        <div className="flex gap-6 pb-8 text-[15px]">
+          <span>Instagram</span>
+          <span>Linkedin</span>
+        </div>
+      </div>
     </main>
   );
 }

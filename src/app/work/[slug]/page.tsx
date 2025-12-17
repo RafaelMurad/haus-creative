@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
 import type { Metadata } from "next";
 
@@ -12,9 +13,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const project = getProjectBySlug(params.slug);
-  
+
   if (!project) return {};
-  
+
   return {
     title: project.metaTitle || `${project.title} | HAUS Creative`,
     description: project.metaDescription || project.description,
@@ -36,16 +37,13 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default function ProjectPage({ params }: ProjectPageProps) {
   const project = getProjectBySlug(params.slug);
-  
+
   if (!project) {
     notFound();
   }
-  
+
   return (
     <main className="min-h-screen bg-white text-black">
-      {/* Top gradient overlay for header visibility */}
-      <div className="fixed top-0 left-0 w-full h-[120px] bg-gradient-to-b from-black/30 to-transparent z-10 pointer-events-none" />
-
       {/* Hero Section - Full viewport with video/image */}
       <section className="relative w-full h-screen bg-black overflow-hidden">
         {project.heroVideo ? (
@@ -57,10 +55,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             muted
             poster={project.heroVideo.poster}
           >
-            <source 
-              src={project.heroVideo.mobile || project.heroVideo.desktop} 
-              type="video/mp4" 
-              media="(max-width: 768px)" 
+            <source
+              src={project.heroVideo.mobile || project.heroVideo.desktop}
+              type="video/mp4"
+              media="(max-width: 768px)"
             />
             <source src={project.heroVideo.desktop} type="video/mp4" />
           </video>
@@ -76,124 +74,149 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             />
           </picture>
         ) : null}
+
+        {/* Client logo overlay - centered */}
+        {project.clientLogo && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src={project.clientLogo}
+              alt={`${project.title} logo`}
+              className="max-w-[300px] md:max-w-[549px] h-auto"
+            />
+          </div>
+        )}
       </section>
 
-      {/* Project Intro Section */}
-      <section className="pt-8 md:pt-12 bg-white">
-        <div className="px-4 md:px-5 lg:px-20">
-          {/* Main intro content */}
-          <div className="flex flex-col md:flex-row gap-8 md:gap-20">
+      {/* Project Content Section */}
+      <section className="bg-white">
+        {/* Intro Section */}
+        <div className="px-5 md:px-[34px] pt-[51px]">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-0">
             {/* Label column */}
-            <div className="w-full md:w-60 flex-shrink-0">
-              <p className="text-[15px] leading-[21px] uppercase tracking-wide text-gray-400">
+            <div className="md:w-[264px] flex-shrink-0">
+              <p className="text-[15px] leading-[18px] uppercase tracking-wide text-gray-500">
                 Intro
               </p>
             </div>
-            
+
             {/* Content column */}
             <div className="flex-1">
-              <h1 className="text-[24px] leading-[30px] md:text-[33px] md:leading-[41px] font-normal mb-4">
+              <h1 className="text-[28px] leading-[34px] md:text-[34px] md:leading-[34px] font-normal mb-4">
                 {project.title}
               </h1>
-              <p className="text-[24px] leading-[30px] md:text-[33px] md:leading-[41px] font-normal text-gray-700">
+              <p className="text-[24px] leading-[34px] md:text-[34px] md:leading-[34px] font-normal text-black">
                 {project.description}
               </p>
             </div>
           </div>
-          
-          {/* Metadata section */}
-          {(project.year || project.services || project.credits) && (
-            <div className="flex flex-col md:flex-row gap-8 md:gap-20 mt-16 md:mt-20">
-              <div className="w-full md:w-60" />
+        </div>
+
+        {/* Media Gallery - 2-column grid on desktop */}
+        <div className="mt-[229px]">
+          {/* Group images in pairs for desktop 2-column layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {project.media.map((item, index) => (
+              <div key={index} className="relative w-full overflow-hidden">
+                {item.type === 'video' ? (
+                  <video
+                    className="w-full h-auto object-cover"
+                    playsInline
+                    autoPlay
+                    loop
+                    muted
+                  >
+                    <source
+                      src={item.mobile || item.desktop}
+                      type="video/mp4"
+                      media="(max-width: 768px)"
+                    />
+                    <source src={item.desktop} type="video/mp4" />
+                  </video>
+                ) : (
+                  <picture>
+                    {item.mobile && (
+                      <source srcSet={item.mobile} media="(max-width: 768px)" />
+                    )}
+                    <img
+                      src={item.desktop}
+                      alt={item.alt}
+                      className="w-full h-auto object-cover"
+                      loading={index < 2 ? "eager" : "lazy"}
+                    />
+                  </picture>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Credits Section */}
+        {project.credits && project.credits.length > 0 && (
+          <div className="px-5 md:px-[34px] mt-20 md:mt-[81px]">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-0">
+              {/* Label column - aligned to second column on desktop */}
+              <div className="md:w-1/2 flex-shrink-0">
+                <p className="text-[15px] leading-[18px] uppercase tracking-wide text-gray-500 md:pl-[686px]">
+                  Credits
+                </p>
+              </div>
+
+              {/* Content column */}
               <div className="flex-1">
-                <div className="flex flex-col md:flex-row gap-10 md:gap-20">
-                  {project.year && (
-                    <div className="mb-10 md:mb-0">
-                      <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-                        Year
-                      </h3>
-                      <p className="text-[15px] leading-[21px]">{project.year}</p>
-                    </div>
-                  )}
-                  
-                  {project.services && project.services.length > 0 && (
-                    <div className="mb-10 md:mb-0">
-                      <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-                        Services
-                      </h3>
-                      <ul className="space-y-1">
-                        {project.services.map((service) => (
-                          <li key={service} className="text-[15px] leading-[21px]">
-                            {service}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {project.credits && project.credits.length > 0 && (
-                    <div className="mb-10 md:mb-0">
-                      <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-                        Credits
-                      </h3>
-                      <ul className="space-y-1">
-                        {project.credits.map((credit, index) => (
-                          <li key={index} className="text-[15px] leading-[21px]">
-                            <span className="text-gray-600">{credit.role}</span>
-                            <br />
-                            {credit.name}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <div className="text-[15px] leading-[21px] space-y-1">
+                  {project.credits.map((credit, index) => (
+                    <p key={index}>
+                      <span className="text-black">{credit.role}</span>
+                      <span className="text-black"> : </span>
+                      <span className="text-black">{credit.name}</span>
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* Divider */}
+        <div className="px-5 md:px-[34px] mt-20 md:mt-[269px]">
+          <div className="border-t border-gray-200" />
+        </div>
+
+        {/* Footer Section */}
+        <div className="px-5 md:px-[34px] py-8 md:py-[41px]">
+          <div className="flex flex-col md:flex-row md:justify-between gap-6">
+            {/* Contact Email */}
+            <div>
+              <Link
+                href="mailto:contact@studiohauscreative.com"
+                className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
+              >
+                contact@studiohauscreative.com
+              </Link>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex gap-6">
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
+              >
+                Instagram
+              </Link>
+              <Link
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
+              >
+                Linkedin
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* Media Gallery - Full bleed images/videos */}
-      <div className="mt-0 space-y-0">
-        {project.media.map((item, index) => (
-          <section key={index} className="relative w-full bg-white">
-            {item.type === 'video' ? (
-              <video
-                className="w-full h-auto"
-                playsInline
-                autoPlay
-                loop
-                muted
-              >
-                <source 
-                  src={item.mobile || item.desktop} 
-                  type="video/mp4" 
-                  media="(max-width: 768px)" 
-                />
-                <source src={item.desktop} type="video/mp4" />
-              </video>
-            ) : (
-              <picture>
-                {item.mobile && (
-                  <source srcSet={item.mobile} media="(max-width: 768px)" />
-                )}
-                <img
-                  src={item.desktop}
-                  alt={item.alt}
-                  className="w-full h-auto"
-                  loading={index < 2 ? "eager" : "lazy"}
-                />
-              </picture>
-            )}
-            {item.caption && (
-              <p className="px-4 md:px-5 lg:px-20 py-4 text-sm text-gray-600">
-                {item.caption}
-              </p>
-            )}
-          </section>
-        ))}
-      </div>
     </main>
   );
 }

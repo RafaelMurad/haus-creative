@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
@@ -10,6 +11,7 @@ import { Logo, MenuIcon } from "../ui";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
   const { isVisible } = useScrollDirection({
     hideThreshold: 100,
     topThreshold: 50,
@@ -18,6 +20,9 @@ export function Header() {
   useBodyScrollLock(isMenuOpen);
 
   const showHeader = isVisible || isMenuOpen;
+
+  // Use dark text on pages with white backgrounds
+  const isDarkText = pathname !== "/";
 
   return (
     <>
@@ -28,8 +33,7 @@ export function Header() {
           px-5 py-6 md:px-12
           transition-all duration-300 ease-out
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
-          text-white
-          mix-blend-difference
+          ${isDarkText ? "text-black" : "text-white"}
         `}
       >
         {/* Logo */}
@@ -38,7 +42,7 @@ export function Header() {
           className="relative z-10 transition-opacity duration-250 hover:opacity-50"
           onClick={() => setIsMenuOpen(false)}
         >
-          <Logo className="h-10 w-auto" />
+          <Logo className="h-10 w-auto md:h-12" />
         </Link>
 
         {/* Mobile Menu Button */}

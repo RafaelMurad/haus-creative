@@ -117,9 +117,7 @@ export const siteConfig: SiteConfig = {
     { title: "Contact", href: "/contact" },
   ],
 
-  footerMenu: [
-    { title: "Careers", href: "/contact#careers" },
-  ],
+  footerMenu: [],
 
   socialLinks: [
     { title: "Instagram", href: "https://www.instagram.com/haus.creative" },
