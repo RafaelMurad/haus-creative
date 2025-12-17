@@ -6,11 +6,11 @@ export function Logo({ className = "" }: LogoProps) {
   return (
     <svg
       width="175"
-      height="37"
-      viewBox="0 0 175 37"
+      height="35"
+      viewBox="0 0 175 35"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`text-white ${className}`}
       aria-label="STUDIO HAUS CREATIVE DIRECTION DESIGN"
     >
       <path

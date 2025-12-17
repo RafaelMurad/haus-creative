@@ -92,30 +92,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             
             {/* Content column */}
             <div className="flex-1">
-              <h1 className="text-[24px] leading-[30px] md:text-[33px] md:leading-[41px] font-normal mb-4">
+              <h1 className="text-[28px] leading-[34px] md:text-[40px] md:leading-[48px] font-normal mb-4">
                 {project.title}
               </h1>
-              <p className="text-[24px] leading-[30px] md:text-[33px] md:leading-[41px] font-normal text-gray-700">
+              <p className="text-[20px] leading-[26px] md:text-[28px] md:leading-[36px] font-normal text-gray-700">
                 {project.description}
               </p>
             </div>
           </div>
           
           {/* Metadata section */}
-          {(project.year || project.services || project.credits) && (
+          {(project.services || project.credits) && (
             <div className="flex flex-col md:flex-row gap-8 md:gap-20 mt-16 md:mt-20">
               <div className="w-full md:w-60" />
               <div className="flex-1">
                 <div className="flex flex-col md:flex-row gap-10 md:gap-20">
-                  {project.year && (
-                    <div className="mb-10 md:mb-0">
-                      <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-                        Year
-                      </h3>
-                      <p className="text-[15px] leading-[21px]">{project.year}</p>
-                    </div>
-                  )}
-                  
                   {project.services && project.services.length > 0 && (
                     <div className="mb-10 md:mb-0">
                       <h3 className="text-xs uppercase tracking-wide text-gray-400 mb-2">

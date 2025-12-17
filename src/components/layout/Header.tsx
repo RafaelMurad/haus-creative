@@ -38,7 +38,7 @@ export function Header() {
           className="relative z-10 transition-opacity duration-250 hover:opacity-50"
           onClick={() => setIsMenuOpen(false)}
         >
-          <Logo className="h-10 w-auto" />
+          <Logo className="h-10 w-auto md:h-12" />
         </Link>
 
         {/* Mobile Menu Button */}
