@@ -29,7 +29,6 @@ export function Header() {
           transition-all duration-300 ease-out
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
           text-white
-          mix-blend-difference
         `}
       >
         {/* Logo */}
