@@ -30,13 +30,12 @@ export function Header() {
         className={`
           fixed top-0 left-0 right-0 z-50
           flex items-center justify-between
-          px-5 py-6 md:px-12
+          px-5 py-7 md:pl-[34px] md:pr-[44px]
           transition-all duration-300 ease-out
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
           ${isDarkText ? "text-black" : "text-white"}
         `}
       >
-        {/* Logo */}
         <Link
           href="/"
           className="relative z-10 transition-opacity duration-250 hover:opacity-50"

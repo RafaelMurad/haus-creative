@@ -1,60 +1,73 @@
 export default function About() {
   return (
-    <main className="min-h-screen bg-white text-black pt-20 md:pt-28">
-      <div className="max-w-[1440px] mx-auto px-5 md:px-12 lg:px-20">
-        {/* Main content grid */}
-        <div className="grid md:grid-cols-2 gap-16 md:gap-20 pt-16 md:pt-20">
-          {/* Left column - Content */}
-          <div className="space-y-16 md:space-y-20">
-            {/* About section */}
-            <div>
-              <h1 className="text-sm font-semibold uppercase tracking-wide text-black mb-8">
-                About Studio Haus
-              </h1>
-              <div className="space-y-8 text-lg md:text-[19px] leading-relaxed">
-                <p>
-                  Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
-                </p>
-                <p>
-                  Working at the intersection of advertising, branding, and experiences, my projects are marked by a refined and precise style with an editorially driven approach, where every detail is considered.
-                </p>
-                <p>
-                  My client roster includes industry leaders such as Rolex, Swarovski, Mercedes-Benz, Bucherer, Hublot, Breitling, Victoria Beckham, Harrods, John Lewis to name a few.
-                </p>
-              </div>
-            </div>
-
-            {/* Contact section */}
-            <div>
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-black mb-4">
-                Contact
-              </h2>
-              <div className="space-y-2 text-[15px]">
-                <p>contact@studiohauscreative.com</p>
-                <div className="flex gap-4">
-                  <span>Instagram</span>
-                  <span>Linkedin</span>
-                </div>
-              </div>
+    <main className="min-h-screen bg-white text-black">
+      {/* Main content - starts at 230px from top per Figma */}
+      <div className="pt-[230px] flex flex-col md:flex-row">
+        {/* Left column - Content */}
+        <div className="px-5 md:pl-[34px] md:pr-8 md:w-1/2 flex flex-col">
+          {/* About section */}
+          <div className="flex-1">
+            <h1 className="text-[14px] font-bold uppercase tracking-wide text-black mb-8">
+              About Studio Haus
+            </h1>
+            <div className="md:pl-[4px] space-y-8 text-[19px] leading-[32px] max-w-[663px]">
+              <p>
+                Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
+              </p>
+              <p>
+                Working at the intersection of advertising, branding, and experiences, my projects are marked by a refined and precise style with an editorially driven approach, where every detail is considered.
+              </p>
+              <p>
+                My client roster includes industry leaders such as Rolex, Swarovski, Mercedes-Benz, Bucherer, Hublot, Breitling, Victoria Beckham, Harrods, John Lewis to name a few.
+              </p>
             </div>
           </div>
 
-          {/* Right column - Image */}
-          <div className="relative">
-            <div className="aspect-[4/3] bg-gray-200 rounded-sm overflow-hidden">
-              <img
-                src="https://www.figma.com/api/mcp/asset/f82e44f2-c742-4ab6-b971-498c8f0ab0ed"
-                alt="Studio Haus portrait"
-                className="w-full h-full object-cover"
-              />
+          {/* Contact section */}
+          <div className="mt-16 md:mt-20 pb-8 md:pl-[9px]">
+            <h2 className="text-[14px] font-bold uppercase tracking-wide text-black mb-4">
+              Contact
+            </h2>
+            <div className="space-y-2 text-[15px]">
+              <p>
+                <a
+                  href="mailto:contact@studiohauscreative.com"
+                  className="hover:opacity-50 transition-opacity"
+                >
+                  contact@studiohauscreative.com
+                </a>
+              </p>
+              <div className="flex gap-[57px]">
+                <a
+                  href="https://instagram.com/studiohauscreative"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-50 transition-opacity"
+                >
+                  Instagram
+                </a>
+                <a
+                  href="https://linkedin.com/company/studiohauscreative"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-50 transition-opacity"
+                >
+                  Linkedin
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom social links */}
-        <div className="flex justify-end gap-6 pt-16 md:pt-20 pb-8 text-[15px]">
-          <span>Instagram</span>
-          <span>Linkedin</span>
+        {/* Right column - Image (extends to right edge, starts at ~722px on 1440px screen) */}
+        <div className="md:w-1/2">
+          <div className="h-[400px] md:h-[528px] overflow-hidden">
+            <img
+              src="https://www.figma.com/api/mcp/asset/f82e44f2-c742-4ab6-b971-498c8f0ab0ed"
+              alt="Studio Haus portrait"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </main>
