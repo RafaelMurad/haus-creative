@@ -47,6 +47,7 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
             opacity: animation.opacity,
             x: animation.x,
             top: animation.y,
+            willChange: 'transform, opacity',
           }}
         >
           <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">

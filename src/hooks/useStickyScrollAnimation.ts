@@ -105,18 +105,19 @@ export function useStickyScrollAnimation(
 
   // Y: Three-state sticky logic
   // Only recalculates at key scroll points, not every pixel
+  // Values are rounded to prevent subpixel jitter on mobile
   const y = useTransform(scrollYProgress, () => {
     if (!ref.current) return `${topPadding}px`;
 
     const rect = ref.current.getBoundingClientRect();
-    const sectionHeight = rect.height;
-    const viewportMiddle = viewportHeight / 2;
+    const sectionHeight = Math.round(rect.height);
+    const viewportMiddle = Math.round(viewportHeight / 2);
 
     // Position of section bottom in viewport
-    const sectionBottom = rect.top + sectionHeight;
+    const sectionBottom = Math.round(rect.top) + sectionHeight;
 
     // Where would text be if stuck to top of section?
-    const textAtTop = rect.top + topPadding;
+    const textAtTop = Math.round(rect.top) + topPadding;
 
     // Calculate if bottom of section would push text above middle
     const bottomPushPosition = sectionBottom - textHeight - bottomPadding;
@@ -128,10 +129,10 @@ export function useStickyScrollAnimation(
     } else if (bottomPushPosition >= viewportMiddle) {
       // State 2: Text reached middle AND bottom hasn't caught up
       // LOCK to viewport middle (fixed position relative to section)
-      return `${viewportMiddle - rect.top}px`;
+      return `${Math.round(viewportMiddle - rect.top)}px`;
     } else {
       // State 3: Bottom of section reached the text - unstick and pull up with it
-      return `${sectionHeight - textHeight - bottomPadding}px`;
+      return `${Math.round(sectionHeight - textHeight - bottomPadding)}px`;
     }
   });
 
