@@ -44,6 +44,29 @@ body {
   scroll-snap-stop: always;
 }
 
+/* ===========================================
+   GPU ACCELERATION FOR SCROLL ANIMATIONS
+   Prevents jitter on mobile by promoting to compositor layer
+   =========================================== */
+
+.gpu-accelerated {
+  /* Promote to compositor layer */
+  transform: translateZ(0);
+  /* Hint to browser for optimization */
+  will-change: transform, opacity;
+  /* Prevent subpixel rendering artifacts */
+  backface-visibility: hidden;
+  /* Smooth font rendering during transforms */
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+/* Disable scroll-snap on mobile to prevent conflicts with scroll animations */
+@media (max-width: 767px) {
+  html {
+    scroll-snap-type: none;
+  }
+}
+
 /* Professional CSS animations - replacing GSAP */
 @keyframes fadeIn {
   from {

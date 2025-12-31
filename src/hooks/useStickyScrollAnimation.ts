@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { useScroll, useTransform, MotionValue } from "framer-motion";
 import { ANIMATIONS } from "@/config/animations";
 
@@ -22,8 +22,8 @@ interface StickyScrollMotion {
   opacity: MotionValue<number>;
   /** Horizontal translation motion value */
   x: MotionValue<number>;
-  /** Vertical position motion value */
-  y: MotionValue<string>;
+  /** Vertical translation motion value (GPU-accelerated transform) */
+  y: MotionValue<number>;
   /** Transition config for slide-in */
   transition: {
     duration: number;
@@ -42,8 +42,10 @@ interface StickyScrollMotion {
  * **Performance characteristics:**
  * - Zero React re-renders (uses Framer Motion values)
  * - Single shared scroll listener (not per-instance)
- * - GPU-accelerated transforms (opacity, x, top)
+ * - GPU-accelerated transforms (opacity, x, y via translateY)
  * - Viewport height cached to avoid layout thrashing
+ * - Throttled getBoundingClientRect calls via progress threshold
+ * - Returns numeric values for smooth Framer Motion interpolation
  * 
  * @param config - Animation configuration options
  * @param config.slideDuration - Slide-in animation duration in ms (default: 0.6s)
@@ -62,7 +64,7 @@ interface StickyScrollMotion {
  * });
  * 
  * <section ref={ref}>
- *   <motion.h2 style={{ opacity, x, top: y }} transition={transition}>
+ *   <motion.h2 style={{ opacity, x, y }} transition={transition}>
  *     Gallery Title
  *   </motion.h2>
  * </section>
@@ -80,6 +82,12 @@ export function useStickyScrollAnimation(
 
   // Cache viewport height to avoid recalculation in transform
   const [viewportHeight, setViewportHeight] = useState(0);
+  
+  // Cache for throttling getBoundingClientRect calls
+  const lastProgress = useRef(0);
+  const cachedY = useRef(topPadding);
+  // Threshold for recalculating - lower values = more updates, higher = smoother but less accurate
+  const PROGRESS_THRESHOLD = 0.002;
 
   useEffect(() => {
     const updateHeight = () => setViewportHeight(window.innerHeight);
@@ -103,11 +111,15 @@ export function useStickyScrollAnimation(
   // X: slide in from left early in scroll
   const x = useTransform(scrollYProgress, [0, 0.15], [-100, 0]);
 
-  // Y: Three-state sticky logic
-  // Only recalculates at key scroll points, not every pixel
-  // Values are rounded to prevent subpixel jitter on mobile
-  const y = useTransform(scrollYProgress, () => {
-    if (!ref.current) return `${topPadding}px`;
+  // Memoized Y calculation to reduce function recreation
+  const calculateY = useCallback((progress: number): number => {
+    if (!ref.current || viewportHeight === 0) return topPadding;
+
+    // Throttle: only recalculate if progress changed significantly
+    if (Math.abs(progress - lastProgress.current) < PROGRESS_THRESHOLD) {
+      return cachedY.current;
+    }
+    lastProgress.current = progress;
 
     const rect = ref.current.getBoundingClientRect();
     const sectionHeight = Math.round(rect.height);
@@ -122,19 +134,28 @@ export function useStickyScrollAnimation(
     // Calculate if bottom of section would push text above middle
     const bottomPushPosition = sectionBottom - textHeight - bottomPadding;
 
+    let newY: number;
+
     // Three-state sticky logic:
     if (textAtTop > viewportMiddle) {
       // State 1: Text hasn't reached viewport middle yet - stick to top of section
-      return `${topPadding}px`;
+      newY = topPadding;
     } else if (bottomPushPosition >= viewportMiddle) {
       // State 2: Text reached middle AND bottom hasn't caught up
       // LOCK to viewport middle (fixed position relative to section)
-      return `${Math.round(viewportMiddle - rect.top)}px`;
+      newY = Math.round(viewportMiddle - rect.top);
     } else {
       // State 3: Bottom of section reached the text - unstick and pull up with it
-      return `${Math.round(sectionHeight - textHeight - bottomPadding)}px`;
+      newY = Math.round(sectionHeight - textHeight - bottomPadding);
     }
-  });
+
+    cachedY.current = newY;
+    return newY;
+  }, [viewportHeight, textHeight, topPadding, bottomPadding]);
+
+  // Y: Three-state sticky logic with GPU-accelerated transform
+  // Returns numeric value for Framer Motion's translateY
+  const y = useTransform(scrollYProgress, calculateY);
 
   // Transition only for initial slide-in
   const transition = {

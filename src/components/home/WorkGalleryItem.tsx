@@ -12,16 +12,9 @@ interface WorkGalleryItemProps {
 
 /**
  * Work gallery item with scroll-animated title
- * 
- * Uses Framer Motion for performance:
- * - GPU-accelerated transforms (no re-renders)
- * - Single shared scroll listener
- * - Motion values update directly on GPU
- * 
- * Animation behavior:
- * 1. Slide in from left when gallery enters viewport
- * 2. Stick to viewport middle when reached
- * 3. Pull up when gallery bottom catches text
+ *
+ * Uses GPU-accelerated Framer Motion animation for all screen sizes.
+ * Three-state sticky animation: slide-in → stick to viewport middle → pull up with section
  */
 export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
   const animation = useStickyScrollAnimation();
@@ -30,7 +23,6 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
     <section
       ref={animation.ref}
       className="relative h-screen w-full overflow-hidden"
-      style={{ position: 'relative' }}
     >
       <Link href={project.href} className="relative block h-full w-full group">
         {/* Media Background */}
@@ -39,15 +31,13 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
           className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
         />
 
-        {/* Campaign Title - GPU-accelerated with Framer Motion */}
+        {/* GPU-accelerated animated title - unified for mobile and desktop */}
         <motion.div
-          layoutRoot
-          className="pointer-events-none absolute left-8 z-10 md:left-16"
+          className="pointer-events-none absolute left-8 z-10 gpu-accelerated md:left-16"
           style={{
             opacity: animation.opacity,
             x: animation.x,
-            top: animation.y,
-            willChange: 'transform, opacity',
+            y: animation.y,
           }}
         >
           <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">
