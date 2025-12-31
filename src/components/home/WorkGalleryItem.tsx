@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { MediaRenderer } from "@/components/ui";
-import { useStickyScrollAnimation } from "@/hooks/useStickyScrollAnimation";
+import { useSlideInOnView } from "@/hooks/useSlideInOnView";
 import type { Project } from "@/config/site";
 
 interface WorkGalleryItemProps {
@@ -13,38 +12,40 @@ interface WorkGalleryItemProps {
 /**
  * Work gallery item with scroll-animated title
  *
- * Uses GPU-accelerated Framer Motion animation for all screen sizes.
- * Three-state sticky animation: slide-in → stick to viewport middle → pull up with section
+ * Uses pure CSS sticky positioning for smooth, jitter-free scrolling on mobile.
+ * - Text enters with slide-in animation when section reaches viewport
+ * - Text stays sticky at viewport middle while scrolling through section
+ * - Section pulls text out when bottom reaches the text position
+ * 
+ * No JavaScript runs during scroll - all handled by browser compositor.
  */
 export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
-  const animation = useStickyScrollAnimation();
+  const { ref, isVisible } = useSlideInOnView({ threshold: 0.3 });
 
   return (
-    <section
-      ref={animation.ref}
-      className="relative h-screen w-full overflow-hidden"
-    >
-      <Link href={project.href} className="relative block h-full w-full group">
-        {/* Media Background */}
+    <section className="relative h-screen w-full overflow-clip">
+      {/* Media Background - absolute positioned layer */}
+      <Link 
+        href={project.href} 
+        className="absolute inset-0 block group"
+        aria-label={`View ${project.title} project`}
+      >
         <MediaRenderer
           media={project.media}
-          className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
+          className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
         />
-
-        {/* GPU-accelerated animated title - unified for mobile and desktop */}
-        <motion.div
-          className="pointer-events-none absolute left-8 z-10 gpu-accelerated md:left-16"
-          style={{
-            opacity: animation.opacity,
-            x: animation.x,
-            y: animation.y,
-          }}
-        >
-          <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">
-            {project.title}
-          </h2>
-        </motion.div>
       </Link>
+
+      {/* Title - CSS sticky positioning, no JS during scroll */}
+      <div
+        ref={ref}
+        data-visible={isVisible}
+        className="sticky-title pointer-events-none relative z-10 px-8 md:px-16"
+      >
+        <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">
+          {project.title}
+        </h2>
+      </div>
     </section>
   );
 }
