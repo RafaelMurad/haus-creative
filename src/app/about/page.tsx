@@ -63,7 +63,7 @@ export default function About() {
         <div className="md:w-1/2">
           <div className="h-[400px] md:h-[528px] overflow-hidden">
             <img
-              src="https://www.figma.com/api/mcp/asset/f82e44f2-c742-4ab6-b971-498c8f0ab0ed"
+              src="/assets/about/about.jpg"
               alt="Studio Haus portrait"
               className="w-full h-full object-cover"
             />
