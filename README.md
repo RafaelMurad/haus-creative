@@ -71,7 +71,7 @@ src/
 │   ├── projects.ts         # Project data + fallback system
 │   └── animations.ts       # Animation timing constants
 ├── hooks/
-│   ├── useStickyScrollAnimation.ts  # GPU-accelerated scroll
+│   ├── useSlideInOnView.ts          # Intersection Observer for slide-in animations
 │   ├── useScrollDirection.ts        # Header auto-hide logic
 │   ├── useBodyScrollLock.ts         # Menu scroll prevention
 │   └── useIntersectionObserver.ts   # Viewport detection

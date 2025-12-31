@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { MediaRenderer } from "@/components/ui";
-import { useStickyScrollAnimation } from "@/hooks/useStickyScrollAnimation";
+import { useSlideInOnView } from "@/hooks/useSlideInOnView";
 import type { Project } from "@/config/site";
 
 interface WorkGalleryItemProps {
@@ -12,49 +11,41 @@ interface WorkGalleryItemProps {
 
 /**
  * Work gallery item with scroll-animated title
+ *
+ * Uses pure CSS sticky positioning for smooth, jitter-free scrolling on mobile.
+ * - Text enters with slide-in animation when section reaches viewport
+ * - Text stays sticky at viewport middle while scrolling through section
+ * - Section pulls text out when bottom reaches the text position
  * 
- * Uses Framer Motion for performance:
- * - GPU-accelerated transforms (no re-renders)
- * - Single shared scroll listener
- * - Motion values update directly on GPU
- * 
- * Animation behavior:
- * 1. Slide in from left when gallery enters viewport
- * 2. Stick to viewport middle when reached
- * 3. Pull up when gallery bottom catches text
+ * No JavaScript runs during scroll - all handled by browser compositor.
  */
 export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
-  const animation = useStickyScrollAnimation();
+  const { ref, isVisible } = useSlideInOnView({ threshold: 0.3 });
 
   return (
-    <section
-      ref={animation.ref}
-      className="relative h-screen w-full overflow-hidden"
-      style={{ position: 'relative' }}
-    >
-      <Link href={project.href} className="relative block h-full w-full group">
-        {/* Media Background */}
+    <section className="relative h-screen w-full overflow-clip pt-[5vh]">
+      {/* Media Background - absolute positioned layer */}
+      <Link 
+        href={project.href} 
+        className="absolute inset-0 block group"
+        aria-label={`View ${project.title} project`}
+      >
         <MediaRenderer
           media={project.media}
-          className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
+          className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
         />
-
-        {/* Campaign Title - GPU-accelerated with Framer Motion */}
-        <motion.div
-          layoutRoot
-          className="pointer-events-none absolute left-8 z-10 md:left-16"
-          style={{
-            opacity: animation.opacity,
-            x: animation.x,
-            top: animation.y,
-            willChange: 'transform, opacity',
-          }}
-        >
-          <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">
-            {project.title}
-          </h2>
-        </motion.div>
       </Link>
+
+      {/* Title - CSS sticky positioning, no JS during scroll */}
+      <div
+        ref={ref}
+        data-visible={isVisible}
+        className="sticky-title pointer-events-none relative z-10 px-5 md:pl-[34px]"
+      >
+        <h2 className="text-3xl font-light tracking-tight text-white md:text-5xl lg:text-6xl">
+          {project.title}
+        </h2>
+      </div>
     </section>
   );
 }

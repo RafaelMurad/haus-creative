@@ -44,6 +44,62 @@ body {
   scroll-snap-stop: always;
 }
 
+/* ===========================================
+   STICKY TITLE ANIMATION
+   Pure CSS sticky positioning with slide-in animation
+   No JavaScript during scroll - handled by browser compositor
+   =========================================== */
+
+.sticky-title {
+  /* Sticky positioning - stays at viewport middle */
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+  
+  /* Initial hidden state - slides in from left */
+  opacity: 0;
+  margin-left: -48px;
+  
+  /* GPU acceleration hints */
+  will-change: opacity, margin-left;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+  
+  /* Smooth transition for slide-in effect */
+  transition: 
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Visible state - triggered by Intersection Observer */
+.sticky-title[data-visible="true"] {
+  opacity: 1;
+  margin-left: 0;
+}
+
+/* Disable scroll-snap on mobile to prevent conflicts with sticky */
+@media (max-width: 767px) {
+  html {
+    scroll-snap-type: none;
+  }
+}
+
+/* ===========================================
+   GPU ACCELERATION UTILITY
+   For elements that need compositor layer promotion
+   =========================================== */
+
+.gpu-accelerated {
+  /* Promote to compositor layer */
+  transform: translateZ(0);
+  /* Hint to browser for optimization */
+  will-change: transform, opacity;
+  /* Prevent subpixel rendering artifacts */
+  backface-visibility: hidden;
+  /* Smooth font rendering during transforms */
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
 /* Professional CSS animations - replacing GSAP */
 @keyframes fadeIn {
   from {
