@@ -64,7 +64,6 @@ export interface ProjectDetail {
 
 /**
  * All projects/campaigns
- * TODO: Populate with real client names and content as assets are updated
  */
 export const projects: ProjectDetail[] = [
   {
