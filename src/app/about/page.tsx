@@ -1,3 +1,6 @@
+import Image from "next/image";
+import { siteConfig } from "@/config/site";
+
 export default function About() {
   return (
     <main className="min-h-screen bg-white text-black">
@@ -31,29 +34,24 @@ export default function About() {
             <div className="space-y-2 text-[15px]">
               <p>
                 <a
-                  href="mailto:contact@studiohauscreative.com"
+                  href={`mailto:${siteConfig.email}`}
                   className="hover:opacity-50 transition-opacity"
                 >
-                  contact@studiohauscreative.com
+                  {siteConfig.email}
                 </a>
               </p>
               <div className="flex gap-[57px]">
-                <a
-                  href="https://instagram.com/studiohauscreative"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-50 transition-opacity"
-                >
-                  Instagram
-                </a>
-                <a
-                  href="https://linkedin.com/company/studiohauscreative"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-50 transition-opacity"
-                >
-                  Linkedin
-                </a>
+                {siteConfig.socialLinks.map((link) => (
+                  <a
+                    key={link.title}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:opacity-50 transition-opacity"
+                  >
+                    {link.title}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -61,11 +59,14 @@ export default function About() {
 
         {/* Right column - Image (extends to right edge, starts at ~722px on 1440px screen) */}
         <div className="md:w-1/2">
-          <div className="h-[400px] md:h-[528px] overflow-hidden">
-            <img
+          <div className="relative h-[400px] md:h-[528px] overflow-hidden">
+            <Image
               src="/assets/about/about.jpg"
               alt="Studio Haus portrait"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
             />
           </div>
         </div>
