@@ -40,3 +40,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Lighthouse CI
+        run: npx @lhci/cli autorun
