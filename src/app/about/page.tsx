@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Over 15 years of experience creating compelling 360° campaigns, branded content, and design for industry leaders including Rolex, Swarovski, Mercedes-Benz, and Harrods.",
+  alternates: {
+    canonical: "/about",
+  },
+};
+
 export default function About() {
   return (
     <main className="min-h-screen bg-white text-black">

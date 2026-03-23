@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with Studio Haus Creative. Operating globally with hubs in London and São Paulo for strategy, creative direction, design, production, and post-production.",
+  alternates: {
+    canonical: "/contact",
+  },
+};
+
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white text-black">
