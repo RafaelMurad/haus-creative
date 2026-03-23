@@ -88,6 +88,7 @@ storybook-static/
 
 # Performance and Analysis
 .lighthouse/
+.lighthouseci/
 .analyzing/
 
 # TypeScript
