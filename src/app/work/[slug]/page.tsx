@@ -21,10 +21,13 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: project.metaTitle || `${project.title} | HAUS Creative`,
     description: project.metaDescription || project.description,
+    alternates: {
+      canonical: `/work/${params.slug}`,
+    },
     openGraph: {
       title: project.title,
       description: project.description,
-      siteName: "HAUS Creative",
+      siteName: "Studio Haus Creative",
       images: project.ogImage ? [{ url: project.ogImage }] : [],
       type: "website",
     },
