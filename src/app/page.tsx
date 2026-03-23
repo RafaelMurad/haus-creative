@@ -1,5 +1,15 @@
 import { IntroHero, WorkGalleryItem, CTALinks } from "@/components/home";
 import { featuredProjects } from "@/config/site";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "HAUS | Creative Direction + Design",
+  description:
+    "Studio Haus Creative specialises in 360° campaigns, branded content, and immersive digital experiences for luxury and forward-thinking brands.",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Home() {
   // First project is the intro hero
