@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white text-black">
@@ -12,10 +14,10 @@ export default function ContactPage() {
           <div className="flex-1">
             <p className="text-[15px]">
               <a
-                href="mailto:contact@studiohauscreative.com"
+                href={`mailto:${siteConfig.email}`}
                 className="hover:opacity-50 transition-opacity"
               >
-                contact@studiohauscreative.com
+                {siteConfig.email}
               </a>
             </p>
           </div>
@@ -58,7 +60,7 @@ export default function ContactPage() {
           </div>
           <div className="flex-1 md:max-w-[1115px]">
             <p className="text-[23px] leading-[34px]">
-              We are always looking to connect with creatives globally. We operate hybrid in remote between London and São Paulo. Reach out via contact@studiohauscreative.com at any time.
+              We are always looking to connect with creatives globally. We operate hybrid in remote between London and São Paulo. Reach out via {siteConfig.email} at any time.
             </p>
           </div>
         </div>
@@ -66,22 +68,17 @@ export default function ContactPage() {
 
       {/* Bottom social links - left-[34px] and left-[134px] at top-[939px] */}
       <div className="px-5 md:px-[34px] flex gap-[21px] pt-[250px] pb-8 text-[15px]">
-        <a
-          href="https://instagram.com/studiohauscreative"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-50 transition-opacity"
-        >
-          Instagram
-        </a>
-        <a
-          href="https://linkedin.com/company/studiohauscreative"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-50 transition-opacity"
-        >
-          Linkedin
-        </a>
+        {siteConfig.socialLinks.map((link) => (
+          <a
+            key={link.title}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-50 transition-opacity"
+          >
+            {link.title}
+          </a>
+        ))}
       </div>
     </main>
   );

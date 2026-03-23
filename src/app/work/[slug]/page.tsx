@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
+import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -63,26 +65,29 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <source src={project.heroVideo.desktop} type="video/mp4" />
           </video>
         ) : project.heroImage ? (
-          <picture>
-            {project.heroImage.mobile && (
-              <source srcSet={project.heroImage.mobile} media="(max-width: 768px)" />
-            )}
-            <img
-              src={project.heroImage.desktop}
-              alt={project.heroImage.alt}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </picture>
+          <Image
+            src={project.heroImage.desktop}
+            alt={project.heroImage.alt}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
         ) : null}
 
         {/* Client logo overlay - centered */}
         {project.clientLogo && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src={project.clientLogo}
-              alt={`${project.title} logo`}
-              className="max-w-[300px] md:max-w-[549px] h-auto"
-            />
+            <div className="relative max-w-[300px] md:max-w-[549px] w-full h-auto">
+              <Image
+                src={project.clientLogo}
+                alt={`${project.title} logo`}
+                width={549}
+                height={200}
+                className="w-full h-auto"
+                sizes="(max-width: 768px) 300px, 549px"
+              />
+            </div>
           </div>
         )}
       </section>
@@ -154,17 +159,15 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                     <source src={item.desktop} type="video/mp4" />
                   </video>
                 ) : (
-                  <picture>
-                    {item.mobile && (
-                      <source srcSet={item.mobile} media="(max-width: 768px)" />
-                    )}
-                    <img
-                      src={item.desktop}
-                      alt={item.alt}
-                      className="w-full h-auto object-cover"
-                      loading={index < 2 ? "eager" : "lazy"}
-                    />
-                  </picture>
+                  <Image
+                    src={item.desktop}
+                    alt={item.alt}
+                    width={1920}
+                    height={1080}
+                    className="w-full h-auto object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    loading={index < 2 ? "eager" : "lazy"}
+                  />
                 )}
               </div>
             ))}
@@ -209,31 +212,26 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             {/* Contact Email */}
             <div>
               <Link
-                href="mailto:contact@studiohauscreative.com"
+                href={`mailto:${siteConfig.email}`}
                 className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
               >
-                contact@studiohauscreative.com
+                {siteConfig.email}
               </Link>
             </div>
 
             {/* Social Links */}
             <div className="flex gap-6">
-              <Link
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
-              >
-                Instagram
-              </Link>
-              <Link
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
-              >
-                Linkedin
-              </Link>
+              {siteConfig.socialLinks.map((link) => (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[15px] leading-[18px] hover:opacity-50 transition-opacity"
+                >
+                  {link.title}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
