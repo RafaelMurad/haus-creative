@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "description": "Default agent with full tool access for development work"
+    },
+    "plan": {
+      "mode": "primary",
+      "description": "Read-only agent for analysis, planning, and code review"
+    },
+    "security-hardener": {
+      "description": "Adds security headers, CSP, restricts next.config.js remote patterns, and hardens the application for production",
+      "mode": "subagent",
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "npm run type-check": "allow",
+          "npm run lint": "allow",
+          "npm run build": "allow",
+          "npm test": "allow"
+        }
+      }
+    },
+    "test-writer": {
+      "description": "Writes component, hook, and config tests following TDD (red-green-refactor). Uses test utilities from src/__tests__/utils.tsx",
+      "mode": "subagent",
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "npm test*": "allow",
+          "npm run type-check": "allow"
+        }
+      }
+    },
+    "seo-optimiser": {
+      "description": "Adds robots.txt, sitemap, structured data, and improves meta tags for the marketing portfolio site",
+      "mode": "subagent",
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "npm run build": "allow",
+          "npm run type-check": "allow",
+          "npm run lint": "allow"
+        }
+      }
+    }
+  }
+}
