@@ -108,7 +108,7 @@ export const siteConfig: SiteConfig = {
   name: "HAUS",
   description:
     "We are a creative studio specializing in digital experiences, brand identity, and immersive design for forward-thinking brands.",
-  email: "hello@haus-creative.com",
+  email: "contact@studiohauscreative.com",
   copyright: `© ${new Date().getFullYear()} Haus Creative`,
 
   mainMenu: [
@@ -120,8 +120,8 @@ export const siteConfig: SiteConfig = {
   footerMenu: [],
 
   socialLinks: [
-    { title: "Instagram", href: "https://www.instagram.com/haus.creative" },
-    { title: "LinkedIn", href: "https://www.linkedin.com/company/haus-creative" },
+    { title: "Instagram", href: "https://www.instagram.com/studiohauscreative" },
+    { title: "LinkedIn", href: "https://www.linkedin.com/company/studiohauscreative" },
   ],
 };
 
