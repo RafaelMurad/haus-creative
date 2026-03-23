@@ -49,6 +49,24 @@ describe("MobileMenu", () => {
     expect(overlay.className).toContain("pointer-events-none");
   });
 
+  it("removes focusable links from tab order when closed", () => {
+    render(<MobileMenu isOpen={false} onClose={onClose} />);
+
+    const allLinks = screen.getAllByRole("link", { hidden: true });
+    allLinks.forEach((link) => {
+      expect(link).toHaveAttribute("tabindex", "-1");
+    });
+  });
+
+  it("keeps links in tab order when open", () => {
+    render(<MobileMenu isOpen={true} onClose={onClose} />);
+
+    const allLinks = screen.getAllByRole("link");
+    allLinks.forEach((link) => {
+      expect(link).toHaveAttribute("tabindex", "0");
+    });
+  });
+
   it("is visible when isOpen is true", () => {
     const { container } = render(
       <MobileMenu isOpen={true} onClose={onClose} />

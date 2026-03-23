@@ -57,6 +57,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <Link
                 href={link.href}
                 onClick={onClose}
+                tabIndex={isOpen ? 0 : -1}
                 className="text-2xl leading-tight transition-opacity duration-250 hover:opacity-50"
               >
                 {link.title}
@@ -77,6 +78,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       >
         <a
           href={`mailto:${siteConfig.email}`}
+          tabIndex={isOpen ? 0 : -1}
           className="text-[15px] leading-[21px] transition-opacity duration-250 hover:opacity-50"
         >
           {siteConfig.email}
@@ -98,6 +100,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
+            tabIndex={isOpen ? 0 : -1}
             className="text-[15px] leading-[21px] transition-opacity duration-250 hover:opacity-50"
           >
             {social.title}
