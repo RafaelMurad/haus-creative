@@ -5,7 +5,7 @@ describe("getProjectBySlug", () => {
     const project = getProjectBySlug("ouronyx");
     expect(project).toBeDefined();
     expect(project?.id).toBe("ouronyx");
-    expect(project?.title).toBe("Ouronyx Digital Experience");
+    expect(project?.title).toBe("Ouronyx");
   });
 
   it("should return undefined for a non-existent slug", () => {
@@ -13,24 +13,22 @@ describe("getProjectBySlug", () => {
     expect(project).toBeUndefined();
   });
 
-  it("should return a derived project from featured projects", () => {
-    // gallery-1 is in featuredProjects but not in the explicit projects array
-    const project = getProjectBySlug("gallery-1");
+  it("should return Marie Claire Arabia by slug", () => {
+    const project = getProjectBySlug("marie-claire-arabia");
     expect(project).toBeDefined();
-    expect(project?.title).toBe("Gallery One");
+    expect(project?.client).toBe("Marie Claire Arabia");
+    expect(project?.credits).toBeDefined();
+    expect(project?.credits?.length).toBeGreaterThan(0);
   });
 
-  it("should prefer explicit projects over derived featured projects", () => {
-    // ouronyx exists in both projects array and featuredProjects
-    const project = getProjectBySlug("ouronyx");
-    expect(project).toBeDefined();
-    expect(project?.description).toBe(
-      "A premium digital experience showcasing fine jewelry through immersive visuals and seamless interactions."
-    );
+  it("should return undefined for removed gallery slugs", () => {
+    expect(getProjectBySlug("gallery-1")).toBeUndefined();
+    expect(getProjectBySlug("brand-identity")).toBeUndefined();
+    expect(getProjectBySlug("motion-design")).toBeUndefined();
   });
 
   it("should return project with correct structure", () => {
-    const project = getProjectBySlug("brand-identity");
+    const project = getProjectBySlug("ysl");
     expect(project).toBeDefined();
     expect(project).toHaveProperty("id");
     expect(project).toHaveProperty("slug");
@@ -51,17 +49,30 @@ describe("getAllProjectSlugs", () => {
     });
   });
 
-  it("should include slugs from explicit projects", () => {
+  it("should include all 9 named project slugs", () => {
     const slugs = getAllProjectSlugs();
     expect(slugs).toContain("ouronyx");
-    expect(slugs).toContain("brand-identity");
-    expect(slugs).toContain("motion-design");
+    expect(slugs).toContain("marie-claire-arabia");
+    expect(slugs).toContain("ysl");
+    expect(slugs).toContain("wao-cosmo");
+    expect(slugs).toContain("vivara");
+    expect(slugs).toContain("bucherer-summer");
+    expect(slugs).toContain("sk");
+    expect(slugs).toContain("bfj");
+    expect(slugs).toContain("life");
   });
 
-  it("should include slugs derived from featured projects", () => {
+  it("should return exactly 9 project slugs", () => {
     const slugs = getAllProjectSlugs();
-    expect(slugs).toContain("gallery-1");
-    expect(slugs).toContain("gallery-2");
+    expect(slugs.length).toBe(9);
+  });
+
+  it("should not contain old gallery slugs", () => {
+    const slugs = getAllProjectSlugs();
+    expect(slugs).not.toContain("gallery-1");
+    expect(slugs).not.toContain("gallery-2");
+    expect(slugs).not.toContain("brand-identity");
+    expect(slugs).not.toContain("motion-design");
   });
 
   it("should not contain duplicates", () => {
@@ -72,9 +83,9 @@ describe("getAllProjectSlugs", () => {
 });
 
 describe("projects", () => {
-  it("should be a non-empty array", () => {
+  it("should be a non-empty array of 9 projects", () => {
     expect(Array.isArray(projects)).toBe(true);
-    expect(projects.length).toBeGreaterThan(0);
+    expect(projects.length).toBe(9);
   });
 
   it("should have valid slugs on all projects", () => {
@@ -88,6 +99,15 @@ describe("projects", () => {
     projects.forEach((project) => {
       expect(Array.isArray(project.media)).toBe(true);
       expect(project.media.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should reference .webp or .mp4 assets only", () => {
+    projects.forEach((project) => {
+      project.media.forEach((item) => {
+        const ext = item.desktop.split(".").pop();
+        expect(["webp", "mp4", "jpg"]).toContain(ext);
+      });
     });
   });
 });
