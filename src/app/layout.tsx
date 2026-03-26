@@ -66,7 +66,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className="bg-black font-sans overflow-x-hidden text-white antialiased">
+        <body className="bg-white font-sans overflow-x-hidden text-black antialiased">
         <JsonLd type="organisation" />
         <JsonLd type="website" />
         <ErrorBoundary>

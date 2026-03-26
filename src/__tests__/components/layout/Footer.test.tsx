@@ -11,9 +11,15 @@ describe("Footer", () => {
     expect(emailLink).toHaveAttribute("href", `mailto:${siteConfig.email}`);
   });
 
-  it("should render the copyright text from siteConfig", () => {
+  it("should render social links from siteConfig", () => {
     render(<Footer />);
-    expect(screen.getByText(siteConfig.copyright)).toBeInTheDocument();
+    siteConfig.socialLinks.forEach((link) => {
+      const socialLink = screen.getByText(link.title);
+      expect(socialLink).toBeInTheDocument();
+      expect(socialLink).toHaveAttribute("href", link.href);
+      expect(socialLink).toHaveAttribute("target", "_blank");
+      expect(socialLink).toHaveAttribute("rel", "noopener noreferrer");
+    });
   });
 
   it("should render as a footer element", () => {

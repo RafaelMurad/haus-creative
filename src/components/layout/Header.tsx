@@ -60,7 +60,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-xs uppercase tracking-wide transition-opacity duration-250 hover:opacity-50"
+              className="text-[18px] uppercase tracking-wide transition-opacity duration-250 hover:opacity-50"
             >
               {link.title}
             </Link>

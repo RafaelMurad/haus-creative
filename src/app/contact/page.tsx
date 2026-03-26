@@ -36,7 +36,7 @@ export default function ContactPage() {
 
       {/* Divider line - top-[246px], spans from 34px to 1396px (width 1362px) */}
       <div className="px-5 md:px-[34px] mt-[89px] md:pr-[44px]">
-        <div className="w-full h-px bg-black"></div>
+        <div className="w-full h-px bg-black opacity-50"></div>
       </div>
 
       {/* New Business section - top-[339px] */}
@@ -48,7 +48,7 @@ export default function ContactPage() {
             </h2>
           </div>
           <div className="flex-1 md:max-w-[1115px]">
-            <p className="text-[23px] leading-[34px]">
+            <p className="text-[15px] leading-[23px] md:text-[23px] md:leading-[34px]">
               We operate globally with hubs in London and São Paulo, building and scaling up bespoke teams to provide the best talent for each client. From strategy, creative direction, design through Production and Post Production. Get in touch to discuss how we can collaborate together.
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
 
       {/* Divider line - top-[539px] */}
       <div className="px-5 md:px-[34px] mt-[98px] md:pr-[44px]">
-        <div className="w-full h-px bg-black"></div>
+        <div className="w-full h-px bg-black opacity-50"></div>
       </div>
 
       {/* For Talent section - top-[628px] */}
@@ -69,7 +69,7 @@ export default function ContactPage() {
             </h2>
           </div>
           <div className="flex-1 md:max-w-[1115px]">
-            <p className="text-[23px] leading-[34px]">
+            <p className="text-[15px] leading-[23px] md:text-[23px] md:leading-[34px]">
               We are always looking to connect with creatives globally. We operate hybrid in remote between London and São Paulo. Reach out via {siteConfig.email} at any time.
             </p>
           </div>

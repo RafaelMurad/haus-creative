@@ -102,46 +102,25 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           <div className="flex flex-col md:flex-row gap-6 md:gap-0">
             {/* Label column */}
             <div className="md:w-[264px] flex-shrink-0">
-              <p className="text-[14px] leading-[18px] uppercase tracking-wide font-bold text-black">
+              <p className="text-[14px] leading-[18px] text-black">
                 Intro
               </p>
             </div>
 
             {/* Content column */}
             <div className="flex-1">
-              <h1 className="text-[28px] leading-[34px] md:text-[34px] md:leading-[34px] font-normal mb-4">
+              <h1 className="text-[28px] leading-[34px] md:text-[33px] md:leading-[34px] font-normal mb-[18px]">
                 {project.title}
               </h1>
-              <p className="text-[14px] leading-[18px] md:text-[14px] md:leading-[18px] font-bold uppercase tracking-wide text-black">
+              <p className="text-[15px] leading-[23px] md:text-[23px] md:leading-[34px] text-black">
                 {project.subtitle || project.description}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Services Section */}
-        {project.services && project.services.length > 0 && (
-          <div className="px-5 md:px-[34px] pt-8 md:pt-12">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-0">
-              {/* Label column */}
-              <div className="md:w-[264px] flex-shrink-0">
-                <p className="text-[14px] leading-[18px] uppercase tracking-wide font-bold text-black">
-                  Services
-                </p>
-              </div>
-
-              {/* Content column */}
-              <div className="flex-1">
-                <p className="text-[15px] leading-[21px] text-black">
-                  {project.services.join(', ')}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Media Gallery - 2-column grid on desktop */}
-        <div className="mt-[229px]">
+        <div className="mt-[143px]">
           {/* Group images in pairs for desktop 2-column layout */}
           <div className="grid grid-cols-1 md:grid-cols-2">
             {project.media.map((item, index) => (
@@ -179,18 +158,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Credits Section */}
         {project.credits && project.credits.length > 0 && (
-          <div className="px-5 md:px-[34px] mt-20 md:mt-[81px]">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-0">
-              {/* Label column - aligned to second column on desktop */}
-              <div className="md:w-1/2 flex-shrink-0">
-                <p className="text-[15px] leading-[18px] uppercase tracking-wide text-gray-500 md:pl-[686px]">
+          <div className="px-5 md:px-0 mt-20 md:mt-[81px]">
+            <div className="flex flex-col md:flex-row">
+              {/* Empty left spacer on desktop (aligns credits to right column) */}
+              <div className="hidden md:block md:w-1/2" />
+
+              {/* Label column */}
+              <div className="md:w-[264px] flex-shrink-0 mb-4 md:mb-0">
+                <p className="text-[14px] leading-[18px] text-black">
                   Credits
                 </p>
               </div>
 
               {/* Content column */}
               <div className="flex-1">
-                <div className="text-[15px] leading-[21px] space-y-1">
+                <div className="text-[15px] leading-[23px] md:text-[18px] md:leading-[28px] space-y-1">
                   {project.credits.map((credit, index) => (
                     <p key={index}>
                       <span className="text-black">{credit.role}</span>
@@ -205,12 +187,12 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         )}
 
         {/* Divider */}
-        <div className="px-5 md:px-[34px] mt-20 md:mt-[269px]">
-          <div className="border-t border-gray-200" />
+        <div className="px-5 md:px-[34px] mt-20 md:mt-[77px] md:pr-[44px]">
+          <div className="w-full h-px bg-black opacity-50" />
         </div>
 
         {/* Footer Section */}
-        <div className="px-5 md:px-[34px] py-8 md:py-[41px]">
+        <div className="px-5 md:px-[34px] py-8 md:py-[41px] md:pr-[44px]">
           <div className="flex flex-col md:flex-row md:justify-between gap-6">
             {/* Contact Email */}
             <div>
@@ -223,7 +205,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             {/* Social Links */}
-            <div className="flex gap-6">
+            <div className="flex gap-[21px]">
               {siteConfig.socialLinks.map((link) => (
                 <Link
                   key={link.title}
