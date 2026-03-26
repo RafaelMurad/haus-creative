@@ -248,6 +248,18 @@ export const featuredProjects: Project[] = [
       alt: "Life project showcase",
     },
   },
+  // 9. Bride Story
+  {
+    id: "bride-story",
+    title: "Bride Story",
+    subtitle: "Art Direction",
+    href: "/work/bride-story",
+    media: {
+      type: "image",
+      src: "/assets/gallery9/Gallery9-1.webp",
+      alt: "Bride Story art direction",
+    },
+  },
 ];
 
 // =============================================================================

@@ -15,6 +15,7 @@ import type { MediaSource } from "@/config/site";
  *   gallery6  = SK
  *   gallery7  = BFJ
  *   gallery8  = Life
+ *   gallery9  = Bride Story
  *   gallery10 = Ouronyx (video, intro hero)
  */
 
@@ -74,7 +75,7 @@ export interface ProjectDetail {
 
 /**
  * All projects/campaigns — ordered by Figma presentation order.
- * Ouronyx first (intro hero), then 8 named projects.
+ * Ouronyx first (intro hero), then 9 named projects.
  */
 export const projects: ProjectDetail[] = [
   // =========================================================================
@@ -101,8 +102,108 @@ export const projects: ProjectDetail[] = [
     media: [
       {
         type: "image",
-        desktop: "/assets/gallery10/Gallery10-Cover.webp",
-        alt: "Ouronyx platform showcase",
+        desktop: "/assets/gallery10/Gallery10-1.webp",
+        alt: "Ouronyx platform showcase 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-2.webp",
+        alt: "Ouronyx platform showcase 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-3.webp",
+        alt: "Ouronyx platform showcase 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-4.webp",
+        alt: "Ouronyx platform showcase 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-5.webp",
+        alt: "Ouronyx platform showcase 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-6.webp",
+        alt: "Ouronyx platform showcase 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-7.webp",
+        alt: "Ouronyx platform showcase 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-8.webp",
+        alt: "Ouronyx platform showcase 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-9.webp",
+        alt: "Ouronyx platform showcase 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-10.webp",
+        alt: "Ouronyx platform showcase 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-11.webp",
+        alt: "Ouronyx platform showcase 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-12.webp",
+        alt: "Ouronyx platform showcase 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-13.webp",
+        alt: "Ouronyx platform showcase 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-14.webp",
+        alt: "Ouronyx platform showcase 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-15.webp",
+        alt: "Ouronyx platform showcase 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-16.webp",
+        alt: "Ouronyx platform showcase 16",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-17.webp",
+        alt: "Ouronyx platform showcase 17",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-18.webp",
+        alt: "Ouronyx platform showcase 18",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-19.webp",
+        alt: "Ouronyx platform showcase 19",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-20.webp",
+        alt: "Ouronyx platform showcase 20",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery10/Gallery10-21.webp",
+        alt: "Ouronyx platform showcase 21",
       },
     ],
 
@@ -161,7 +262,7 @@ export const projects: ProjectDetail[] = [
       },
       {
         type: "image",
-        desktop: "/assets/gallery1/Gallery1-6.jpg",
+        desktop: "/assets/gallery1/Gallery1-6.webp",
         alt: "Marie Claire Arabia editorial look 5",
       },
       {
@@ -289,8 +390,103 @@ export const projects: ProjectDetail[] = [
     media: [
       {
         type: "image",
-        desktop: "/assets/gallery3/Gallery3-Cover.webp",
+        desktop: "/assets/gallery3/Gallery3-1.webp",
         alt: "Wao Cosmo brand identity showcase",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-2.webp",
+        alt: "Wao Cosmo visual design 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-3.webp",
+        alt: "Wao Cosmo visual design 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-4.webp",
+        alt: "Wao Cosmo visual design 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-5.webp",
+        alt: "Wao Cosmo visual design 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-6.webp",
+        alt: "Wao Cosmo visual design 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-7.webp",
+        alt: "Wao Cosmo visual design 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-8.webp",
+        alt: "Wao Cosmo visual design 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-9.webp",
+        alt: "Wao Cosmo visual design 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-10.webp",
+        alt: "Wao Cosmo visual design 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-11.webp",
+        alt: "Wao Cosmo visual design 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-12.webp",
+        alt: "Wao Cosmo visual design 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-13.webp",
+        alt: "Wao Cosmo visual design 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-14.webp",
+        alt: "Wao Cosmo visual design 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-15.webp",
+        alt: "Wao Cosmo visual design 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-16.webp",
+        alt: "Wao Cosmo visual design 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-17.webp",
+        alt: "Wao Cosmo visual design 16",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-18.webp",
+        alt: "Wao Cosmo visual design 17",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-19.webp",
+        alt: "Wao Cosmo visual design 18",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery3/Gallery3-20.webp",
+        alt: "Wao Cosmo visual design 19",
       },
     ],
 
@@ -387,8 +583,53 @@ export const projects: ProjectDetail[] = [
     media: [
       {
         type: "image",
-        desktop: "/assets/gallery5/Gallery5-Cover.webp",
-        alt: "Bucherer Summer campaign showcase",
+        desktop: "/assets/gallery5/Gallery5-1.webp",
+        alt: "Bucherer Summer campaign image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-2.webp",
+        alt: "Bucherer Summer campaign image 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-3.webp",
+        alt: "Bucherer Summer campaign image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-4.webp",
+        alt: "Bucherer Summer campaign image 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-5.webp",
+        alt: "Bucherer Summer campaign image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-6.webp",
+        alt: "Bucherer Summer campaign image 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-7.webp",
+        alt: "Bucherer Summer campaign image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-8.webp",
+        alt: "Bucherer Summer campaign image 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-9.webp",
+        alt: "Bucherer Summer campaign image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery5/Gallery5-10.webp",
+        alt: "Bucherer Summer campaign image 10",
       },
     ],
 
@@ -433,6 +674,116 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/gallery6/Gallery6-4.webp",
         alt: "SK brand image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-5.webp",
+        alt: "SK brand image 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-6.webp",
+        alt: "SK brand image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-7.webp",
+        alt: "SK brand image 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-8.webp",
+        alt: "SK brand image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-9.webp",
+        alt: "SK brand image 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-10.webp",
+        alt: "SK brand image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-11.webp",
+        alt: "SK brand image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-12.webp",
+        alt: "SK brand image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-13.webp",
+        alt: "SK brand image 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-14.webp",
+        alt: "SK brand image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-15.webp",
+        alt: "SK brand image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-16.webp",
+        alt: "SK brand image 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-17.webp",
+        alt: "SK brand image 16",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-18.webp",
+        alt: "SK brand image 17",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-19.webp",
+        alt: "SK brand image 18",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-20.webp",
+        alt: "SK brand image 19",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-21.webp",
+        alt: "SK brand image 20",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-22.webp",
+        alt: "SK brand image 21",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-23.webp",
+        alt: "SK brand image 22",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-24.webp",
+        alt: "SK brand image 23",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-25.webp",
+        alt: "SK brand image 24",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery6/Gallery6-26.webp",
+        alt: "SK brand image 25",
       },
     ],
 
@@ -503,6 +854,141 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/gallery7/Gallery7-9.webp",
         alt: "BFJ project image 8",
       },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-10.webp",
+        alt: "BFJ project image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-11.webp",
+        alt: "BFJ project image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-12.webp",
+        alt: "BFJ project image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-13.webp",
+        alt: "BFJ project image 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-14.webp",
+        alt: "BFJ project image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-15.webp",
+        alt: "BFJ project image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-16.webp",
+        alt: "BFJ project image 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-17.webp",
+        alt: "BFJ project image 16",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-18.webp",
+        alt: "BFJ project image 17",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-19.webp",
+        alt: "BFJ project image 18",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-20.webp",
+        alt: "BFJ project image 19",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-21.webp",
+        alt: "BFJ project image 20",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-22.webp",
+        alt: "BFJ project image 21",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-23.webp",
+        alt: "BFJ project image 22",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-24.webp",
+        alt: "BFJ project image 23",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-25.webp",
+        alt: "BFJ project image 24",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-26.webp",
+        alt: "BFJ project image 25",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-27.webp",
+        alt: "BFJ project image 26",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-28.webp",
+        alt: "BFJ project image 27",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-29.webp",
+        alt: "BFJ project image 28",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-30.webp",
+        alt: "BFJ project image 29",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-31.webp",
+        alt: "BFJ project image 30",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-32.webp",
+        alt: "BFJ project image 31",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-33.webp",
+        alt: "BFJ project image 32",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-34.webp",
+        alt: "BFJ project image 33",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-35.webp",
+        alt: "BFJ project image 34",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery7/Gallery7-36.webp",
+        alt: "BFJ project image 35",
+      },
     ],
 
     metaTitle: "BFJ | HAUS Creative",
@@ -534,8 +1020,78 @@ export const projects: ProjectDetail[] = [
     media: [
       {
         type: "image",
-        desktop: "/assets/gallery8/Gallery8-1.webp",
-        alt: "Life project showcase",
+        desktop: "/assets/gallery8/Gallery8-2.webp",
+        alt: "Life project image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-3.webp",
+        alt: "Life project image 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-4.webp",
+        alt: "Life project image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-5.webp",
+        alt: "Life project image 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-6.webp",
+        alt: "Life project image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-7.webp",
+        alt: "Life project image 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-8.webp",
+        alt: "Life project image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-9.webp",
+        alt: "Life project image 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-10.webp",
+        alt: "Life project image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-11.webp",
+        alt: "Life project image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-12.webp",
+        alt: "Life project image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-13.webp",
+        alt: "Life project image 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-14.webp",
+        alt: "Life project image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-15.webp",
+        alt: "Life project image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery8/Gallery8-16.webp",
+        alt: "Life project image 15",
       },
     ],
 
@@ -543,6 +1099,75 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Creative strategy and visual direction for Life by Studio Haus Creative.",
     ogImage: "/assets/gallery8/Gallery8-1.webp",
+  },
+
+  // =========================================================================
+  // 9. Bride Story — gallery9
+  // =========================================================================
+  {
+    id: "bride-story",
+    slug: "bride-story",
+    client: "Bride Story",
+    title: "Bride Story",
+    subtitle: "Art Direction",
+    description:
+      "Art direction and visual storytelling for Bride Story, capturing the elegance and emotion of bridal fashion through refined creative direction.",
+
+    heroImage: {
+      desktop: "/assets/gallery9/Gallery9-1.webp",
+      alt: "Bride Story art direction",
+    },
+
+    year: "2024",
+    services: ["Art Direction", "Creative Direction", "Photography Direction"],
+
+    media: [
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-2.webp",
+        alt: "Bride Story image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-3.webp",
+        alt: "Bride Story image 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-4.webp",
+        alt: "Bride Story image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-5.webp",
+        alt: "Bride Story image 4",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-6.webp",
+        alt: "Bride Story image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-7.webp",
+        alt: "Bride Story image 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-8.webp",
+        alt: "Bride Story image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery9/Gallery9-9.webp",
+        alt: "Bride Story image 8",
+      },
+    ],
+
+    metaTitle: "Bride Story | HAUS Creative",
+    metaDescription:
+      "Art direction and visual storytelling for Bride Story by Studio Haus Creative.",
+    ogImage: "/assets/gallery9/Gallery9-1.webp",
   },
 ];
 
