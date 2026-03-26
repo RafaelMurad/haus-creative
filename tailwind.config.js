@@ -16,7 +16,7 @@ module.exports = {
       colors: {
         // Luxury monochromatic palette
         luxury: {
-          black: '#0a0a0a',
+          black: '#000000',
           charcoal: '#1a1a1a',
           gray: '#666666',
           lightgray: '#e5e5e5',

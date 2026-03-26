@@ -20,10 +20,10 @@ export default function About() {
         <div className="px-5 md:pl-[34px] md:pr-8 md:w-1/2 flex flex-col">
           {/* About section */}
           <div className="flex-1">
-            <h1 className="text-[14px] font-bold uppercase tracking-wide text-black mb-8">
+            <h1 className="text-[14px] font-bold uppercase tracking-wide text-black mb-[58px]">
               About Studio Haus
             </h1>
-            <div className="md:pl-[4px] space-y-8 text-[19px] leading-[32px] max-w-[663px]">
+            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[18px] md:text-[19px] md:leading-[32px] max-w-[663px]">
               <p>
                 Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
               </p>
@@ -50,7 +50,7 @@ export default function About() {
                   {siteConfig.email}
                 </a>
               </p>
-              <div className="flex gap-[57px]">
+              <div className="flex gap-[21px]">
                 {siteConfig.socialLinks.map((link) => (
                   <a
                     key={link.title}
