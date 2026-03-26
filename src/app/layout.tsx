@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Header, Footer } from "../components/layout";
+import { Header } from "../components/layout";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { JsonLd } from "@/components/seo";
 import { siteConfig } from "@/config/site";
@@ -81,7 +81,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <main id="main-content" tabIndex={-1} className="min-h-screen">
             {children}
           </main>
-          <Footer />
         </ErrorBoundary>
       </body>
     </html>

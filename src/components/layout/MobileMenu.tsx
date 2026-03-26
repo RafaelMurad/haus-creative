@@ -2,11 +2,6 @@
 
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import {
-  generateAnimatedGradientStyle,
-  gradientPresets,
-} from "@/utils/gradientGenerator";
-import { ANIMATIONS } from "@/config/animations";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -14,18 +9,10 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  // Generate gradient style - easy to change by updating the preset or colours
-  const gradientStyle = generateAnimatedGradientStyle({
-    colours: gradientPresets.monochrome,
-    direction: 135,
-    animationDuration: ANIMATIONS.mobileMenu.animationDuration,
-  });
-
   return (
     <div
       className={`
-        fixed inset-0 z-40 text-white
-        pt-[60px] px-4 pb-10
+        fixed inset-0 z-40 text-black
         flex flex-col
         transition-all duration-300 ease-out
         ${isOpen
@@ -34,14 +21,15 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         }
       `}
       style={{
-        ...gradientStyle,
-        animation: isOpen ? gradientStyle.animation as string : "none",
+        backgroundColor: "rgba(255, 255, 255, 0.85)",
+        backdropFilter: "blur(44px)",
+        WebkitBackdropFilter: "blur(44px)",
       }}
       aria-hidden={!isOpen}
     >
       {/* Main Navigation */}
-      <nav className="mt-20 mb-auto">
-        <ul className="space-y-5">
+      <nav className="mt-[182px] ml-[21px]">
+        <ul className="space-y-[34px]">
           {siteConfig.mainMenu.map((link, index) => (
             <li
               key={link.href}
@@ -58,7 +46,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 href={link.href}
                 onClick={onClose}
                 tabIndex={isOpen ? 0 : -1}
-                className="text-2xl leading-tight transition-opacity duration-250 hover:opacity-50"
+                className="text-[18px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
               >
                 {link.title}
               </Link>
@@ -67,10 +55,13 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </ul>
       </nav>
 
+      {/* Spacer to push email/social to bottom */}
+      <div className="flex-1" />
+
       {/* Contact Email */}
       <div
         className={`
-          mt-20 mb-3
+          ml-[21px] mb-[19px]
           transform transition-all duration-300 ease-out
           ${isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}
         `}
@@ -79,7 +70,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <a
           href={`mailto:${siteConfig.email}`}
           tabIndex={isOpen ? 0 : -1}
-          className="text-[15px] leading-[21px] transition-opacity duration-250 hover:opacity-50"
+          className="text-[15px] leading-[1.21em] transition-opacity duration-250 hover:opacity-50"
         >
           {siteConfig.email}
         </a>
@@ -88,7 +79,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {/* Social Links */}
       <div
         className={`
-          flex gap-8
+          ml-[21px] mb-[69px] flex gap-[21px]
           transform transition-all duration-300 ease-out
           ${isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}
         `}
@@ -101,7 +92,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={isOpen ? 0 : -1}
-            className="text-[15px] leading-[21px] transition-opacity duration-250 hover:opacity-50"
+            className="text-[15px] leading-[1.21em] transition-opacity duration-250 hover:opacity-50"
           >
             {social.title}
           </a>

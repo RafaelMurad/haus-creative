@@ -23,7 +23,7 @@ export function WorkGalleryItem({ project }: WorkGalleryItemProps) {
   const { ref, isVisible } = useSlideInOnView({ threshold: 0.3 });
 
   return (
-    <section className="relative h-screen w-full overflow-clip pt-[5vh]">
+    <section className="relative h-screen w-full overflow-clip">
       {/* Media Background - absolute positioned layer */}
       <Link 
         href={project.href} 
