@@ -61,7 +61,6 @@ export interface ProjectDetail {
 
   // Metadata
   year?: string;
-  services?: string[];
   credits?: ProjectCredit[];
 
   // Gallery media (ordered array)
@@ -97,7 +96,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Digital Design", "Development", "Art Direction"],
 
     media: [
       {
@@ -233,7 +231,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Creative Direction", "Art Direction", "Editorial Design"],
     credits: [
       { role: "Art Direction", name: "Studio Haus Creative" },
       { role: "Photographer", name: "Ekin Can Bayrakdar" },
@@ -311,7 +308,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Art Direction", "Creative Direction", "Visual Design"],
 
     media: [
       {
@@ -385,7 +381,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Brand Strategy", "Visual Identity", "Art Direction"],
 
     media: [
       {
@@ -514,7 +509,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Art Direction", "Creative Direction", "Photography Direction"],
 
     media: [
       {
@@ -578,7 +572,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Creative Direction", "Motion Design", "Animation"],
 
     media: [
       {
@@ -657,7 +650,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Brand Development", "Visual Identity", "Design"],
 
     media: [
       {
@@ -811,7 +803,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Digital Design", "Creative Direction", "Art Direction"],
 
     media: [
       {
@@ -1015,7 +1006,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Creative Strategy", "Visual Direction", "Design"],
 
     media: [
       {
@@ -1119,7 +1109,6 @@ export const projects: ProjectDetail[] = [
     },
 
     year: "2024",
-    services: ["Art Direction", "Creative Direction", "Photography Direction"],
 
     media: [
       {

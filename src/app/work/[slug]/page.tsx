@@ -119,27 +119,6 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
 
-        {/* Services Section */}
-        {project.services && project.services.length > 0 && (
-          <div className="px-5 md:px-[34px] pt-8 md:pt-12">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-0">
-              {/* Label column */}
-              <div className="md:w-[264px] flex-shrink-0">
-                <p className="text-[14px] leading-[18px] text-black">
-                  Services
-                </p>
-              </div>
-
-              {/* Content column */}
-              <div className="flex-1">
-                <p className="text-[15px] leading-[21px] text-black">
-                  {project.services.join(', ')}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Media Gallery - 2-column grid on desktop */}
         <div className="mt-[143px]">
           {/* Group images in pairs for desktop 2-column layout */}
