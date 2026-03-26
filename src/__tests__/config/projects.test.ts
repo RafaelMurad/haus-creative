@@ -49,7 +49,7 @@ describe("getAllProjectSlugs", () => {
     });
   });
 
-  it("should include all 9 named project slugs", () => {
+  it("should include all 10 named project slugs", () => {
     const slugs = getAllProjectSlugs();
     expect(slugs).toContain("ouronyx");
     expect(slugs).toContain("marie-claire-arabia");
@@ -60,11 +60,12 @@ describe("getAllProjectSlugs", () => {
     expect(slugs).toContain("sk");
     expect(slugs).toContain("bfj");
     expect(slugs).toContain("life");
+    expect(slugs).toContain("bride-story");
   });
 
-  it("should return exactly 9 project slugs", () => {
+  it("should return exactly 10 project slugs", () => {
     const slugs = getAllProjectSlugs();
-    expect(slugs.length).toBe(9);
+    expect(slugs.length).toBe(10);
   });
 
   it("should not contain old gallery slugs", () => {
@@ -83,9 +84,9 @@ describe("getAllProjectSlugs", () => {
 });
 
 describe("projects", () => {
-  it("should be a non-empty array of 9 projects", () => {
+  it("should be a non-empty array of 10 projects", () => {
     expect(Array.isArray(projects)).toBe(true);
-    expect(projects.length).toBe(9);
+    expect(projects.length).toBe(10);
   });
 
   it("should have valid slugs on all projects", () => {

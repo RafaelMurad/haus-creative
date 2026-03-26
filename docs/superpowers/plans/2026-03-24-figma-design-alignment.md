@@ -2,470 +2,366 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Achieve full visual parity between the HAUS Creative portfolio website and the Figma source of truth by replacing generic gallery content with 8 named Figma projects, converting images to WebP, and building Marie Claire Arabia as the reference project detail page.
+**Goal:** Achieve full visual parity between the HAUS Creative portfolio website and the Figma source of truth. This includes all project assets, correct image counts, social post mockups, client logos, credits, and layout/typography alignment.
 
-**Architecture:** Incremental, PR-per-phase approach. Each phase branches from `main` independently. Phase 7 handles asset optimisation (PNG to WebP, remove unused galleries). Phase 8 builds Marie Claire Arabia as the template project detail page with full gallery, credits, and client logo. Phase 9 applies the template to the remaining 7 projects. Phase 10 aligns the homepage/work listing with Figma.
+**Architecture:** Incremental, PR-per-phase approach. Each phase branches from `main` independently. Phases 7–9 (completed) handled initial asset optimisation and project setup. Phase 10 (completed) verified homepage/work listing. Phases 11–13 close asset gaps discovered via Figma MCP audit, add Bride Story, and align visual details.
 
 **Tech Stack:** Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS 3, cwebp (image conversion)
 
----
-
-## Gallery-to-Project Mapping (Figma Order)
-
-| Gallery | Figma Project | Slug | Image Count | Type |
-|---------|--------------|------|-------------|------|
-| gallery1 | Marie Claire Arabia | `marie-claire-arabia` | 10 | Image |
-| gallery2 | YSL | `ysl` | 10 | Image |
-| gallery3 | WAO COSMO | `wao-cosmo` | 1 cover + video | Video |
-| gallery4 | VIVARA | `vivara` | 8 | Image |
-| gallery5 | BUCHERER SUMMER | `bucherer-summer` | 1 cover + video | Video |
-| gallery6 | SK | `sk` | 4 | Image |
-| gallery7 | BFJ | `bfj` | 9 | Image |
-| gallery8 | LIFE | `life` | 1 | Image |
-| gallery10 | Ouronyx | `ouronyx` | 1 cover + 2 videos | Video (hero) |
-| gallery9 | *REMOVE* | — | — | — |
-| gallery11 | *REMOVE* | — | — | — |
-| gallery12 | *REMOVE* | — | — | — |
-
-## File Structure
-
-### Files to Create
-- `scripts/convert-to-webp.sh` — One-time script to convert PNGs to WebP (high quality, q=90)
-
-### Files to Modify
-- `src/config/site.ts` — Replace 12 featuredProjects with 9 (Ouronyx hero + 8 named projects), update paths to .webp
-- `src/config/projects.ts` — Replace 3 hardcoded projects with 9 full ProjectDetail objects (all gallery images, credits, services, etc.)
-- `src/app/work/[slug]/page.tsx` — Enhanced project detail layout matching Figma (2-col masked grid, intro text, credits)
-- `src/app/page.tsx` — May need CTA text updates
-- `src/app/work/page.tsx` — Update if it references removed galleries
-- `src/app/sitemap.ts` — Update URL list (remove old slugs, add new ones)
-- `src/__tests__/config/projects.test.ts` — Update tests for new project data
-- `src/__tests__/config/site.test.ts` — Update tests for new featuredProjects
-- `public/assets/` — Convert PNGs to WebP, remove gallery9/11/12
-
-### Files to Leave Unchanged
-- `src/components/home/WorkGalleryItem.tsx` — Already correct pattern
-- `src/components/home/IntroHero.tsx` — Already correct
-- `src/components/ui/MediaRenderer.tsx` — Already handles all media types
-- `src/components/layout/` — Header/Footer/MobileMenu unchanged
-- `tailwind.config.js` — Font configs stay for future use
+**Figma Source:** File key `DfLEWBgyOQxK8Utc1TSyQY` — accessed via `figma-developer-mcp` MCP server (configured in `opencode.json`, reads `FIGMA_API_KEY` from `.env`)
 
 ---
 
-## Phase 7: Asset Optimisation
+## Gallery-to-Project Mapping (Figma Order — Updated)
 
-> **Branch:** `feature/phase-7-asset-optimisation`
+| Gallery | Figma Project | Slug | Local Files | Figma Images (est.) | Status |
+|---------|--------------|------|-------------|---------------------|--------|
+| gallery1 | Marie Claire Arabia | `marie-claire-arabia` | 10 | ~10 + 6 social posts + logo | Complete (gallery), social posts missing |
+| gallery2 | YSL | `ysl` | 10 | ~10 | Complete |
+| gallery3 | WAO COSMO | `wao-cosmo` | 2 (cover + video) | ~17 gallery + 6 social posts | **Incomplete** |
+| gallery4 | VIVARA | `vivara` | 8 | ~8 | Complete |
+| gallery5 | BUCHERER SUMMER | `bucherer-summer` | 2 (cover + video) | ~5 gallery + logo | **Incomplete** |
+| gallery6 | SK | `sk` | 4 | ~18 | **Severely incomplete** |
+| gallery7 | BFJ | `bfj` | 9 | ~24 | **Incomplete** |
+| gallery8 | LIFE | `life` | 1 | ~13 | **Severely incomplete** |
+| gallery9 | BRIDE STORY | `bride-story` | 0 | ~12 | **Missing entirely** |
+| gallery10 | Ouronyx | `ouronyx` | 3 (cover + 2 videos) | ~23 | **Incomplete** |
 
-### Task 7.1: Convert PNGs to High-Quality WebP
+---
 
-**Files:**
-- Create: `scripts/convert-to-webp.sh`
-- Modify: `public/assets/gallery{1-8,10}/*.png` -> `.webp`
+## Completed Phases
 
-- [ ] **Step 1: Create the conversion script**
+### Phase 7: Asset Optimisation — DONE (PR #25)
 
-```bash
-#!/bin/bash
-# Convert all gallery PNGs to high-quality WebP
-# Preserves originals until verified, then removes them
-set -euo pipefail
+- [x] Convert PNGs to high-quality WebP (q=90, method 6)
+- [x] Remove unused gallery directories (gallery11, gallery12)
+- [x] Update config file extensions (.png → .webp)
 
-QUALITY=90
-ASSETS_DIR="public/assets"
+### Phase 8: Marie Claire Arabia Reference Implementation — DONE (PR #25)
 
-for dir in "$ASSETS_DIR"/gallery{1,2,3,4,5,6,7,8,10}; do
-  [ -d "$dir" ] || continue
-  echo "Processing $(basename "$dir")..."
-  for png in "$dir"/*.png; do
-    [ -f "$png" ] || continue
-    webp="${png%.png}.webp"
-    cwebp -q "$QUALITY" -m 6 "$png" -o "$webp"
-    echo "  Converted: $(basename "$png") -> $(basename "$webp")"
-  done
-done
+- [x] Replace 12 generic `featuredProjects` with 9 named projects
+- [x] Build Marie Claire Arabia ProjectDetail with full gallery and credits
+- [x] Update sitemap with new slugs
+- [x] Update tests (150 passing, 20 suites)
 
-echo "Done. Verify WebP files, then remove PNGs with:"
-echo "  find public/assets -name '*.png' -delete"
-```
+### Phase 9: Remaining Projects (Apply Template) — DONE (PR #25)
 
-- [ ] **Step 2: Run the conversion script**
+- [x] Complete all 9 explicit ProjectDetail entries in projects.ts
+- [x] Remove auto-derivation logic
+- [x] All tests passing, clean build
 
-Run: `bash scripts/convert-to-webp.sh`
-Expected: WebP files created alongside PNGs in each gallery folder
+### Phase 10: Homepage & Work Listing Verification — DONE
 
-- [ ] **Step 3: Verify WebP quality and sizes**
+- [x] Homepage shows Ouronyx hero + 8 project gallery items
+- [x] /work page shows 8 project gallery items (no hero)
+- [x] All 9 project detail pages render with full galleries
+- [x] Playwright verification passed (all pages, screenshots captured)
+- [x] Type-check, lint, tests, build all clean
+- [ ] Run Lighthouse locally (deferred — not blocking)
 
-Run: `for f in public/assets/gallery1/Gallery1-1.webp public/assets/gallery2/Gallery2-1.webp; do ls -lh "$f"; done`
-Expected: WebP files significantly smaller than PNGs but visually identical
+---
 
-- [ ] **Step 4: Remove original PNGs (keep JPGs as-is, keep video files)**
+## Phase 11: Asset Gap Closure
 
-Run: `find public/assets/gallery{1,2,3,4,5,6,7,8,10} -name "*.png" -delete`
-Expected: Only .webp, .mp4, .jpg files remain
+> **Branch:** `feature/phase-11-asset-gap-closure`
 
-- [ ] **Step 5: Verify gallery1 has correct files**
+Download all missing images from Figma for projects with incomplete assets. Use the Figma MCP server (`figma_download_figma_images`) to export images, then convert to WebP.
 
-Run: `ls public/assets/gallery1/`
-Expected: Gallery1-1.webp through Gallery1-10.webp plus Gallery1-6.jpg
+### Task 11.1: Download Bride Story Assets (gallery9)
 
-### Task 7.2: Remove Unused Galleries
+**Entirely new project — 0 of ~12 images exist locally.**
 
-**Files:**
-- Delete: `public/assets/gallery9/`, `public/assets/gallery11/`, `public/assets/gallery12/`
+Figma frames: `Bride-Story1` through `Bride-Story9` (standalone frames, IDs 313:623–313:654)
 
-- [ ] **Step 1: Remove the three unused gallery directories**
+Images to download:
+| # | Figma Node Name | Classification |
+|---|----------------|----------------|
+| 1 | `01_capa_scavoneVERNIS 1` | Cover/hero |
+| 2 | `Screenshot 2025-09-29 at 23.12.14 1` | Background |
+| 3 | `Screenshot 2025-09-30 at 09.52.35 1` | Gallery |
+| 4 | `Screenshot 2025-09-30 at 09.51.16 1` | Gallery |
+| 5 | `_MG_6967 1` | Gallery (photo) |
+| 6 | `Screenshot 2025-09-30 at 09.51.23 1` | Gallery |
+| 7 | `Secao4-GIF-6 1` | Gallery (GIF frame) |
+| 8 | `_MG_7628 copy 1` | Gallery (photo) |
+| 9 | `Screenshot 2025-09-30 at 09.52.08 1` | Gallery |
+| 10 | `_MG_7498 1` | Gallery (photo) |
+| 11 | `Screenshot 2025-09-30 at 09.51.49 1` | Gallery |
+| 12 | `Screenshot 2025-09-30 at 09.52.24 1` | Gallery |
 
-Run: `rm -rf public/assets/gallery9 public/assets/gallery11 public/assets/gallery12`
-Expected: Directories removed, ~28MB freed
+- [ ] **Step 1:** Create `public/assets/gallery9/` directory
+- [ ] **Step 2:** Use `figma_download_figma_images` to export all Bride Story image nodes as PNG
+- [ ] **Step 3:** Convert to WebP (q=90, method 6)
+- [ ] **Step 4:** Verify all 12 images present and high quality
 
-- [ ] **Step 2: Verify remaining gallery structure**
+### Task 11.2: Download Life Assets (gallery8)
 
-Run: `ls -d public/assets/gallery*/`
-Expected: gallery1/ gallery2/ gallery3/ gallery4/ gallery5/ gallery6/ gallery7/ gallery8/ gallery10/
+**Only 1 of ~13 images exist locally.**
 
-### Task 7.3: Update Config — File Extensions
+Figma frames: `LIFE - MOBILE`, `LIFE WEB - VIVARA_V2`
 
-**Files:**
-- Modify: `src/config/site.ts` — Update all `.png` references to `.webp`
+Missing images (names from Figma):
+| # | Figma Node Name | Classification |
+|---|----------------|----------------|
+| 1 | `image 106` | Hero |
+| 2 | `587887687_n` | Gallery / Logo |
+| 3 | `587542277_n` | Gallery |
+| 4 | `Captura de tela 2026-03-17 112750 1` | Gallery |
+| 5 | `Captura de tela 2026-03-17 112528 1` | Gallery |
+| 6 | `Captura de tela 2026-03-17 112946 1` | Gallery |
+| 7 | `583006327_n` | Gallery |
+| 8 | `582908105_n` | Gallery |
+| 9 | `587595951_n` | Gallery |
+| 10 | `588031033_n` | Gallery |
+| 11 | `589177828_n` | Gallery |
+| 12 | `588613959_n` | Gallery |
 
-- [ ] **Step 1: Update all .png references in site.ts to .webp**
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs from LIFE frames
+- [ ] **Step 2:** Download all image nodes
+- [ ] **Step 3:** Convert to WebP, name as Gallery8-2 through Gallery8-13
+- [ ] **Step 4:** Verify all ~13 images present
 
-Every `MediaSource.src`, `poster`, `alt` path that references a `.png` in galleries 1-8, 10 must change to `.webp`. Example:
-- `"/assets/gallery1/Gallery1-1.png"` -> `"/assets/gallery1/Gallery1-1.webp"`
-- `"/assets/gallery10/Gallery10-Cover.png"` -> `"/assets/gallery10/Gallery10-Cover.webp"`
+### Task 11.3: Download SK Assets (gallery6)
 
-- [ ] **Step 2: Update projects.ts — File extensions**
+**Only 4 of ~18 images exist locally.**
 
-Same pattern: all `.png` references to `.webp` in the hardcoded project entries.
+Figma frames: `SK MOBILE`, `SK WEB`
 
-- [ ] **Step 3: Run type-check and build**
+Missing images include: `Gen5_Tangwei-ALP-*` series, `Gen5_Ayase_Haruka-ALP-*` series, multiple screenshots.
 
-Run: `npm run type-check && npm run build`
-Expected: Clean build, no missing asset warnings
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs from SK frames
+- [ ] **Step 2:** Download all unique image nodes not already in gallery6
+- [ ] **Step 3:** Convert to WebP, name as Gallery6-5 through Gallery6-18
+- [ ] **Step 4:** Verify all ~18 images present
 
-- [ ] **Step 4: Commit**
+### Task 11.4: Download BFJ Assets (gallery7)
+
+**Only 9 of ~24 images exist locally.**
+
+Figma frames: `BFJ MOBILE`, `BFJ WEB`
+
+Missing images include: `SSLPJ001746_BUCHERER_BRAND_PERSONA_*` series, `Secao11-GIF-*` series, `IMG_1657`, `SUMMER-Print-AD-Single-5`, `SWA_BTL_MF_SL_27`, `SS19_*` series.
+
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs from BFJ frames
+- [ ] **Step 2:** Download all unique image nodes not already in gallery7
+- [ ] **Step 3:** Convert to WebP, name as Gallery7-10 through Gallery7-24
+- [ ] **Step 4:** Verify all ~24 images present
+
+### Task 11.5: Download Ouronyx Assets (gallery10)
+
+**Only 3 files locally (1 cover + 2 videos). ~23 images in Figma.**
+
+Figma frames: `OURO1` through `OURO6`, `OURO2-2` through `OURO2-6`
+
+Missing images include: `IMG_3050` through `IMG_3061` (12 sequential photos), `PR00000844_OURONYX_*` campaign images (B&W and colour), `Ouronyx-Covers`, `OURONYX_MVP2020_BTS487`, multiple screenshots.
+
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs from OURO frames
+- [ ] **Step 2:** Download all unique image nodes
+- [ ] **Step 3:** Convert to WebP, name as Gallery10-1 through Gallery10-23
+- [ ] **Step 4:** Verify all images present
+
+### Task 11.6: Download Wao Cosmo Assets (gallery3)
+
+**Only 2 files locally (cover + video). ~17 gallery + 6 social posts in Figma.**
+
+Figma frames: `WAO COSMO` mobile and desktop, plus standalone WAO post frames
+
+Gallery images: `WAO-4x5-COSMO-*` series, `WAO-Cosmo-17-extended`, `FLORA-*` series (multiple variants), `COSMOPOLITAN1020`
+Social posts: `WAO-COSMO-Post*` series, `WAO-COSMO-LAYOUT1`
+
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs
+- [ ] **Step 2:** Download gallery images and social post mockups
+- [ ] **Step 3:** Convert to WebP
+- [ ] **Step 4:** Verify all images present
+
+### Task 11.7: Download Bucherer Summer Assets (gallery5)
+
+**Only 2 files locally (cover + video). ~5 gallery images + logo in Figma.**
+
+Figma frames: `BUCHERER SUMMER MOBILE`, `BUCHERER SUMMER WEB`
+
+Missing images: `BUC-2-3`, `SUMMER-Print-AD-Single-5` variants, screenshots
+Logo: `bucherer-logo-black-and-white`
+
+- [ ] **Step 1:** Use Figma MCP to get exact node IDs
+- [ ] **Step 2:** Download gallery images and logo
+- [ ] **Step 3:** Convert to WebP
+- [ ] **Step 4:** Verify all images present
+
+### Task 11.8: Download Marie Claire Arabia Social Posts + Logo
+
+**Gallery images complete. 6 social post mockups + client logo missing.**
+
+Figma frames: `ProjectsPage2-MC` (118:46 mobile, 118:122 desktop)
+
+Missing assets:
+| # | Figma Node Name | Node ID (mobile) | Node ID (desktop) | Classification |
+|---|----------------|-------------------|--------------------| ---------------|
+| 1 | `MC-Post3-2 1` | 233:339 | 233:324 | Social post |
+| 2 | `MC-Post1 2` | 233:469 | 233:405 | Social post |
+| 3 | `MC-Post6-2 1` | 233:473 | 233:428 | Social post |
+| 4 | `MC-9x16-7 2` | 233:477 | 233:407 | Social post (stories) |
+| 5 | `MC-9x16-9 2` | 233:481 | 233:408 | Social post (stories) |
+| 6 | `MC-Post3-3 2` | 233:488 | 233:424 | Social post |
+| 7 | `logoMC 1` | 135:97 | 135:237 | Client logo |
+
+- [ ] **Step 1:** Download social post images and logo via Figma MCP
+- [ ] **Step 2:** Convert to WebP, save social posts as Gallery1-11 through Gallery1-16, logo separately
+- [ ] **Step 3:** Verify all assets present
+
+### Task 11.9: Convert All New Assets to WebP
+
+- [ ] **Step 1:** Run conversion script on all new PNG downloads
+- [ ] **Step 2:** Remove original PNGs
+- [ ] **Step 3:** Verify no PNGs remain in any gallery directory
+
+### Task 11.10: Commit
 
 ```bash
 git add -A
-git commit -m "perf: convert gallery PNGs to high-quality WebP and remove unused galleries"
+git commit -m "feat: download missing Figma assets for all projects and add Bride Story"
 ```
 
 ---
 
-## Phase 8: Marie Claire Arabia Reference Implementation
+## Phase 12: Update Project Configs
 
-> **Branch:** `feature/phase-8-marie-claire-template`
+> **Branch:** `feature/phase-12-project-config-update`
 
-### Task 8.1: Update featuredProjects Config
+Wire up all newly downloaded assets in config files, add Bride Story as 10th project.
 
-**Files:**
-- Modify: `src/config/site.ts:132-278`
+### Task 12.1: Add Bride Story to Site Config
 
-Replace the 12 generic `featuredProjects` entries with 9 named projects. Ouronyx stays as first (hero). The remaining 8 follow Figma order.
+**Files:** `src/config/site.ts`
 
-- [ ] **Step 1: Replace featuredProjects array**
-
-```typescript
-export const featuredProjects: Project[] = [
-  // Hero — Ouronyx (intro hero, not in work listing grid)
-  {
-    id: "ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
-    href: "/work/ouronyx",
-    media: {
-      type: "video",
-      src: "/assets/gallery10/Gallery10-Ouronyx.mp4",
-      srcMobile: "/assets/gallery10/Gallery10-Ouronyx-Mobile.mp4",
-      poster: "/assets/gallery10/Gallery10-Cover.webp",
-      autoPlay: true, loop: true, muted: true,
-    },
-  },
-  // 1. Marie Claire Arabia
-  {
-    id: "marie-claire-arabia",
-    title: "Marie Claire Arabia",
-    subtitle: "Creative Direction",
-    href: "/work/marie-claire-arabia",
-    media: {
-      type: "image",
-      src: "/assets/gallery1/Gallery1-1.webp",
-      alt: "Marie Claire Arabia editorial",
-    },
-  },
-  // 2. YSL
-  {
-    id: "ysl",
-    title: "YSL",
-    subtitle: "Art Direction",
-    href: "/work/ysl",
-    media: {
-      type: "image",
-      src: "/assets/gallery2/Gallery2-1.webp",
-      alt: "YSL campaign",
-    },
-  },
-  // 3. WAO COSMO
-  {
-    id: "wao-cosmo",
-    title: "Wao Cosmo",
-    subtitle: "Visual Design",
-    href: "/work/wao-cosmo",
-    media: {
-      type: "video",
-      src: "/assets/gallery3/Gallery3-Video.mp4",
-      poster: "/assets/gallery3/Gallery3-Cover.webp",
-      autoPlay: true, loop: true, muted: true,
-    },
-  },
-  // 4. VIVARA
-  {
-    id: "vivara",
-    title: "Vivara",
-    subtitle: "Art Direction",
-    href: "/work/vivara",
-    media: {
-      type: "image",
-      src: "/assets/gallery4/Gallery4-1.webp",
-      alt: "Vivara jewellery campaign",
-    },
-  },
-  // 5. BUCHERER SUMMER
-  {
-    id: "bucherer-summer",
-    title: "Bucherer Summer",
-    subtitle: "Creative Direction",
-    href: "/work/bucherer-summer",
-    media: {
-      type: "video",
-      src: "/assets/gallery5/Gallery5-Video.mp4",
-      poster: "/assets/gallery5/Gallery5-Cover.webp",
-      autoPlay: true, loop: true, muted: true,
-    },
-  },
-  // 6. SK
-  {
-    id: "sk",
-    title: "SK",
-    subtitle: "Brand Development",
-    href: "/work/sk",
-    media: {
-      type: "image",
-      src: "/assets/gallery6/Gallery6-1.webp",
-      alt: "SK brand showcase",
-    },
-  },
-  // 7. BFJ
-  {
-    id: "bfj",
-    title: "BFJ",
-    subtitle: "Digital Design",
-    href: "/work/bfj",
-    media: {
-      type: "image",
-      src: "/assets/gallery7/Gallery7-1.webp",
-      alt: "BFJ project showcase",
-    },
-  },
-  // 8. LIFE
-  {
-    id: "life",
-    title: "Life",
-    subtitle: "Creative Strategy",
-    href: "/work/life",
-    media: {
-      type: "image",
-      src: "/assets/gallery8/Gallery8-1.webp",
-      alt: "Life project showcase",
-    },
-  },
-];
-```
-
-- [ ] **Step 2: Update ctaLinks text if needed**
-
-Verify CTA text matches Figma. Current: "View all works" / "Work with us".
-
-- [ ] **Step 3: Run type-check**
-
-Run: `npm run type-check`
-Expected: PASS
-
-### Task 8.2: Build Marie Claire Arabia ProjectDetail
-
-**Files:**
-- Modify: `src/config/projects.ts`
-
-Replace the 3 hardcoded project entries with a full Marie Claire Arabia entry that wires up ALL 10 gallery images, credits from Figma, and proper metadata.
-
-- [ ] **Step 1: Write the Marie Claire Arabia project detail**
-
-From Figma analysis:
-- Title: "Marie Claire Arabia"
-- Subtitle: "September Issue - Back to Work Editorial"
-- Credits: Art Direction, Photographer (Ekin Can Bayrakdar), Stylist, etc.
-- Gallery: 10 images from gallery1/ in 2-column masked grid layout
-- Hero image: Gallery1-6.webp (or Gallery1-1.webp — matches Figma `Gallery1-6 1` background)
+- [ ] **Step 1:** Add Bride Story to `featuredProjects` array (10th entry, after Life)
 
 ```typescript
+// 9. BRIDE STORY
 {
-  id: 'marie-claire-arabia',
-  slug: 'marie-claire-arabia',
-  client: 'Marie Claire Arabia',
-  title: 'Marie Claire Arabia',
-  subtitle: 'September Issue - Back to Work Editorial',
-  description: 'Creative direction for the September Issue Back to Work editorial, combining bold fashion statements with refined art direction.',
-  introText: 'A striking editorial for Marie Claire Arabia\'s September Issue, exploring the return to professional elegance through contemporary fashion photography.',
-  
-  heroImage: {
-    desktop: '/assets/gallery1/Gallery1-6.webp',
-    alt: 'Marie Claire Arabia September Issue editorial',
+  id: "bride-story",
+  title: "Bride Story",
+  subtitle: "Editorial Design",
+  href: "/work/bride-story",
+  media: {
+    type: "image",
+    src: "/assets/gallery9/Gallery9-1.webp",
+    alt: "Bride Story editorial",
   },
-  
-  year: '2024',
-  services: ['Creative Direction', 'Art Direction', 'Editorial Design'],
-  credits: [
-    { role: 'Art Direction', name: 'Studio Haus Creative' },
-    { role: 'Photographer', name: 'Ekin Can Bayrakdar' },
-  ],
-  
-  media: [
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-1.webp', alt: 'Marie Claire Arabia editorial look 1' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-2.webp', alt: 'Marie Claire Arabia editorial look 2' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-3.webp', alt: 'Marie Claire Arabia editorial look 3' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-4.webp', alt: 'Marie Claire Arabia editorial look 4' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-5.webp', alt: 'Marie Claire Arabia editorial look 5' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-7.webp', alt: 'Marie Claire Arabia editorial look 6' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-8.webp', alt: 'Marie Claire Arabia editorial look 7' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-9.webp', alt: 'Marie Claire Arabia editorial look 8' },
-    { type: 'image', desktop: '/assets/gallery1/Gallery1-10.webp', alt: 'Marie Claire Arabia editorial look 9' },
-  ],
-  
-  metaTitle: 'Marie Claire Arabia | HAUS Creative',
-  metaDescription: 'Creative direction for Marie Claire Arabia September Issue - Back to Work Editorial by Studio Haus Creative.',
-  ogImage: '/assets/gallery1/Gallery1-1.webp',
-}
+},
 ```
 
-- [ ] **Step 2: Add remaining project stubs**
+- [ ] **Step 2:** Run type-check
 
-Add minimal ProjectDetail entries for the other 8 projects (Ouronyx, YSL, WAO COSMO, VIVARA, BUCHERER SUMMER, SK, BFJ, LIFE) with all their gallery images wired up. These use the same pattern but with appropriate gallery paths and image counts.
+### Task 12.2: Add Bride Story ProjectDetail
 
-- [ ] **Step 3: Remove createProjectDetailFromFeatured and derivedFeaturedProjects**
+**Files:** `src/config/projects.ts`
 
-The auto-derivation logic is no longer needed — all projects are now explicitly defined. Remove:
-- `createProjectDetailFromFeatured()` function
-- `derivedFeaturedProjects` computed map
-- Update `getProjectBySlug()` to only search `projects` array
-- Update `getAllProjectSlugs()` to only map `projects` array
+- [ ] **Step 1:** Create full ProjectDetail entry for Bride Story with all ~12 gallery images, credits, services, SEO metadata
+- [ ] **Step 2:** Run type-check
 
-- [ ] **Step 4: Run type-check**
+### Task 12.3: Update Existing Project Media Arrays
 
-Run: `npm run type-check`
-Expected: PASS
+**Files:** `src/config/projects.ts`
 
-### Task 8.3: Update Sitemap
+Update the `media[]` arrays for all projects that received new images:
 
-**Files:**
-- Modify: `src/app/sitemap.ts`
+| Project | Current media count | New media count |
+|---------|-------------------|-----------------|
+| Life | 1 | ~13 |
+| SK | 4 | ~18 |
+| BFJ | 9 | ~24 |
+| Ouronyx | 3 | ~23 |
+| Wao Cosmo | 2 | ~17+ |
+| Bucherer Summer | 2 | ~5+ |
+| Marie Claire Arabia | 10 | ~16 (+ social posts) |
 
-- [ ] **Step 1: Update sitemap to use new slugs**
+- [ ] **Step 1:** Update Life (gallery8) media array with Gallery8-2 through Gallery8-13
+- [ ] **Step 2:** Update SK (gallery6) media array with Gallery6-5 through Gallery6-18
+- [ ] **Step 3:** Update BFJ (gallery7) media array with Gallery7-10 through Gallery7-24
+- [ ] **Step 4:** Update Ouronyx (gallery10) media array with Gallery10-1 through Gallery10-23
+- [ ] **Step 5:** Update Wao Cosmo (gallery3) media array
+- [ ] **Step 6:** Update Bucherer Summer (gallery5) media array
+- [ ] **Step 7:** Update Marie Claire Arabia (gallery1) media array with social posts
+- [ ] **Step 8:** Wire up client logos where available (MC, Vivara, Bucherer)
+- [ ] **Step 9:** Run type-check
 
-Import `getAllProjectSlugs` and dynamically generate work URLs instead of hardcoding. Remove old generic gallery slugs, add new named project slugs.
+### Task 12.4: Update Sitemap
 
-- [ ] **Step 2: Run build to verify sitemap**
+**Files:** `src/app/sitemap.ts`
 
-Run: `npm run build`
-Expected: Sitemap generates with correct URLs
+- [ ] **Step 1:** Add `/work/bride-story` to sitemap
+- [ ] **Step 2:** Run build to verify
 
-### Task 8.4: Update Tests
+### Task 12.5: Update Tests
 
-**Files:**
-- Modify: `src/__tests__/config/site.test.ts`
-- Modify: `src/__tests__/config/projects.test.ts`
+**Files:** `src/__tests__/config/site.test.ts`, `src/__tests__/config/projects.test.ts`
 
-- [ ] **Step 1: Update site.test.ts for new featuredProjects**
+- [ ] **Step 1:** Update `featuredProjects` count from 9 to 10
+- [ ] **Step 2:** Update `projects` array count from 9 to 10
+- [ ] **Step 3:** Add test for `getProjectBySlug('bride-story')`
+- [ ] **Step 4:** Update `getAllProjectSlugs()` to expect 10 slugs
+- [ ] **Step 5:** Update media count assertions for projects that received new images
+- [ ] **Step 6:** Run tests — all must pass
 
-Update test expectations:
-- `featuredProjects` has 9 entries (was 12)
-- First entry is Ouronyx (unchanged)
-- Second entry is Marie Claire Arabia (was "Gallery One")
-- All entries have valid `.webp` or `.mp4` media paths
+### Task 12.6: Full Verification
 
-- [ ] **Step 2: Update projects.test.ts for new project data**
-
-Update test expectations:
-- `projects` array has 9 entries (was 3 hardcoded + 9 derived)
-- `getProjectBySlug('marie-claire-arabia')` returns correct data
-- `getProjectBySlug('gallery-1')` returns undefined (old slug removed)
-- `getAllProjectSlugs()` returns 9 slugs
-- No more `derivedFeaturedProjects` logic to test
-
-- [ ] **Step 3: Run tests**
-
-Run: `npm test`
-Expected: All tests pass
-
-- [ ] **Step 4: Run full verification**
-
-Run: `npm run type-check && npm run lint && npm test && npm run build`
-Expected: All pass clean
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 1:** `npm run type-check` — clean
+- [ ] **Step 2:** `npm run lint` — clean
+- [ ] **Step 3:** `npm test` — all pass
+- [ ] **Step 4:** `npm run build` — clean SSG build, 10 project pages
+- [ ] **Step 5:** Commit
 
 ```bash
 git add -A
-git commit -m "feat: add Marie Claire Arabia as reference project with full gallery and credits"
+git commit -m "feat: add Bride Story project and wire up all missing Figma assets"
 ```
 
 ---
 
-## Phase 9: Remaining Projects (Apply Template)
+## Phase 13: Visual Alignment
 
-> **Branch:** `feature/phase-9-all-projects`
+> **Branch:** `feature/phase-13-visual-alignment`
 
-### Task 9.1: Complete All ProjectDetail Entries
+Compare website against Figma design and fix typography, spacing, layout, and colour differences.
 
-**Files:**
-- Modify: `src/config/projects.ts`
+### Task 13.1: Typography Audit
 
-Apply the Marie Claire Arabia pattern to the remaining 7 projects. Each gets:
-- Proper client name, title, subtitle from Figma
-- All gallery images wired into `media[]` array
-- Services and credits (where known from Figma)
-- SEO metadata
+Use Figma MCP to extract text styles from key frames and compare against current CSS/Tailwind.
 
-Project details:
+- [ ] **Step 1:** Extract all text styles from Figma (font family, size, weight, line-height, letter-spacing)
+- [ ] **Step 2:** Compare against current `globals.css` and Tailwind config
+- [ ] **Step 3:** Fix any discrepancies
 
-| Project | Gallery | Images | Hero |
-|---------|---------|--------|------|
-| YSL | gallery2 | Gallery2-1 through Gallery2-10 | Gallery2-1.webp |
-| WAO COSMO | gallery3 | Gallery3-Cover.webp + Video | Gallery3-Video.mp4 |
-| VIVARA | gallery4 | Gallery4-1 through Gallery4-8 | Gallery4-1.webp |
-| BUCHERER SUMMER | gallery5 | Gallery5-Cover.webp + Video | Gallery5-Video.mp4 |
-| SK | gallery6 | Gallery6-1 through Gallery6-4 | Gallery6-1.webp |
-| BFJ | gallery7 | Gallery7-1 through Gallery7-9 | Gallery7-1.webp |
-| LIFE | gallery8 | Gallery8-1.webp | Gallery8-1.webp |
+### Task 13.2: Spacing & Layout Audit
 
-- [ ] **Step 1: Complete all 9 ProjectDetail entries in projects.ts**
-- [ ] **Step 2: Run type-check and build**
-- [ ] **Step 3: Update tests for complete project set**
-- [ ] **Step 4: Run full verification**
-- [ ] **Step 5: Commit**
+- [ ] **Step 1:** Compare homepage section heights and padding against Figma
+- [ ] **Step 2:** Compare project detail page layout (2-col grid, intro section, credits) against Figma
+- [ ] **Step 3:** Compare mobile variants against Figma `-M` frames
+- [ ] **Step 4:** Fix any discrepancies
 
----
+### Task 13.3: Colour Audit
 
-## Phase 10: Homepage & Work Listing Alignment
+- [ ] **Step 1:** Extract all fill colours from Figma
+- [ ] **Step 2:** Compare against Tailwind config and CSS custom properties
+- [ ] **Step 3:** Fix any discrepancies
 
-> **Branch:** `feature/phase-10-homepage-alignment`
+### Task 13.4: Component Detail Alignment
 
-### Task 10.1: Verify Homepage Renders Correctly
+- [ ] **Step 1:** Header/nav — compare against Figma (Home-D, Home-M)
+- [ ] **Step 2:** Footer — compare against Figma
+- [ ] **Step 3:** Project hero section — compare against Figma (client logo overlay, image sizing)
+- [ ] **Step 4:** Gallery grid — compare against Figma (2-col masked grid, spacing, aspect ratios)
+- [ ] **Step 5:** Credits section — compare against Figma
+- [ ] **Step 6:** About page — compare against Figma (About-M, About-D)
+- [ ] **Step 7:** Contact page — compare against Figma (Contact-M, Contact-D)
 
-- [ ] **Step 1: Verify homepage shows Ouronyx hero + 8 project gallery items**
-- [ ] **Step 2: Verify /work page shows 8 project gallery items (no hero)**
-- [ ] **Step 3: Verify all project detail pages render with full galleries**
-- [ ] **Step 4: Run Lighthouse locally**
-- [ ] **Step 5: Final commit and PR**
+### Task 13.5: Full Verification
+
+- [ ] **Step 1:** `npm run type-check && npm run lint && npm test && npm run build`
+- [ ] **Step 2:** Playwright visual verification of all pages
+- [ ] **Step 3:** Lighthouse audit
+- [ ] **Step 4:** Commit and PR
 
 ---
 
@@ -476,9 +372,21 @@ After all phases:
 - [ ] `npm run lint` — clean
 - [ ] `npm test` — all pass, coverage above 50%
 - [ ] `npm run build` — clean SSG build
-- [ ] All 9 project detail pages render with full image galleries
-- [ ] Homepage: Ouronyx hero + 8 named projects
-- [ ] /work: 8 named projects (same as homepage minus hero)
-- [ ] Sitemap has correct URLs
-- [ ] No references to old gallery-N slugs remain
+- [ ] All 10 project detail pages render with full image galleries
+- [ ] Homepage: Ouronyx hero + 9 named projects (including Bride Story)
+- [ ] /work: 9 named projects (same as homepage minus hero)
+- [ ] Sitemap has correct URLs (10 project slugs)
+- [ ] No references to old generic gallery slugs remain
 - [ ] No .png files remain in galleries (all converted to .webp)
+- [ ] Client logos rendered on project hero sections where available
+- [ ] Social post mockups included in Marie Claire Arabia and Wao Cosmo galleries
+- [ ] Typography, spacing, and colours match Figma source of truth
+- [ ] Mobile layouts match Figma `-M` frame variants
+
+## Notes
+
+- **Shared hero assets:** `PRO00003037_2022_Bucherer_Summer_SL5_0001_01_F1A` appears in Bucherer Summer, SK, and BFJ — likely a placeholder. Verify with designer whether each project should have its own hero.
+- **`image 106`** is reused across multiple projects as a hero overlay — may be a template element.
+- **Social post mockups** exist only for Marie Claire Arabia (6 posts) and Wao Cosmo (6 posts). These are distinct from gallery photography.
+- **Client logos** confirmed in Figma: `logoMC` (Marie Claire), `LOGO` (Vivara), `bucherer-logo-black-and-white` (Bucherer).
+- **Gallery1-6.jpg** is the only non-WebP gallery image — should be converted in Phase 11.

@@ -71,7 +71,7 @@ export default function About() {
         <div className="md:w-1/2">
           <div className="relative h-[400px] md:h-[528px] overflow-hidden">
             <Image
-              src="/assets/about/about.jpg"
+              src="/assets/about/about.webp"
               alt="Studio Haus portrait"
               fill
               className="object-cover"
