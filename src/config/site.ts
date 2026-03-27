@@ -121,7 +121,7 @@ export const siteConfig: SiteConfig = {
 
   socialLinks: [
     { title: "Instagram", href: "https://www.instagram.com/studiohauscreative" },
-    { title: "LinkedIn", href: "https://www.linkedin.com/company/studiohauscreative" },
+    { title: "Linkedin", href: "https://www.linkedin.com/company/studiohauscreative" },
   ],
 };
 

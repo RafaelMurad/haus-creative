@@ -21,8 +21,9 @@ export function Header() {
 
   const showHeader = isVisible || isMenuOpen;
 
-  // Use dark text on pages with white backgrounds
-  const isDarkText = pathname !== "/";
+  // Use dark text on pages with white backgrounds (about, contact)
+  // Use light text on pages with dark hero backgrounds (home, work, project detail)
+  const isDarkText = pathname === "/about" || pathname === "/contact";
 
   return (
     <>
@@ -60,7 +61,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[18px] uppercase tracking-wide transition-opacity duration-250 hover:opacity-50"
+              className="text-[18px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
             >
               {link.title}
             </Link>
