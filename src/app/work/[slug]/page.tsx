@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
+import { GalleryGrid } from "@/components/ui";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 
@@ -119,40 +120,9 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
 
-        {/* Media Gallery - 2-column grid on desktop */}
+        {/* Media Gallery */}
         <div className="mt-[143px]">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {project.media.map((item, index) => (
-              <div key={index} className="relative w-full overflow-hidden">
-                {item.type === 'video' ? (
-                  <video
-                    className="w-full h-auto object-cover"
-                    playsInline
-                    autoPlay
-                    loop
-                    muted
-                  >
-                    <source
-                      src={item.mobile || item.desktop}
-                      type="video/mp4"
-                      media="(max-width: 768px)"
-                    />
-                    <source src={item.desktop} type="video/mp4" />
-                  </video>
-                ) : (
-                  <Image
-                    src={item.desktop}
-                    alt={item.alt}
-                    width={1920}
-                    height={1080}
-                    className="w-full h-auto object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    loading={index < 2 ? "eager" : "lazy"}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+          <GalleryGrid media={project.media} />
         </div>
 
         {/* Credits Section */}

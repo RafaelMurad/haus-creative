@@ -20,12 +20,30 @@ import type { CarouselConfig } from "@/types/carousel";
  *   gallery10 = Ouronyx (video, intro hero)
  */
 
+/**
+ * Gallery layout frame types — controls how each media item is rendered.
+ *
+ * - `mask`       Edge-to-edge image, no background (default)
+ * - `inset`      Image padded inside a coloured background container
+ * - `phone`      Phone device mockup with rounded-corner CSS frame on blue bg
+ * - `colorFrame` Solid colour background behind the image
+ */
+export type GalleryFrame = "mask" | "inset" | "phone" | "colorFrame";
+
 export interface ProjectMedia {
   type: "image" | "video";
   desktop: string;
   mobile?: string;
   alt: string;
-  caption?: string;
+
+  /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
+  span?: "full" | "half";
+
+  /** Frame presentation style. Defaults to 'mask'. */
+  frame?: GalleryFrame;
+
+  /** Background colour for inset/colorFrame/phone containers (e.g. '#1500FF'). */
+  bgColor?: string;
 }
 
 export interface ProjectCredit {
@@ -254,31 +272,42 @@ export const projects: ProjectDetail[] = [
     ],
 
     media: [
+      // Row 1: half inset pair (white bg)
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-2.webp",
         alt: "Marie Claire Arabia editorial look 1",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-3.webp",
         alt: "Marie Claire Arabia editorial look 2",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 2: half inset left + half mask right
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-4.webp",
         alt: "Marie Claire Arabia editorial look 3",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-5.webp",
         alt: "Marie Claire Arabia editorial look 4",
       },
+      // Row 3: full mask
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-6.webp",
         alt: "Marie Claire Arabia editorial look 5",
+        span: "full",
       },
+      // Row 4: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-7.webp",
@@ -289,6 +318,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/gallery1/Gallery1-8.webp",
         alt: "Marie Claire Arabia editorial look 7",
       },
+      // Row 5: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-9.webp",
@@ -299,11 +329,14 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/gallery1/Gallery1-10.webp",
         alt: "Marie Claire Arabia editorial look 9",
       },
+      // Row 6: full mask
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-11.webp",
         alt: "Marie Claire Arabia social post 1",
+        span: "full",
       },
+      // Rows 7+: social/extended items — half mask pairs
       {
         type: "image",
         desktop: "/assets/gallery1/Gallery1-12.webp",
@@ -362,66 +395,95 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: full mask
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-2.webp",
         alt: "YSL campaign image 1",
+        span: "full",
       },
+      // Row 2: half colorFrame pair (pink + red)
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-3.webp",
         alt: "YSL campaign image 2",
+        frame: "colorFrame",
+        bgColor: "#FF0DDF",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-4.webp",
         alt: "YSL campaign image 3",
+        frame: "colorFrame",
+        bgColor: "#FF0D0D",
       },
+      // Row 3: full mask
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-5.webp",
         alt: "YSL campaign image 4",
+        span: "full",
       },
+      // Row 4: half colorFrame pair (purple + red)
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-6.webp",
         alt: "YSL campaign image 5",
+        frame: "colorFrame",
+        bgColor: "#4C1EF4",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-7.webp",
         alt: "YSL campaign image 6",
+        frame: "colorFrame",
+        bgColor: "#FF0D0D",
       },
+      // Row 5: full mask
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-8.webp",
         alt: "YSL campaign image 7",
+        span: "full",
       },
+      // Row 6: half colorFrame pair (pink + purple)
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-9.webp",
         alt: "YSL campaign image 8",
+        frame: "colorFrame",
+        bgColor: "#FF0DDF",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-10.webp",
         alt: "YSL campaign image 9",
+        frame: "colorFrame",
+        bgColor: "#4C1EF4",
       },
+      // Row 7: full mask
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-11.webp",
         alt: "YSL campaign image 10",
+        span: "full",
       },
+      // Row 8: half colorFrame pair (red + pink)
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-12.webp",
         alt: "YSL campaign image 11",
+        frame: "colorFrame",
+        bgColor: "#FF0D0D",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-13.webp",
         alt: "YSL campaign image 12",
+        frame: "colorFrame",
+        bgColor: "#FF0DDF",
       },
+      // Extended items — half mask pairs
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-14.webp",
@@ -475,31 +537,40 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: half pair — inset (right) + mask (left)
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-1.webp",
         alt: "Wao Cosmo brand identity showcase",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-2.webp",
         alt: "Wao Cosmo visual design 1",
       },
+      // Row 2: half pair — inset + mask
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-3.webp",
         alt: "Wao Cosmo visual design 2",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-4.webp",
         alt: "Wao Cosmo visual design 3",
       },
+      // Row 3: full mask
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-5.webp",
         alt: "Wao Cosmo visual design 4",
+        span: "full",
       },
+      // Row 4: half pair — mask + inset
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-6.webp",
@@ -509,71 +580,105 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/gallery3/Gallery3-7.webp",
         alt: "Wao Cosmo visual design 6",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 5: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-8.webp",
         alt: "Wao Cosmo visual design 7",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-9.webp",
         alt: "Wao Cosmo visual design 8",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 6: half colorFrame pair (brown)
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-10.webp",
         alt: "Wao Cosmo visual design 9",
+        frame: "colorFrame",
+        bgColor: "#AB5F33",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-11.webp",
         alt: "Wao Cosmo visual design 10",
+        frame: "colorFrame",
+        bgColor: "#AB5F33",
       },
+      // Row 7: half colorFrame pair (brown)
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-12.webp",
         alt: "Wao Cosmo visual design 11",
+        frame: "colorFrame",
+        bgColor: "#AB5F33",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-13.webp",
         alt: "Wao Cosmo visual design 12",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 8: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-14.webp",
         alt: "Wao Cosmo visual design 13",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-15.webp",
         alt: "Wao Cosmo visual design 14",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 9: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-16.webp",
         alt: "Wao Cosmo visual design 15",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-17.webp",
         alt: "Wao Cosmo visual design 16",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 10: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-18.webp",
         alt: "Wao Cosmo visual design 17",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-19.webp",
         alt: "Wao Cosmo visual design 18",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 11: full mask
       {
         type: "image",
         desktop: "/assets/gallery3/Gallery3-20.webp",
         alt: "Wao Cosmo visual design 19",
+        span: "full",
       },
     ],
 
@@ -608,80 +713,116 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-2.webp",
         alt: "Vivara campaign image 1",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-3.webp",
         alt: "Vivara campaign image 2",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 2: full mask
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-4.webp",
         alt: "Vivara campaign image 3",
+        span: "full",
       },
+      // Row 3: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-5.webp",
         alt: "Vivara campaign image 4",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-6.webp",
         alt: "Vivara campaign image 5",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 4: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-7.webp",
         alt: "Vivara campaign image 6",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-8.webp",
         alt: "Vivara campaign image 7",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 5: full mask
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-9.webp",
         alt: "Vivara campaign image 8",
+        span: "full",
       },
+      // Row 6: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-10.webp",
         alt: "Vivara campaign image 9",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-11.webp",
         alt: "Vivara campaign image 10",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 7: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-12.webp",
         alt: "Vivara campaign image 11",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-13.webp",
         alt: "Vivara campaign image 12",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 8: full mask
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-14.webp",
         alt: "Vivara campaign image 13",
+        span: "full",
       },
+      // Row 9: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-15.webp",
         alt: "Vivara campaign image 14",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery4/Gallery4-16.webp",
         alt: "Vivara campaign image 15",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
     ],
 
@@ -716,55 +857,76 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // All items: half-width inset pairs (uniform 2×5 grid, white bg)
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-1.webp",
         alt: "Bucherer Summer campaign image 1",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-2.webp",
         alt: "Bucherer Summer campaign image 2",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-3.webp",
         alt: "Bucherer Summer campaign image 3",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-4.webp",
         alt: "Bucherer Summer campaign image 4",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-5.webp",
         alt: "Bucherer Summer campaign image 5",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-6.webp",
         alt: "Bucherer Summer campaign image 6",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-7.webp",
         alt: "Bucherer Summer campaign image 7",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-8.webp",
         alt: "Bucherer Summer campaign image 8",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-9.webp",
         alt: "Bucherer Summer campaign image 9",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery5/Gallery5-10.webp",
         alt: "Bucherer Summer campaign image 10",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
     ],
 
@@ -799,81 +961,118 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-2.webp",
         alt: "SK brand image 1",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-3.webp",
         alt: "SK brand image 2",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 2: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-4.webp",
         alt: "SK brand image 3",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-5.webp",
         alt: "SK brand image 4",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 3: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-6.webp",
         alt: "SK brand image 5",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-7.webp",
         alt: "SK brand image 6",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 4: full mask
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-8.webp",
         alt: "SK brand image 7",
+        span: "full",
       },
+      // Row 5: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-9.webp",
         alt: "SK brand image 8",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-10.webp",
         alt: "SK brand image 9",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 6: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-11.webp",
         alt: "SK brand image 10",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-12.webp",
         alt: "SK brand image 11",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 7: full mask
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-13.webp",
         alt: "SK brand image 12",
+        span: "full",
       },
+      // Row 8: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-14.webp",
         alt: "SK brand image 13",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-15.webp",
         alt: "SK brand image 14",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 9: full mask
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-16.webp",
         alt: "SK brand image 15",
+        span: "full",
       },
+      // Extended items — half mask pairs
       {
         type: "image",
         desktop: "/assets/gallery6/Gallery6-17.webp",
@@ -957,180 +1156,257 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-2.webp",
         alt: "BFJ project image 1",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-3.webp",
         alt: "BFJ project image 2",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 2: full mask
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-4.webp",
         alt: "BFJ project image 3",
+        span: "full",
       },
+      // Row 3: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-5.webp",
         alt: "BFJ project image 4",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-6.webp",
         alt: "BFJ project image 5",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 4: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-7.webp",
         alt: "BFJ project image 6",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-8.webp",
         alt: "BFJ project image 7",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 5: full mask
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-9.webp",
         alt: "BFJ project image 8",
+        span: "full",
       },
+      // Row 6: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-10.webp",
         alt: "BFJ project image 9",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-11.webp",
         alt: "BFJ project image 10",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 7: half inset pair
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-12.webp",
         alt: "BFJ project image 11",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-13.webp",
         alt: "BFJ project image 12",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Row 8: full mask
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-14.webp",
         alt: "BFJ project image 13",
+        span: "full",
       },
+      // Extended items — half inset pairs
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-15.webp",
         alt: "BFJ project image 14",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-16.webp",
         alt: "BFJ project image 15",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-17.webp",
         alt: "BFJ project image 16",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-18.webp",
         alt: "BFJ project image 17",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-19.webp",
         alt: "BFJ project image 18",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-20.webp",
         alt: "BFJ project image 19",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-21.webp",
         alt: "BFJ project image 20",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-22.webp",
         alt: "BFJ project image 21",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-23.webp",
         alt: "BFJ project image 22",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-24.webp",
         alt: "BFJ project image 23",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-25.webp",
         alt: "BFJ project image 24",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-26.webp",
         alt: "BFJ project image 25",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-27.webp",
         alt: "BFJ project image 26",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-28.webp",
         alt: "BFJ project image 27",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-29.webp",
         alt: "BFJ project image 28",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-30.webp",
         alt: "BFJ project image 29",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Full-width banner
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-31.webp",
         alt: "BFJ project image 30",
+        span: "full",
       },
+      // More inset pairs
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-32.webp",
         alt: "BFJ project image 31",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-33.webp",
         alt: "BFJ project image 32",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-34.webp",
         alt: "BFJ project image 33",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-35.webp",
         alt: "BFJ project image 34",
+        frame: "inset",
+        bgColor: "#FFFFFF",
       },
+      // Full-width banner
       {
         type: "image",
         desktop: "/assets/gallery7/Gallery7-36.webp",
         alt: "BFJ project image 35",
+        span: "full",
       },
     ],
 
@@ -1165,71 +1441,104 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
+      // Row 1: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-2.webp",
         alt: "Life project image 1",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-3.webp",
         alt: "Life project image 2",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 2: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-4.webp",
         alt: "Life project image 3",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-5.webp",
         alt: "Life project image 4",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 3: full mask
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-6.webp",
         alt: "Life project image 5",
+        span: "full",
       },
+      // Row 4: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-7.webp",
         alt: "Life project image 6",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-8.webp",
         alt: "Life project image 7",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 5: half phone + half colorFrame pink
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-9.webp",
         alt: "Life project image 8",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-10.webp",
         alt: "Life project image 9",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
+      // Row 6: half colorFrame pink + half phone
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-11.webp",
         alt: "Life project image 10",
+        frame: "colorFrame",
+        bgColor: "#FF0E9B",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-12.webp",
         alt: "Life project image 11",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
+      // Row 7: half phone + half colorFrame brown
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-13.webp",
         alt: "Life project image 12",
+        frame: "phone",
+        bgColor: "#1500FF",
       },
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-14.webp",
         alt: "Life project image 13",
+        frame: "colorFrame",
+        bgColor: "#AB5F33",
       },
+      // Extended items — half mask pairs
       {
         type: "image",
         desktop: "/assets/gallery8/Gallery8-15.webp",

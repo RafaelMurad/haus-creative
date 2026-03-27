@@ -70,7 +70,16 @@ export default function ContactPage() {
           </div>
           <div className="flex-1 md:max-w-[1115px]">
             <p className="text-[15px] leading-[1.53em] md:text-[23px] md:leading-[1.48em]">
-              We are always looking to connect with creatives globally. We operate hybrid in remote between London and São Paulo. Reach out via {siteConfig.email} at any time.
+              We are always looking to connect with creatives globally. We
+              operate hybrid in remote between London and São Paulo. Reach
+              out via{" "}
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="hover:opacity-50 transition-opacity"
+              >
+                {siteConfig.email}
+              </a>{" "}
+              at any time.
             </p>
           </div>
         </div>
