@@ -161,7 +161,7 @@ export const featuredProjects: Project[] = [
   // 2. YSL
   {
     id: "ysl",
-    title: "YSL",
+    title: "Yves Saint Laurent",
     subtitle: "Art Direction",
     href: "/work/ysl",
     media: {
