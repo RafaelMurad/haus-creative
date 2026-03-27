@@ -40,7 +40,7 @@ body {
   transform: translateY(-50%);
 
   opacity: 0;
-  margin-left: -48px;
+  margin-left: -24px;
 
   will-change: opacity, margin-left;
   backface-visibility: hidden;
@@ -56,10 +56,28 @@ body {
   margin-left: 0;
 }
 
+/* Use larger offset on desktop */
+@media (min-width: 768px) {
+  .sticky-title {
+    margin-left: -48px;
+  }
+}
+
 /* Disable scroll-snap on mobile to prevent conflicts with sticky */
 @media (max-width: 767px) {
   html {
     scroll-snap-type: none;
+  }
+}
+
+/* ===========================================
+   DYNAMIC VIEWPORT HEIGHT FALLBACK
+   Browsers without dvh support fall back to vh
+   =========================================== */
+
+@supports not (height: 100dvh) {
+  .h-dvh {
+    height: 100vh;
   }
 }
 

@@ -26,11 +26,11 @@ describe("IntroHero", () => {
     alt: "Hero image",
   };
 
-  it("renders a full-screen section", () => {
+  it("renders a full-viewport section using dynamic viewport height", () => {
     const { container } = render(<IntroHero media={mockMedia} />);
     const section = container.querySelector("section");
     expect(section).toBeInTheDocument();
-    expect(section?.className).toContain("h-screen");
+    expect(section?.className).toContain("h-dvh");
   });
 
   it("passes media and priority to MediaRenderer", () => {

@@ -28,7 +28,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       aria-hidden={!isOpen}
     >
       {/* Main Navigation */}
-      <nav className="mt-[182px] ml-[21px]">
+      <nav className="mt-[120px] min-[700px]:mt-[182px] ml-[21px]">
         <ul className="space-y-[34px]">
           {siteConfig.mainMenu.map((link, index) => (
             <li
@@ -79,7 +79,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {/* Social Links */}
       <div
         className={`
-          ml-[21px] mb-[69px] flex gap-[21px]
+          ml-[21px] mb-[40px] min-[700px]:mb-[69px] flex gap-[21px]
           transform transition-all duration-300 ease-out
           ${isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}
         `}

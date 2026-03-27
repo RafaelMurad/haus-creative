@@ -94,10 +94,10 @@ describe("WorkGalleryItem", () => {
     expect(renderer).toHaveAttribute("data-src", "/assets/projects/test.jpg");
   });
 
-  it("renders within a full-screen section", () => {
+  it("renders within a full-viewport section using dynamic viewport height", () => {
     const { container } = render(<WorkGalleryItem project={mockProject} />);
     const section = container.querySelector("section");
-    expect(section?.className).toContain("h-screen");
+    expect(section?.className).toContain("h-dvh");
   });
 
   it("renders MediaRenderer when galleryMedia is provided without carouselConfig", () => {

@@ -31,7 +31,7 @@ export function VideoHero({
 
   return (
     <section
-      className="relative w-full h-screen bg-black overflow-hidden"
+      className="relative w-full h-dvh bg-black overflow-hidden"
       data-playing={isPlaying}
     >
       {/* Background Video */}
