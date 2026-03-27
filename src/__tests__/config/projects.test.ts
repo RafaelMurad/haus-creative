@@ -111,4 +111,41 @@ describe("projects", () => {
       });
     });
   });
+
+  describe("carousel config", () => {
+    it("every project has a carousel config", () => {
+      projects.forEach((project) => {
+        expect(project.carousel).toBeDefined();
+        expect(project.carousel!.animation).toBeDefined();
+      });
+    });
+
+    it("video-only projects have no autoAdvanceTime", () => {
+      const videoProjects = projects.filter(
+        (p) => p.slug === "wao-cosmo" || p.slug === "bucherer-summer"
+      );
+      expect(videoProjects).toHaveLength(2);
+      videoProjects.forEach((p) => {
+        expect(p.carousel!.autoAdvanceTime).toBeUndefined();
+      });
+    });
+
+    it("SK uses slide animation for treadmill effect", () => {
+      const sk = projects.find((p) => p.slug === "sk");
+      expect(sk!.carousel!.animation).toBe("slide");
+      expect(sk!.carousel!.autoAdvanceTime).toBe(2500);
+    });
+
+    it("YSL uses fast none animation (800ms)", () => {
+      const ysl = projects.find((p) => p.slug === "ysl");
+      expect(ysl!.carousel!.animation).toBe("none");
+      expect(ysl!.carousel!.autoAdvanceTime).toBe(800);
+    });
+
+    it("Life uses slow fade animation (3000ms)", () => {
+      const life = projects.find((p) => p.slug === "life");
+      expect(life!.carousel!.animation).toBe("fade");
+      expect(life!.carousel!.autoAdvanceTime).toBe(3000);
+    });
+  });
 });

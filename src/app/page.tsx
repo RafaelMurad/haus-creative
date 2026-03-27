@@ -1,5 +1,7 @@
 import { IntroHero, WorkGalleryItem } from "@/components/home";
 import { featuredProjects } from "@/config/site";
+import { projects } from "@/config/projects";
+import type { ProjectMedia } from "@/config/projects";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,6 +13,24 @@ export const metadata: Metadata = {
   },
 };
 
+/** Build a lookup map from slug → project detail for O(1) access. */
+const projectBySlug = new Map(projects.map((p) => [p.slug, p]));
+
+/**
+ * Select which gallery media items to show on the homepage.
+ * Uses homepageIndices from the carousel config if specified,
+ * otherwise returns all media items.
+ */
+function getHomepageMedia(
+  media: ProjectMedia[],
+  homepageIndices?: number[],
+): ProjectMedia[] {
+  if (!homepageIndices || homepageIndices.length === 0) return media;
+  return homepageIndices
+    .filter((i) => i >= 0 && i < media.length)
+    .map((i) => media[i]);
+}
+
 export default function Home() {
   // First project is the intro hero
   const [introProject, ...workProjects] = featuredProjects;
@@ -21,9 +41,22 @@ export default function Home() {
       <IntroHero media={introProject.media} />
 
       {/* Work Gallery Items - Each navigable to its own page */}
-      {workProjects.map((project) => (
-        <WorkGalleryItem key={project.id} project={project} />
-      ))}
+      {workProjects.map((project) => {
+        const detail = projectBySlug.get(project.id);
+        const carouselConfig = detail?.carousel;
+        const galleryMedia = detail
+          ? getHomepageMedia(detail.media, carouselConfig?.homepageIndices)
+          : undefined;
+
+        return (
+          <WorkGalleryItem
+            key={project.id}
+            project={project}
+            galleryMedia={galleryMedia}
+            carouselConfig={carouselConfig}
+          />
+        );
+      })}
     </>
   );
 }

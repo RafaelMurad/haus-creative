@@ -1,4 +1,5 @@
 import type { MediaSource } from "@/config/site";
+import type { CarouselConfig } from "@/types/carousel";
 
 /**
  * Project/Campaign Data Configuration
@@ -65,6 +66,9 @@ export interface ProjectDetail {
 
   // Gallery media (ordered array)
   media: ProjectMedia[];
+
+  /** Carousel/gallery presentation settings (animation, timing, homepage selection). */
+  carousel?: CarouselConfig;
 
   // SEO
   metaTitle?: string;
@@ -209,6 +213,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Premium digital experience for luxury brand Ouronyx by Studio Haus Creative.",
     ogImage: "/assets/gallery10/Gallery10-Cover.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
   },
 
   // =========================================================================
@@ -326,6 +335,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Creative direction for Marie Claire Arabia September Issue - Back to Work Editorial by Studio Haus Creative.",
     ogImage: "/assets/gallery1/Gallery1-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
   },
 
   // =========================================================================
@@ -434,6 +448,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Art direction for Yves Saint Laurent by Studio Haus Creative.",
     ogImage: "/assets/gallery2/Gallery2-1.webp",
+
+    carousel: {
+      animation: "none",
+      autoAdvanceTime: 800,
+    },
   },
 
   // =========================================================================
@@ -562,6 +581,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Visual identity and brand design for Wao Cosmo by Studio Haus Creative.",
     ogImage: "/assets/gallery3/Gallery3-Cover.webp",
+
+    carousel: {
+      animation: "none",
+      // No autoAdvanceTime — video loops continuously
+    },
   },
 
   // =========================================================================
@@ -665,6 +689,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Art direction for Vivara jewellery campaigns by Studio Haus Creative.",
     ogImage: "/assets/gallery4/Gallery4-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 1000,
+    },
   },
 
   // =========================================================================
@@ -743,6 +772,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Creative direction for Bucherer Summer campaign by Studio Haus Creative.",
     ogImage: "/assets/gallery5/Gallery5-Cover.webp",
+
+    carousel: {
+      animation: "none",
+      // No autoAdvanceTime — video loops continuously
+    },
   },
 
   // =========================================================================
@@ -896,6 +930,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Brand development and visual identity for SK by Studio Haus Creative.",
     ogImage: "/assets/gallery6/Gallery6-1.webp",
+
+    carousel: {
+      animation: "slide",
+      autoAdvanceTime: 2500,
+    },
   },
 
   // =========================================================================
@@ -1099,6 +1138,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Digital design and creative direction for BFJ by Studio Haus Creative.",
     ogImage: "/assets/gallery7/Gallery7-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
   },
 
   // =========================================================================
@@ -1202,6 +1246,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Creative strategy and visual direction for Life by Studio Haus Creative.",
     ogImage: "/assets/gallery8/Gallery8-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 3000,
+    },
   },
 
   // =========================================================================
@@ -1270,6 +1319,11 @@ export const projects: ProjectDetail[] = [
     metaDescription:
       "Art direction and visual storytelling for Bride Story by Studio Haus Creative.",
     ogImage: "/assets/gallery9/Gallery9-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
   },
 ];
 
