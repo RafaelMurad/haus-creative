@@ -80,6 +80,7 @@ function VideoMedia({ media, className, priority = false }: VideoMediaProps) {
         loop={media.loop !== false}
         muted={media.muted !== false}
         poster={media.poster}
+        preload={priority ? "metadata" : "none"}
       >
         {/* Mobile video source */}
         {media.srcMobile && (

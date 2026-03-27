@@ -160,6 +160,8 @@ export function SimpleCarousel({
                 autoPlay
                 loop
                 muted
+                poster={item.poster}
+                preload={isActive ? "metadata" : "none"}
               >
                 {item.mobile && (
                   <source

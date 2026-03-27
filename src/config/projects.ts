@@ -36,6 +36,9 @@ export interface ProjectMedia {
   mobile?: string;
   alt: string;
 
+  /** Poster image for video items — shown before playback starts. */
+  poster?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
