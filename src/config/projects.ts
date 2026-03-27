@@ -230,10 +230,18 @@ export const projects: ProjectDetail[] = [
       alt: "Marie Claire Arabia September Issue editorial",
     },
 
+    clientLogo: "/assets/gallery1/Gallery1-Logo.webp",
+
     year: "2024",
     credits: [
-      { role: "Art Direction", name: "Studio Haus Creative" },
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
       { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
     ],
 
     media: [
@@ -282,6 +290,36 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/gallery1/Gallery1-10.webp",
         alt: "Marie Claire Arabia editorial look 9",
       },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-11.webp",
+        alt: "Marie Claire Arabia social post 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-12.webp",
+        alt: "Marie Claire Arabia social post 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-13.webp",
+        alt: "Marie Claire Arabia social post 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-14.webp",
+        alt: "Marie Claire Arabia social story 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-15.webp",
+        alt: "Marie Claire Arabia social story 2",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery1/Gallery1-16.webp",
+        alt: "Marie Claire Arabia social post 4",
+      },
     ],
 
     metaTitle: "Marie Claire Arabia | HAUS Creative",
@@ -297,7 +335,7 @@ export const projects: ProjectDetail[] = [
     id: "ysl",
     slug: "ysl",
     client: "YSL",
-    title: "YSL",
+    title: "Yves Saint Laurent",
     subtitle: "Art Direction",
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
@@ -354,6 +392,41 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/gallery2/Gallery2-10.webp",
         alt: "YSL campaign image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-11.webp",
+        alt: "YSL campaign image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-12.webp",
+        alt: "YSL campaign image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-13.webp",
+        alt: "YSL campaign image 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-14.webp",
+        alt: "YSL campaign image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-15.webp",
+        alt: "YSL campaign image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-16.webp",
+        alt: "YSL campaign image 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery2/Gallery2-17.webp",
+        alt: "YSL campaign image 16",
       },
     ],
 
@@ -545,6 +618,46 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/gallery4/Gallery4-8.webp",
         alt: "Vivara campaign image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-9.webp",
+        alt: "Vivara campaign image 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-10.webp",
+        alt: "Vivara campaign image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-11.webp",
+        alt: "Vivara campaign image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-12.webp",
+        alt: "Vivara campaign image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-13.webp",
+        alt: "Vivara campaign image 12",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-14.webp",
+        alt: "Vivara campaign image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-15.webp",
+        alt: "Vivara campaign image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/gallery4/Gallery4-16.webp",
+        alt: "Vivara campaign image 15",
       },
     ],
 
