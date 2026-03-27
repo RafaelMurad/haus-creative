@@ -130,7 +130,7 @@ function InsetFrame({ item, index, sizes }: GalleryItemProps) {
 
   return (
     <div
-      className="w-full aspect-[3/4] flex items-center justify-center p-[55px] md:p-[55px]"
+      className="w-full aspect-[3/4] flex items-center justify-center p-[24px] md:p-[55px]"
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">
@@ -191,7 +191,7 @@ function ColorFrame({ item, index, sizes }: GalleryItemProps) {
 
   return (
     <div
-      className="w-full aspect-[3/4] flex items-center justify-center p-[40px] md:p-[55px]"
+      className="w-full aspect-[3/4] flex items-center justify-center p-[24px] md:p-[55px]"
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">

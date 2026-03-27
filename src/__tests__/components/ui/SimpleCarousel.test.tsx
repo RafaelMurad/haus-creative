@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import { SimpleCarousel } from "@/components/ui/SimpleCarousel";
 import type { ProjectMedia } from "@/config/projects";
 
@@ -172,5 +172,104 @@ describe("SimpleCarousel", () => {
     );
     const carousel = screen.getByRole("region");
     expect(carousel.className).toContain("custom-class");
+  });
+
+  // =========================================================================
+  // Touch/swipe support
+  // =========================================================================
+
+  it("advances to next slide on swipe left", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" autoAdvanceTime={5000} />
+    );
+    const carousel = screen.getByRole("region");
+
+    // Swipe left (negative deltaX)
+    fireEvent.touchStart(carousel, {
+      touches: [{ clientX: 200, clientY: 300 }],
+    });
+    fireEvent.touchEnd(carousel, {
+      changedTouches: [{ clientX: 100, clientY: 300 }],
+    });
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[1]).toHaveAttribute("data-active", "true");
+  });
+
+  it("goes to previous slide on swipe right", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" autoAdvanceTime={5000} />
+    );
+    const carousel = screen.getByRole("region");
+
+    // First advance to slide 1
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    // Swipe right (positive deltaX)
+    fireEvent.touchStart(carousel, {
+      touches: [{ clientX: 100, clientY: 300 }],
+    });
+    fireEvent.touchEnd(carousel, {
+      changedTouches: [{ clientX: 250, clientY: 300 }],
+    });
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[0]).toHaveAttribute("data-active", "true");
+  });
+
+  it("ignores swipe below threshold distance", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" />
+    );
+    const carousel = screen.getByRole("region");
+
+    // Tiny swipe (only 20px, threshold is 50px)
+    fireEvent.touchStart(carousel, {
+      touches: [{ clientX: 200, clientY: 300 }],
+    });
+    fireEvent.touchEnd(carousel, {
+      changedTouches: [{ clientX: 180, clientY: 300 }],
+    });
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[0]).toHaveAttribute("data-active", "true");
+  });
+
+  it("ignores vertical swipes (scroll gestures)", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" />
+    );
+    const carousel = screen.getByRole("region");
+
+    // Mostly vertical swipe (deltaY > SWIPE_VERTICAL_LIMIT)
+    fireEvent.touchStart(carousel, {
+      touches: [{ clientX: 200, clientY: 100 }],
+    });
+    fireEvent.touchEnd(carousel, {
+      changedTouches: [{ clientX: 100, clientY: 300 }],
+    });
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[0]).toHaveAttribute("data-active", "true");
+  });
+
+  it("wraps to last slide when swiping right on first slide", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" />
+    );
+    const carousel = screen.getByRole("region");
+
+    // Swipe right on first slide
+    fireEvent.touchStart(carousel, {
+      touches: [{ clientX: 100, clientY: 300 }],
+    });
+    fireEvent.touchEnd(carousel, {
+      changedTouches: [{ clientX: 250, clientY: 300 }],
+    });
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[2]).toHaveAttribute("data-active", "true");
   });
 });

@@ -402,20 +402,16 @@ export const projects: ProjectDetail[] = [
         alt: "YSL campaign image 1",
         span: "full",
       },
-      // Row 2: half colorFrame pair (pink + red)
+      // Row 2: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-3.webp",
         alt: "YSL campaign image 2",
-        frame: "colorFrame",
-        bgColor: "#FF0DDF",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-4.webp",
         alt: "YSL campaign image 3",
-        frame: "colorFrame",
-        bgColor: "#FF0D0D",
       },
       // Row 3: full mask
       {
@@ -424,20 +420,16 @@ export const projects: ProjectDetail[] = [
         alt: "YSL campaign image 4",
         span: "full",
       },
-      // Row 4: half colorFrame pair (purple + red)
+      // Row 4: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-6.webp",
         alt: "YSL campaign image 5",
-        frame: "colorFrame",
-        bgColor: "#4C1EF4",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-7.webp",
         alt: "YSL campaign image 6",
-        frame: "colorFrame",
-        bgColor: "#FF0D0D",
       },
       // Row 5: full mask
       {
@@ -446,20 +438,16 @@ export const projects: ProjectDetail[] = [
         alt: "YSL campaign image 7",
         span: "full",
       },
-      // Row 6: half colorFrame pair (pink + purple)
+      // Row 6: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-9.webp",
         alt: "YSL campaign image 8",
-        frame: "colorFrame",
-        bgColor: "#FF0DDF",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-10.webp",
         alt: "YSL campaign image 9",
-        frame: "colorFrame",
-        bgColor: "#4C1EF4",
       },
       // Row 7: full mask
       {
@@ -468,20 +456,16 @@ export const projects: ProjectDetail[] = [
         alt: "YSL campaign image 10",
         span: "full",
       },
-      // Row 8: half colorFrame pair (red + pink)
+      // Row 8: half mask pair
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-12.webp",
         alt: "YSL campaign image 11",
-        frame: "colorFrame",
-        bgColor: "#FF0D0D",
       },
       {
         type: "image",
         desktop: "/assets/gallery2/Gallery2-13.webp",
         alt: "YSL campaign image 12",
-        frame: "colorFrame",
-        bgColor: "#FF0DDF",
       },
       // Extended items — half mask pairs
       {

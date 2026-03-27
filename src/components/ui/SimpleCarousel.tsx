@@ -19,12 +19,18 @@ interface SimpleCarouselProps {
   priority?: boolean;
 }
 
+/** Minimum horizontal distance (px) to register as a swipe. */
+const SWIPE_THRESHOLD = 50;
+/** Maximum vertical distance (px) — beyond this, treat as vertical scroll. */
+const SWIPE_VERTICAL_LIMIT = 100;
+
 /**
- * SimpleCarousel — CSS-only auto-advancing carousel.
+ * SimpleCarousel — CSS-only auto-advancing carousel with touch/swipe support.
  *
  * Renders slides in a stacked layout (absolute positioning).
  * Transitions between slides using CSS transitions based on animation type.
  * Auto-advances via setInterval, pauses when tab is hidden.
+ * Supports horizontal swipe gestures on touch devices.
  *
  * No navigation dots or controls — luxury portfolio aesthetic.
  */
@@ -38,6 +44,7 @@ export function SimpleCarousel({
 }: SimpleCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const animConfig = getSimpleAnimation(animation);
 
@@ -77,6 +84,46 @@ export function SimpleCarousel({
     };
   }, [startAutoAdvance, clearAutoAdvance]);
 
+  // Touch handlers for swipe navigation
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (items.length <= 1) return;
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    },
+    [items.length],
+  );
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || items.length <= 1) return;
+
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
+      touchStartRef.current = null;
+
+      // Ignore if vertical movement exceeds limit (user is scrolling)
+      if (Math.abs(deltaY) > SWIPE_VERTICAL_LIMIT) return;
+      // Ignore if horizontal distance is below threshold
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+      if (deltaX < 0) {
+        // Swipe left → next slide
+        setActiveIndex((current) => (current + 1) % items.length);
+      } else {
+        // Swipe right → previous slide
+        setActiveIndex(
+          (current) => (current - 1 + items.length) % items.length,
+        );
+      }
+
+      // Reset auto-advance timer after manual swipe
+      startAutoAdvance();
+    },
+    [items.length, startAutoAdvance],
+  );
+
   if (items.length === 0) return null;
 
   return (
@@ -86,6 +133,8 @@ export function SimpleCarousel({
       aria-label="Gallery"
       aria-live="off"
       className={`relative w-full h-full overflow-hidden ${className}`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {items.map((item, index) => {
         const isActive = index === activeIndex;

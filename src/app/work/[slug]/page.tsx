@@ -51,7 +51,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Hero Section - Full viewport with video/image */}
-      <section className="relative w-full h-screen bg-black overflow-hidden">
+      <section className="relative w-full h-dvh bg-black overflow-hidden">
         {project.heroVideo ? (
           <video
             className="absolute inset-0 w-full h-full object-cover"
@@ -110,7 +110,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
             {/* Content column */}
             <div className="flex-1 max-w-[663px]">
-              <h1 className="text-[33px] leading-[1.03em] font-normal mb-[18px]">
+              <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
                 {project.title}
               </h1>
               <p className="text-[23px] leading-[1.48em] text-black">
