@@ -2,74 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Enhanced Smooth Scrolling - Lenis-like experience with native CSS */
+/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y proximity;
   overscroll-behavior-y: none;
 }
 
-/* Custom smooth scroll with easing - matching Lenis feel */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
-  }
-  
-  * {
-    scroll-behavior: smooth;
-    scroll-timeline: --page-scroll block;
   }
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   letter-spacing: -0.01em;
-  /* iOS momentum scrolling */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: none;
 }
 
-/* Remove default margins */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Snap alignment */
-.snap-start {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-
 /* ===========================================
    STICKY TITLE ANIMATION
    Pure CSS sticky positioning with slide-in animation
-   No JavaScript during scroll - handled by browser compositor
+   No JavaScript during scroll — handled by browser compositor
    =========================================== */
 
 .sticky-title {
-  /* Sticky positioning - stays at viewport middle */
   position: sticky;
   top: 50vh;
   transform: translateY(-50%);
-  
-  /* Initial hidden state - slides in from left */
+
   opacity: 0;
   margin-left: -48px;
-  
-  /* GPU acceleration hints */
+
   will-change: opacity, margin-left;
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
-  
-  /* Smooth transition for slide-in effect */
-  transition: 
+
+  transition:
     opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
     margin-left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Visible state - triggered by Intersection Observer */
 .sticky-title[data-visible="true"] {
   opacity: 1;
   margin-left: 0;
@@ -83,108 +64,8 @@ body {
 }
 
 /* ===========================================
-   GPU ACCELERATION UTILITY
-   For elements that need compositor layer promotion
+   BASE LAYER
    =========================================== */
-
-.gpu-accelerated {
-  /* Promote to compositor layer */
-  transform: translateZ(0);
-  /* Hint to browser for optimization */
-  will-change: transform, opacity;
-  /* Prevent subpixel rendering artifacts */
-  backface-visibility: hidden;
-  /* Smooth font rendering during transforms */
-  -webkit-font-smoothing: subpixel-antialiased;
-}
-
-/* Professional CSS animations - replacing GSAP */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes blurIn {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-    transform: scale(1.05);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
-  }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Animation classes for scroll triggers */
-.animate-in {
-  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.animate-slide-up {
-  animation: slideInUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.animate-scale {
-  animation: scaleIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.animate-blur {
-  animation: blurIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* Initial state for elements that will animate */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 @layer base {
   html {
@@ -201,290 +82,10 @@ body {
   }
 }
 
-/* Luxury minimal theme */
-section.gallery-row {
-  min-height: 100vh;
-  height: 100vh;
-  width: 100vw;
-  background: #ffffff;
-}
-
-.media-item,
-.media-content {
-  background: transparent !important;
-}
-
-/* Luxury underline effect */
-.luxury-underline {
-  position: relative;
-}
-
-.luxury-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: #000000;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.luxury-underline:hover::after {
-  width: 100%;
-}
-
-/* Refined hover effects */
-.luxury-hover {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.luxury-hover:hover {
-  opacity: 0.6;
-  transform: translateY(-2px);
-}
-
-/* Image overlay on hover */
-.image-overlay {
-  position: relative;
-  overflow: hidden;
-}
-
-.image-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0);
-  transition: background 0.4s ease;
-}
-
-.image-overlay:hover::after {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Smooth scroll */
-.smooth-scroll {
-  scroll-behavior: smooth;
-}
-
-/* Clean divider */
-.luxury-divider {
-  width: 60px;
-  height: 1px;
-  background: #000000;
-  margin: 0 auto;
-}
-
-/* Magnetic hover for typography */
-.hover-magnetic-container {
-  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.hover-magnetic-container:hover {
-  transform: translateY(-4px);
-}
-
-/* Expand animation for divider */
-@keyframes expand {
-  from {
-    width: 0;
-  }
-  to {
-    width: 60px;
-  }
-}
-
-.animate-expand {
-  animation: expand 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-@keyframes expand-full {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-.animate-expand-full {
-  animation: expand-full 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-/* Scroll pulse animation */
-@keyframes scroll-pulse {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.animate-scroll-pulse {
-  animation: scroll-pulse 2s ease-in-out infinite;
-}
-
-/* Gallery reveal on scroll */
-.gallery-item-reveal {
-  opacity: 0;
-  transform: translateY(60px) scale(0.95);
-  transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
-              transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.gallery-item-reveal.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* Glow effect on hover */
-.hover-glow {
-  position: relative;
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.hover-glow::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(circle, rgba(201, 165, 90, 0.15) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.hover-glow:hover::before {
-  opacity: 1;
-}
-
-.hover-glow:hover {
-  transform: translateY(-8px);
-}
-
-/* Option 3: Fluid Grid with Kinetic Typography */
-
-/* Kinetic letter appearance - staggered reveal */
-@keyframes letter-appear {
-  from {
-    opacity: 0;
-    transform: translateY(40px) rotateX(-90deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0deg);
-  }
-}
-
-.animate-letter-appear {
-  animation: letter-appear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* Kinetic letter subtle float */
-.kinetic-letter {
-  transition: transform 0.3s ease;
-}
-
-.kinetic-letter:hover {
-  transform: translateY(-4px);
-}
-
-/* Wave appearance for text */
-@keyframes wave-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-.animate-wave-in {
-  animation: wave-in 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-/* Elastic expand for divider */
-@keyframes expand-elastic {
-  from {
-    width: 0;
-  }
-  50% {
-    width: 80px;
-  }
-  to {
-    width: 60px;
-  }
-}
-
-.animate-expand-elastic {
-  animation: expand-elastic 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* Floating ambient shapes */
-@keyframes float-slow {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -20px) scale(1.05);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
-  }
-}
-
-@keyframes float-slower {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(-40px, 30px) scale(0.95);
-  }
-  66% {
-    transform: translate(20px, -30px) scale(1.05);
-  }
-}
-
-.animate-float-slow {
-  animation: float-slow 20s ease-in-out infinite;
-}
-
-.animate-float-slower {
-  animation: float-slower 25s ease-in-out infinite;
-}
-
-/* Fluid grid item reveal */
-.gallery-item-fluid {
-  opacity: 0;
-  transform: translateY(80px) scale(0.9);
-  transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.gallery-item-fluid.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* Kinetic text subtle effects */
-.kinetic-text {
-  transition: letter-spacing 0.5s ease;
-}
-
-.kinetic-text:hover {
-  letter-spacing: 0.2em;
-}
-
 /* ===========================================
-   ACCESSIBILITY STYLES
+   ACCESSIBILITY
    =========================================== */
 
-/* Screen reader only utility */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -497,18 +98,15 @@ section.gallery-row {
   border: 0;
 }
 
-/* Focus visible styles for keyboard navigation */
 *:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
 
-/* Remove focus outline for mouse users */
 *:focus:not(:focus-visible) {
   outline: none;
 }
 
-/* High contrast focus for dark backgrounds */
 .focus-ring-white:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
@@ -516,7 +114,6 @@ section.gallery-row {
 
 /* ===========================================
    REDUCED MOTION SUPPORT
-   Respects users who prefer reduced motion
    =========================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -533,34 +130,9 @@ section.gallery-row {
     scroll-behavior: auto;
   }
 
-  /* Disable scroll snap for reduced motion users */
   html,
   .snap-y,
   .snap-mandatory {
     scroll-snap-type: none;
-  }
-
-  .snap-start {
-    scroll-snap-align: none;
-    scroll-snap-stop: normal;
-  }
-
-  /* Ensure elements are visible without animation */
-  .animate-on-scroll,
-  .gallery-item-reveal,
-  .gallery-item-fluid {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* Utility class for elements that should not animate */
-.motion-reduce\:transition-none {
-  transition: none !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .motion-safe\:transition-all {
-    transition: none !important;
   }
 }
