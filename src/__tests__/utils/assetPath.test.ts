@@ -1,4 +1,4 @@
-import { getAssetPath, titleToFileName } from "../../utils/assetPath";
+import { getAssetPath, getGalleryAssets, titleToFileName } from "../../utils/assetPath";
 
 describe("getAssetPath", () => {
   const originalEnv = process.env.NODE_ENV;
@@ -57,6 +57,21 @@ describe("getAssetPath", () => {
     expect(consoleSpy).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
+  });
+});
+
+describe("getGalleryAssets", () => {
+  it("returns an empty array (placeholder implementation)", async () => {
+    const result = await getGalleryAssets("gallery1");
+
+    expect(result).toEqual([]);
+  });
+
+  it("accepts any gallery ID without error", async () => {
+    const result = await getGalleryAssets("some-gallery-id");
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(0);
   });
 });
 
