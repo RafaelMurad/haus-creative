@@ -39,6 +39,9 @@ build/
 coverage/
 .nyc_output/
 
+# Visual regression tests — screenshots are ephemeral (regenerate with npm run test:visual:baseline)
+e2e/screenshots/
+
 # Debug
 debug/
 .debug/
