@@ -60,6 +60,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             loop
             muted
             poster={project.heroVideo.poster}
+            preload="metadata"
           >
             <source
               src={project.heroVideo.mobile || project.heroVideo.desktop}

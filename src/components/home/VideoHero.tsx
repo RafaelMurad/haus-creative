@@ -43,6 +43,7 @@ export function VideoHero({
         loop
         muted
         poster={posterSrc}
+        preload="metadata"
       >
         {/* Mobile video source */}
         {videoSrcMobile && (

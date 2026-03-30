@@ -95,6 +95,8 @@ function MaskFrame({ item, index, sizes }: GalleryItemProps) {
         autoPlay
         loop
         muted
+        poster={item.poster}
+        preload={index < 2 ? "metadata" : "none"}
       >
         {item.mobile && (
           <source
