@@ -13,7 +13,9 @@
     "format:check": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:visual": "npm run build && python3 .agents/skills/webapp-testing/scripts/with_server.py --server 'npm start' --port 3000 -- python3 e2e/visual_test.py",
+    "test:visual:baseline": "npm run build && python3 .agents/skills/webapp-testing/scripts/with_server.py --server 'npm start' --port 3000 -- python3 e2e/visual_test.py --baseline"
   },
   "dependencies": {
     "next": "^14.1.0",
