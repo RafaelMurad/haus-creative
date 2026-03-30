@@ -272,4 +272,143 @@ describe("SimpleCarousel", () => {
     const slides = container.querySelectorAll("[data-slide-index]");
     expect(slides[2]).toHaveAttribute("data-active", "true");
   });
+
+  // =========================================================================
+  // Animation type branches
+  // =========================================================================
+
+  it("applies slide animation styles (translateX)", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="slide" autoAdvanceTime={5000} />
+    );
+
+    // Active slide should have translateX(0%)
+    const slides = container.querySelectorAll("[data-slide-index]");
+    const activeStyle = (slides[0] as HTMLElement).style;
+    expect(activeStyle.transform).toBe("translateX(0%)");
+    expect(activeStyle.opacity).toBe("1");
+
+    // Inactive slide should be offset
+    const inactiveStyle = (slides[1] as HTMLElement).style;
+    expect(inactiveStyle.transform).toBe("translateX(100%)");
+  });
+
+  it("applies slideUp animation styles (translateY)", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="slideUp" />
+    );
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    const activeStyle = (slides[0] as HTMLElement).style;
+    expect(activeStyle.transform).toBe("translateY(0%)");
+    expect(activeStyle.opacity).toBe("1");
+
+    const inactiveStyle = (slides[1] as HTMLElement).style;
+    expect(inactiveStyle.transform).toBe("translateY(20%)");
+    expect(inactiveStyle.opacity).toBe("0");
+  });
+
+  it("applies scale animation styles", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="scale" />
+    );
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    const activeStyle = (slides[0] as HTMLElement).style;
+    expect(activeStyle.transform).toBe("scale(1)");
+    expect(activeStyle.opacity).toBe("1");
+
+    const inactiveStyle = (slides[1] as HTMLElement).style;
+    expect(inactiveStyle.transform).toBe("scale(0.9)");
+    expect(inactiveStyle.opacity).toBe("0");
+  });
+
+  it("applies blur animation styles", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="blur" />
+    );
+
+    const slides = container.querySelectorAll("[data-slide-index]");
+    const activeStyle = (slides[0] as HTMLElement).style;
+    expect(activeStyle.filter).toBe("blur(0px)");
+    expect(activeStyle.transform).toBe("scale(1)");
+
+    const inactiveStyle = (slides[1] as HTMLElement).style;
+    expect(inactiveStyle.filter).toBe("blur(8px)");
+    expect(inactiveStyle.transform).toBe("scale(1.05)");
+  });
+
+  // =========================================================================
+  // Page Visibility API
+  // =========================================================================
+
+  it("pauses auto-advance when tab becomes hidden", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" autoAdvanceTime={1000} />
+    );
+
+    // Simulate tab going hidden
+    Object.defineProperty(document, "hidden", { value: true, writable: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+
+    // Advance past where slide should change
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    // Should still be on the first slide (timer was cleared)
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides[0]).toHaveAttribute("data-active", "true");
+
+    // Simulate tab becoming visible again
+    Object.defineProperty(document, "hidden", { value: false, writable: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+
+    // Now advancing should work
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    const slidesAfter = container.querySelectorAll("[data-slide-index]");
+    expect(slidesAfter[1]).toHaveAttribute("data-active", "true");
+  });
+
+  // =========================================================================
+  // Video with mobile source branch
+  // =========================================================================
+
+  it("renders mobile source when video has mobile property", () => {
+    const videoWithMobile: ProjectMedia[] = [
+      {
+        type: "video",
+        desktop: "/assets/gallery/video.mp4",
+        mobile: "/assets/gallery/video-mobile.mp4",
+        alt: "Video with mobile",
+      },
+    ];
+
+    const { container } = render(
+      <SimpleCarousel items={videoWithMobile} animation="none" />
+    );
+
+    const sources = container.querySelectorAll("video source");
+    expect(sources).toHaveLength(2);
+    expect(sources[0]).toHaveAttribute("src", "/assets/gallery/video-mobile.mp4");
+    expect(sources[1]).toHaveAttribute("src", "/assets/gallery/video.mp4");
+  });
+
+  // =========================================================================
+  // Priority prop
+  // =========================================================================
+
+  it("renders with priority prop without crashing", () => {
+    const { container } = render(
+      <SimpleCarousel items={mockImages} animation="fade" priority />
+    );
+
+    // Should render all slides correctly with the priority prop
+    const slides = container.querySelectorAll("[data-slide-index]");
+    expect(slides).toHaveLength(3);
+    expect(slides[0]).toHaveAttribute("data-active", "true");
+  });
 });

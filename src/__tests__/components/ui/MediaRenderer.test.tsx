@@ -149,4 +149,46 @@ describe("MediaRenderer", () => {
       expect(img).toHaveClass("custom-class");
     });
   });
+
+  describe("video MIME type detection", () => {
+    it("should detect webm MIME type", () => {
+      const media: MediaSource = {
+        type: "video",
+        src: "/assets/video.webm",
+      };
+      const { container } = render(<MediaRenderer media={media} />);
+      const source = container.querySelector("source");
+      expect(source).toHaveAttribute("type", "video/webm");
+    });
+
+    it("should detect ogg MIME type", () => {
+      const media: MediaSource = {
+        type: "video",
+        src: "/assets/video.ogg",
+      };
+      const { container } = render(<MediaRenderer media={media} />);
+      const source = container.querySelector("source");
+      expect(source).toHaveAttribute("type", "video/ogg");
+    });
+
+    it("should detect mov MIME type", () => {
+      const media: MediaSource = {
+        type: "video",
+        src: "/assets/video.mov",
+      };
+      const { container } = render(<MediaRenderer media={media} />);
+      const source = container.querySelector("source");
+      expect(source).toHaveAttribute("type", "video/quicktime");
+    });
+
+    it("should default to mp4 MIME type for unknown extensions", () => {
+      const media: MediaSource = {
+        type: "video",
+        src: "/assets/video.avi",
+      };
+      const { container } = render(<MediaRenderer media={media} />);
+      const source = container.querySelector("source");
+      expect(source).toHaveAttribute("type", "video/mp4");
+    });
+  });
 });
