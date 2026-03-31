@@ -47,6 +47,21 @@ export interface ProjectMedia {
 
   /** Background colour for inset/colorFrame/phone containers (e.g. '#1500FF'). */
   bgColor?: string;
+
+  /**
+   * Aspect ratio override for framed items (e.g. '3/4', '16/9', '1/1').
+   * Only applies to inset, phone, and colorFrame frames.
+   * Mask items always use their natural image aspect ratio.
+   * Defaults to '3/4'.
+   */
+  aspectRatio?: string;
+
+  /**
+   * Padding override for inset and colorFrame containers, in px.
+   * Format: [mobile, desktop]. Defaults to [24, 55].
+   * Has no effect on mask or phone frames.
+   */
+  padding?: [number, number];
 }
 
 export interface ProjectCredit {
@@ -87,6 +102,12 @@ export interface ProjectDetail {
 
   // Gallery media (ordered array)
   media: ProjectMedia[];
+
+  /**
+   * Vertical gap between gallery rows in px.
+   * Format: [mobile, desktop]. Defaults to [0, 0] (flush rows).
+   */
+  galleryGap?: [number, number];
 
   /** Carousel/gallery presentation settings (animation, timing, homepage selection). */
   carousel?: CarouselConfig;
