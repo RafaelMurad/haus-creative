@@ -10,7 +10,7 @@
  * Usage:
  *   node scripts/figma-audit.mjs
  *
- * Requires FIGMA_API_KEY in .env (same dir or parent).
+
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -44,9 +44,9 @@ function loadEnv() {
 }
 
 const env = loadEnv();
-const API_KEY = env.FIGMA_API_KEY;
+
 if (!API_KEY) {
-  console.error("ERROR: FIGMA_API_KEY not found in .env");
+
   process.exit(1);
 }
 
@@ -127,7 +127,7 @@ async function figmaFetch(path) {
   lastRequestTime = Date.now();
 
   const res = await fetch(url, {
-    headers: { "X-FIGMA-TOKEN": API_KEY },
+
   });
 
   if (res.status === 429) {
