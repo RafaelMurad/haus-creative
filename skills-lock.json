@@ -6,16 +6,6 @@
       "sourceType": "github",
       "computedHash": "2c060290f90340e8bb6009502ec936b8ebb3ff889332a43e24bf210528ebba9f"
     },
-    "figma-create-design-system-rules": {
-      "source": "figma/mcp-server-guide",
-      "sourceType": "github",
-      "computedHash": "2a0d7f3579044c13eed985f721093e2637f91fb8fe22b49dd7e99eedd2ca5180"
-    },
-    "figma-implement-design": {
-      "source": "figma/mcp-server-guide",
-      "sourceType": "github",
-      "computedHash": "3a73f35eaa52cba221f5f237097b6e2e4c193c558bf88aa4ab32dec736ad0ffe"
-    },
     "next-best-practices": {
       "source": "vercel-labs/next-skills",
       "sourceType": "github",

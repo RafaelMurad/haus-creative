@@ -69,14 +69,15 @@ describe("ProjectPage", () => {
     expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 
-  it("renders the GalleryGrid with project media", () => {
+  it("renders the GalleryGrid with project images (excluding hero banner)", () => {
     render(<ProjectPage params={{ slug: validSlug }} />);
+
+    const images = validProject.media.filter((m) => m.type === "image");
+    const expectedGalleryCount = images.length - 1; // first image is hero
 
     const grid = screen.getByTestId("gallery-grid");
     expect(grid).toBeInTheDocument();
-    expect(Number(grid.getAttribute("data-count"))).toBe(
-      validProject.media.length,
-    );
+    expect(Number(grid.getAttribute("data-count"))).toBe(expectedGalleryCount);
   });
 
   it("renders the contact email from siteConfig in the footer", () => {
@@ -119,66 +120,35 @@ describe("ProjectPage", () => {
     }
   });
 
-  it("renders hero image when project has heroImage but no heroVideo", () => {
-    const imageProject = projects.find(
-      (p) => p.heroImage && !p.heroVideo,
-    );
+  it("renders first image as hero banner on project page", () => {
+    // The hero banner uses the first image from the media array
+    const project = projects.find((p) => p.media.some((m) => m.type === "image"));
+    expect(project).toBeDefined();
 
-    if (imageProject) {
-      render(<ProjectPage params={{ slug: imageProject.slug }} />);
+    render(<ProjectPage params={{ slug: project!.slug }} />);
 
-      const heroImg = screen.getByAltText(imageProject.heroImage!.alt);
-      expect(heroImg).toBeInTheDocument();
-    }
+    const firstImage = project!.media.find((m) => m.type === "image")!;
+    const heroImg = screen.getByAltText(firstImage.alt);
+    expect(heroImg).toBeInTheDocument();
   });
 
-  it("renders hero video when project has heroVideo with mobile source", () => {
-    // ouronyx has heroVideo.mobile
-    const videoProject = projects.find((p) => p.heroVideo?.mobile);
-
-    if (videoProject) {
-      const { container } = render(
-        <ProjectPage params={{ slug: videoProject.slug }} />,
-      );
-
-      const video = container.querySelector("video");
-      expect(video).toBeInTheDocument();
-
-      // Should have two <source> elements
-      const sources = container.querySelectorAll("video source");
-      expect(sources.length).toBe(2);
-    }
-  });
-
-  it("renders hero video without mobile source (falls back to desktop)", () => {
-    // wao-cosmo has heroVideo but no mobile
-    const videoProject = projects.find(
-      (p) => p.heroVideo && !p.heroVideo.mobile,
+  it("does not render video element on project pages", () => {
+    const { container } = render(
+      <ProjectPage params={{ slug: validSlug }} />,
     );
 
-    if (videoProject) {
-      const { container } = render(
-        <ProjectPage params={{ slug: videoProject.slug }} />,
-      );
-
-      const video = container.querySelector("video");
-      expect(video).toBeInTheDocument();
-
-      // Mobile source should fall back to desktop src
-      const sources = container.querySelectorAll("video source");
-      expect(sources[0].getAttribute("src")).toBe(
-        videoProject.heroVideo!.desktop,
-      );
-    }
+    const video = container.querySelector("video");
+    expect(video).not.toBeInTheDocument();
   });
 
-  it("renders nothing in hero section when project has no heroVideo or heroImage", () => {
-    // All current projects have one or the other, but test the null path
-    // by finding a project that renders correctly
-    const project = projects.find(
-      (p) => p.heroVideo || p.heroImage,
-    );
-    expect(project).toBeDefined(); // Sanity check
+  it("uses first image media item as hero regardless of heroVideo/heroImage config", () => {
+    // Hero always comes from media[0] (first image), not heroVideo or heroImage
+    render(<ProjectPage params={{ slug: validSlug }} />);
+
+    const project = projects.find((p) => p.slug === validSlug)!;
+    const firstImage = project.media.find((m) => m.type === "image")!;
+    const heroImg = screen.getByAltText(firstImage.alt);
+    expect(heroImg).toBeInTheDocument();
   });
 
   it("does not render credits section when project has no credits", () => {

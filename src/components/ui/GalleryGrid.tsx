@@ -14,6 +14,9 @@ interface GalleryGridProps {
  * - `phone`      CSS phone device mockup on blue background
  * - `colorFrame` Solid colour background behind the image
  *
+ * Per-item overrides via ProjectMedia:
+ * - `padding`     — [mobile, desktop] px values (default [24, 55] for inset/colorFrame)
+ *
  * Items with `span: 'full'` render full-width.
  * Items with `span: 'half'` (default) are paired into 2-column rows on desktop.
  * All items stack vertically on mobile.
@@ -52,6 +55,7 @@ export function GalleryGrid({ media }: GalleryGridProps) {
           </div>
         );
       })}
+
     </div>
   );
 }
@@ -129,11 +133,17 @@ function MaskFrame({ item, index, sizes }: GalleryItemProps) {
 
 function InsetFrame({ item, index, sizes }: GalleryItemProps) {
   const bgColor = item.bgColor ?? "#FFFFFF";
+  const [mobilePad, desktopPad] = item.padding ?? [24, 55];
 
   return (
     <div
-      className="w-full aspect-[3/4] flex items-center justify-center p-[24px] md:p-[55px]"
-      style={{ backgroundColor: bgColor }}
+      className="w-full aspect-[3/4] flex items-center justify-center gallery-frame-pad"
+      style={{
+        backgroundColor: bgColor,
+        "--pad-mobile": `${mobilePad}px`,
+        "--pad-desktop": `${desktopPad}px`,
+        padding: `var(--pad-mobile)`,
+      } as React.CSSProperties}
     >
       <div className="relative w-full h-full">
         <Image
@@ -190,11 +200,17 @@ function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
 
 function ColorFrame({ item, index, sizes }: GalleryItemProps) {
   const bgColor = item.bgColor ?? "#FF0E9B";
+  const [mobilePad, desktopPad] = item.padding ?? [24, 55];
 
   return (
     <div
-      className="w-full aspect-[3/4] flex items-center justify-center p-[24px] md:p-[55px]"
-      style={{ backgroundColor: bgColor }}
+      className="w-full aspect-[3/4] flex items-center justify-center gallery-frame-pad"
+      style={{
+        backgroundColor: bgColor,
+        "--pad-mobile": `${mobilePad}px`,
+        "--pad-desktop": `${desktopPad}px`,
+        padding: `var(--pad-mobile)`,
+      } as React.CSSProperties}
     >
       <div className="relative w-full h-full">
         <Image

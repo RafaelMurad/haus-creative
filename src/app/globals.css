@@ -131,6 +131,21 @@ body {
 }
 
 /* ===========================================
+   GALLERY FRAME RESPONSIVE PADDING
+   CSS custom properties set per-element; media query switches values.
+   =========================================== */
+
+.gallery-frame-pad {
+  padding: var(--pad-mobile, 24px);
+}
+
+@media (min-width: 768px) {
+  .gallery-frame-pad {
+    padding: var(--pad-desktop, 55px);
+  }
+}
+
+/* ===========================================
    REDUCED MOTION SUPPORT
    =========================================== */
 

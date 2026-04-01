@@ -10,8 +10,8 @@ const nextConfig = {
     // Configure image sizes for better optimization
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 
-    // Enable optimization for local images
-    unoptimized: false,
+    // Serve original images without re-compression for maximum quality
+    unoptimized: true,
 
     // Increase cache time for better performance
     minimumCacheTTL: 86400, // 24 hours

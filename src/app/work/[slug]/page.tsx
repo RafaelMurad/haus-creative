@@ -48,37 +48,26 @@ export default function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  // Images only — first image is the hero banner, rest go into the gallery
+  const images = project.media.filter((m) => m.type === "image");
+  const heroImage = images[0];
+  const galleryImages = images.slice(1);
+
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Hero Section - Full viewport with video/image */}
-      <section className="relative w-full h-dvh bg-black overflow-hidden">
-        {project.heroVideo ? (
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            playsInline
-            autoPlay
-            loop
-            muted
-            poster={project.heroVideo.poster}
-            preload="metadata"
-          >
-            <source
-              src={project.heroVideo.mobile || project.heroVideo.desktop}
-              type="video/mp4"
-              media="(max-width: 768px)"
-            />
-            <source src={project.heroVideo.desktop} type="video/mp4" />
-          </video>
-        ) : project.heroImage ? (
+      {/* Hero Section - Full width, height follows image aspect ratio */}
+      <section className="relative w-full bg-black">
+        {heroImage && (
           <Image
-            src={project.heroImage.desktop}
-            alt={project.heroImage.alt}
-            fill
-            className="object-cover"
+            src={heroImage.desktop}
+            alt={heroImage.alt}
+            width={1920}
+            height={1080}
+            className="w-full h-auto"
             sizes="100vw"
             priority
           />
-        ) : null}
+        )}
 
         {/* Client logo overlay - centered */}
         {project.clientLogo && (
@@ -121,9 +110,9 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
 
-        {/* Media Gallery */}
+        {/* Media Gallery — images only, excluding the hero banner */}
         <div className="mt-[143px]">
-          <GalleryGrid media={project.media} />
+          <GalleryGrid media={galleryImages} />
         </div>
 
         {/* Credits Section */}

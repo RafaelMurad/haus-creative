@@ -48,9 +48,7 @@
   },
   "mcp": {
     "figma": {
-      "type": "local",
-      "command": ["npx", "figma-developer-mcp", "--stdio", "--env", ".env"],
-      "enabled": true
     }
   }
+    // MCP config removed for security
 }
