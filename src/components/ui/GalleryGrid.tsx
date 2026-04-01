@@ -3,8 +3,6 @@ import type { ProjectMedia } from "@/config/projects";
 
 interface GalleryGridProps {
   media: ProjectMedia[];
-  /** Vertical gap between rows [mobile, desktop] in px. Defaults to [0, 0]. */
-  galleryGap?: [number, number];
 }
 
 /**
@@ -17,33 +15,17 @@ interface GalleryGridProps {
  * - `colorFrame` Solid colour background behind the image
  *
  * Per-item overrides via ProjectMedia:
- * - `aspectRatio` — container aspect ratio (default '3/4' for framed items)
  * - `padding`     — [mobile, desktop] px values (default [24, 55] for inset/colorFrame)
  *
  * Items with `span: 'full'` render full-width.
  * Items with `span: 'half'` (default) are paired into 2-column rows on desktop.
  * All items stack vertically on mobile.
  */
-export function GalleryGrid({ media, galleryGap }: GalleryGridProps) {
+export function GalleryGrid({ media }: GalleryGridProps) {
   const rows = groupIntoRows(media);
-  const [mobileGap, desktopGap] = galleryGap ?? [0, 0];
-
-  // Build gap style — uses CSS custom properties for responsive values
-  const hasGap = mobileGap > 0 || desktopGap > 0;
 
   return (
-    <div
-      className={hasGap ? "flex flex-col" : undefined}
-      style={
-        hasGap
-          ? ({
-              "--gallery-gap-mobile": `${mobileGap}px`,
-              "--gallery-gap-desktop": `${desktopGap}px`,
-              gap: `var(--gallery-gap-mobile)`,
-            } as React.CSSProperties)
-          : undefined
-      }
-    >
+    <div>
       {rows.map((row, rowIndex) => {
         if (row.length === 1 && (row[0].span === "full" || !hasHalfPair(row))) {
           // Full-width row (single item)
@@ -151,15 +133,13 @@ function MaskFrame({ item, index, sizes }: GalleryItemProps) {
 
 function InsetFrame({ item, index, sizes }: GalleryItemProps) {
   const bgColor = item.bgColor ?? "#FFFFFF";
-  const aspectRatio = item.aspectRatio ?? "3/4";
   const [mobilePad, desktopPad] = item.padding ?? [24, 55];
 
   return (
     <div
-      className="w-full flex items-center justify-center gallery-frame-pad"
+      className="w-full aspect-[3/4] flex items-center justify-center gallery-frame-pad"
       style={{
         backgroundColor: bgColor,
-        aspectRatio: aspectRatio.replace("/", " / "),
         "--pad-mobile": `${mobilePad}px`,
         "--pad-desktop": `${desktopPad}px`,
         padding: `var(--pad-mobile)`,
@@ -194,12 +174,11 @@ function InsetFrame({ item, index, sizes }: GalleryItemProps) {
  */
 function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
   const bgColor = item.bgColor ?? "#1500FF";
-  const aspectRatio = item.aspectRatio ?? "3/4";
 
   return (
     <div
-      className="w-full flex items-center justify-center"
-      style={{ backgroundColor: bgColor, aspectRatio: aspectRatio.replace("/", " / ") }}
+      className="w-full aspect-[3/4] flex items-center justify-center"
+      style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-[58%] h-[78%] rounded-[32px] md:rounded-[40px] overflow-hidden border-[6px] md:border-[8px] border-black/90 shadow-lg">
         <Image
@@ -221,15 +200,13 @@ function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
 
 function ColorFrame({ item, index, sizes }: GalleryItemProps) {
   const bgColor = item.bgColor ?? "#FF0E9B";
-  const aspectRatio = item.aspectRatio ?? "3/4";
   const [mobilePad, desktopPad] = item.padding ?? [24, 55];
 
   return (
     <div
-      className="w-full flex items-center justify-center gallery-frame-pad"
+      className="w-full aspect-[3/4] flex items-center justify-center gallery-frame-pad"
       style={{
         backgroundColor: bgColor,
-        aspectRatio: aspectRatio.replace("/", " / "),
         "--pad-mobile": `${mobilePad}px`,
         "--pad-desktop": `${desktopPad}px`,
         padding: `var(--pad-mobile)`,

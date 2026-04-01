@@ -130,7 +130,7 @@ export const siteConfig: SiteConfig = {
 // =============================================================================
 
 export const featuredProjects: Project[] = [
-  // Hero — Ouronyx (intro hero, not shown in work listing grid)
+  // 1. Ouronyx (intro hero)
   {
     id: "ouronyx",
     title: "Ouronyx",
@@ -138,126 +138,172 @@ export const featuredProjects: Project[] = [
     href: "/work/ouronyx",
     media: {
       type: "video",
-      src: "/assets/gallery10/Gallery10-Ouronyx.mp4",
-      srcMobile: "/assets/gallery10/Gallery10-Ouronyx-Mobile.mp4",
-      poster: "/assets/gallery10/Gallery10-Cover.webp",
+      src: "/assets/ouronyx/web/video.mp4",
+      srcMobile: "/assets/ouronyx/mobile/video.mp4",
+      poster: "/assets/ouronyx/web/OUR_WEB_01.webp",
       autoPlay: true,
       loop: true,
       muted: true,
     },
   },
-  // 1. Marie Claire Arabia
+  // 2. Marie Claire
   {
-    id: "marie-claire-arabia",
-    title: "Marie Claire Arabia",
+    id: "marie-claire",
+    title: "Marie Claire",
     subtitle: "Creative Direction",
-    href: "/work/marie-claire-arabia",
+    href: "/work/marie-claire",
     media: {
-      type: "image",
-      src: "/assets/gallery1/Gallery1-1.webp",
-      alt: "Marie Claire Arabia editorial",
+      type: "video",
+      src: "/assets/marie-claire/web/video.mp4",
+      srcMobile: "/assets/marie-claire/mobile/video.mp4",
+      poster: "/assets/marie-claire/web/MC_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
-  // 2. YSL
+  // 3. YSL
   {
     id: "ysl",
     title: "Yves Saint Laurent",
     subtitle: "Art Direction",
     href: "/work/ysl",
     media: {
-      type: "image",
-      src: "/assets/gallery2/Gallery2-1.webp",
-      alt: "YSL campaign",
-    },
-  },
-  // 3. Wao Cosmo
-  {
-    id: "wao-cosmo",
-    title: "Wao Cosmo",
-    subtitle: "Visual Design",
-    href: "/work/wao-cosmo",
-    media: {
       type: "video",
-      src: "/assets/gallery3/Gallery3-Video.mp4",
-      poster: "/assets/gallery3/Gallery3-Cover.webp",
+      src: "/assets/ysl/web/video-01.mp4",
+      srcMobile: "/assets/ysl/mobile/video-01.mp4",
+      poster: "/assets/ysl/web/YSL_WEB_01.webp",
       autoPlay: true,
       loop: true,
       muted: true,
     },
   },
-  // 4. Vivara
+  // 4. WAO
+  {
+    id: "wao",
+    title: "WAO",
+    subtitle: "Visual Design",
+    href: "/work/wao",
+    media: {
+      type: "video",
+      src: "/assets/wao/web/video.mp4",
+      srcMobile: "/assets/wao/mobile/video.mp4",
+      poster: "/assets/wao/web/WAO_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
+    },
+  },
+  // 5. Vivara
   {
     id: "vivara",
     title: "Vivara",
     subtitle: "Art Direction",
     href: "/work/vivara",
     media: {
-      type: "image",
-      src: "/assets/gallery4/Gallery4-1.webp",
-      alt: "Vivara jewellery campaign",
-    },
-  },
-  // 5. Bucherer Summer
-  {
-    id: "bucherer-summer",
-    title: "Bucherer Summer",
-    subtitle: "Creative Direction",
-    href: "/work/bucherer-summer",
-    media: {
       type: "video",
-      src: "/assets/gallery5/Gallery5-Video.mp4",
-      poster: "/assets/gallery5/Gallery5-Cover.webp",
+      src: "/assets/vivara/web/video.mp4",
+      srcMobile: "/assets/vivara/mobile/video.mp4",
+      poster: "/assets/vivara/web/VIV_WEB_01.webp",
       autoPlay: true,
       loop: true,
       muted: true,
     },
   },
-  // 6. SK
+  // 6. Bucherer
   {
-    id: "sk",
-    title: "SK",
-    subtitle: "Brand Development",
-    href: "/work/sk",
+    id: "bucherer",
+    title: "Bucherer",
+    subtitle: "Creative Direction",
+    href: "/work/bucherer",
     media: {
-      type: "image",
-      src: "/assets/gallery6/Gallery6-1.webp",
-      alt: "SK brand showcase",
+      type: "video",
+      src: "/assets/bucherer/web/video.mp4",
+      srcMobile: "/assets/bucherer/mobile/video.mp4",
+      poster: "/assets/bucherer/web/BUC_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
-  // 7. BFJ
+  // 7. SK-II
+  {
+    id: "sk-ii",
+    title: "SK-II",
+    subtitle: "Brand Development",
+    href: "/work/sk-ii",
+    media: {
+      type: "video",
+      src: "/assets/sk-ii/web/video.mp4",
+      srcMobile: "/assets/sk-ii/mobile/video.mp4",
+      poster: "/assets/sk-ii/web/SKII-WEB-01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
+    },
+  },
+  // 8. BFJ
   {
     id: "bfj",
     title: "BFJ",
     subtitle: "Digital Design",
     href: "/work/bfj",
     media: {
-      type: "image",
-      src: "/assets/gallery7/Gallery7-1.webp",
-      alt: "BFJ project showcase",
+      type: "video",
+      src: "/assets/bfj/web/video.mp4",
+      srcMobile: "/assets/bfj/mobile/video.mp4",
+      poster: "/assets/bfj/web/BUC_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
-  // 8. Life
+  // 9. Life
   {
     id: "life",
     title: "Life",
     subtitle: "Creative Strategy",
     href: "/work/life",
     media: {
-      type: "image",
-      src: "/assets/gallery8/Gallery8-1.webp",
-      alt: "Life project showcase",
+      type: "video",
+      src: "/assets/life/web/video.mp4",
+      srcMobile: "/assets/life/mobile/video.mp4",
+      poster: "/assets/life/web/LIFE_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
-  // 9. Bride Story
+  // 10. Bride
   {
-    id: "bride-story",
-    title: "Bride Story",
+    id: "bride",
+    title: "Bride",
     subtitle: "Art Direction",
-    href: "/work/bride-story",
+    href: "/work/bride",
     media: {
-      type: "image",
-      src: "/assets/gallery9/Gallery9-1.webp",
-      alt: "Bride Story art direction",
+      type: "video",
+      src: "/assets/bride/web/video.mp4",
+      srcMobile: "/assets/bride/mobile/video.mp4",
+      poster: "/assets/bride/web/BRD_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
+    },
+  },
+  // 11. Harrods
+  {
+    id: "harrods",
+    title: "Harrods",
+    subtitle: "Creative Direction",
+    href: "/work/harrods",
+    media: {
+      type: "video",
+      src: "/assets/harrods/web/video-01.mp4",
+      srcMobile: "/assets/harrods/mobile/video-01.mp4",
+      poster: "/assets/harrods/web/HAR_WEB_01.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
 ];

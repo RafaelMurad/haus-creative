@@ -13,10 +13,10 @@ describe("getProjectBySlug", () => {
     expect(project).toBeUndefined();
   });
 
-  it("should return Marie Claire Arabia by slug", () => {
-    const project = getProjectBySlug("marie-claire-arabia");
+  it("should return Marie Claire by slug", () => {
+    const project = getProjectBySlug("marie-claire");
     expect(project).toBeDefined();
-    expect(project?.client).toBe("Marie Claire Arabia");
+    expect(project?.client).toBe("Marie Claire");
     expect(project?.credits).toBeDefined();
     expect(project?.credits?.length).toBeGreaterThan(0);
   });
@@ -25,6 +25,11 @@ describe("getProjectBySlug", () => {
     expect(getProjectBySlug("gallery-1")).toBeUndefined();
     expect(getProjectBySlug("brand-identity")).toBeUndefined();
     expect(getProjectBySlug("motion-design")).toBeUndefined();
+    // Old slugs that were renamed
+    expect(getProjectBySlug("marie-claire-arabia")).toBeUndefined();
+    expect(getProjectBySlug("wao-cosmo")).toBeUndefined();
+    expect(getProjectBySlug("bucherer-summer")).toBeUndefined();
+    expect(getProjectBySlug("bride-story")).toBeUndefined();
   });
 
   it("should return project with correct structure", () => {
@@ -49,23 +54,24 @@ describe("getAllProjectSlugs", () => {
     });
   });
 
-  it("should include all 10 named project slugs", () => {
+  it("should include all 11 project slugs", () => {
     const slugs = getAllProjectSlugs();
     expect(slugs).toContain("ouronyx");
-    expect(slugs).toContain("marie-claire-arabia");
+    expect(slugs).toContain("marie-claire");
     expect(slugs).toContain("ysl");
-    expect(slugs).toContain("wao-cosmo");
+    expect(slugs).toContain("wao");
     expect(slugs).toContain("vivara");
-    expect(slugs).toContain("bucherer-summer");
-    expect(slugs).toContain("sk");
+    expect(slugs).toContain("bucherer");
+    expect(slugs).toContain("sk-ii");
     expect(slugs).toContain("bfj");
     expect(slugs).toContain("life");
-    expect(slugs).toContain("bride-story");
+    expect(slugs).toContain("bride");
+    expect(slugs).toContain("harrods");
   });
 
-  it("should return exactly 10 project slugs", () => {
+  it("should return exactly 11 project slugs", () => {
     const slugs = getAllProjectSlugs();
-    expect(slugs.length).toBe(10);
+    expect(slugs.length).toBe(11);
   });
 
   it("should not contain old gallery slugs", () => {
@@ -84,9 +90,9 @@ describe("getAllProjectSlugs", () => {
 });
 
 describe("projects", () => {
-  it("should be a non-empty array of 10 projects", () => {
+  it("should be a non-empty array of 11 projects", () => {
     expect(Array.isArray(projects)).toBe(true);
-    expect(projects.length).toBe(10);
+    expect(projects.length).toBe(11);
   });
 
   it("should have valid slugs on all projects", () => {
@@ -107,8 +113,16 @@ describe("projects", () => {
     projects.forEach((project) => {
       project.media.forEach((item) => {
         const ext = item.desktop.split(".").pop();
-        expect(["webp", "mp4", "jpg"]).toContain(ext);
+        expect(["webp", "mp4"]).toContain(ext);
       });
+    });
+  });
+
+  it("should have heroVideo on all projects", () => {
+    projects.forEach((project) => {
+      expect(project.heroVideo).toBeDefined();
+      expect(project.heroVideo!.desktop).toMatch(/\.mp4$/);
+      expect(project.heroVideo!.poster).toMatch(/\.webp$/);
     });
   });
 
@@ -120,9 +134,9 @@ describe("projects", () => {
       });
     });
 
-    it("video-only projects have no autoAdvanceTime", () => {
+    it("video-loop projects have no autoAdvanceTime", () => {
       const videoProjects = projects.filter(
-        (p) => p.slug === "wao-cosmo" || p.slug === "bucherer-summer"
+        (p) => p.slug === "wao" || p.slug === "bucherer"
       );
       expect(videoProjects).toHaveLength(2);
       videoProjects.forEach((p) => {
@@ -130,10 +144,10 @@ describe("projects", () => {
       });
     });
 
-    it("SK uses slide animation for treadmill effect", () => {
-      const sk = projects.find((p) => p.slug === "sk");
-      expect(sk!.carousel!.animation).toBe("slide");
-      expect(sk!.carousel!.autoAdvanceTime).toBe(2500);
+    it("SK-II uses slide animation for treadmill effect", () => {
+      const skii = projects.find((p) => p.slug === "sk-ii");
+      expect(skii!.carousel!.animation).toBe("slide");
+      expect(skii!.carousel!.autoAdvanceTime).toBe(2500);
     });
 
     it("YSL uses fast none animation (800ms)", () => {

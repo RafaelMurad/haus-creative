@@ -151,7 +151,7 @@ describe("ProjectPage", () => {
   });
 
   it("renders hero video without mobile source (falls back to desktop)", () => {
-    // wao-cosmo has heroVideo but no mobile
+    // Find any project with heroVideo but no mobile source
     const videoProject = projects.find(
       (p) => p.heroVideo && !p.heroVideo.mobile,
     );

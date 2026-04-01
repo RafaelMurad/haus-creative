@@ -146,16 +146,6 @@ body {
 }
 
 /* ===========================================
-   GALLERY GAP RESPONSIVE
-   =========================================== */
-
-@media (min-width: 768px) {
-  [style*="--gallery-gap-mobile"] {
-    gap: var(--gallery-gap-desktop, 0px);
-  }
-}
-
-/* ===========================================
    REDUCED MOTION SUPPORT
    =========================================== */
 
