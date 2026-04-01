@@ -127,3 +127,7 @@ tsconfig.tsbuildinfo
 .vibe/
 .windsurf/
 .zencoder/
+
+# Source assets (not for production — use public/assets/ instead)
+EXPORT-ORIGINAL/
+Vitor-Website/

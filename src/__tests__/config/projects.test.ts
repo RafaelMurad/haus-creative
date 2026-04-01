@@ -109,11 +109,11 @@ describe("projects", () => {
     });
   });
 
-  it("should reference .webp or .mp4 assets only", () => {
+  it("should reference .png, .jpg, or .mp4 assets only", () => {
     projects.forEach((project) => {
       project.media.forEach((item) => {
         const ext = item.desktop.split(".").pop();
-        expect(["webp", "mp4"]).toContain(ext);
+        expect(["png", "jpg", "mp4"]).toContain(ext);
       });
     });
   });
@@ -122,7 +122,7 @@ describe("projects", () => {
     projects.forEach((project) => {
       expect(project.heroVideo).toBeDefined();
       expect(project.heroVideo!.desktop).toMatch(/\.mp4$/);
-      expect(project.heroVideo!.poster).toMatch(/\.webp$/);
+      expect(project.heroVideo!.poster).toMatch(/\.(png|jpg)$/);
     });
   });
 
