@@ -40,12 +40,15 @@ export default function Home() {
       {/* Introductory Hero - Full viewport, no text */}
       <IntroHero media={introProject.media} />
 
-      {/* Work Gallery Items - Each navigable to its own page */}
+      {/* Work Gallery Items - Each navigable to its own page.
+          Carousel effects are OFF by default. To enable per-project,
+          add homepageIndices to the project's carousel config in projects.ts. */}
       {workProjects.map((project) => {
         const detail = projectBySlug.get(project.id);
         const carouselConfig = detail?.carousel;
-        const galleryMedia = detail
-          ? getHomepageMedia(detail.media, carouselConfig?.homepageIndices)
+        const hasHomepageCarousel = carouselConfig?.homepageIndices && carouselConfig.homepageIndices.length > 0;
+        const galleryMedia = hasHomepageCarousel && detail
+          ? getHomepageMedia(detail.media, carouselConfig!.homepageIndices)
           : undefined;
 
         return (
@@ -53,7 +56,7 @@ export default function Home() {
             key={project.id}
             project={project}
             galleryMedia={galleryMedia}
-            carouselConfig={carouselConfig}
+            carouselConfig={hasHomepageCarousel ? carouselConfig : undefined}
           />
         );
       })}

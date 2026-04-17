@@ -172,6 +172,16 @@ export function SimpleCarousel({
                 )}
                 <source src={item.desktop} type="video/mp4" />
               </video>
+            ) : item.mobile ? (
+              <picture>
+                <source media="(max-width: 768px)" srcSet={item.mobile} />
+                <img
+                  src={item.desktop}
+                  alt={item.alt}
+                  className="w-full h-full object-cover"
+                  loading={priority && index === 0 ? "eager" : "lazy"}
+                />
+              </picture>
             ) : (
               <Image
                 src={item.desktop}

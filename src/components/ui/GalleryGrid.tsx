@@ -24,10 +24,18 @@ export function GalleryGrid({ media }: GalleryGridProps) {
   return (
     <div>
       {rows.map((row, rowIndex) => {
-        if (row.length === 1 && (row[0].span === "full" || !hasHalfPair(row))) {
-          // Full-width row (single item)
+        const isFullRow = row.length === 1 && (row[0].span === "full" || !hasHalfPair(row));
+        // Full-width rows get automatic spacing (~150px in Figma).
+        // Manual spaceBefore on individual items also adds spacing.
+        // Full-width rows get ~150px gap (75px top + 75px bottom) matching Figma
+        const autoSpace = isFullRow && rowIndex > 0 ? "py-[60px] md:py-[150px]" : "";
+        const manualSpace = row[0].spaceBefore ? "py-[60px] md:py-[150px]" : "";
+        const space = manualSpace || autoSpace;
+
+        if (isFullRow) {
+          // Full-width row — natural aspect ratio
           return (
-            <div key={rowIndex}>
+            <div key={rowIndex} className={`w-full ${space}`}>
               <GalleryItem
                 item={row[0]}
                 index={getGlobalIndex(rows, rowIndex, 0)}
@@ -37,15 +45,16 @@ export function GalleryGrid({ media }: GalleryGridProps) {
           );
         }
 
-        // Half-width pair row
+        // Half-width pair row — matched heights, side by side on desktop, stacked on mobile
         return (
-          <div key={rowIndex} className="flex flex-col md:flex-row">
+          <div key={rowIndex} className={`flex flex-col md:flex-row w-full ${space}`}>
             {row.map((item, colIndex) => (
-              <div key={colIndex} className="w-full md:w-1/2">
+              <div key={colIndex} className="w-full md:w-1/2 aspect-[4/5] overflow-hidden">
                 <GalleryItem
                   item={item}
                   index={getGlobalIndex(rows, rowIndex, colIndex)}
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  paired
                 />
               </div>
             ))}
@@ -64,9 +73,10 @@ interface GalleryItemProps {
   item: ProjectMedia;
   index: number;
   sizes: string;
+  paired?: boolean;
 }
 
-function GalleryItem({ item, index, sizes }: GalleryItemProps) {
+function GalleryItem({ item, index, sizes, paired }: GalleryItemProps) {
   const frame = item.frame ?? "mask";
 
   switch (frame) {
@@ -78,7 +88,7 @@ function GalleryItem({ item, index, sizes }: GalleryItemProps) {
       return <ColorFrame item={item} index={index} sizes={sizes} />;
     case "mask":
     default:
-      return <MaskFrame item={item} index={index} sizes={sizes} />;
+      return <MaskFrame item={item} index={index} sizes={sizes} paired={paired} />;
   }
 }
 
@@ -86,11 +96,17 @@ function GalleryItem({ item, index, sizes }: GalleryItemProps) {
 // Frame: Mask — edge-to-edge image, no background
 // =============================================================================
 
-function MaskFrame({ item, index, sizes }: GalleryItemProps) {
+function MaskFrame({ item, index, sizes, paired }: GalleryItemProps) {
+  // Paired items (half-width rows) fill their container to match heights.
+  // Single items (full-width) render at natural aspect ratio.
+  const imgClass = paired
+    ? "w-full h-full object-cover block"
+    : "w-full h-auto block";
+
   if (item.type === "video") {
     return (
       <video
-        className="w-full h-auto object-cover"
+        className={imgClass}
         playsInline
         autoPlay
         loop
@@ -110,13 +126,43 @@ function MaskFrame({ item, index, sizes }: GalleryItemProps) {
     );
   }
 
+  if (item.mobile) {
+    return (
+      <picture>
+        <source media="(max-width: 768px)" srcSet={item.mobile} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.desktop}
+          alt={item.alt}
+          className={imgClass}
+          loading={index < 2 ? "eager" : "lazy"}
+        />
+      </picture>
+    );
+  }
+
+  if (paired) {
+    return (
+      <div className="relative w-full h-full">
+        <Image
+          src={item.desktop}
+          alt={item.alt}
+          fill
+          className="object-cover"
+          sizes={sizes}
+          loading={index < 2 ? "eager" : "lazy"}
+        />
+      </div>
+    );
+  }
+
   return (
     <Image
       src={item.desktop}
       alt={item.alt}
-      width={1920}
-      height={1080}
-      className="w-full h-auto object-cover block"
+      width={1440}
+      height={900}
+      className="w-full h-auto block"
       sizes={sizes}
       loading={index < 2 ? "eager" : "lazy"}
     />
@@ -136,14 +182,26 @@ function InsetFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-contain"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-contain"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-contain"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );
@@ -171,14 +229,26 @@ function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-[58%] h-[78%] rounded-[32px] md:rounded-[40px] overflow-hidden border-[6px] md:border-[8px] border-black/90 shadow-lg">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-cover"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-cover"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-cover"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );
@@ -197,14 +267,26 @@ function ColorFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-contain"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-contain"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-contain"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );

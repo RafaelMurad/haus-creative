@@ -54,7 +54,11 @@ export default function ProjectPage({ params }: ProjectPageProps) {
       <section className="relative w-full h-dvh bg-black overflow-hidden">
         {project.heroVideo ? (
           <video
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full"
+            style={{
+              objectFit: project.heroVideo.objectFit ?? "cover",
+              objectPosition: project.heroVideo.objectPosition ?? "center",
+            }}
             playsInline
             autoPlay
             loop
@@ -70,27 +74,39 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <source src={project.heroVideo.desktop} type="video/mp4" />
           </video>
         ) : project.heroImage ? (
-          <Image
-            src={project.heroImage.desktop}
-            alt={project.heroImage.alt}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
+          project.heroImage.mobile ? (
+            <picture>
+              <source media="(max-width: 768px)" srcSet={project.heroImage.mobile} />
+              <img
+                src={project.heroImage.desktop}
+                alt={project.heroImage.alt}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="eager"
+              />
+            </picture>
+          ) : (
+            <Image
+              src={project.heroImage.desktop}
+              alt={project.heroImage.alt}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+          )
         ) : null}
 
-        {/* Client logo overlay - centered */}
-        {project.clientLogo && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative max-w-[300px] md:max-w-[549px] w-full h-auto">
+        {/* Client logo overlay - hidden when hero video is present (logo baked into video) */}
+        {project.clientLogo && !project.heroVideo && (
+          <div className="absolute inset-0 flex items-end justify-start px-4 pb-6 md:items-center md:justify-end md:px-0 md:pb-0 md:pr-[10%]">
+            <div className="relative w-full md:max-w-[549px] md:w-full h-auto">
               <Image
                 src={project.clientLogo}
                 alt={`${project.title} logo`}
                 width={549}
                 height={200}
                 className="w-full h-auto"
-                sizes="(max-width: 768px) 300px, 549px"
+                sizes="(max-width: 768px) 90vw, 549px"
               />
             </div>
           </div>

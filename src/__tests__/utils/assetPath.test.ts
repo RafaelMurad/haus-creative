@@ -10,18 +10,18 @@ describe("getAssetPath", () => {
   });
 
   it("returns correct path for gallery and filename", () => {
-    const result = getAssetPath("gallery1", "image.jpg");
-    expect(result).toBe("/assets/gallery1/image.jpg");
+    const result = getAssetPath("mc-arabia", "image.jpg");
+    expect(result).toBe("/assets/mc-arabia/image.jpg");
   });
 
   it("sanitizes gallery ID with special characters", () => {
-    const result = getAssetPath("gallery@#$%1", "image.jpg");
-    expect(result).toBe("/assets/gallery1/image.jpg");
+    const result = getAssetPath("mc@#$%arabia", "image.jpg");
+    expect(result).toBe("/assets/mcarabia/image.jpg");
   });
 
   it("converts gallery ID to lowercase", () => {
-    const result = getAssetPath("Gallery1", "image.jpg");
-    expect(result).toBe("/assets/gallery1/image.jpg");
+    const result = getAssetPath("MC-Arabia", "image.jpg");
+    expect(result).toBe("/assets/mc-arabia/image.jpg");
   });
 
   it("handles gallery ID with hyphens and underscores", () => {
@@ -30,19 +30,19 @@ describe("getAssetPath", () => {
   });
 
   it("handles various file extensions", () => {
-    expect(getAssetPath("gallery1", "video.mp4")).toBe("/assets/gallery1/video.mp4");
-    expect(getAssetPath("gallery1", "image.png")).toBe("/assets/gallery1/image.png");
-    expect(getAssetPath("gallery1", "animation.gif")).toBe("/assets/gallery1/animation.gif");
+    expect(getAssetPath("mc-arabia", "video.mp4")).toBe("/assets/mc-arabia/video.mp4");
+    expect(getAssetPath("mc-arabia", "image.png")).toBe("/assets/mc-arabia/image.png");
+    expect(getAssetPath("mc-arabia", "animation.gif")).toBe("/assets/mc-arabia/animation.gif");
   });
 
   it("logs debug message in development mode", () => {
     const consoleSpy = jest.spyOn(console, "debug").mockImplementation();
     (process.env as { NODE_ENV?: string }).NODE_ENV = "development";
 
-    getAssetPath("gallery1", "image.jpg");
+    getAssetPath("mc-arabia", "image.jpg");
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      "Asset path generated: /assets/gallery1/image.jpg"
+      "Asset path generated: /assets/mc-arabia/image.jpg"
     );
 
     consoleSpy.mockRestore();
@@ -52,7 +52,7 @@ describe("getAssetPath", () => {
     const consoleSpy = jest.spyOn(console, "debug").mockImplementation();
     (process.env as { NODE_ENV?: string }).NODE_ENV = "production";
 
-    getAssetPath("gallery1", "image.jpg");
+    getAssetPath("mc-arabia", "image.jpg");
 
     expect(consoleSpy).not.toHaveBeenCalled();
 
@@ -62,7 +62,7 @@ describe("getAssetPath", () => {
 
 describe("getGalleryAssets", () => {
   it("returns an empty array (placeholder implementation)", async () => {
-    const result = await getGalleryAssets("gallery1");
+    const result = await getGalleryAssets("mc-arabia");
 
     expect(result).toEqual([]);
   });

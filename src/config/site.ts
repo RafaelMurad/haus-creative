@@ -130,20 +130,17 @@ export const siteConfig: SiteConfig = {
 // =============================================================================
 
 export const featuredProjects: Project[] = [
-  // Hero — Ouronyx (intro hero, not shown in work listing grid)
+  // Intro hero — SK (non-navigable, will be video in future)
   {
-    id: "ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
-    href: "/work/ouronyx",
+    id: "sk",
+    title: "SK",
+    subtitle: "Brand Development",
+    href: "/work/sk",
     media: {
-      type: "video",
-      src: "/assets/gallery10/Gallery10-Ouronyx.mp4",
-      srcMobile: "/assets/gallery10/Gallery10-Ouronyx-Mobile.mp4",
-      poster: "/assets/gallery10/Gallery10-Cover.webp",
-      autoPlay: true,
-      loop: true,
-      muted: true,
+      type: "image",
+      src: "/assets/sk/sk-1.webp",
+      srcMobile: "/assets/sk/sk-1-mobile.webp",
+      alt: "SK brand showcase",
     },
   },
   // 1. Marie Claire Arabia
@@ -154,7 +151,8 @@ export const featuredProjects: Project[] = [
     href: "/work/marie-claire-arabia",
     media: {
       type: "image",
-      src: "/assets/gallery1/Gallery1-1.webp",
+      src: "/assets/mc-arabia/mc-arabia-hero.webp",
+      srcMobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
       alt: "Marie Claire Arabia editorial",
     },
   },
@@ -166,26 +164,11 @@ export const featuredProjects: Project[] = [
     href: "/work/ysl",
     media: {
       type: "image",
-      src: "/assets/gallery2/Gallery2-1.webp",
-      alt: "YSL campaign",
+      src: "/assets/ysl/ysl-1.webp",
+      alt: "YSL art direction",
     },
   },
-  // 3. Wao Cosmo
-  {
-    id: "wao-cosmo",
-    title: "Wao Cosmo",
-    subtitle: "Visual Design",
-    href: "/work/wao-cosmo",
-    media: {
-      type: "video",
-      src: "/assets/gallery3/Gallery3-Video.mp4",
-      poster: "/assets/gallery3/Gallery3-Cover.webp",
-      autoPlay: true,
-      loop: true,
-      muted: true,
-    },
-  },
-  // 4. Vivara
+  // 3. Vivara
   {
     id: "vivara",
     title: "Vivara",
@@ -193,8 +176,21 @@ export const featuredProjects: Project[] = [
     href: "/work/vivara",
     media: {
       type: "image",
-      src: "/assets/gallery4/Gallery4-1.webp",
+      src: "/assets/vivara/vivara-1.webp",
+      srcMobile: "/assets/vivara/vivara-1-mobile.webp",
       alt: "Vivara jewellery campaign",
+    },
+  },
+  // 4. Life
+  {
+    id: "life",
+    title: "Life",
+    subtitle: "Creative Strategy",
+    href: "/work/life",
+    media: {
+      type: "image",
+      src: "/assets/life/life-1.webp",
+      alt: "Life project showcase",
     },
   },
   // 5. Bucherer Summer
@@ -205,26 +201,14 @@ export const featuredProjects: Project[] = [
     href: "/work/bucherer-summer",
     media: {
       type: "video",
-      src: "/assets/gallery5/Gallery5-Video.mp4",
-      poster: "/assets/gallery5/Gallery5-Cover.webp",
+      src: "/assets/bucherer/bucherer-video.mp4",
+      poster: "/assets/bucherer/bucherer-cover.webp",
       autoPlay: true,
       loop: true,
       muted: true,
     },
   },
-  // 6. SK
-  {
-    id: "sk",
-    title: "SK",
-    subtitle: "Brand Development",
-    href: "/work/sk",
-    media: {
-      type: "image",
-      src: "/assets/gallery6/Gallery6-1.webp",
-      alt: "SK brand showcase",
-    },
-  },
-  // 7. BFJ
+  // 6. BFJ
   {
     id: "bfj",
     title: "BFJ",
@@ -232,20 +216,39 @@ export const featuredProjects: Project[] = [
     href: "/work/bfj",
     media: {
       type: "image",
-      src: "/assets/gallery7/Gallery7-1.webp",
+      src: "/assets/bfj/bfj-1.webp",
       alt: "BFJ project showcase",
     },
   },
-  // 8. Life
+  // 7. Wao Cosmo
   {
-    id: "life",
-    title: "Life",
-    subtitle: "Creative Strategy",
-    href: "/work/life",
+    id: "wao-cosmo",
+    title: "Wao Cosmo",
+    subtitle: "Visual Design",
+    href: "/work/wao-cosmo",
     media: {
-      type: "image",
-      src: "/assets/gallery8/Gallery8-1.webp",
-      alt: "Life project showcase",
+      type: "video",
+      src: "/assets/wao-cosmo/wao-cosmo-video.mp4",
+      poster: "/assets/wao-cosmo/wao-cosmo-cover.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
+    },
+  },
+  // 8. Ouronyx
+  {
+    id: "ouronyx",
+    title: "Ouronyx",
+    subtitle: "Digital Experience",
+    href: "/work/ouronyx",
+    media: {
+      type: "video",
+      src: "/assets/ouronyx/ouronyx-video.mp4",
+      srcMobile: "/assets/ouronyx/ouronyx-video-mobile.mp4",
+      poster: "/assets/ouronyx/ouronyx-cover.webp",
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
   // 9. Bride Story
@@ -256,8 +259,21 @@ export const featuredProjects: Project[] = [
     href: "/work/bride-story",
     media: {
       type: "image",
-      src: "/assets/gallery9/Gallery9-1.webp",
+      src: "/assets/bride-story/bride-story-1.webp",
+      srcMobile: "/assets/bride-story/bride-story-1-mobile.webp",
       alt: "Bride Story art direction",
+    },
+  },
+  // 10. Harrods
+  {
+    id: "harrods",
+    title: "Harrods",
+    subtitle: "Dining Hall",
+    href: "/work/harrods",
+    media: {
+      type: "image",
+      src: "/assets/harrods/harrods-1.webp",
+      alt: "Harrods Dining Hall",
     },
   },
 ];
