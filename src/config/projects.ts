@@ -630,6 +630,9 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
+    // Figma gaps: 156px between full-width and pair rows; consecutive pairs are flush.
+    fullRowSpacing: 156,
+
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
       mobile: "/assets/vivara/vivara-1-mobile.webp",
@@ -639,11 +642,11 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: half pair
+      // Row 1: half pair — VIV_WEB_02 + VIV_WEB_03
       {
         type: "image",
         desktop: "/assets/vivara/vivara-2.webp",
-        mobile: "/assets/vivara/vivara-9-mobile.webp",
+        mobile: "/assets/vivara/vivara-2-mobile.webp",
         alt: "vivara gallery image 1",
       },
       {
@@ -652,7 +655,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-3-mobile.webp",
         alt: "vivara gallery image 2",
       },
-      // Row 2: full width
+      // Row 2: full width — VIV_WEB_04
       {
         type: "image",
         desktop: "/assets/vivara/vivara-4.webp",
@@ -660,7 +663,7 @@ export const projects: ProjectDetail[] = [
         alt: "vivara gallery image 3",
         span: "full",
       },
-      // Row 3: half pair
+      // Row 3: half pair — VIV_WEB_05 + VIV_WEB_06
       {
         type: "image",
         desktop: "/assets/vivara/vivara-5.webp",
@@ -673,7 +676,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-6-mobile.webp",
         alt: "vivara gallery image 5",
       },
-      // Row 4: half pair
+      // Row 4: half pair — VIV_WEB_07 + VIV_WEB_08
+      // Note: vivara-7/8 desktop↔mobile refs are intentionally cross-named;
+      // dimensions confirm the content matches (vivara-7 desktop 1074×1922 =
+      // vivara-8-mobile 1074×1922).
       {
         type: "image",
         desktop: "/assets/vivara/vivara-7.webp",
@@ -686,7 +692,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-7-mobile.webp",
         alt: "vivara gallery image 7",
       },
-      // Row 5: full width
+      // Row 5: full width — VIV_WEB_09
       {
         type: "image",
         desktop: "/assets/vivara/vivara-9.webp",
@@ -694,63 +700,64 @@ export const projects: ProjectDetail[] = [
         alt: "vivara gallery image 8",
         span: "full",
       },
-      // Row 6: half pair
+      // Row 6: half pair — VIV_WEB_10 + VIV_WEB_11
       {
         type: "image",
         desktop: "/assets/vivara/vivara-10.webp",
+        mobile: "/assets/vivara/vivara-10-mobile.webp",
         alt: "vivara gallery image 9",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-11.webp",
-        mobile: "/assets/vivara/vivara-10-mobile.webp",
+        mobile: "/assets/vivara/vivara-11-mobile.webp",
         alt: "vivara gallery image 10",
       },
-      // Row 7: half pair
+      // Row 7: half pair — VIV_WEB_12 + VIV_WEB_13
       {
         type: "image",
         desktop: "/assets/vivara/vivara-12.webp",
-        mobile: "/assets/vivara/vivara-11-mobile.webp",
+        mobile: "/assets/vivara/vivara-12-mobile.webp",
         alt: "vivara gallery image 11",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-13.webp",
-        mobile: "/assets/vivara/vivara-12-mobile.webp",
+        mobile: "/assets/vivara/vivara-13-mobile.webp",
         alt: "vivara gallery image 12",
       },
-      // Row 8: full width
+      // Row 8: full width — VIV_WEB_14
       {
         type: "image",
         desktop: "/assets/vivara/vivara-14.webp",
-        mobile: "/assets/vivara/vivara-13-mobile.webp",
+        mobile: "/assets/vivara/vivara-14-mobile.webp",
         alt: "vivara gallery image 13",
         span: "full",
       },
-      // Row 9: half pair
+      // Row 9: half pair — VIV_WEB_15 + VIV_WEB_16
       {
         type: "image",
         desktop: "/assets/vivara/vivara-15.webp",
-        mobile: "/assets/vivara/vivara-14-mobile.webp",
+        mobile: "/assets/vivara/vivara-15-mobile.webp",
         alt: "vivara gallery image 14",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-16.webp",
-        mobile: "/assets/vivara/vivara-15-mobile.webp",
+        mobile: "/assets/vivara/vivara-16-mobile.webp",
         alt: "vivara gallery image 15",
       },
-      // Row 10: half pair
+      // Row 10: half pair — VIV_WEB_17 + VIV_WEB_18
       {
         type: "image",
         desktop: "/assets/vivara/vivara-17.webp",
-        mobile: "/assets/vivara/vivara-16-mobile.webp",
+        mobile: "/assets/vivara/vivara-17-mobile.webp",
         alt: "vivara gallery image 16",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-18.webp",
-        mobile: "/assets/vivara/vivara-17-mobile.webp",
+        // vivara-18-mobile.webp not in EXPORT — desktop serves as fallback
         alt: "vivara gallery image 17",
       },
     ],
