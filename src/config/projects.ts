@@ -51,8 +51,14 @@ export interface ProjectMedia {
   /** CSS object-position override for images (e.g. 'top', 'center bottom'). Defaults to 'center'. */
   objectPosition?: string;
 
-  /** Add white space above this item's row. */
-  spaceBefore?: boolean;
+  /**
+   * Extra whitespace above this item's row.
+   * - `true` — 150 desktop / 60 mobile.
+   * - `number` — desktop px; mobile scales to ~40%.
+   * - `{ mobile, desktop }` — explicit per-breakpoint values.
+   * Overrides the project's `fullRowSpacing` for this row only.
+   */
+  spaceBefore?: boolean | number | { mobile: number; desktop: number };
 }
 
 export interface ProjectCredit {
@@ -97,6 +103,18 @@ export interface ProjectDetail {
 
   // Gallery media (ordered array)
   media: ProjectMedia[];
+
+  /**
+   * Padding (px) applied to both sides of each full-width gallery row.
+   *
+   * - `number` — desktop px; mobile scales to ~40% (legacy default behavior).
+   * - `{ mobile, desktop }` — explicit per-breakpoint values, for projects where
+   *   desktop images bake whitespace in but mobile images don't (e.g. YSL, where
+   *   desktop is flush 0 but mobile needs ~60).
+   *
+   * Defaults to 150 (desktop) / 60 (mobile), matching MC Arabia.
+   */
+  fullRowSpacing?: number | { mobile: number; desktop: number };
 
   /** Carousel/gallery presentation settings (animation, timing, homepage selection). */
   carousel?: CarouselConfig;
@@ -330,110 +348,107 @@ export const projects: ProjectDetail[] = [
     slug: "ysl",
     client: "YSL",
     title: "Yves Saint Laurent",
+    // Desktop EXPORT images bake in their own whitespace (so 0); mobile
+    // images are edge-to-edge 440px crops and need explicit row gaps that
+    // match Figma's mobile layout spacing between full-width rows.
+    fullRowSpacing: { mobile: 60, desktop: 0 },
     subtitle: "Art Direction",
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
 
     heroImage: {
       desktop: "/assets/ysl/ysl-1.webp",
+      mobile: "/assets/ysl/ysl-1-mobile.webp",
       alt: "YSL campaign art direction",
     },
 
     year: "2024",
 
     media: [
-      // Row 1: full mask
+      // Row 1: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-2.webp",
-        alt: "YSL campaign image 1",
+        mobile: "/assets/ysl/ysl-2-mobile.webp",
+        alt: "YSL campaign full 1",
         span: "full",
       },
-      // Row 2: half mask pair
+      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-3.webp",
-        alt: "YSL campaign image 2",
+        mobile: "/assets/ysl/ysl-3-mobile.webp",
+        alt: "YSL campaign image 1",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-4.webp",
-        alt: "YSL campaign image 3",
+        mobile: "/assets/ysl/ysl-4-mobile.webp",
+        alt: "YSL campaign image 2",
       },
-      // Row 3: full mask
+      // Row 3: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-5.webp",
-        alt: "YSL campaign image 4",
+        mobile: "/assets/ysl/ysl-5-mobile.webp",
+        alt: "YSL campaign full 2",
         span: "full",
       },
-      // Row 4: half mask pair
+      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-6.webp",
-        alt: "YSL campaign image 5",
+        mobile: "/assets/ysl/ysl-6-mobile.webp",
+        alt: "YSL campaign image 3",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-7.webp",
-        alt: "YSL campaign image 6",
+        mobile: "/assets/ysl/ysl-7-mobile.webp",
+        alt: "YSL campaign image 4",
       },
-      // Row 5: full mask
+      // Row 5: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-8.webp",
-        alt: "YSL campaign image 7",
+        mobile: "/assets/ysl/ysl-8-mobile.webp",
+        alt: "YSL campaign full 3",
         span: "full",
       },
-      // Row 6: half mask pair
+      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-9.webp",
-        alt: "YSL campaign image 8",
+        mobile: "/assets/ysl/ysl-9-mobile.webp",
+        alt: "YSL campaign image 5",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-10.webp",
-        alt: "YSL campaign image 9",
+        alt: "YSL campaign image 6",
       },
-      // Row 7: full mask
+      // Row 7: full-width image — flush (no auto row padding) per-item override.
+      // `spaceBefore: 0` overrides `fullRowSpacing` for this row only.
       {
         type: "image",
         desktop: "/assets/ysl/ysl-11.webp",
-        alt: "YSL campaign image 10",
+        mobile: "/assets/ysl/ysl-11-mobile.webp",
+        alt: "YSL campaign full 4",
         span: "full",
+        spaceBefore: 0,
       },
-      // Row 8: half mask pair
+      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-12.webp",
-        alt: "YSL campaign image 11",
+        mobile: "/assets/ysl/ysl-12-mobile.webp",
+        alt: "YSL campaign image 7",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-13.webp",
-        alt: "YSL campaign image 12",
-      },
-      // Extended items — half mask pairs
-      {
-        type: "image",
-        desktop: "/assets/ysl/ysl-14.webp",
-        alt: "YSL campaign image 13",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ysl/ysl-15.webp",
-        alt: "YSL campaign image 14",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ysl/ysl-16.webp",
-        alt: "YSL campaign image 15",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ysl/ysl-17.webp",
-        alt: "YSL campaign image 16",
+        mobile: "/assets/ysl/ysl-13-mobile.webp",
+        alt: "YSL campaign image 8",
       },
     ],
 

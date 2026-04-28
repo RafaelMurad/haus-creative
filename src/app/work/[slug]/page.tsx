@@ -139,7 +139,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Media Gallery */}
         <div className="mt-[143px]">
-          <GalleryGrid media={project.media} />
+          <GalleryGrid media={project.media} fullRowSpacing={project.fullRowSpacing} />
         </div>
 
         {/* Credits Section */}
