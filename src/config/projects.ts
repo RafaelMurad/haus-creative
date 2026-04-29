@@ -1133,6 +1133,7 @@ export const projects: ProjectDetail[] = [
 
     heroImage: {
       desktop: "/assets/life/life-1.webp",
+      mobile: "/assets/life/life-1-mobile.webp",
       alt: "life hero",
     },
 
