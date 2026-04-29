@@ -26,17 +26,17 @@ jest.mock("next/image", () => ({
 const mockImages: ProjectMedia[] = [
   {
     type: "image",
-    desktop: "/assets/gallery1/Gallery1-1.webp",
+    desktop: "/assets/mc-arabia/mc-arabia-1.webp",
     alt: "Slide 1",
   },
   {
     type: "image",
-    desktop: "/assets/gallery1/Gallery1-2.webp",
+    desktop: "/assets/mc-arabia/mc-arabia-2.webp",
     alt: "Slide 2",
   },
   {
     type: "image",
-    desktop: "/assets/gallery1/Gallery1-3.webp",
+    desktop: "/assets/mc-arabia/mc-arabia-3.webp",
     alt: "Slide 3",
   },
 ];
@@ -44,7 +44,7 @@ const mockImages: ProjectMedia[] = [
 const mockVideo: ProjectMedia[] = [
   {
     type: "video",
-    desktop: "/assets/gallery3/Gallery3-Video.mp4",
+    desktop: "/assets/wao-cosmo/wao-cosmo-video.mp4",
     alt: "Video slide",
   },
 ];

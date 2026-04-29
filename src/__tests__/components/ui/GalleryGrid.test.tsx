@@ -65,7 +65,7 @@ describe("GalleryGrid", () => {
     const media = [makeImage({}, 1)];
     render(<GalleryGrid media={media} />);
     const img = screen.getByAltText("Image 1");
-    expect(img.className).toContain("object-cover");
+    expect(img.className).toContain("w-full");
   });
 
   it("renders video items with video element", () => {

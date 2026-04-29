@@ -72,16 +72,15 @@ describe("Home page", () => {
 
 // Test the getHomepageMedia logic indirectly by testing the exported module
 describe("getHomepageMedia logic", () => {
-  it("passes gallery media to WorkGalleryItems that have project detail data", () => {
+  it("does not pass gallery media when homepage carousels are off", () => {
     render(<Home />);
 
-    // Projects that exist in the projects config should have gallery media
     const [, ...workProjects] = featuredProjects;
 
+    // With carousels off (no homepageIndices), no project gets gallery media
     workProjects.forEach((project) => {
       const item = screen.getByTestId(`work-gallery-${project.id}`);
-      // All current projects have detail data, so they should all get gallery media
-      expect(item.getAttribute("data-has-gallery-media")).toBe("true");
+      expect(item.getAttribute("data-has-gallery-media")).toBe("false");
     });
   });
 
@@ -106,19 +105,15 @@ describe("getHomepageMedia logic", () => {
     });
   });
 
-  it("returns all media when homepageIndices is not specified", () => {
+  it("returns zero gallery media when homepageIndices is not specified", () => {
     render(<Home />);
 
     const [, ...workProjects] = featuredProjects;
 
-    // Find a project without homepageIndices
     workProjects.forEach((project) => {
-      const detail = projects.find((p) => p.slug === project.id);
-      if (detail && (!detail.carousel?.homepageIndices || detail.carousel.homepageIndices.length === 0)) {
-        const item = screen.getByTestId(`work-gallery-${project.id}`);
-        const mediaCount = Number(item.getAttribute("data-gallery-media-count"));
-        expect(mediaCount).toBe(detail.media.length);
-      }
+      const item = screen.getByTestId(`work-gallery-${project.id}`);
+      const mediaCount = Number(item.getAttribute("data-gallery-media-count"));
+      expect(mediaCount).toBe(0);
     });
   });
 });

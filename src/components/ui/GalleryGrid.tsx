@@ -1,8 +1,59 @@
 import Image from "next/image";
 import type { ProjectMedia } from "@/config/projects";
 
+type SpacingInput =
+  | number
+  | { mobile: number; desktop: number }
+  | boolean
+  | undefined;
+
 interface GalleryGridProps {
   media: ProjectMedia[];
+  /**
+   * Padding applied to both sides of each full-width row. Accepts a single
+   * desktop px value (mobile scales to ~40%) or `{ mobile, desktop }` for
+   * explicit per-breakpoint control (e.g. YSL where desktop is flush but mobile
+   * needs 60px because mobile EXPORT images have no baked whitespace).
+   */
+  fullRowSpacing?: number | { mobile: number; desktop: number };
+}
+
+const MOBILE_RATIO = 0.4;
+
+/** Normalize any spacing input to explicit { mobile, desktop } px values. */
+function resolveSpacing(
+  input: SpacingInput,
+): { mobile: number; desktop: number } | null {
+  if (input === undefined || input === false) return null;
+  if (input === true) return { mobile: 60, desktop: 150 };
+  if (typeof input === "number") {
+    if (input <= 0) return null;
+    return { mobile: Math.round(input * MOBILE_RATIO), desktop: input };
+  }
+  if (input.mobile <= 0 && input.desktop <= 0) return null;
+  return input;
+}
+
+/** Build responsive CSS var-driven padding classes + inline style. */
+function rowSpacing(
+  input: SpacingInput,
+  kind: "py" | "pb" | "pt",
+): { className: string; style: React.CSSProperties } | null {
+  const resolved = resolveSpacing(input);
+  if (!resolved) return null;
+  // These Tailwind classes are static strings, so JIT picks them up at build.
+  const classMap = {
+    py: "py-[var(--row-pad-mb,0px)] md:py-[var(--row-pad-md,0px)]",
+    pb: "pb-[var(--row-pad-mb,0px)] md:pb-[var(--row-pad-md,0px)]",
+    pt: "pt-[var(--row-pad-mb,0px)] md:pt-[var(--row-pad-md,0px)]",
+  };
+  return {
+    className: classMap[kind],
+    style: {
+      ["--row-pad-mb" as string]: `${resolved.mobile}px`,
+      ["--row-pad-md" as string]: `${resolved.desktop}px`,
+    },
+  };
 }
 
 /**
@@ -18,16 +69,35 @@ interface GalleryGridProps {
  * Items with `span: 'half'` (default) are paired into 2-column rows on desktop.
  * All items stack vertically on mobile.
  */
-export function GalleryGrid({ media }: GalleryGridProps) {
+export function GalleryGrid({ media, fullRowSpacing = 150 }: GalleryGridProps) {
   const rows = groupIntoRows(media);
 
   return (
     <div>
       {rows.map((row, rowIndex) => {
-        if (row.length === 1 && (row[0].span === "full" || !hasHalfPair(row))) {
-          // Full-width row (single item)
+        const isFullRow = row.length === 1 && (row[0].span === "full" || !hasHalfPair(row));
+
+        // Resolve per-row spacing:
+        // 1. Manual `spaceBefore` on the first item takes priority (top-only).
+        // 2. Otherwise, full-width rows get `fullRowSpacing` on both sides —
+        //    except the very first row, which gets bottom-only so the page
+        //    wrapper's top spacing (mt-[143px]) isn't doubled.
+        // 3. Pair rows get no auto spacing (they butt against neighbours).
+        // Spacing of 0 (flush) on either breakpoint skips that axis accordingly.
+        const spacing =
+          row[0].spaceBefore !== undefined && row[0].spaceBefore !== false
+            ? rowSpacing(row[0].spaceBefore, "pt")
+            : isFullRow
+              ? rowSpacing(fullRowSpacing, rowIndex === 0 ? "pb" : "py")
+              : null;
+
+        const space = spacing?.className ?? "";
+        const inlineStyle = spacing?.style;
+
+        if (isFullRow) {
+          // Full-width row — natural aspect ratio
           return (
-            <div key={rowIndex}>
+            <div key={rowIndex} className={`w-full ${space}`} style={inlineStyle}>
               <GalleryItem
                 item={row[0]}
                 index={getGlobalIndex(rows, rowIndex, 0)}
@@ -37,15 +107,21 @@ export function GalleryGrid({ media }: GalleryGridProps) {
           );
         }
 
-        // Half-width pair row
+        // Half-width pair row — side by side on desktop, stacked on mobile.
+        // Images render at natural aspect; matched-aspect pairs line up by design.
         return (
-          <div key={rowIndex} className="flex flex-col md:flex-row">
+          <div
+            key={rowIndex}
+            className={`flex flex-col md:flex-row w-full ${space}`}
+            style={inlineStyle}
+          >
             {row.map((item, colIndex) => (
               <div key={colIndex} className="w-full md:w-1/2">
                 <GalleryItem
                   item={item}
                   index={getGlobalIndex(rows, rowIndex, colIndex)}
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  paired
                 />
               </div>
             ))}
@@ -64,9 +140,10 @@ interface GalleryItemProps {
   item: ProjectMedia;
   index: number;
   sizes: string;
+  paired?: boolean;
 }
 
-function GalleryItem({ item, index, sizes }: GalleryItemProps) {
+function GalleryItem({ item, index, sizes, paired }: GalleryItemProps) {
   const frame = item.frame ?? "mask";
 
   switch (frame) {
@@ -78,7 +155,7 @@ function GalleryItem({ item, index, sizes }: GalleryItemProps) {
       return <ColorFrame item={item} index={index} sizes={sizes} />;
     case "mask":
     default:
-      return <MaskFrame item={item} index={index} sizes={sizes} />;
+      return <MaskFrame item={item} index={index} sizes={sizes} paired={paired} />;
   }
 }
 
@@ -86,11 +163,15 @@ function GalleryItem({ item, index, sizes }: GalleryItemProps) {
 // Frame: Mask — edge-to-edge image, no background
 // =============================================================================
 
-function MaskFrame({ item, index, sizes }: GalleryItemProps) {
+function MaskFrame({ item, index, sizes, paired }: GalleryItemProps) {
+  // All items render at natural aspect. Paired items share a source aspect per design,
+  // so side-by-side images line up without needing a forced container aspect.
+  const imgClass = "w-full h-auto block";
+
   if (item.type === "video") {
     return (
       <video
-        className="w-full h-auto object-cover"
+        className={imgClass}
         playsInline
         autoPlay
         loop
@@ -110,13 +191,28 @@ function MaskFrame({ item, index, sizes }: GalleryItemProps) {
     );
   }
 
+  if (item.mobile) {
+    return (
+      <picture>
+        <source media="(max-width: 768px)" srcSet={item.mobile} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.desktop}
+          alt={item.alt}
+          className={imgClass}
+          loading={index < 2 ? "eager" : "lazy"}
+        />
+      </picture>
+    );
+  }
+
   return (
     <Image
       src={item.desktop}
       alt={item.alt}
-      width={1920}
-      height={1080}
-      className="w-full h-auto object-cover block"
+      width={paired ? 720 : 1440}
+      height={paired ? 1200 : 700}
+      className={imgClass}
       sizes={sizes}
       loading={index < 2 ? "eager" : "lazy"}
     />
@@ -136,14 +232,26 @@ function InsetFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-contain"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-contain"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-contain"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );
@@ -171,14 +279,26 @@ function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-[58%] h-[78%] rounded-[32px] md:rounded-[40px] overflow-hidden border-[6px] md:border-[8px] border-black/90 shadow-lg">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-cover"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-cover"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-cover"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );
@@ -197,14 +317,26 @@ function ColorFrame({ item, index, sizes }: GalleryItemProps) {
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-full h-full">
-        <Image
-          src={item.desktop}
-          alt={item.alt}
-          fill
-          className="object-contain"
-          sizes={sizes}
-          loading={index < 2 ? "eager" : "lazy"}
-        />
+        {item.mobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <img
+              src={item.desktop}
+              alt={item.alt}
+              className="w-full h-full object-contain"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+        ) : (
+          <Image
+            src={item.desktop}
+            alt={item.alt}
+            fill
+            className="object-contain"
+            sizes={sizes}
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+        )}
       </div>
     </div>
   );
