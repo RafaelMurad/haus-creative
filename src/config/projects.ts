@@ -1128,6 +1128,9 @@ export const projects: ProjectDetail[] = [
     description:
       "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
 
+    // Figma gaps: 150px between full-width and pair rows; consecutive pairs are flush.
+    fullRowSpacing: 150,
+
     heroImage: {
       desktop: "/assets/life/life-1.webp",
       alt: "life hero",
@@ -1149,7 +1152,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/life/life-2-mobile.webp",
         alt: "life gallery image 2",
       },
-      // Row 2: half pair
+      // Row 2: half pair (flush)
       {
         type: "image",
         desktop: "/assets/life/life-4.webp",
@@ -1162,7 +1165,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/life/life-5-mobile.webp",
         alt: "life gallery image 4",
       },
-      // Row 3: full width
+      // Row 3: full width (1919×1079 landscape)
       {
         type: "image",
         desktop: "/assets/life/life-6.webp",
@@ -1170,7 +1173,7 @@ export const projects: ProjectDetail[] = [
         alt: "life gallery image 5",
         span: "full",
       },
-      // Row 4: half pair
+      // Row 4: half pair — both portrait
       {
         type: "image",
         desktop: "/assets/life/life-7.webp",
@@ -1179,56 +1182,59 @@ export const projects: ProjectDetail[] = [
       },
       {
         type: "image",
-        desktop: "/assets/life/life-8.webp",
-        mobile: "/assets/life/life-7-mobile.webp",
-        alt: "life gallery image 7",
-      },
-      // Row 5: half pair
-      {
-        type: "image",
-        desktop: "/assets/life/life-9.webp",
-        mobile: "/assets/life/life-9-mobile.webp",
-        alt: "life gallery image 8",
-      },
-      {
-        type: "image",
         desktop: "/assets/life/life-10.webp",
         mobile: "/assets/life/life-10-mobile.webp",
-        alt: "life gallery image 9",
+        alt: "life gallery image 7",
       },
-      // Row 6: full width
+      // Row 5: half pair (flush) — both portrait
       {
         type: "image",
         desktop: "/assets/life/life-11.webp",
         mobile: "/assets/life/life-11-mobile.webp",
-        alt: "life gallery image 10",
-        span: "full",
+        alt: "life gallery image 8",
       },
-      // Row 7: half pair
       {
         type: "image",
         desktop: "/assets/life/life-12.webp",
         mobile: "/assets/life/life-13-mobile.webp",
-        alt: "life gallery image 11",
+        alt: "life gallery image 9",
       },
+      // Row 6: full width (1919×1079 landscape)
+      {
+        type: "image",
+        desktop: "/assets/life/life-8.webp",
+        mobile: "/assets/life/life-7-mobile.webp",
+        alt: "life gallery image 10",
+        span: "full",
+      },
+      // Row 7: full width (1919×1079 landscape)
+      {
+        type: "image",
+        desktop: "/assets/life/life-9.webp",
+        mobile: "/assets/life/life-9-mobile.webp",
+        alt: "life gallery image 11",
+        span: "full",
+      },
+      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/life/life-13.webp",
         mobile: "/assets/life/life-12-mobile.webp",
         alt: "life gallery image 12",
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/life/life-14.webp",
         mobile: "/assets/life/life-15-mobile.webp",
         alt: "life gallery image 13",
       },
+      // Row 9: lone portrait — no pair partner in EXPORT; renders as full-width
       {
         type: "image",
         desktop: "/assets/life/life-15.webp",
         mobile: "/assets/life/life-14-mobile.webp",
         alt: "life gallery image 14",
+        span: "full",
       },
     ],
 
