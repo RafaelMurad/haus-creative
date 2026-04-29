@@ -16,8 +16,9 @@ import type { CarouselConfig } from "@/types/carousel";
  *   gallery6  = SK
  *   gallery7  = BFJ
  *   gallery8  = Life
- *   gallery9  = Bride Story
- *   gallery10 = Ouronyx (video, intro hero)
+ *   gallery9  = Ouronyx (video, intro hero)
+ *   gallery10 = Bride Story
+ *   gallery11 = Harrods
  */
 
 /**
@@ -126,96 +127,9 @@ export interface ProjectDetail {
 }
 
 /**
- * All projects/campaigns — ordered by Figma presentation order.
- * Ouronyx first (intro hero), then 9 named projects.
+ * All projects/campaigns — ordered by Figma canvas position.
  */
 export const projects: ProjectDetail[] = [
-  // =========================================================================
-  // Ouronyx — gallery10 (intro hero)
-  // =========================================================================
-  {
-    id: "ouronyx",
-    slug: "ouronyx",
-    client: "Ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
-    description:
-      "A premium digital experience showcasing luxury aesthetics through immersive visuals and seamless interactions.",
-
-    heroVideo: {
-      desktop: "/assets/ouronyx/ouronyx-video.mp4",
-      mobile: "/assets/ouronyx/ouronyx-video-mobile.mp4",
-      poster: "/assets/ouronyx/ouronyx-cover.webp",
-    },
-
-    heroImage: {
-      desktop: "/assets/ouronyx/ouronyx-1.webp",
-      alt: "ouronyx hero",
-    },
-
-    year: "2024",
-
-    media: [
-      // Row 1: half pair
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-2.webp",
-        mobile: "/assets/ouronyx/ouronyx-2-mobile.webp",
-        alt: "ouronyx gallery image 1",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-3.webp",
-        mobile: "/assets/ouronyx/ouronyx-3-mobile.webp",
-        alt: "ouronyx gallery image 2",
-      },
-      // Row 2: half pair
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-4.webp",
-        mobile: "/assets/ouronyx/ouronyx-5-mobile.webp",
-        alt: "ouronyx gallery image 3",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-5.webp",
-        mobile: "/assets/ouronyx/ouronyx-4-mobile.webp",
-        alt: "ouronyx gallery image 4",
-      },
-      // Row 3: half pair
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-6.webp",
-        mobile: "/assets/ouronyx/ouronyx-6-mobile.webp",
-        alt: "ouronyx gallery image 5",
-      },
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-7.webp",
-        mobile: "/assets/ouronyx/ouronyx-7-mobile.webp",
-        alt: "ouronyx gallery image 6",
-      },
-      // Row 4: full width
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-8.webp",
-        mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
-        alt: "ouronyx gallery image 7",
-        span: "full",
-      },
-    ],
-
-    metaTitle: "Ouronyx | HAUS Creative",
-    metaDescription:
-      "Premium digital experience for luxury brand Ouronyx by Studio Haus Creative.",
-    ogImage: "/assets/ouronyx/ouronyx-1.webp",
-
-    carousel: {
-      animation: "fade",
-      autoAdvanceTime: 2000,
-    },
-  },
-
   // =========================================================================
   // 1. Marie Claire Arabia — gallery1
   // =========================================================================
@@ -488,11 +402,23 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
 
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
       // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-2.webp",
+        mobile: "/assets/wao-cosmo/wao-cosmo-2-mobile.webp",
         alt: "wao-cosmo gallery image 1",
       },
       {
@@ -774,350 +700,7 @@ export const projects: ProjectDetail[] = [
   },
 
   // =========================================================================
-  // 5. Bucherer Summer — gallery5 (video)
-  // =========================================================================
-  {
-    id: "bucherer-summer",
-    slug: "bucherer-summer",
-    client: "Bucherer",
-    title: "Bucherer Summer",
-    subtitle: "Creative Direction",
-    description:
-      "Creative direction for Bucherer's summer campaign, bringing dynamic motion design and animation to the luxury watch and jewellery brand.",
-
-    heroVideo: {
-      desktop: "/assets/bucherer/bucherer-video.mp4",
-      poster: "/assets/bucherer/bucherer-cover.webp",
-    },
-
-    heroImage: {
-      desktop: "/assets/bucherer/bucherer-1.webp",
-      alt: "bucherer hero",
-    },
-
-    year: "2024",
-
-    media: [
-      // Row 1: half pair
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-2.webp",
-        mobile: "/assets/bucherer/bucherer-2-mobile.webp",
-        alt: "bucherer gallery image 1",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-3.webp",
-        mobile: "/assets/bucherer/bucherer-3-mobile.webp",
-        alt: "bucherer gallery image 2",
-      },
-      // Row 2: half pair
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-4.webp",
-        mobile: "/assets/bucherer/bucherer-4-mobile.webp",
-        alt: "bucherer gallery image 3",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-5.webp",
-        mobile: "/assets/bucherer/bucherer-6-mobile.webp",
-        alt: "bucherer gallery image 4",
-      },
-      // Row 3: half pair
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-6.webp",
-        mobile: "/assets/bucherer/bucherer-7-mobile.webp",
-        alt: "bucherer gallery image 5",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-7.webp",
-        mobile: "/assets/bucherer/bucherer-8-mobile.webp",
-        alt: "bucherer gallery image 6",
-      },
-      // Row 4: half pair
-      {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-8.webp",
-        mobile: "/assets/bucherer/bucherer-9-mobile.webp",
-        alt: "bucherer gallery image 7",
-      },
-    ],
-
-    metaTitle: "Bucherer Summer | HAUS Creative",
-    metaDescription:
-      "Creative direction for Bucherer Summer campaign by Studio Haus Creative.",
-    ogImage: "/assets/bucherer/bucherer-1.webp",
-
-    carousel: {
-      animation: "none",
-      // No autoAdvanceTime — video loops continuously
-    },
-  },
-
-  // =========================================================================
-  // 6. SK — gallery6
-  // =========================================================================
-  {
-    id: "sk",
-    slug: "sk",
-    client: "SK",
-    title: "SK",
-    subtitle: "Brand Development",
-    description:
-      "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
-
-    heroImage: {
-      desktop: "/assets/sk/sk-1.webp",
-      mobile: "/assets/sk/sk-1-mobile.webp",
-      alt: "sk hero",
-    },
-
-    year: "2024",
-
-    media: [
-      // Row 1: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-2.webp",
-        mobile: "/assets/sk/sk-2-mobile.webp",
-        alt: "sk gallery image 1",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-3.webp",
-        mobile: "/assets/sk/sk-3-mobile.webp",
-        alt: "sk gallery image 2",
-      },
-      // Row 2: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-4.webp",
-        mobile: "/assets/sk/sk-5-mobile.webp",
-        alt: "sk gallery image 3",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-5.webp",
-        mobile: "/assets/sk/sk-4-mobile.webp",
-        alt: "sk gallery image 4",
-      },
-      // Row 3: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-6.webp",
-        mobile: "/assets/sk/sk-6-mobile.webp",
-        alt: "sk gallery image 5",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-7.webp",
-        mobile: "/assets/sk/sk-7-mobile.webp",
-        alt: "sk gallery image 6",
-      },
-      // Row 4: full width
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-8.webp",
-        mobile: "/assets/sk/sk-8-mobile.webp",
-        alt: "sk gallery image 7",
-        span: "full",
-      },
-      // Row 5: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-9.webp",
-        mobile: "/assets/sk/sk-9-mobile.webp",
-        alt: "sk gallery image 8",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-10.webp",
-        mobile: "/assets/sk/sk-10-mobile.webp",
-        alt: "sk gallery image 9",
-      },
-      // Row 6: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-11.webp",
-        mobile: "/assets/sk/sk-12-mobile.webp",
-        alt: "sk gallery image 10",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-12.webp",
-        mobile: "/assets/sk/sk-11-mobile.webp",
-        alt: "sk gallery image 11",
-      },
-      // Row 7: full width
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-13.webp",
-        mobile: "/assets/sk/sk-13-mobile.webp",
-        alt: "sk gallery image 12",
-        span: "full",
-      },
-      // Row 8: half pair
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-14.webp",
-        mobile: "/assets/sk/sk-14-mobile.webp",
-        alt: "sk gallery image 13",
-      },
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-15.webp",
-        mobile: "/assets/sk/sk-16-mobile.webp",
-        alt: "sk gallery image 14",
-      },
-      // Row 9: full width
-      {
-        type: "image",
-        desktop: "/assets/sk/sk-16.webp",
-        mobile: "/assets/sk/sk-15-mobile.webp",
-        alt: "sk gallery image 15",
-        span: "full",
-      },
-    ],
-
-    metaTitle: "SK | HAUS Creative",
-    metaDescription:
-      "Brand development and visual identity for SK by Studio Haus Creative.",
-    ogImage: "/assets/sk/sk-1.webp",
-
-    carousel: {
-      animation: "slide",
-      autoAdvanceTime: 2500,
-    },
-  },
-
-  // =========================================================================
-  // 7. BFJ — gallery7
-  // =========================================================================
-  {
-    id: "bfj",
-    slug: "bfj",
-    client: "BFJ",
-    title: "BFJ",
-    subtitle: "Digital Design",
-    description:
-      "Digital design and creative direction for BFJ, delivering impactful visual experiences across digital platforms.",
-
-    heroImage: {
-      desktop: "/assets/bfj/bfj-1.webp",
-      alt: "bfj hero",
-    },
-
-    year: "2024",
-
-    media: [
-      // Row 1: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-2.webp",
-        mobile: "/assets/bfj/bfj-2-mobile.webp",
-        alt: "bfj gallery image 1",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-3.webp",
-        mobile: "/assets/bfj/bfj-3-mobile.webp",
-        alt: "bfj gallery image 2",
-      },
-      // Row 2: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-4.webp",
-        mobile: "/assets/bfj/bfj-4-mobile.webp",
-        alt: "bfj gallery image 3",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-5.webp",
-        mobile: "/assets/bfj/bfj-6-mobile.webp",
-        alt: "bfj gallery image 4",
-      },
-      // Row 3: full width
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-6.webp",
-        alt: "bfj gallery image 5",
-        span: "full",
-      },
-      // Row 4: full width
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-7.webp",
-        mobile: "/assets/bfj/bfj-7-mobile.webp",
-        alt: "bfj gallery image 6",
-        span: "full",
-      },
-      // Row 5: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-8.webp",
-        alt: "bfj gallery image 7",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-9.webp",
-        mobile: "/assets/bfj/bfj-8-mobile.webp",
-        alt: "bfj gallery image 8",
-      },
-      // Row 6: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-10.webp",
-        alt: "bfj gallery image 9",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-11.webp",
-        mobile: "/assets/bfj/bfj-9-mobile.webp",
-        alt: "bfj gallery image 10",
-      },
-      // Row 7: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-12.webp",
-        alt: "bfj gallery image 11",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-13.webp",
-        mobile: "/assets/bfj/bfj-10-mobile.webp",
-        alt: "bfj gallery image 12",
-      },
-      // Row 8: half pair
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-14.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
-        alt: "bfj gallery image 13",
-      },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-15.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
-        alt: "bfj gallery image 14",
-      },
-    ],
-
-    metaTitle: "BFJ | HAUS Creative",
-    metaDescription:
-      "Digital design and creative direction for BFJ by Studio Haus Creative.",
-    ogImage: "/assets/bfj/bfj-1.webp",
-
-    carousel: {
-      animation: "fade",
-      autoAdvanceTime: 2000,
-    },
-  },
-
-  // =========================================================================
-  // 8. Life — gallery8
+  // 5. Life — gallery5
   // =========================================================================
   {
     id: "life",
@@ -1251,7 +834,462 @@ export const projects: ProjectDetail[] = [
   },
 
   // =========================================================================
-  // 9. Bride Story — gallery9
+  // 6. SK — gallery6
+  // =========================================================================
+  {
+    id: "sk",
+    slug: "sk",
+    client: "SK",
+    title: "SK",
+    subtitle: "Brand Development",
+    description:
+      "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
+
+    heroImage: {
+      desktop: "/assets/sk/sk-1.webp",
+      mobile: "/assets/sk/sk-1-mobile.webp",
+      alt: "sk hero",
+    },
+
+    year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
+    media: [
+      // Row 1: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-2.webp",
+        mobile: "/assets/sk/sk-2-mobile.webp",
+        alt: "sk gallery image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-3.webp",
+        mobile: "/assets/sk/sk-3-mobile.webp",
+        alt: "sk gallery image 2",
+      },
+      // Row 2: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-4.webp",
+        mobile: "/assets/sk/sk-5-mobile.webp",
+        alt: "sk gallery image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-5.webp",
+        mobile: "/assets/sk/sk-4-mobile.webp",
+        alt: "sk gallery image 4",
+      },
+      // Row 3: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-6.webp",
+        mobile: "/assets/sk/sk-6-mobile.webp",
+        alt: "sk gallery image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-7.webp",
+        mobile: "/assets/sk/sk-7-mobile.webp",
+        alt: "sk gallery image 6",
+      },
+      // Row 4: full width
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-8.webp",
+        mobile: "/assets/sk/sk-8-mobile.webp",
+        alt: "sk gallery image 7",
+        span: "full",
+      },
+      // Row 5: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-9.webp",
+        mobile: "/assets/sk/sk-9-mobile.webp",
+        alt: "sk gallery image 8",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-10.webp",
+        mobile: "/assets/sk/sk-10-mobile.webp",
+        alt: "sk gallery image 9",
+      },
+      // Row 6: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-11.webp",
+        mobile: "/assets/sk/sk-12-mobile.webp",
+        alt: "sk gallery image 10",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-12.webp",
+        mobile: "/assets/sk/sk-11-mobile.webp",
+        alt: "sk gallery image 11",
+      },
+      // Row 7: full width
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-13.webp",
+        mobile: "/assets/sk/sk-13-mobile.webp",
+        alt: "sk gallery image 12",
+        span: "full",
+      },
+      // Row 8: half pair
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-14.webp",
+        mobile: "/assets/sk/sk-14-mobile.webp",
+        alt: "sk gallery image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-15.webp",
+        mobile: "/assets/sk/sk-16-mobile.webp",
+        alt: "sk gallery image 14",
+      },
+      // Row 9: full width
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-16.webp",
+        mobile: "/assets/sk/sk-15-mobile.webp",
+        alt: "sk gallery image 15",
+        span: "full",
+      },
+    ],
+
+    metaTitle: "SK | HAUS Creative",
+    metaDescription:
+      "Brand development and visual identity for SK by Studio Haus Creative.",
+    ogImage: "/assets/sk/sk-1.webp",
+
+    carousel: {
+      animation: "slide",
+      autoAdvanceTime: 2500,
+    },
+  },
+
+  // =========================================================================
+  // 7. Bucherer Summer — gallery7
+  // =========================================================================
+  {
+    id: "bucherer-summer",
+    slug: "bucherer-summer",
+    client: "Bucherer",
+    title: "Bucherer Summer",
+    subtitle: "Creative Direction",
+    description:
+      "Creative direction for Bucherer's summer campaign, bringing dynamic motion design and animation to the luxury watch and jewellery brand.",
+
+    heroImage: {
+      desktop: "/assets/bucherer/bucherer-1-mobile.webp",
+      mobile: "/assets/bucherer/bucherer-1-mobile.webp",
+      alt: "bucherer hero",
+    },
+
+    year: "2024",
+
+    media: [
+      // Row 1: half pair
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-2.webp",
+        mobile: "/assets/bucherer/bucherer-2-mobile.webp",
+        alt: "bucherer gallery image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-3.webp",
+        mobile: "/assets/bucherer/bucherer-3-mobile.webp",
+        alt: "bucherer gallery image 2",
+      },
+      // Row 2: half pair
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-4.webp",
+        mobile: "/assets/bucherer/bucherer-4-mobile.webp",
+        alt: "bucherer gallery image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-5.webp",
+        mobile: "/assets/bucherer/bucherer-5-mobile.webp",
+        alt: "bucherer gallery image 4",
+      },
+      // Row 3: half pair
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-6.webp",
+        mobile: "/assets/bucherer/bucherer-6-mobile.webp",
+        alt: "bucherer gallery image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-7.webp",
+        mobile: "/assets/bucherer/bucherer-7-mobile.webp",
+        alt: "bucherer gallery image 6",
+      },
+      // Row 4: half pair
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-8.webp",
+        mobile: "/assets/bucherer/bucherer-8-mobile.webp",
+        alt: "bucherer gallery image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bucherer/bucherer-9-mobile.webp",
+        mobile: "/assets/bucherer/bucherer-9-mobile.webp",
+        alt: "bucherer gallery image 8",
+      },
+    ],
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
+    metaTitle: "Bucherer Summer | HAUS Creative",
+    metaDescription:
+      "Creative direction for Bucherer Summer campaign by Studio Haus Creative.",
+    ogImage: "/assets/bucherer/bucherer-1.webp",
+
+    carousel: {
+      animation: "none",
+    },
+  },
+
+  // =========================================================================
+  // 8. BFJ — gallery8
+  // =========================================================================
+  {
+    id: "bfj",
+    slug: "bfj",
+    client: "BFJ",
+    title: "BFJ",
+    subtitle: "Digital Design",
+    description:
+      "Digital design and creative direction for BFJ, delivering impactful visual experiences across digital platforms.",
+
+    heroImage: {
+      desktop: "/assets/bfj/bfj-1.webp",
+      alt: "bfj hero",
+    },
+
+    year: "2024",
+
+    media: [
+      // Row 1: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-2.webp",
+        mobile: "/assets/bfj/bfj-2-mobile.webp",
+        alt: "bfj gallery image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-3.webp",
+        mobile: "/assets/bfj/bfj-3-mobile.webp",
+        alt: "bfj gallery image 2",
+      },
+      // Row 2: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-4.webp",
+        mobile: "/assets/bfj/bfj-4-mobile.webp",
+        alt: "bfj gallery image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-5.webp",
+        mobile: "/assets/bfj/bfj-5-mobile.webp",
+        alt: "bfj gallery image 4",
+      },
+      // Row 3: full width
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-6.webp",
+        mobile: "/assets/bfj/bfj-6-mobile.webp",
+        alt: "bfj gallery image 5",
+        span: "full",
+      },
+      // Row 4: full width
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-7.webp",
+        mobile: "/assets/bfj/bfj-7-mobile.webp",
+        alt: "bfj gallery image 6",
+        span: "full",
+      },
+      // Row 5: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-8.webp",
+        alt: "bfj gallery image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-9.webp",
+        mobile: "/assets/bfj/bfj-8-mobile.webp",
+        alt: "bfj gallery image 8",
+      },
+      // Row 6: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-10.webp",
+        mobile: "/assets/bfj/bfj-10-mobile.webp",
+        alt: "bfj gallery image 9",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-11.webp",
+        mobile: "/assets/bfj/bfj-9-mobile.webp",
+        alt: "bfj gallery image 10",
+      },
+      // Row 7: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-12.webp",
+        alt: "bfj gallery image 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-13.webp",
+        mobile: "/assets/bfj/bfj-10-mobile.webp",
+        alt: "bfj gallery image 12",
+      },
+      // Row 8: half pair
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-14.webp",
+        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        alt: "bfj gallery image 13",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-15.webp",
+        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        alt: "bfj gallery image 14",
+      },
+    ],
+
+    metaTitle: "BFJ | HAUS Creative",
+    metaDescription:
+      "Digital design and creative direction for BFJ by Studio Haus Creative.",
+    ogImage: "/assets/bfj/bfj-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
+  },
+
+  // =========================================================================
+  // 9. Ouronyx — gallery9 (intro hero)
+  // =========================================================================
+  {
+    id: "ouronyx",
+    slug: "ouronyx",
+    client: "Ouronyx",
+    title: "Ouronyx",
+    subtitle: "Digital Experience",
+    description:
+      "A premium digital experience showcasing luxury aesthetics through immersive visuals and seamless interactions.",
+
+    heroVideo: {
+      desktop: "/assets/ouronyx/ouronyx-video.mp4",
+      mobile: "/assets/ouronyx/ouronyx-video-mobile.mp4",
+      poster: "/assets/ouronyx/ouronyx-cover.webp",
+    },
+
+    heroImage: {
+      desktop: "/assets/ouronyx/ouronyx-1.webp",
+      mobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
+      alt: "ouronyx hero",
+    },
+
+    year: "2024",
+
+    media: [
+      // Row 1: half pair
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-2.webp",
+        mobile: "/assets/ouronyx/ouronyx-2-mobile.webp",
+        alt: "ouronyx gallery image 1",
+      },
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-3.webp",
+        mobile: "/assets/ouronyx/ouronyx-3-mobile.webp",
+        alt: "ouronyx gallery image 2",
+      },
+      // Row 2: half pair
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-4.webp",
+        mobile: "/assets/ouronyx/ouronyx-5-mobile.webp",
+        alt: "ouronyx gallery image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-5.webp",
+        mobile: "/assets/ouronyx/ouronyx-4-mobile.webp",
+        alt: "ouronyx gallery image 4",
+      },
+      // Row 3: half pair
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-6.webp",
+        mobile: "/assets/ouronyx/ouronyx-6-mobile.webp",
+        alt: "ouronyx gallery image 5",
+      },
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-7.webp",
+        mobile: "/assets/ouronyx/ouronyx-7-mobile.webp",
+        alt: "ouronyx gallery image 6",
+      },
+      // Row 4: full width
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-8.webp",
+        mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
+        alt: "ouronyx gallery image 7",
+        span: "full",
+      },
+    ],
+
+    metaTitle: "Ouronyx | HAUS Creative",
+    metaDescription:
+      "Premium digital experience for luxury brand Ouronyx by Studio Haus Creative.",
+    ogImage: "/assets/ouronyx/ouronyx-1.webp",
+
+    carousel: {
+      animation: "fade",
+      autoAdvanceTime: 2000,
+    },
+  },
+
+  // =========================================================================
+  // 10. Bride Story — gallery10
   // =========================================================================
   {
     id: "bride-story",
@@ -1308,6 +1346,7 @@ export const projects: ProjectDetail[] = [
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-7.webp",
+        mobile: "/assets/bride-story/bride-story-7-mobile.webp",
         alt: "bride-story gallery image 6",
       },
       {
@@ -1350,7 +1389,7 @@ export const projects: ProjectDetail[] = [
   },
 
   // =========================================================================
-  // 10. Harrods
+  // 11. Harrods
   // =========================================================================
   {
     id: "harrods",
@@ -1363,6 +1402,7 @@ export const projects: ProjectDetail[] = [
 
     heroImage: {
       desktop: "/assets/harrods/harrods-1.webp",
+      mobile: "/assets/harrods/harrods-1-mobile.webp",
       alt: "harrods hero",
     },
 
@@ -1386,21 +1426,21 @@ export const projects: ProjectDetail[] = [
       {
         type: "image",
         desktop: "/assets/harrods/harrods-4.webp",
+        mobile: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods gallery image 3",
+      },
+      {
+        type: "image",
+        desktop: "/assets/harrods/harrods-5.webp",
+        mobile: "/assets/harrods/harrods-5-mobile.webp",
+        alt: "harrods gallery image 4",
       },
       // Row 3: full width
       {
         type: "image",
-        desktop: "/assets/harrods/harrods-5.webp",
-        mobile: "/assets/harrods/harrods-4-mobile.webp",
-        alt: "harrods gallery image 4",
-        span: "full",
-      },
-      // Row 4: half pair
-      {
-        type: "image",
         desktop: "/assets/harrods/harrods-6.webp",
         alt: "harrods gallery image 5",
+        span: "full",
       },
       {
         type: "image",
