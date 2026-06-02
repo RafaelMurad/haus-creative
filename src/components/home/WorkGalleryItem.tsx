@@ -60,13 +60,16 @@ export function WorkGalleryItem({
         )}
       </Link>
 
-      {/* Title - CSS sticky positioning, no JS during scroll */}
+      {/* Title - CSS sticky positioning, no JS during scroll.
+          mt-[25vh] offsets the title's natural position 25vh below the section's
+          top edge so it enters the viewport later — only after the section has
+          scrolled in past the boundary, not right at the transition. */}
       <div
         ref={ref}
         data-visible={isVisible}
-        className="sticky-title pointer-events-none relative z-10 px-5 md:pl-[34px]"
+        className="sticky-title pointer-events-none relative z-10 mt-[25vh] px-5 md:pl-[34px]"
       >
-        <h2 className="text-3xl font-light tracking-tight text-white md:text-5xl lg:text-6xl">
+        <h2 className="text-2xl font-light tracking-tight text-white md:text-4xl lg:text-5xl">
           {project.title}
         </h2>
       </div>

@@ -46,7 +46,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 href={link.href}
                 onClick={onClose}
                 tabIndex={isOpen ? 0 : -1}
-                className="text-[18px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
+                className="text-[15px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
               >
                 {link.title}
               </Link>

@@ -48,7 +48,7 @@ export default function ContactPage() {
             </h2>
           </div>
           <div className="flex-1 md:max-w-[1115px]">
-            <p className="text-[15px] leading-[1.53em] md:text-[23px] md:leading-[1.48em]">
+            <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
               We operate globally with hubs in London and São Paulo, building and scaling up bespoke teams to provide the best talent for each client. From strategy, creative direction, design through Production and Post Production. Get in touch to discuss how we can collaborate together.
             </p>
           </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
             </h2>
           </div>
           <div className="flex-1 md:max-w-[1115px]">
-            <p className="text-[15px] leading-[1.53em] md:text-[23px] md:leading-[1.48em]">
+            <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
               We are always looking to connect with creatives globally. We
               operate hybrid in remote between London and São Paulo. Reach
               out via{" "}

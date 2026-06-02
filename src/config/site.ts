@@ -151,7 +151,7 @@ export const featuredProjects: Project[] = [
     href: "/work/marie-claire-arabia",
     media: {
       type: "image",
-      src: "/assets/mc-arabia/mc-arabia-hero.webp",
+      src: "/assets/mc-arabia/mc-arabia-home-cover.webp",
       srcMobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
       alt: "Marie Claire Arabia editorial",
     },
