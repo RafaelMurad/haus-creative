@@ -306,14 +306,14 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         <div className="px-[21px] md:px-[41px] md:pr-[44px]">
           {/* Mobile: stacked vertically. Desktop: email left, social right */}
           <div className="flex flex-col md:flex-row md:justify-between pt-[71px] md:pt-[175px] pb-[107px] md:pb-[107px]">
-            {/* Contact Email */}
+            {/* Contact Email — plain <a> for native mailto: handling */}
             <div>
-              <Link
+              <a
                 href={`mailto:${siteConfig.email}`}
                 className="text-[15px] leading-[1.21em] hover:opacity-50 transition-opacity"
               >
                 {siteConfig.email}
-              </Link>
+              </a>
             </div>
 
             {/* Social Links - vertical on mobile, horizontal on desktop */}
