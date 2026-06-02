@@ -120,8 +120,8 @@ export const siteConfig: SiteConfig = {
   footerMenu: [],
 
   socialLinks: [
-    { title: "Instagram", href: "https://www.instagram.com/studiohauscreative" },
-    { title: "Linkedin", href: "https://www.linkedin.com/company/studiohauscreative" },
+    { title: "Instagram", href: "https://www.instagram.com/vitor.milito" },
+    { title: "Linkedin", href: "https://www.linkedin.com/in/vitormilito/" },
   ],
 };
 
