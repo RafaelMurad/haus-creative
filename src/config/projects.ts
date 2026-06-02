@@ -89,6 +89,10 @@ export interface ProjectDetail {
   // Content
   description: string;
   introText?: string;
+  /** Campaign tagline shown in the intro block, uppercase (e.g. "SEPTEMBER ISSUE - BACK TO WORK EDITORIAL") */
+  editorialSubtitle?: string;
+  /** Agency name shown in the intro block under the campaign tagline */
+  agency?: string;
 
   // Hero Media
   heroVideo?: {
@@ -165,6 +169,8 @@ export const projects: ProjectDetail[] = [
       "Creative direction for the September Issue Back to Work editorial, combining bold fashion statements with refined art direction.",
     introText:
       "A striking editorial for Marie Claire Arabia's September Issue, exploring the return to professional elegance through contemporary fashion photography.",
+    editorialSubtitle: "September Issue - Back to Work Editorial",
+    agency: "ITP Media",
 
     // heroVideo available but disabled until landscape version is provided:
     // heroVideo: {

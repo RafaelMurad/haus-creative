@@ -214,23 +214,29 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Project Content Section */}
       <section className="bg-white">
-        {/* Intro Section */}
+        {/* Intro Section — two-column layout below hero.
+            Left: title + campaign tagline (uppercase) + agency line.
+            Right: description body. Mobile: stacked single column. */}
         <div className="px-[21px] md:px-[34px] pt-[234px] md:pt-[51px]">
-          <div className="flex flex-col md:flex-row gap-[49px] md:gap-0">
-            {/* Label column — hidden on mobile per Figma */}
-            <div className="hidden md:block md:w-[264px] flex-shrink-0">
-              <p className="text-[14px] leading-[1.21em] text-black">
-                Intro
-              </p>
-            </div>
-
-            {/* Content column */}
-            <div className="flex-1 max-w-[663px]">
+          <div className="flex flex-col md:flex-row gap-[49px] md:gap-[60px]">
+            {/* Left column: title + editorial subtitle + agency */}
+            <div className="flex-1 md:max-w-[400px]">
               <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
                 {project.title}
               </h1>
-              <p className="text-[23px] leading-[1.48em] text-black">
-                {project.subtitle || project.description}
+              <p className="text-[14px] leading-[1.4em] uppercase tracking-wide mb-[14px]">
+                {project.editorialSubtitle ?? "LOREM IPSUM EDITORIAL"}
+              </p>
+              <p className="text-[14px] leading-[1.4em]">
+                <span className="font-semibold">Agency:</span>{" "}
+                {project.agency ?? "Lorem Ipsum"}
+              </p>
+            </div>
+
+            {/* Right column: description (prefer longer introText if present) */}
+            <div className="flex-1 md:max-w-[460px]">
+              <p className="text-[14px] leading-[1.4em] text-black">
+                {project.introText ?? project.description}
               </p>
             </div>
           </div>
