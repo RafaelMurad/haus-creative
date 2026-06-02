@@ -42,6 +42,22 @@ coverage/
 # Visual regression tests — screenshots are ephemeral (regenerate with npm run test:visual:baseline)
 e2e/screenshots/
 
+# Local dev review screenshots (multi-MB, regenerated per session)
+.screenshots/
+
+# Local Claude permission overrides
+.claude/settings.local.json
+
+# Figma audit / sorter dev tools (local-only; not part of the shipped site)
+public/figma-catalog.html
+public/figma-sorter.html
+public/figma-images
+public/figma-images/
+scripts/figma-audit.mjs
+
+# Working notes for client review — not for production
+CLIENT_QUESTIONS.md
+
 # Debug
 debug/
 .debug/

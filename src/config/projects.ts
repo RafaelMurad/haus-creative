@@ -54,12 +54,23 @@ export interface ProjectMedia {
 
   /**
    * Extra whitespace above this item's row.
-   * - `true` — 150 desktop / 60 mobile.
+   * - `true` — 38 desktop / 15 mobile.
    * - `number` — desktop px; mobile scales to ~40%.
    * - `{ mobile, desktop }` — explicit per-breakpoint values.
    * Overrides the project's `fullRowSpacing` for this row only.
    */
   spaceBefore?: boolean | number | { mobile: number; desktop: number };
+  /**
+   * Extra whitespace below this slot. Same shape as `spaceBefore`.
+   * For pair rows: applied to the row container when set on the right item,
+   * applied as mobile-only per-slot padding when set on the left item.
+   * For full rows: applied to the row container.
+   */
+  spaceAfter?: boolean | number | { mobile: number; desktop: number };
+  /** When true, this slot renders only on mobile (hidden on desktop via CSS). */
+  mobileOnly?: boolean;
+  /** When true, this slot renders only on desktop (hidden on mobile via CSS). */
+  desktopOnly?: boolean;
 }
 
 export interface ProjectCredit {
@@ -93,6 +104,10 @@ export interface ProjectDetail {
     desktop: string;
     mobile?: string;
     alt: string;
+    /** CSS object-fit override. Defaults to 'cover'. Use 'contain' to show full image without cropping. */
+    objectFit?: "cover" | "contain";
+    /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
+    objectPosition?: string;
   };
 
   // Client logo overlay on hero
@@ -113,7 +128,7 @@ export interface ProjectDetail {
    *   desktop images bake whitespace in but mobile images don't (e.g. YSL, where
    *   desktop is flush 0 but mobile needs ~60).
    *
-   * Defaults to 150 (desktop) / 60 (mobile), matching MC Arabia.
+   * Defaults to 38 (desktop) / 15 (mobile), matching MC Arabia.
    */
   fullRowSpacing?: number | { mobile: number; desktop: number };
 
@@ -255,10 +270,6 @@ export const projects: ProjectDetail[] = [
     slug: "ysl",
     client: "YSL",
     title: "Yves Saint Laurent",
-    // Desktop EXPORT images bake in their own whitespace (so 0); mobile
-    // images are edge-to-edge 440px crops and need explicit row gaps that
-    // match Figma's mobile layout spacing between full-width rows.
-    fullRowSpacing: { mobile: 60, desktop: 0 },
     subtitle: "Art Direction",
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
@@ -371,11 +382,6 @@ export const projects: ProjectDetail[] = [
     description:
       "Comprehensive visual identity and brand design for Wao Cosmo, creating a distinctive visual language across all touchpoints.",
 
-    heroVideo: {
-      desktop: "/assets/wao-cosmo/wao-cosmo-video.mp4",
-      poster: "/assets/wao-cosmo/wao-cosmo-cover.webp",
-    },
-
     heroImage: {
       desktop: "/assets/wao-cosmo/wao-cosmo-1.webp",
       mobile: "/assets/wao-cosmo/wao-cosmo-1-mobile.webp",
@@ -425,6 +431,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-6.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-6-mobile.webp",
         alt: "wao-cosmo image 5",
+        span: "full",
       },
       {
         type: "image",
@@ -443,6 +450,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-9.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-9-mobile.webp",
         alt: "wao-cosmo image 8",
+        span: "full",
       },
       {
         type: "image",
@@ -497,36 +505,44 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-18.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-18-mobile.webp",
         alt: "wao-cosmo image 17",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-19.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-19-mobile.webp",
         alt: "wao-cosmo image 18",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-20-mobile.webp",
         alt: "wao-cosmo image 19",
+        spaceBefore: { mobile: 55, desktop: 55 },
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-21-mobile.webp",
         alt: "wao-cosmo image 20",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-22.webp",
+        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-22-mobile.webp",
-        alt: "wao-cosmo image 21",
+        alt: "wao-cosmo image 21 (mobile)",
+        mobileOnly: true,
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-23.webp",
+        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-23-mobile.webp",
-        alt: "wao-cosmo image 22",
+        alt: "wao-cosmo image 22 (mobile)",
+        mobileOnly: true,
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
     ],
 
@@ -553,8 +569,11 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
-    // Figma gaps: 156px between full-width and pair rows; consecutive pairs are flush.
-    fullRowSpacing: 156,
+    heroVideo: {
+      desktop: "/assets/vivara/vivara-hero-video.mp4",
+      mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
+      poster: "/assets/vivara/vivara-1.webp",
+    },
 
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
@@ -694,9 +713,6 @@ export const projects: ProjectDetail[] = [
     subtitle: "Creative Strategy",
     description:
       "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
-
-    // Figma gaps: 150px between full-width and pair rows; consecutive pairs are flush.
-    fullRowSpacing: 150,
 
     heroImage: {
       desktop: "/assets/life/life-1.webp",
@@ -880,12 +896,14 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-8-mobile.webp",
         alt: "sk image 7",
         span: "full",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-9.webp",
         mobile: "/assets/sk/sk-9-mobile.webp",
         alt: "sk image 8",
+        spaceBefore: true,
       },
       {
         type: "image",
@@ -911,6 +929,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-13-mobile.webp",
         alt: "sk image 12",
         span: "full",
+        spaceBefore: true,
       },
       {
         type: "image",
@@ -957,7 +976,7 @@ export const projects: ProjectDetail[] = [
       "Creative direction for Bucherer's summer campaign, bringing dynamic motion design and animation to the luxury watch and jewellery brand.",
 
     heroImage: {
-      desktop: "/assets/bucherer/bucherer-1-mobile.webp",
+      desktop: "/assets/bucherer/bucherer-1.webp",
       mobile: "/assets/bucherer/bucherer-1-mobile.webp",
       alt: "bucherer hero",
     },
@@ -1042,21 +1061,32 @@ export const projects: ProjectDetail[] = [
   {
     id: "bfj",
     slug: "bfj",
-    client: "BFJ",
-    title: "BFJ",
-    subtitle: "Digital Design",
+    client: "Bucherer Fine Jewellery",
+    title: "Bucherer Fine Jewellery",
+    subtitle: "Lorem Ipsum",
     description:
-      "Digital design and creative direction for BFJ, delivering impactful visual experiences across digital platforms.",
+      "Creative direction and digital design for Bucherer Fine Jewellery.",
 
     heroImage: {
       desktop: "/assets/bfj/bfj-1.webp",
+      mobile: "/assets/bfj/bfj-1-mobile.webp",
       alt: "bfj hero",
     },
 
     year: "2024",
 
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-2.webp",
@@ -1069,7 +1099,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-3-mobile.webp",
         alt: "bfj gallery image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-4.webp",
@@ -1082,7 +1111,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-5-mobile.webp",
         alt: "bfj gallery image 4",
       },
-      // Row 3: full width
       {
         type: "image",
         desktop: "/assets/bfj/bfj-6.webp",
@@ -1090,63 +1118,60 @@ export const projects: ProjectDetail[] = [
         alt: "bfj gallery image 5",
         span: "full",
       },
-      // Row 4: full width
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-7.webp",
-        mobile: "/assets/bfj/bfj-7-mobile.webp",
-        alt: "bfj gallery image 6",
-        span: "full",
-      },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-8.webp",
+        mobile: "/assets/bfj/bfj-8-mobile.webp",
         alt: "bfj gallery image 7",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-9.webp",
-        mobile: "/assets/bfj/bfj-8-mobile.webp",
+        mobile: "/assets/bfj/bfj-9-mobile.webp",
         alt: "bfj gallery image 8",
       },
-      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-10.webp",
         mobile: "/assets/bfj/bfj-10-mobile.webp",
         alt: "bfj gallery image 9",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-11.webp",
-        mobile: "/assets/bfj/bfj-9-mobile.webp",
+        mobile: "/assets/bfj/bfj-11-mobile.webp",
         alt: "bfj gallery image 10",
       },
-      // Row 7: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-12.webp",
+        mobile: "/assets/bfj/bfj-12-mobile.webp",
         alt: "bfj gallery image 11",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-13.webp",
-        mobile: "/assets/bfj/bfj-10-mobile.webp",
+        mobile: "/assets/bfj/bfj-13-mobile.webp",
         alt: "bfj gallery image 12",
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-14.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        mobile: "/assets/bfj/bfj-14-mobile.webp",
         alt: "bfj gallery image 13",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-15.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        mobile: "/assets/bfj/bfj-15-mobile.webp",
         alt: "bfj gallery image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-13.webp",
+        mobile: "/assets/bfj/bfj-16-mobile.webp",
+        alt: "bfj gallery image 15",
       },
     ],
 
@@ -1167,11 +1192,11 @@ export const projects: ProjectDetail[] = [
   {
     id: "ouronyx",
     slug: "ouronyx",
-    client: "Ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
+    client: "OURONYX",
+    title: "OURONYX",
+    subtitle: "Lorem Ipsum",
     description:
-      "A premium digital experience showcasing luxury aesthetics through immersive visuals and seamless interactions.",
+      "Lorem Ipsum",
 
     heroVideo: {
       desktop: "/assets/ouronyx/ouronyx-video.mp4",
@@ -1230,6 +1255,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
         alt: "ouronyx image 7",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 60 },
       },
     ],
 
@@ -1260,9 +1286,21 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bride-story/bride-story-1.webp",
       mobile: "/assets/bride-story/bride-story-1-mobile.webp",
       alt: "bride-story hero",
+      objectFit: "contain",
     },
 
     year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
 
     media: [
       {
@@ -1295,6 +1333,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bride-story/bride-story-6-mobile.webp",
         alt: "bride-story image 5",
         span: "full",
+        spaceBefore: { mobile: 72, desktop: 202 },
+        spaceAfter: { mobile: 72, desktop: 174 },
       },
       {
         type: "image",
@@ -1326,6 +1366,7 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bride-story/bride-story-11-mobile.webp",
         alt: "bride-story image 10",
         span: "full",
+        spaceBefore: { mobile: 101, desktop: 101 },
       },
     ],
 
@@ -1356,9 +1397,21 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/harrods/harrods-1.webp",
       mobile: "/assets/harrods/harrods-1-mobile.webp",
       alt: "harrods hero",
+      objectFit: "contain",
     },
 
     year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
 
     media: [
       {
@@ -1391,6 +1444,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-6-mobile.webp",
         alt: "harrods image 5",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 100 },
+        spaceAfter: { mobile: 55, desktop: 100 },
       },
       {
         type: "image",
@@ -1415,6 +1470,8 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/harrods/harrods-10.webp",
         mobile: "/assets/harrods/harrods-10-mobile.webp",
         alt: "harrods image 9",
+        spaceBefore: { mobile: 55, desktop: 0 },
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -1422,6 +1479,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-11-mobile.webp",
         alt: "harrods image 10",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 100 },
+        spaceAfter: { mobile: 0, desktop: 100 },
       },
       {
         type: "image",
@@ -1457,6 +1516,7 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/harrods/harrods-17.webp",
         alt: "harrods image 16",
+        desktopOnly: true,
       },
     ],
 

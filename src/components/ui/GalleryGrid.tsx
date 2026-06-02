@@ -25,7 +25,7 @@ function resolveSpacing(
   input: SpacingInput,
 ): { mobile: number; desktop: number } | null {
   if (input === undefined || input === false) return null;
-  if (input === true) return { mobile: 60, desktop: 150 };
+  if (input === true) return { mobile: 15, desktop: 38 };
   if (typeof input === "number") {
     if (input <= 0) return null;
     return { mobile: Math.round(input * MOBILE_RATIO), desktop: input };
@@ -41,18 +41,30 @@ function rowSpacing(
 ): { className: string; style: React.CSSProperties } | null {
   const resolved = resolveSpacing(input);
   if (!resolved) return null;
-  // These Tailwind classes are static strings, so JIT picks them up at build.
+  // Static class strings (Tailwind JIT picks them up) — per-axis var names
+  // so multiple kinds can co-exist on the same element without collision.
   const classMap = {
-    py: "py-[var(--row-pad-mb,0px)] md:py-[var(--row-pad-md,0px)]",
-    pb: "pb-[var(--row-pad-mb,0px)] md:pb-[var(--row-pad-md,0px)]",
-    pt: "pt-[var(--row-pad-mb,0px)] md:pt-[var(--row-pad-md,0px)]",
+    py: "py-[var(--row-py-mb,0px)] md:py-[var(--row-py-md,0px)]",
+    pb: "pb-[var(--row-pb-mb,0px)] md:pb-[var(--row-pb-md,0px)]",
+    pt: "pt-[var(--row-pt-mb,0px)] md:pt-[var(--row-pt-md,0px)]",
+  };
+  const styleMap: Record<"py" | "pb" | "pt", React.CSSProperties> = {
+    py: {
+      ["--row-py-mb" as string]: `${resolved.mobile}px`,
+      ["--row-py-md" as string]: `${resolved.desktop}px`,
+    },
+    pb: {
+      ["--row-pb-mb" as string]: `${resolved.mobile}px`,
+      ["--row-pb-md" as string]: `${resolved.desktop}px`,
+    },
+    pt: {
+      ["--row-pt-mb" as string]: `${resolved.mobile}px`,
+      ["--row-pt-md" as string]: `${resolved.desktop}px`,
+    },
   };
   return {
     className: classMap[kind],
-    style: {
-      ["--row-pad-mb" as string]: `${resolved.mobile}px`,
-      ["--row-pad-md" as string]: `${resolved.desktop}px`,
-    },
+    style: styleMap[kind],
   };
 }
 
@@ -69,35 +81,49 @@ function rowSpacing(
  * Items with `span: 'half'` (default) are paired into 2-column rows on desktop.
  * All items stack vertically on mobile.
  */
-export function GalleryGrid({ media, fullRowSpacing = 150 }: GalleryGridProps) {
+export function GalleryGrid({ media, fullRowSpacing = 0 }: GalleryGridProps) {
   const rows = groupIntoRows(media);
 
   return (
     <div>
       {rows.map((row, rowIndex) => {
         const isFullRow = row.length === 1 && (row[0].span === "full" || !hasHalfPair(row));
+        const lastItem = row[row.length - 1];
 
-        // Resolve per-row spacing:
-        // 1. Manual `spaceBefore` on the first item takes priority (top-only).
-        // 2. Otherwise, full-width rows get `fullRowSpacing` on both sides —
-        //    except the very first row, which gets bottom-only so the page
-        //    wrapper's top spacing (mt-[143px]) isn't doubled.
-        // 3. Pair rows get no auto spacing (they butt against neighbours).
-        // Spacing of 0 (flush) on either breakpoint skips that axis accordingly.
-        const spacing =
+        // Row-level top spacing: row[0].spaceBefore overrides `fullRowSpacing`.
+        const topSpacing =
           row[0].spaceBefore !== undefined && row[0].spaceBefore !== false
             ? rowSpacing(row[0].spaceBefore, "pt")
             : isFullRow
               ? rowSpacing(fullRowSpacing, rowIndex === 0 ? "pb" : "py")
               : null;
+        // Row-level bottom spacing: last item's spaceAfter.
+        const bottomSpacing =
+          lastItem.spaceAfter !== undefined && lastItem.spaceAfter !== false
+            ? rowSpacing(lastItem.spaceAfter, "pb")
+            : null;
 
-        const space = spacing?.className ?? "";
-        const inlineStyle = spacing?.style;
+        // Merge top + bottom inline style vars; both reference the same CSS var
+        // names, so for pair rows we need to split into separate divs if both
+        // are set with different values. For now, prefer combining when possible.
+        const space = [topSpacing?.className, bottomSpacing?.className].filter(Boolean).join(" ");
+        const inlineStyle: React.CSSProperties = {
+          ...(topSpacing?.style ?? {}),
+          ...(bottomSpacing?.style ?? {}),
+        };
 
         if (isFullRow) {
-          // Full-width row — natural aspect ratio
+          const fullHidden = row[0].mobileOnly
+            ? "md:hidden"
+            : row[0].desktopOnly
+              ? "hidden md:block"
+              : "";
           return (
-            <div key={rowIndex} className={`w-full ${space}`} style={inlineStyle}>
+            <div
+              key={rowIndex}
+              className={`relative w-full ${space} ${fullHidden}`.trim()}
+              style={inlineStyle}
+            >
               <GalleryItem
                 item={row[0]}
                 index={getGlobalIndex(rows, rowIndex, 0)}
@@ -108,23 +134,62 @@ export function GalleryGrid({ media, fullRowSpacing = 150 }: GalleryGridProps) {
         }
 
         // Half-width pair row — side by side on desktop, stacked on mobile.
-        // Images render at natural aspect; matched-aspect pairs line up by design.
+        // Per-slot spacing (row[1].spaceBefore and row[0].spaceAfter) applies
+        // as mobile-only padding on individual slot divs so desktop pair alignment
+        // isn't broken.
+        const allMobileOnly = row.every((item) => item.mobileOnly);
+        const allDesktopOnly = row.every((item) => item.desktopOnly);
+        const pairHidden = allMobileOnly
+          ? "md:hidden"
+          : allDesktopOnly
+            ? "hidden md:flex"
+            : "";
         return (
           <div
             key={rowIndex}
-            className={`flex flex-col md:flex-row w-full ${space}`}
+            className={`flex flex-col md:flex-row w-full ${space} ${pairHidden}`.trim()}
             style={inlineStyle}
           >
-            {row.map((item, colIndex) => (
-              <div key={colIndex} className="w-full md:w-1/2">
-                <GalleryItem
-                  item={item}
-                  index={getGlobalIndex(rows, rowIndex, colIndex)}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  paired
-                />
-              </div>
-            ))}
+            {row.map((item, colIndex) => {
+              // Per-slot mobile-only padding for intra-pair gaps.
+              const beforePad =
+                colIndex === 1 && item.spaceBefore !== undefined && item.spaceBefore !== false
+                  ? rowSpacing(item.spaceBefore, "pt")
+                  : null;
+              const afterPad =
+                colIndex === 0 && item.spaceAfter !== undefined && item.spaceAfter !== false
+                  ? rowSpacing(item.spaceAfter, "pb")
+                  : null;
+              const itemClass = [beforePad?.className, afterPad?.className]
+                .filter(Boolean)
+                .join(" ");
+              const itemStyle: React.CSSProperties = {
+                ...(beforePad?.style ?? {}),
+                ...(afterPad?.style ?? {}),
+              };
+              const desktopReset =
+                (beforePad ? "md:!pt-0 " : "") + (afterPad ? "md:!pb-0" : "");
+              const itemHidden =
+                item.mobileOnly && !allMobileOnly
+                  ? "md:hidden"
+                  : item.desktopOnly && !allDesktopOnly
+                    ? "hidden md:block"
+                    : "";
+              return (
+                <div
+                  key={colIndex}
+                  className={`relative w-full md:w-1/2 ${itemClass} ${desktopReset} ${itemHidden}`.trim()}
+                  style={itemStyle}
+                >
+                  <GalleryItem
+                    item={item}
+                    index={getGlobalIndex(rows, rowIndex, colIndex)}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    paired
+                  />
+                </div>
+              );
+            })}
           </div>
         );
       })}
@@ -183,7 +248,7 @@ function MaskFrame({ item, index, sizes, paired }: GalleryItemProps) {
           <source
             src={item.mobile}
             type="video/mp4"
-            media="(max-width: 768px)"
+            media="(max-width: 767.98px)"
           />
         )}
         <source src={item.desktop} type="video/mp4" />
@@ -194,7 +259,7 @@ function MaskFrame({ item, index, sizes, paired }: GalleryItemProps) {
   if (item.mobile) {
     return (
       <picture>
-        <source media="(max-width: 768px)" srcSet={item.mobile} />
+        <source media="(max-width: 767.98px)" srcSet={item.mobile} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={item.desktop}
@@ -234,7 +299,7 @@ function InsetFrame({ item, index, sizes }: GalleryItemProps) {
       <div className="relative w-full h-full">
         {item.mobile ? (
           <picture>
-            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <source media="(max-width: 767.98px)" srcSet={item.mobile} />
             <img
               src={item.desktop}
               alt={item.alt}
@@ -281,7 +346,7 @@ function PhoneFrame({ item, index, sizes }: GalleryItemProps) {
       <div className="relative w-[58%] h-[78%] rounded-[32px] md:rounded-[40px] overflow-hidden border-[6px] md:border-[8px] border-black/90 shadow-lg">
         {item.mobile ? (
           <picture>
-            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <source media="(max-width: 767.98px)" srcSet={item.mobile} />
             <img
               src={item.desktop}
               alt={item.alt}
@@ -319,7 +384,7 @@ function ColorFrame({ item, index, sizes }: GalleryItemProps) {
       <div className="relative w-full h-full">
         {item.mobile ? (
           <picture>
-            <source media="(max-width: 768px)" srcSet={item.mobile} />
+            <source media="(max-width: 767.98px)" srcSet={item.mobile} />
             <img
               src={item.desktop}
               alt={item.alt}
