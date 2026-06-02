@@ -38,7 +38,7 @@ export function WorkGalleryItem({
   const useCarousel = galleryMedia && galleryMedia.length > 0 && carouselConfig;
 
   return (
-    <section className="relative h-dvh w-full overflow-clip pt-[10vh]">
+    <section className="relative h-dvh w-full overflow-clip pt-[5vh]">
       {/* Media Background - absolute positioned layer */}
       <Link
         href={project.href}
