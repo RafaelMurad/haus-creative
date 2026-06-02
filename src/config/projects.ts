@@ -108,6 +108,13 @@ export interface ProjectDetail {
     objectFit?: "cover" | "contain";
     /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
     objectPosition?: string;
+    /**
+     * Mobile rendering strategy. Default behaviour fills the viewport (`h-dvh` + `object-cover`),
+     * accepting a slight side-crop. Use `"natural"` to render the mobile asset at its natural
+     * aspect ratio (no crop, hero height < viewport). Use when the mobile asset has critical
+     * content near the edges that cropping would clip (e.g. Ouronyx 440×607 with edge text).
+     */
+    mobileFit?: "cover" | "natural";
   };
 
   // Client logo overlay on hero
@@ -170,9 +177,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/mc-arabia/mc-arabia-hero.webp",
       mobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
       alt: "Marie Claire Arabia September Issue editorial",
+      objectFit: "contain",
     },
-
-    clientLogo: "/assets/mc-arabia/mc-arabia-logo.webp",
 
     year: "2024",
     credits: [
@@ -217,6 +223,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/mc-arabia/mc-arabia-6-mobile.webp",
         alt: "mc-arabia image 5",
         span: "full",
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
       {
         type: "image",
@@ -248,6 +256,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/mc-arabia/mc-arabia-11-mobile.webp",
         alt: "mc-arabia image 10",
         span: "full",
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
     ],
 
@@ -277,10 +287,22 @@ export const projects: ProjectDetail[] = [
     heroImage: {
       desktop: "/assets/ysl/ysl-1.webp",
       mobile: "/assets/ysl/ysl-1-mobile.webp",
-      alt: "YSL campaign art direction",
+      alt: "YSL editorial hero",
+      objectFit: "contain",
     },
 
     year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
 
     media: [
       {
@@ -289,10 +311,12 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-2-mobile.webp",
         alt: "ysl image 1",
         span: "full",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-3.webp",
+        mobile: "/assets/ysl/ysl-3-mobile.webp",
         alt: "ysl image 2",
       },
       {
@@ -326,6 +350,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-8-mobile.webp",
         alt: "ysl image 7",
         span: "full",
+        spaceBefore: { mobile: 55, desktop: 0 },
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -336,6 +362,7 @@ export const projects: ProjectDetail[] = [
       {
         type: "image",
         desktop: "/assets/ysl/ysl-10.webp",
+        mobile: "/assets/ysl/ysl-10-mobile.webp",
         alt: "ysl image 9",
       },
       {
@@ -386,6 +413,7 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/wao-cosmo/wao-cosmo-1.webp",
       mobile: "/assets/wao-cosmo/wao-cosmo-1-mobile.webp",
       alt: "wao-cosmo hero",
+      objectFit: "contain",
     },
 
     year: "2024",
@@ -569,19 +597,25 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
-    heroVideo: {
-      desktop: "/assets/vivara/vivara-hero-video.mp4",
-      mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
-      poster: "/assets/vivara/vivara-1.webp",
-    },
-
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
       mobile: "/assets/vivara/vivara-1-mobile.webp",
       alt: "vivara hero",
+      objectFit: "contain",
     },
 
     year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
 
     media: [
       {
@@ -589,12 +623,14 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/vivara/vivara-2.webp",
         mobile: "/assets/vivara/vivara-2-mobile.webp",
         alt: "vivara image 1",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-3.webp",
         mobile: "/assets/vivara/vivara-3-mobile.webp",
         alt: "vivara image 2",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -602,6 +638,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-4-mobile.webp",
         alt: "vivara image 3",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 150 },
+        spaceAfter: { mobile: 0, desktop: 150 },
       },
       {
         type: "image",
@@ -626,6 +664,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/vivara/vivara-8.webp",
         mobile: "/assets/vivara/vivara-8-mobile.webp",
         alt: "vivara image 7",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -633,6 +672,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-9-mobile.webp",
         alt: "vivara image 8",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 150 },
+        spaceAfter: { mobile: 0, desktop: 150 },
       },
       {
         type: "image",
@@ -657,6 +698,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/vivara/vivara-13.webp",
         mobile: "/assets/vivara/vivara-13-mobile.webp",
         alt: "vivara image 12",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -664,6 +706,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/vivara/vivara-14-mobile.webp",
         alt: "vivara image 13",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 150 },
+        spaceAfter: { mobile: 0, desktop: 150 },
       },
       {
         type: "image",
@@ -676,6 +720,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/vivara/vivara-16.webp",
         mobile: "/assets/vivara/vivara-16-mobile.webp",
         alt: "vivara image 15",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -718,9 +763,23 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/life/life-1.webp",
       mobile: "/assets/life/life-1-mobile.webp",
       alt: "life hero",
+      objectFit: "contain",
     },
 
     year: "2024",
+
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
+    fullRowSpacing: 150,
 
     media: [
       {
@@ -838,6 +897,7 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/sk/sk-1.webp",
       mobile: "/assets/sk/sk-1-mobile.webp",
       alt: "sk hero",
+      objectFit: "contain",
     },
 
     year: "2024",
@@ -903,7 +963,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/sk/sk-9.webp",
         mobile: "/assets/sk/sk-9-mobile.webp",
         alt: "sk image 8",
-        spaceBefore: true,
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
@@ -979,6 +1039,7 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bucherer/bucherer-1.webp",
       mobile: "/assets/bucherer/bucherer-1-mobile.webp",
       alt: "bucherer hero",
+      objectFit: "contain",
     },
 
     year: "2024",
@@ -1071,6 +1132,7 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bfj/bfj-1.webp",
       mobile: "/assets/bfj/bfj-1-mobile.webp",
       alt: "bfj hero",
+      objectFit: "contain",
     },
 
     year: "2024",
@@ -1120,6 +1182,13 @@ export const projects: ProjectDetail[] = [
       },
       {
         type: "image",
+        desktop: "/assets/bfj/bfj-7.webp",
+        mobile: "/assets/bfj/bfj-7-mobile.webp",
+        alt: "bfj gallery image 6",
+        span: "full",
+      },
+      {
+        type: "image",
         desktop: "/assets/bfj/bfj-8.webp",
         mobile: "/assets/bfj/bfj-8-mobile.webp",
         alt: "bfj gallery image 7",
@@ -1135,7 +1204,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/bfj/bfj-10.webp",
         mobile: "/assets/bfj/bfj-10-mobile.webp",
         alt: "bfj gallery image 9",
-        spaceBefore: true,
+        spaceBefore: { mobile: 0, desktop: 100 },
       },
       {
         type: "image",
@@ -1167,12 +1236,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-15-mobile.webp",
         alt: "bfj gallery image 14",
       },
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-13.webp",
-        mobile: "/assets/bfj/bfj-16-mobile.webp",
-        alt: "bfj gallery image 15",
-      },
     ],
 
     metaTitle: "BFJ | HAUS Creative",
@@ -1198,16 +1261,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Lorem Ipsum",
 
-    heroVideo: {
-      desktop: "/assets/ouronyx/ouronyx-video.mp4",
-      mobile: "/assets/ouronyx/ouronyx-video-mobile.mp4",
-      poster: "/assets/ouronyx/ouronyx-cover.webp",
-    },
-
     heroImage: {
       desktop: "/assets/ouronyx/ouronyx-1.webp",
       mobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
       alt: "ouronyx hero",
+      objectFit: "contain",
+      mobileFit: "natural",
     },
 
     year: "2024",
@@ -1398,6 +1457,7 @@ export const projects: ProjectDetail[] = [
       mobile: "/assets/harrods/harrods-1-mobile.webp",
       alt: "harrods hero",
       objectFit: "contain",
+      mobileFit: "natural",
     },
 
     year: "2024",

@@ -48,6 +48,16 @@ export default function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  // Dev-only hero slot label. Gated by NODE_ENV; do not remove — used during
+  // slot-level review feedback to identify which asset the hero is rendering.
+  const heroSrc =
+    project.heroVideo?.desktop ||
+    project.heroVideo?.mobile ||
+    project.heroImage?.desktop ||
+    "";
+  const heroMatch = heroSrc.match(/\/([^/]+)\.(?:webp|mp4|jpg|png)$/i);
+  const heroLabel = heroMatch ? heroMatch[1] : "hero";
+
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Hero Section.
@@ -55,17 +65,30 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           1. heroImage.objectFit === "contain" → no h-dvh; image renders at
              natural aspect (full width, auto height). Used when client-supplied
              titles need to stay un-cropped (e.g. Bride Story "BRIDE" text).
-          2. heroVideo + heroImage.mobile → mobile uses 440/607 aspect, desktop h-dvh.
+          2. heroVideo + heroImage.mobile → mobile uses the mobile asset's natural
+             aspect (440/864 — matches delivered EXPORT mobile heroes for BFJ,
+             Vivara, MC Arabia). Desktop renders the video at h-dvh.
           3. Default → h-dvh on both breakpoints. */}
       <section
         className={`relative w-full bg-black overflow-hidden ${
           project.heroImage?.objectFit === "contain"
-            ? "h-dvh md:h-auto"
+            ? project.heroImage?.mobileFit === "natural"
+              ? "h-auto"
+              : "h-dvh md:h-auto"
             : project.heroVideo && project.heroImage?.mobile
-              ? "aspect-[440/607] md:aspect-auto md:h-dvh"
+              ? "aspect-[440/864] md:aspect-auto md:h-dvh"
               : "h-dvh"
         }`}
       >
+        {process.env.NODE_ENV === "development" && (
+          <div
+            className="absolute top-2 left-2 z-50 px-2 py-1 rounded bg-black/80 text-white font-mono text-[11px] leading-none pointer-events-none select-none"
+            data-slot-badge
+          >
+            {heroLabel}
+            <span className="ml-1 opacity-60">·hero</span>
+          </div>
+        )}
         {project.heroVideo ? (
           <>
             {/* Mobile fallback: static heroImage when available (videos rarely
@@ -111,9 +134,12 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               ? { objectPosition: project.heroImage.objectPosition }
               : undefined;
             if (isContain) {
+              const naturalMobile = project.heroImage.mobileFit === "natural";
               // Two-image render so each breakpoint gets its own fit strategy:
               // - Mobile: cover the h-dvh section (image fills viewport; minor side
-              //   crop is acceptable for portrait-oriented mobile crops).
+              //   crop is acceptable for portrait-oriented mobile crops). When
+              //   `mobileFit: "natural"` is set, render at natural aspect instead —
+              //   used for mobile assets with edge content that cropping would clip.
               // - Desktop: natural width × auto height so client-supplied titles
               //   (e.g. "BRIDE", "Harrods Dining Hall") don't get cropped.
               return (
@@ -123,7 +149,11 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                     <img
                       src={project.heroImage.mobile}
                       alt={project.heroImage.alt}
-                      className="absolute inset-0 w-full h-full object-cover md:hidden"
+                      className={
+                        naturalMobile
+                          ? "block w-full h-auto md:hidden"
+                          : "absolute inset-0 w-full h-full object-cover md:hidden"
+                      }
                       style={posStyle}
                       loading="eager"
                     />

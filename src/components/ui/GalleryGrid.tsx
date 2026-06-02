@@ -1,6 +1,26 @@
 import Image from "next/image";
 import type { ProjectMedia } from "@/config/projects";
 
+// Dev-only slot badge. Shows the slot identifier (e.g. "mc-arabia-3", "ysl-2")
+// in a corner overlay so the user can reference individual slots while reviewing.
+// Hidden in production builds via NODE_ENV check — DO NOT remove without explicit
+// user request, this is the primary tool for slot-level review feedback.
+function SlotBadge({ item, paired }: { item: ProjectMedia; paired?: boolean }) {
+  if (process.env.NODE_ENV !== "development") return null;
+  const src = item.desktop || item.mobile || "";
+  const match = src.match(/\/([^/]+)\.(?:webp|mp4|jpg|png)$/i);
+  const label = match ? match[1] : src;
+  return (
+    <div
+      className="absolute top-2 left-2 z-50 px-2 py-1 rounded bg-black/80 text-white font-mono text-[11px] leading-none pointer-events-none select-none"
+      data-slot-badge
+    >
+      {label}
+      <span className="ml-1 opacity-60">{paired ? "·pair" : "·full"}</span>
+    </div>
+  );
+}
+
 type SpacingInput =
   | number
   | { mobile: number; desktop: number }
@@ -124,6 +144,7 @@ export function GalleryGrid({ media, fullRowSpacing = 0 }: GalleryGridProps) {
               className={`relative w-full ${space} ${fullHidden}`.trim()}
               style={inlineStyle}
             >
+              <SlotBadge item={row[0]} />
               <GalleryItem
                 item={row[0]}
                 index={getGlobalIndex(rows, rowIndex, 0)}
@@ -181,6 +202,7 @@ export function GalleryGrid({ media, fullRowSpacing = 0 }: GalleryGridProps) {
                   className={`relative w-full md:w-1/2 ${itemClass} ${desktopReset} ${itemHidden}`.trim()}
                   style={itemStyle}
                 >
+                  <SlotBadge item={item} paired />
                   <GalleryItem
                     item={item}
                     index={getGlobalIndex(rows, rowIndex, colIndex)}
