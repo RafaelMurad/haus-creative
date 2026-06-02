@@ -204,6 +204,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/mc-arabia/mc-arabia-2.webp",
         mobile: "/assets/mc-arabia/mc-arabia-2-mobile.webp",
         alt: "mc-arabia image 1",
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
