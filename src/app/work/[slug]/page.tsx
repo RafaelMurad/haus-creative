@@ -217,7 +217,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         {/* Intro Section — two-column layout below hero.
             Left: title + campaign tagline (uppercase) + agency line.
             Right: description body. Mobile: stacked single column. */}
-        <div className="px-[21px] md:px-[34px] pt-[234px] md:pt-[51px]">
+        <div className="px-[21px] md:px-[34px] pt-[100px] md:pt-[40px]">
           <div className="flex flex-col md:flex-row gap-[49px] md:gap-[60px]">
             {/* Left column: title + editorial subtitle + agency */}
             <div className="flex-1 md:max-w-[400px]">
@@ -243,7 +243,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         </div>
 
         {/* Media Gallery */}
-        <div className="mt-[164px] md:mt-[143px]">
+        <div className="mt-[80px] md:mt-[80px]">
           <GalleryGrid media={project.media} fullRowSpacing={project.fullRowSpacing} />
         </div>
 
