@@ -54,12 +54,23 @@ export interface ProjectMedia {
 
   /**
    * Extra whitespace above this item's row.
-   * - `true` — 150 desktop / 60 mobile.
+   * - `true` — 38 desktop / 15 mobile.
    * - `number` — desktop px; mobile scales to ~40%.
    * - `{ mobile, desktop }` — explicit per-breakpoint values.
    * Overrides the project's `fullRowSpacing` for this row only.
    */
   spaceBefore?: boolean | number | { mobile: number; desktop: number };
+  /**
+   * Extra whitespace below this slot. Same shape as `spaceBefore`.
+   * For pair rows: applied to the row container when set on the right item,
+   * applied as mobile-only per-slot padding when set on the left item.
+   * For full rows: applied to the row container.
+   */
+  spaceAfter?: boolean | number | { mobile: number; desktop: number };
+  /** When true, this slot renders only on mobile (hidden on desktop via CSS). */
+  mobileOnly?: boolean;
+  /** When true, this slot renders only on desktop (hidden on mobile via CSS). */
+  desktopOnly?: boolean;
 }
 
 export interface ProjectCredit {
@@ -93,6 +104,10 @@ export interface ProjectDetail {
     desktop: string;
     mobile?: string;
     alt: string;
+    /** CSS object-fit override. Defaults to 'cover'. Use 'contain' to show full image without cropping. */
+    objectFit?: "cover" | "contain";
+    /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
+    objectPosition?: string;
   };
 
   // Client logo overlay on hero
@@ -113,7 +128,7 @@ export interface ProjectDetail {
    *   desktop images bake whitespace in but mobile images don't (e.g. YSL, where
    *   desktop is flush 0 but mobile needs ~60).
    *
-   * Defaults to 150 (desktop) / 60 (mobile), matching MC Arabia.
+   * Defaults to 38 (desktop) / 15 (mobile), matching MC Arabia.
    */
   fullRowSpacing?: number | { mobile: number; desktop: number };
 
@@ -172,74 +187,67 @@ export const projects: ProjectDetail[] = [
     ],
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-2.webp",
         mobile: "/assets/mc-arabia/mc-arabia-2-mobile.webp",
-        alt: "mc-arabia gallery image 1",
+        alt: "mc-arabia image 1",
       },
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-3.webp",
         mobile: "/assets/mc-arabia/mc-arabia-3-mobile.webp",
-        alt: "mc-arabia gallery image 2",
+        alt: "mc-arabia image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-4.webp",
         mobile: "/assets/mc-arabia/mc-arabia-4-mobile.webp",
-        alt: "mc-arabia gallery image 3",
+        alt: "mc-arabia image 3",
       },
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-5.webp",
         mobile: "/assets/mc-arabia/mc-arabia-5-mobile.webp",
-        alt: "mc-arabia gallery image 4",
+        alt: "mc-arabia image 4",
       },
-      // Row 3: full width
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-6.webp",
         mobile: "/assets/mc-arabia/mc-arabia-6-mobile.webp",
-        alt: "mc-arabia gallery image 5",
+        alt: "mc-arabia image 5",
         span: "full",
       },
-      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-7.webp",
         mobile: "/assets/mc-arabia/mc-arabia-7-mobile.webp",
-        alt: "mc-arabia gallery image 6",
+        alt: "mc-arabia image 6",
       },
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-8.webp",
         mobile: "/assets/mc-arabia/mc-arabia-8-mobile.webp",
-        alt: "mc-arabia gallery image 7",
+        alt: "mc-arabia image 7",
       },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-9.webp",
         mobile: "/assets/mc-arabia/mc-arabia-9-mobile.webp",
-        alt: "mc-arabia gallery image 8",
+        alt: "mc-arabia image 8",
       },
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-10.webp",
         mobile: "/assets/mc-arabia/mc-arabia-10-mobile.webp",
-        alt: "mc-arabia gallery image 9",
+        alt: "mc-arabia image 9",
       },
-      // Row 6: full width
       {
         type: "image",
         desktop: "/assets/mc-arabia/mc-arabia-11.webp",
         mobile: "/assets/mc-arabia/mc-arabia-11-mobile.webp",
-        alt: "mc-arabia gallery image 10",
+        alt: "mc-arabia image 10",
         span: "full",
-        objectPosition: "top",
       },
     ],
 
@@ -262,10 +270,6 @@ export const projects: ProjectDetail[] = [
     slug: "ysl",
     client: "YSL",
     title: "Yves Saint Laurent",
-    // Desktop EXPORT images bake in their own whitespace (so 0); mobile
-    // images are edge-to-edge 440px crops and need explicit row gaps that
-    // match Figma's mobile layout spacing between full-width rows.
-    fullRowSpacing: { mobile: 60, desktop: 0 },
     subtitle: "Art Direction",
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
@@ -279,90 +283,79 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-2.webp",
         mobile: "/assets/ysl/ysl-2-mobile.webp",
-        alt: "YSL campaign full 1",
+        alt: "ysl image 1",
         span: "full",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-3.webp",
-        mobile: "/assets/ysl/ysl-3-mobile.webp",
-        alt: "YSL campaign image 1",
+        alt: "ysl image 2",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-4.webp",
         mobile: "/assets/ysl/ysl-4-mobile.webp",
-        alt: "YSL campaign image 2",
+        alt: "ysl image 3",
       },
-      // Row 3: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-5.webp",
         mobile: "/assets/ysl/ysl-5-mobile.webp",
-        alt: "YSL campaign full 2",
+        alt: "ysl image 4",
         span: "full",
       },
-      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-6.webp",
         mobile: "/assets/ysl/ysl-6-mobile.webp",
-        alt: "YSL campaign image 3",
+        alt: "ysl image 5",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-7.webp",
         mobile: "/assets/ysl/ysl-7-mobile.webp",
-        alt: "YSL campaign image 4",
+        alt: "ysl image 6",
       },
-      // Row 5: full-width image
       {
         type: "image",
         desktop: "/assets/ysl/ysl-8.webp",
         mobile: "/assets/ysl/ysl-8-mobile.webp",
-        alt: "YSL campaign full 3",
+        alt: "ysl image 7",
         span: "full",
       },
-      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-9.webp",
         mobile: "/assets/ysl/ysl-9-mobile.webp",
-        alt: "YSL campaign image 5",
+        alt: "ysl image 8",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-10.webp",
-        alt: "YSL campaign image 6",
+        alt: "ysl image 9",
       },
-      // Row 7: full-width image — flush (no auto row padding) per-item override.
-      // `spaceBefore: 0` overrides `fullRowSpacing` for this row only.
       {
         type: "image",
         desktop: "/assets/ysl/ysl-11.webp",
         mobile: "/assets/ysl/ysl-11-mobile.webp",
-        alt: "YSL campaign full 4",
+        alt: "ysl image 10",
         span: "full",
-        spaceBefore: 0,
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/ysl/ysl-12.webp",
         mobile: "/assets/ysl/ysl-12-mobile.webp",
-        alt: "YSL campaign image 7",
+        alt: "ysl image 11",
       },
       {
         type: "image",
         desktop: "/assets/ysl/ysl-13.webp",
         mobile: "/assets/ysl/ysl-13-mobile.webp",
-        alt: "YSL campaign image 8",
+        alt: "ysl image 12",
       },
     ],
 
@@ -389,11 +382,6 @@ export const projects: ProjectDetail[] = [
     description:
       "Comprehensive visual identity and brand design for Wao Cosmo, creating a distinctive visual language across all touchpoints.",
 
-    heroVideo: {
-      desktop: "/assets/wao-cosmo/wao-cosmo-video.mp4",
-      poster: "/assets/wao-cosmo/wao-cosmo-cover.webp",
-    },
-
     heroImage: {
       desktop: "/assets/wao-cosmo/wao-cosmo-1.webp",
       mobile: "/assets/wao-cosmo/wao-cosmo-1-mobile.webp",
@@ -414,122 +402,147 @@ export const projects: ProjectDetail[] = [
     ],
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-2.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-2-mobile.webp",
-        alt: "wao-cosmo gallery image 1",
+        alt: "wao-cosmo image 1",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-3.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-3-mobile.webp",
-        alt: "wao-cosmo gallery image 2",
+        alt: "wao-cosmo image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-4.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-5-mobile.webp",
-        alt: "wao-cosmo gallery image 3",
+        mobile: "/assets/wao-cosmo/wao-cosmo-4-mobile.webp",
+        alt: "wao-cosmo image 3",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-5.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-4-mobile.webp",
-        alt: "wao-cosmo gallery image 4",
+        mobile: "/assets/wao-cosmo/wao-cosmo-5-mobile.webp",
+        alt: "wao-cosmo image 4",
       },
-      // Row 3: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-6.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-8-mobile.webp",
-        alt: "wao-cosmo gallery image 5",
+        mobile: "/assets/wao-cosmo/wao-cosmo-6-mobile.webp",
+        alt: "wao-cosmo image 5",
+        span: "full",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-7.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-9-mobile.webp",
-        alt: "wao-cosmo gallery image 6",
+        mobile: "/assets/wao-cosmo/wao-cosmo-7-mobile.webp",
+        alt: "wao-cosmo image 6",
       },
-      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-8.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-13-mobile.webp",
-        alt: "wao-cosmo gallery image 7",
+        mobile: "/assets/wao-cosmo/wao-cosmo-8-mobile.webp",
+        alt: "wao-cosmo image 7",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-9.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-12-mobile.webp",
-        alt: "wao-cosmo gallery image 8",
+        mobile: "/assets/wao-cosmo/wao-cosmo-9-mobile.webp",
+        alt: "wao-cosmo image 8",
+        span: "full",
       },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-10.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-14-mobile.webp",
-        alt: "wao-cosmo gallery image 9",
+        mobile: "/assets/wao-cosmo/wao-cosmo-10-mobile.webp",
+        alt: "wao-cosmo image 9",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-11.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-15-mobile.webp",
-        alt: "wao-cosmo gallery image 10",
+        mobile: "/assets/wao-cosmo/wao-cosmo-11-mobile.webp",
+        alt: "wao-cosmo image 10",
       },
-      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-12.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-16-mobile.webp",
-        alt: "wao-cosmo gallery image 11",
+        mobile: "/assets/wao-cosmo/wao-cosmo-12-mobile.webp",
+        alt: "wao-cosmo image 11",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-13.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-17-mobile.webp",
-        alt: "wao-cosmo gallery image 12",
+        mobile: "/assets/wao-cosmo/wao-cosmo-13-mobile.webp",
+        alt: "wao-cosmo image 12",
       },
-      // Row 7: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-14.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-19-mobile.webp",
-        alt: "wao-cosmo gallery image 13",
+        mobile: "/assets/wao-cosmo/wao-cosmo-14-mobile.webp",
+        alt: "wao-cosmo image 13",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-15.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-18-mobile.webp",
-        alt: "wao-cosmo gallery image 14",
+        mobile: "/assets/wao-cosmo/wao-cosmo-15-mobile.webp",
+        alt: "wao-cosmo image 14",
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-16.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-21-mobile.webp",
-        alt: "wao-cosmo gallery image 15",
+        mobile: "/assets/wao-cosmo/wao-cosmo-16-mobile.webp",
+        alt: "wao-cosmo image 15",
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-17.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-20-mobile.webp",
-        alt: "wao-cosmo gallery image 16",
+        mobile: "/assets/wao-cosmo/wao-cosmo-17-mobile.webp",
+        alt: "wao-cosmo image 16",
       },
-      // Row 9: half pair
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-18.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-23-mobile.webp",
-        alt: "wao-cosmo gallery image 17",
+        mobile: "/assets/wao-cosmo/wao-cosmo-18-mobile.webp",
+        alt: "wao-cosmo image 17",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/wao-cosmo/wao-cosmo-19.webp",
+        mobile: "/assets/wao-cosmo/wao-cosmo-19-mobile.webp",
+        alt: "wao-cosmo image 18",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "image",
+        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
+        mobile: "/assets/wao-cosmo/wao-cosmo-20-mobile.webp",
+        alt: "wao-cosmo image 19",
+        spaceBefore: { mobile: 55, desktop: 55 },
+      },
+      {
+        type: "image",
+        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
+        mobile: "/assets/wao-cosmo/wao-cosmo-21-mobile.webp",
+        alt: "wao-cosmo image 20",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "image",
+        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
         mobile: "/assets/wao-cosmo/wao-cosmo-22-mobile.webp",
-        alt: "wao-cosmo gallery image 18",
+        alt: "wao-cosmo image 21 (mobile)",
+        mobileOnly: true,
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "image",
+        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
+        mobile: "/assets/wao-cosmo/wao-cosmo-23-mobile.webp",
+        alt: "wao-cosmo image 22 (mobile)",
+        mobileOnly: true,
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
     ],
 
@@ -556,8 +569,11 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
-    // Figma gaps: 156px between full-width and pair rows; consecutive pairs are flush.
-    fullRowSpacing: 156,
+    heroVideo: {
+      desktop: "/assets/vivara/vivara-hero-video.mp4",
+      mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
+      poster: "/assets/vivara/vivara-1.webp",
+    },
 
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
@@ -568,123 +584,110 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: half pair — VIV_WEB_02 + VIV_WEB_03
       {
         type: "image",
         desktop: "/assets/vivara/vivara-2.webp",
         mobile: "/assets/vivara/vivara-2-mobile.webp",
-        alt: "vivara gallery image 1",
+        alt: "vivara image 1",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-3.webp",
         mobile: "/assets/vivara/vivara-3-mobile.webp",
-        alt: "vivara gallery image 2",
+        alt: "vivara image 2",
       },
-      // Row 2: full width — VIV_WEB_04
       {
         type: "image",
         desktop: "/assets/vivara/vivara-4.webp",
         mobile: "/assets/vivara/vivara-4-mobile.webp",
-        alt: "vivara gallery image 3",
+        alt: "vivara image 3",
         span: "full",
       },
-      // Row 3: half pair — VIV_WEB_05 + VIV_WEB_06
       {
         type: "image",
         desktop: "/assets/vivara/vivara-5.webp",
         mobile: "/assets/vivara/vivara-5-mobile.webp",
-        alt: "vivara gallery image 4",
+        alt: "vivara image 4",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-6.webp",
         mobile: "/assets/vivara/vivara-6-mobile.webp",
-        alt: "vivara gallery image 5",
+        alt: "vivara image 5",
       },
-      // Row 4: half pair — VIV_WEB_07 + VIV_WEB_08
-      // Note: vivara-7/8 desktop↔mobile refs are intentionally cross-named;
-      // dimensions confirm the content matches (vivara-7 desktop 1074×1922 =
-      // vivara-8-mobile 1074×1922).
       {
         type: "image",
         desktop: "/assets/vivara/vivara-7.webp",
-        mobile: "/assets/vivara/vivara-8-mobile.webp",
-        alt: "vivara gallery image 6",
+        mobile: "/assets/vivara/vivara-7-mobile.webp",
+        alt: "vivara image 6",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-8.webp",
-        mobile: "/assets/vivara/vivara-7-mobile.webp",
-        alt: "vivara gallery image 7",
+        mobile: "/assets/vivara/vivara-8-mobile.webp",
+        alt: "vivara image 7",
       },
-      // Row 5: full width — VIV_WEB_09
       {
         type: "image",
         desktop: "/assets/vivara/vivara-9.webp",
         mobile: "/assets/vivara/vivara-9-mobile.webp",
-        alt: "vivara gallery image 8",
+        alt: "vivara image 8",
         span: "full",
       },
-      // Row 6: half pair — VIV_WEB_10 + VIV_WEB_11
       {
         type: "image",
         desktop: "/assets/vivara/vivara-10.webp",
         mobile: "/assets/vivara/vivara-10-mobile.webp",
-        alt: "vivara gallery image 9",
+        alt: "vivara image 9",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-11.webp",
         mobile: "/assets/vivara/vivara-11-mobile.webp",
-        alt: "vivara gallery image 10",
+        alt: "vivara image 10",
       },
-      // Row 7: half pair — VIV_WEB_12 + VIV_WEB_13
       {
         type: "image",
         desktop: "/assets/vivara/vivara-12.webp",
         mobile: "/assets/vivara/vivara-12-mobile.webp",
-        alt: "vivara gallery image 11",
+        alt: "vivara image 11",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-13.webp",
         mobile: "/assets/vivara/vivara-13-mobile.webp",
-        alt: "vivara gallery image 12",
+        alt: "vivara image 12",
       },
-      // Row 8: full width — VIV_WEB_14
       {
         type: "image",
         desktop: "/assets/vivara/vivara-14.webp",
         mobile: "/assets/vivara/vivara-14-mobile.webp",
-        alt: "vivara gallery image 13",
+        alt: "vivara image 13",
         span: "full",
       },
-      // Row 9: half pair — VIV_WEB_15 + VIV_WEB_16
       {
         type: "image",
         desktop: "/assets/vivara/vivara-15.webp",
         mobile: "/assets/vivara/vivara-15-mobile.webp",
-        alt: "vivara gallery image 14",
+        alt: "vivara image 14",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-16.webp",
         mobile: "/assets/vivara/vivara-16-mobile.webp",
-        alt: "vivara gallery image 15",
+        alt: "vivara image 15",
       },
-      // Row 10: half pair — VIV_WEB_17 + VIV_WEB_18
       {
         type: "image",
         desktop: "/assets/vivara/vivara-17.webp",
         mobile: "/assets/vivara/vivara-17-mobile.webp",
-        alt: "vivara gallery image 16",
+        alt: "vivara image 16",
       },
       {
         type: "image",
         desktop: "/assets/vivara/vivara-18.webp",
-        // vivara-18-mobile.webp not in EXPORT — desktop serves as fallback
-        alt: "vivara gallery image 17",
+        mobile: "/assets/vivara/vivara-18-mobile.webp",
+        alt: "vivara image 17",
       },
     ],
 
@@ -711,9 +714,6 @@ export const projects: ProjectDetail[] = [
     description:
       "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
 
-    // Figma gaps: 150px between full-width and pair rows; consecutive pairs are flush.
-    fullRowSpacing: 150,
-
     heroImage: {
       desktop: "/assets/life/life-1.webp",
       mobile: "/assets/life/life-1-mobile.webp",
@@ -723,102 +723,91 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/life/life-2.webp",
-        mobile: "/assets/life/life-3-mobile.webp",
-        alt: "life gallery image 1",
+        mobile: "/assets/life/life-2-mobile.webp",
+        alt: "life image 1",
       },
       {
         type: "image",
         desktop: "/assets/life/life-3.webp",
-        mobile: "/assets/life/life-2-mobile.webp",
-        alt: "life gallery image 2",
+        mobile: "/assets/life/life-3-mobile.webp",
+        alt: "life image 2",
       },
-      // Row 2: half pair (flush)
       {
         type: "image",
         desktop: "/assets/life/life-4.webp",
         mobile: "/assets/life/life-4-mobile.webp",
-        alt: "life gallery image 3",
+        alt: "life image 3",
       },
       {
         type: "image",
         desktop: "/assets/life/life-5.webp",
         mobile: "/assets/life/life-5-mobile.webp",
-        alt: "life gallery image 4",
+        alt: "life image 4",
       },
-      // Row 3: full width (1919×1079 landscape)
       {
         type: "image",
         desktop: "/assets/life/life-6.webp",
         mobile: "/assets/life/life-6-mobile.webp",
-        alt: "life gallery image 5",
+        alt: "life image 5",
         span: "full",
       },
-      // Row 4: half pair — both portrait
       {
         type: "image",
         desktop: "/assets/life/life-7.webp",
+        mobile: "/assets/life/life-7-mobile.webp",
+        alt: "life image 6",
+      },
+      {
+        type: "image",
+        desktop: "/assets/life/life-8.webp",
         mobile: "/assets/life/life-8-mobile.webp",
-        alt: "life gallery image 6",
+        alt: "life image 7",
+      },
+      {
+        type: "image",
+        desktop: "/assets/life/life-9.webp",
+        mobile: "/assets/life/life-9-mobile.webp",
+        alt: "life image 8",
       },
       {
         type: "image",
         desktop: "/assets/life/life-10.webp",
         mobile: "/assets/life/life-10-mobile.webp",
-        alt: "life gallery image 7",
+        alt: "life image 9",
       },
-      // Row 5: half pair (flush) — both portrait
       {
         type: "image",
         desktop: "/assets/life/life-11.webp",
         mobile: "/assets/life/life-11-mobile.webp",
-        alt: "life gallery image 8",
+        alt: "life image 10",
+        span: "full",
       },
       {
         type: "image",
         desktop: "/assets/life/life-12.webp",
-        mobile: "/assets/life/life-13-mobile.webp",
-        alt: "life gallery image 9",
+        mobile: "/assets/life/life-12-mobile.webp",
+        alt: "life image 11",
       },
-      // Row 6: full width (1919×1079 landscape)
-      {
-        type: "image",
-        desktop: "/assets/life/life-8.webp",
-        mobile: "/assets/life/life-7-mobile.webp",
-        alt: "life gallery image 10",
-        span: "full",
-      },
-      // Row 7: full width (1919×1079 landscape)
-      {
-        type: "image",
-        desktop: "/assets/life/life-9.webp",
-        mobile: "/assets/life/life-9-mobile.webp",
-        alt: "life gallery image 11",
-        span: "full",
-      },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/life/life-13.webp",
-        mobile: "/assets/life/life-12-mobile.webp",
-        alt: "life gallery image 12",
+        mobile: "/assets/life/life-13-mobile.webp",
+        alt: "life image 12",
       },
       {
         type: "image",
         desktop: "/assets/life/life-14.webp",
-        mobile: "/assets/life/life-15-mobile.webp",
-        alt: "life gallery image 13",
+        mobile: "/assets/life/life-14-mobile.webp",
+        alt: "life image 13",
       },
-      // Row 9: lone portrait — no pair partner in EXPORT; renders as full-width
       {
         type: "image",
         desktop: "/assets/life/life-15.webp",
-        mobile: "/assets/life/life-14-mobile.webp",
-        alt: "life gallery image 14",
-        span: "full",
+        mobile: "/assets/life/life-15-mobile.webp",
+        alt: "life image 14",
       },
     ],
 
@@ -865,106 +854,100 @@ export const projects: ProjectDetail[] = [
     ],
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-2.webp",
         mobile: "/assets/sk/sk-2-mobile.webp",
-        alt: "sk gallery image 1",
+        alt: "sk image 1",
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-3.webp",
         mobile: "/assets/sk/sk-3-mobile.webp",
-        alt: "sk gallery image 2",
+        alt: "sk image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-4.webp",
-        mobile: "/assets/sk/sk-5-mobile.webp",
-        alt: "sk gallery image 3",
+        mobile: "/assets/sk/sk-4-mobile.webp",
+        alt: "sk image 3",
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-5.webp",
-        mobile: "/assets/sk/sk-4-mobile.webp",
-        alt: "sk gallery image 4",
+        mobile: "/assets/sk/sk-5-mobile.webp",
+        alt: "sk image 4",
       },
-      // Row 3: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-6.webp",
         mobile: "/assets/sk/sk-6-mobile.webp",
-        alt: "sk gallery image 5",
+        alt: "sk image 5",
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-7.webp",
         mobile: "/assets/sk/sk-7-mobile.webp",
-        alt: "sk gallery image 6",
+        alt: "sk image 6",
       },
-      // Row 4: full width
       {
         type: "image",
         desktop: "/assets/sk/sk-8.webp",
         mobile: "/assets/sk/sk-8-mobile.webp",
-        alt: "sk gallery image 7",
+        alt: "sk image 7",
         span: "full",
+        spaceBefore: true,
       },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-9.webp",
         mobile: "/assets/sk/sk-9-mobile.webp",
-        alt: "sk gallery image 8",
+        alt: "sk image 8",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-10.webp",
         mobile: "/assets/sk/sk-10-mobile.webp",
-        alt: "sk gallery image 9",
+        alt: "sk image 9",
       },
-      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-11.webp",
-        mobile: "/assets/sk/sk-12-mobile.webp",
-        alt: "sk gallery image 10",
+        mobile: "/assets/sk/sk-11-mobile.webp",
+        alt: "sk image 10",
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-12.webp",
-        mobile: "/assets/sk/sk-11-mobile.webp",
-        alt: "sk gallery image 11",
+        mobile: "/assets/sk/sk-12-mobile.webp",
+        alt: "sk image 11",
       },
-      // Row 7: full width
       {
         type: "image",
         desktop: "/assets/sk/sk-13.webp",
         mobile: "/assets/sk/sk-13-mobile.webp",
-        alt: "sk gallery image 12",
+        alt: "sk image 12",
         span: "full",
+        spaceBefore: true,
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/sk/sk-14.webp",
         mobile: "/assets/sk/sk-14-mobile.webp",
-        alt: "sk gallery image 13",
+        alt: "sk image 13",
       },
       {
         type: "image",
         desktop: "/assets/sk/sk-15.webp",
-        mobile: "/assets/sk/sk-16-mobile.webp",
-        alt: "sk gallery image 14",
+        mobile: "/assets/sk/sk-15-mobile.webp",
+        alt: "sk image 14",
       },
-      // Row 9: full width
       {
         type: "image",
         desktop: "/assets/sk/sk-16.webp",
-        mobile: "/assets/sk/sk-15-mobile.webp",
-        alt: "sk gallery image 15",
+        mobile: "/assets/sk/sk-16-mobile.webp",
+        alt: "sk image 15",
         span: "full",
       },
     ],
@@ -993,7 +976,7 @@ export const projects: ProjectDetail[] = [
       "Creative direction for Bucherer's summer campaign, bringing dynamic motion design and animation to the luxury watch and jewellery brand.",
 
     heroImage: {
-      desktop: "/assets/bucherer/bucherer-1-mobile.webp",
+      desktop: "/assets/bucherer/bucherer-1.webp",
       mobile: "/assets/bucherer/bucherer-1-mobile.webp",
       alt: "bucherer hero",
     },
@@ -1001,57 +984,53 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-2.webp",
         mobile: "/assets/bucherer/bucherer-2-mobile.webp",
-        alt: "bucherer gallery image 1",
+        alt: "bucherer image 1",
       },
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-3.webp",
         mobile: "/assets/bucherer/bucherer-3-mobile.webp",
-        alt: "bucherer gallery image 2",
+        alt: "bucherer image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-4.webp",
         mobile: "/assets/bucherer/bucherer-4-mobile.webp",
-        alt: "bucherer gallery image 3",
+        alt: "bucherer image 3",
       },
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-5.webp",
         mobile: "/assets/bucherer/bucherer-5-mobile.webp",
-        alt: "bucherer gallery image 4",
+        alt: "bucherer image 4",
       },
-      // Row 3: half pair
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-6.webp",
         mobile: "/assets/bucherer/bucherer-6-mobile.webp",
-        alt: "bucherer gallery image 5",
+        alt: "bucherer image 5",
       },
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-7.webp",
         mobile: "/assets/bucherer/bucherer-7-mobile.webp",
-        alt: "bucherer gallery image 6",
+        alt: "bucherer image 6",
       },
-      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/bucherer/bucherer-8.webp",
         mobile: "/assets/bucherer/bucherer-8-mobile.webp",
-        alt: "bucherer gallery image 7",
+        alt: "bucherer image 7",
       },
       {
         type: "image",
-        desktop: "/assets/bucherer/bucherer-9-mobile.webp",
+        desktop: "/assets/bucherer/bucherer-9.webp",
         mobile: "/assets/bucherer/bucherer-9-mobile.webp",
-        alt: "bucherer gallery image 8",
+        alt: "bucherer image 8",
       },
     ],
 
@@ -1082,21 +1061,32 @@ export const projects: ProjectDetail[] = [
   {
     id: "bfj",
     slug: "bfj",
-    client: "BFJ",
-    title: "BFJ",
-    subtitle: "Digital Design",
+    client: "Bucherer Fine Jewellery",
+    title: "Bucherer Fine Jewellery",
+    subtitle: "Lorem Ipsum",
     description:
-      "Digital design and creative direction for BFJ, delivering impactful visual experiences across digital platforms.",
+      "Creative direction and digital design for Bucherer Fine Jewellery.",
 
     heroImage: {
       desktop: "/assets/bfj/bfj-1.webp",
+      mobile: "/assets/bfj/bfj-1-mobile.webp",
       alt: "bfj hero",
     },
 
     year: "2024",
 
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-2.webp",
@@ -1109,7 +1099,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-3-mobile.webp",
         alt: "bfj gallery image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-4.webp",
@@ -1122,7 +1111,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-5-mobile.webp",
         alt: "bfj gallery image 4",
       },
-      // Row 3: full width
       {
         type: "image",
         desktop: "/assets/bfj/bfj-6.webp",
@@ -1130,63 +1118,60 @@ export const projects: ProjectDetail[] = [
         alt: "bfj gallery image 5",
         span: "full",
       },
-      // Row 4: full width
-      {
-        type: "image",
-        desktop: "/assets/bfj/bfj-7.webp",
-        mobile: "/assets/bfj/bfj-7-mobile.webp",
-        alt: "bfj gallery image 6",
-        span: "full",
-      },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-8.webp",
+        mobile: "/assets/bfj/bfj-8-mobile.webp",
         alt: "bfj gallery image 7",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-9.webp",
-        mobile: "/assets/bfj/bfj-8-mobile.webp",
+        mobile: "/assets/bfj/bfj-9-mobile.webp",
         alt: "bfj gallery image 8",
       },
-      // Row 6: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-10.webp",
         mobile: "/assets/bfj/bfj-10-mobile.webp",
         alt: "bfj gallery image 9",
+        spaceBefore: true,
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-11.webp",
-        mobile: "/assets/bfj/bfj-9-mobile.webp",
+        mobile: "/assets/bfj/bfj-11-mobile.webp",
         alt: "bfj gallery image 10",
       },
-      // Row 7: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-12.webp",
+        mobile: "/assets/bfj/bfj-12-mobile.webp",
         alt: "bfj gallery image 11",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-13.webp",
-        mobile: "/assets/bfj/bfj-10-mobile.webp",
+        mobile: "/assets/bfj/bfj-13-mobile.webp",
         alt: "bfj gallery image 12",
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/bfj/bfj-14.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        mobile: "/assets/bfj/bfj-14-mobile.webp",
         alt: "bfj gallery image 13",
       },
       {
         type: "image",
         desktop: "/assets/bfj/bfj-15.webp",
-        mobile: "/assets/bfj/bfj-11-mobile.webp",
+        mobile: "/assets/bfj/bfj-15-mobile.webp",
         alt: "bfj gallery image 14",
+      },
+      {
+        type: "image",
+        desktop: "/assets/bfj/bfj-13.webp",
+        mobile: "/assets/bfj/bfj-16-mobile.webp",
+        alt: "bfj gallery image 15",
       },
     ],
 
@@ -1207,11 +1192,11 @@ export const projects: ProjectDetail[] = [
   {
     id: "ouronyx",
     slug: "ouronyx",
-    client: "Ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
+    client: "OURONYX",
+    title: "OURONYX",
+    subtitle: "Lorem Ipsum",
     description:
-      "A premium digital experience showcasing luxury aesthetics through immersive visuals and seamless interactions.",
+      "Lorem Ipsum",
 
     heroVideo: {
       desktop: "/assets/ouronyx/ouronyx-video.mp4",
@@ -1228,52 +1213,49 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-2.webp",
         mobile: "/assets/ouronyx/ouronyx-2-mobile.webp",
-        alt: "ouronyx gallery image 1",
+        alt: "ouronyx image 1",
       },
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-3.webp",
         mobile: "/assets/ouronyx/ouronyx-3-mobile.webp",
-        alt: "ouronyx gallery image 2",
+        alt: "ouronyx image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-4.webp",
-        mobile: "/assets/ouronyx/ouronyx-5-mobile.webp",
-        alt: "ouronyx gallery image 3",
+        mobile: "/assets/ouronyx/ouronyx-4-mobile.webp",
+        alt: "ouronyx image 3",
       },
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-5.webp",
-        mobile: "/assets/ouronyx/ouronyx-4-mobile.webp",
-        alt: "ouronyx gallery image 4",
+        mobile: "/assets/ouronyx/ouronyx-5-mobile.webp",
+        alt: "ouronyx image 4",
       },
-      // Row 3: half pair
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-6.webp",
         mobile: "/assets/ouronyx/ouronyx-6-mobile.webp",
-        alt: "ouronyx gallery image 5",
+        alt: "ouronyx image 5",
       },
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-7.webp",
         mobile: "/assets/ouronyx/ouronyx-7-mobile.webp",
-        alt: "ouronyx gallery image 6",
+        alt: "ouronyx image 6",
       },
-      // Row 4: full width
       {
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-8.webp",
         mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
-        alt: "ouronyx gallery image 7",
+        alt: "ouronyx image 7",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 60 },
       },
     ],
 
@@ -1304,76 +1286,87 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bride-story/bride-story-1.webp",
       mobile: "/assets/bride-story/bride-story-1-mobile.webp",
       alt: "bride-story hero",
+      objectFit: "contain",
     },
 
     year: "2024",
 
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-2.webp",
         mobile: "/assets/bride-story/bride-story-2-mobile.webp",
-        alt: "bride-story gallery image 1",
+        alt: "bride-story image 1",
       },
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-3.webp",
         mobile: "/assets/bride-story/bride-story-3-mobile.webp",
-        alt: "bride-story gallery image 2",
+        alt: "bride-story image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-4.webp",
         mobile: "/assets/bride-story/bride-story-4-mobile.webp",
-        alt: "bride-story gallery image 3",
+        alt: "bride-story image 3",
       },
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-5.webp",
         mobile: "/assets/bride-story/bride-story-5-mobile.webp",
-        alt: "bride-story gallery image 4",
+        alt: "bride-story image 4",
       },
-      // Row 3: full width
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-6.webp",
-        alt: "bride-story gallery image 5",
+        mobile: "/assets/bride-story/bride-story-6-mobile.webp",
+        alt: "bride-story image 5",
         span: "full",
+        spaceBefore: { mobile: 72, desktop: 202 },
+        spaceAfter: { mobile: 72, desktop: 174 },
       },
-      // Row 4: half pair
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-7.webp",
         mobile: "/assets/bride-story/bride-story-7-mobile.webp",
-        alt: "bride-story gallery image 6",
+        alt: "bride-story image 6",
       },
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-8.webp",
-        mobile: "/assets/bride-story/bride-story-6-mobile.webp",
-        alt: "bride-story gallery image 7",
+        mobile: "/assets/bride-story/bride-story-8-mobile.webp",
+        alt: "bride-story image 7",
       },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-9.webp",
-        mobile: "/assets/bride-story/bride-story-8-mobile.webp",
-        alt: "bride-story gallery image 8",
+        mobile: "/assets/bride-story/bride-story-9-mobile.webp",
+        alt: "bride-story image 8",
       },
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-10.webp",
-        mobile: "/assets/bride-story/bride-story-7-mobile.webp",
-        alt: "bride-story gallery image 9",
+        mobile: "/assets/bride-story/bride-story-10-mobile.webp",
+        alt: "bride-story image 9",
       },
-      // Row 6: full width
       {
         type: "image",
         desktop: "/assets/bride-story/bride-story-11.webp",
-        alt: "bride-story gallery image 10",
+        mobile: "/assets/bride-story/bride-story-11-mobile.webp",
+        alt: "bride-story image 10",
         span: "full",
+        spaceBefore: { mobile: 101, desktop: 101 },
       },
     ],
 
@@ -1404,103 +1397,126 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/harrods/harrods-1.webp",
       mobile: "/assets/harrods/harrods-1-mobile.webp",
       alt: "harrods hero",
+      objectFit: "contain",
     },
 
     year: "2024",
 
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
-      // Row 1: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-2.webp",
         mobile: "/assets/harrods/harrods-2-mobile.webp",
-        alt: "harrods gallery image 1",
+        alt: "harrods image 1",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-3.webp",
         mobile: "/assets/harrods/harrods-3-mobile.webp",
-        alt: "harrods gallery image 2",
+        alt: "harrods image 2",
       },
-      // Row 2: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-4.webp",
         mobile: "/assets/harrods/harrods-4-mobile.webp",
-        alt: "harrods gallery image 3",
+        alt: "harrods image 3",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-5.webp",
         mobile: "/assets/harrods/harrods-5-mobile.webp",
-        alt: "harrods gallery image 4",
+        alt: "harrods image 4",
       },
-      // Row 3: full width
       {
         type: "image",
         desktop: "/assets/harrods/harrods-6.webp",
-        alt: "harrods gallery image 5",
+        mobile: "/assets/harrods/harrods-6-mobile.webp",
+        alt: "harrods image 5",
         span: "full",
+        spaceBefore: { mobile: 0, desktop: 100 },
+        spaceAfter: { mobile: 55, desktop: 100 },
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-7.webp",
-        mobile: "/assets/harrods/harrods-5-mobile.webp",
-        alt: "harrods gallery image 6",
+        mobile: "/assets/harrods/harrods-7-mobile.webp",
+        alt: "harrods image 6",
       },
-      // Row 5: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-8.webp",
-        alt: "harrods gallery image 7",
+        mobile: "/assets/harrods/harrods-8-mobile.webp",
+        alt: "harrods image 7",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-9.webp",
-        alt: "harrods gallery image 8",
+        mobile: "/assets/harrods/harrods-9-mobile.webp",
+        alt: "harrods image 8",
       },
-      // Row 6: full width
       {
         type: "image",
         desktop: "/assets/harrods/harrods-10.webp",
-        mobile: "/assets/harrods/harrods-6-mobile.webp",
-        alt: "harrods gallery image 9",
-        span: "full",
+        mobile: "/assets/harrods/harrods-10-mobile.webp",
+        alt: "harrods image 9",
+        spaceBefore: { mobile: 55, desktop: 0 },
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
-      // Row 7: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-11.webp",
-        alt: "harrods gallery image 10",
+        mobile: "/assets/harrods/harrods-11-mobile.webp",
+        alt: "harrods image 10",
+        span: "full",
+        spaceBefore: { mobile: 0, desktop: 100 },
+        spaceAfter: { mobile: 0, desktop: 100 },
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-12.webp",
-        mobile: "/assets/harrods/harrods-7-mobile.webp",
-        alt: "harrods gallery image 11",
+        mobile: "/assets/harrods/harrods-12-mobile.webp",
+        alt: "harrods image 11",
       },
-      // Row 8: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-13.webp",
-        mobile: "/assets/harrods/harrods-8-mobile.webp",
-        alt: "harrods gallery image 12",
+        mobile: "/assets/harrods/harrods-13-mobile.webp",
+        alt: "harrods image 12",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-14.webp",
-        alt: "harrods gallery image 13",
+        mobile: "/assets/harrods/harrods-14-mobile.webp",
+        alt: "harrods image 13",
       },
-      // Row 9: half pair
       {
         type: "image",
         desktop: "/assets/harrods/harrods-15.webp",
-        alt: "harrods gallery image 14",
+        mobile: "/assets/harrods/harrods-15-mobile.webp",
+        alt: "harrods image 14",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-16.webp",
-        alt: "harrods gallery image 15",
+        mobile: "/assets/harrods/harrods-16-mobile.webp",
+        alt: "harrods image 15",
+      },
+      {
+        type: "image",
+        desktop: "/assets/harrods/harrods-17.webp",
+        alt: "harrods image 16",
+        desktopOnly: true,
       },
     ],
 
