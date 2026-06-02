@@ -59,7 +59,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   const heroLabel = heroMatch ? heroMatch[1] : "hero";
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div id="top" className="min-h-screen bg-white text-black">
       {/* Hero Section.
           Three height modes:
           1. heroImage.objectFit === "contain" → no h-dvh; image renders at
@@ -247,16 +247,26 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           <GalleryGrid media={project.media} fullRowSpacing={project.fullRowSpacing} />
         </div>
 
-        {/* Credits Section */}
+        {/* Credits Section with Back-to-top link.
+            Desktop: ↑ Back to top sits in the left column (where the spacer
+            was), Credits label + content fill the right half.
+            Mobile: Credits stacked first, then Back to top below. */}
         {project.credits && project.credits.length > 0 && (
           <div className="px-[34px] md:px-0 mt-20 md:mt-[81px]">
             <div className="flex flex-col md:flex-row">
-              {/* Empty left spacer on desktop (aligns credits to right column) */}
-              <div className="hidden md:block md:w-1/2" />
+              {/* Back to top — desktop only, in left column */}
+              <div className="hidden md:block md:w-1/2 md:pl-[34px]">
+                <a
+                  href="#top"
+                  className="text-[14px] font-semibold leading-[1.21em] text-black hover:opacity-50 transition-opacity inline-flex items-center gap-1"
+                >
+                  <span aria-hidden>↑</span> Back to top
+                </a>
+              </div>
 
               {/* Label column */}
               <div className="md:w-[120px] flex-shrink-0 mb-4 md:mb-0">
-                <p className="text-[14px] leading-[1.21em] text-black">
+                <p className="text-[14px] font-semibold leading-[1.21em] text-black">
                   Credits
                 </p>
               </div>
@@ -274,11 +284,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 </div>
               </div>
             </div>
+
+            {/* Back to top — mobile only, below credits */}
+            <div className="md:hidden mt-[55px]">
+              <a
+                href="#top"
+                className="text-[14px] font-semibold leading-[1.21em] text-black hover:opacity-50 transition-opacity inline-flex items-center gap-1"
+              >
+                <span aria-hidden>↑</span> Back to top
+              </a>
+            </div>
           </div>
         )}
 
-        {/* Divider - mobile only per Figma (desktop has no divider) */}
-        <div className="px-[17px] mt-[71px] md:hidden">
+        {/* Divider — both mobile + desktop per updated Figma */}
+        <div className="px-[17px] md:px-[34px] mt-[71px] md:mt-[81px] md:pr-[44px]">
           <div className="w-full h-[0.5px] bg-black" />
         </div>
 
