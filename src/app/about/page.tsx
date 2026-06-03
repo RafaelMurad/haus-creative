@@ -50,8 +50,9 @@ export default function About() {
             </div>
           </div>
 
-          {/* Contact section */}
-          <div className="mt-16 md:mt-20 pb-8 md:pl-[9px]">
+          {/* Contact section — mobile only per Figma About-D (desktop shows
+              only the social links bottom-right of the right column) */}
+          <div className="md:hidden mt-16 pb-8">
             <h2 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
               Contact
             </h2>
