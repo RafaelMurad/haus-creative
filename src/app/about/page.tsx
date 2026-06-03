@@ -96,7 +96,7 @@ export default function About() {
           </div>
 
           {/* Desktop bottom-right social links per Figma About-D */}
-          <div className="flex-1 flex items-end justify-end pb-8 pr-[44px]">
+          <div className="flex-1 flex items-end justify-end mt-16 pb-8 pr-[44px]">
             <div className="flex gap-[21px] text-[15px] leading-[1.21em]">
               {siteConfig.socialLinks.map((link) => (
                 <a
