@@ -83,8 +83,8 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Image (desktop only) + bottom-right social links */}
-        <div className="hidden md:flex md:w-1/2 md:flex-col">
+        {/* Right column - Image (desktop only) */}
+        <div className="hidden md:block md:w-1/2">
           <div className="relative h-[528px] overflow-hidden">
             <Image
               src="/assets/about/about.webp"
@@ -94,23 +94,6 @@ export default function About() {
               sizes="50vw"
               priority
             />
-          </div>
-
-          {/* Desktop bottom-right social links per Figma About-D */}
-          <div className="flex-1 flex items-end justify-end mt-16 pb-8 pr-[44px]">
-            <div className="flex gap-[21px] text-[15px] leading-[1.21em]">
-              {siteConfig.socialLinks.map((link) => (
-                <a
-                  key={`footer-${link.title}`}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-50 transition-opacity"
-                >
-                  {link.title}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
       </div>
