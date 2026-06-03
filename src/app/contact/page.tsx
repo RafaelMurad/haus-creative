@@ -22,7 +22,7 @@ export default function ContactPage() {
             </h1>
           </div>
           <div className="flex-1">
-            <p className="text-[15px] leading-[1.21em]">
+            <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
               <a
                 href={`mailto:${siteConfig.email}`}
                 className="hover:opacity-50 transition-opacity"
