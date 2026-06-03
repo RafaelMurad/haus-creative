@@ -33,12 +33,12 @@ export function WorkGalleryItem({
   galleryMedia,
   carouselConfig,
 }: WorkGalleryItemProps) {
-  const { ref, isVisible } = useSlideInOnView({ threshold: 0.3 });
+  const { ref, isVisible } = useSlideInOnView({ threshold: 0.6 });
 
   const useCarousel = galleryMedia && galleryMedia.length > 0 && carouselConfig;
 
   return (
-    <section className="relative h-dvh w-full overflow-clip">
+    <section className="relative h-dvh w-full overflow-clip pt-[5vh]">
       {/* Media Background - absolute positioned layer */}
       <Link
         href={project.href}
@@ -66,7 +66,7 @@ export function WorkGalleryItem({
         data-visible={isVisible}
         className="sticky-title pointer-events-none relative z-10 px-5 md:pl-[34px]"
       >
-        <h2 className="text-3xl font-light tracking-tight text-white md:text-5xl lg:text-6xl">
+        <h2 className="text-2xl font-light tracking-tight text-white md:text-4xl lg:text-5xl">
           {project.title}
         </h2>
       </div>

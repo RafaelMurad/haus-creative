@@ -120,8 +120,8 @@ export const siteConfig: SiteConfig = {
   footerMenu: [],
 
   socialLinks: [
-    { title: "Instagram", href: "https://www.instagram.com/studiohauscreative" },
-    { title: "Linkedin", href: "https://www.linkedin.com/company/studiohauscreative" },
+    { title: "Instagram", href: "https://www.instagram.com/vitor.milito" },
+    { title: "Linkedin", href: "https://www.linkedin.com/in/vitormilito/" },
   ],
 };
 
@@ -151,7 +151,7 @@ export const featuredProjects: Project[] = [
     href: "/work/marie-claire-arabia",
     media: {
       type: "image",
-      src: "/assets/mc-arabia/mc-arabia-hero.webp",
+      src: "/assets/mc-arabia/mc-arabia-home-cover.webp",
       srcMobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
       alt: "Marie Claire Arabia editorial",
     },
@@ -216,7 +216,7 @@ export const featuredProjects: Project[] = [
     href: "/work/bucherer-summer",
     media: {
       type: "image",
-      src: "/assets/bucherer/bucherer-1-mobile.webp",
+      src: "/assets/bucherer/bucherer-1.webp",
       srcMobile: "/assets/bucherer/bucherer-1-mobile.webp",
       alt: "Bucherer Summer campaign",
     },
@@ -256,7 +256,7 @@ export const featuredProjects: Project[] = [
     media: {
       type: "image",
       src: "/assets/ouronyx/ouronyx-1.webp",
-      srcMobile: "/assets/ouronyx/ouronyx-2.webp",
+      srcMobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
       alt: "Ouronyx digital experience",
     },
   },
@@ -269,7 +269,7 @@ export const featuredProjects: Project[] = [
     media: {
       type: "image",
       src: "/assets/bride-story/bride-story-1.webp",
-      srcMobile: "/assets/bride-story/bride-story-3-mobile.webp",
+      srcMobile: "/assets/bride-story/bride-story-1-mobile.webp",
       alt: "Bride Story art direction",
     },
   },
@@ -282,7 +282,7 @@ export const featuredProjects: Project[] = [
     media: {
       type: "image",
       src: "/assets/harrods/harrods-1.webp",
-      srcMobile: "/assets/harrods/harrods-2.webp",
+      srcMobile: "/assets/harrods/harrods-1-mobile.webp",
       alt: "Harrods Dining Hall",
     },
   },

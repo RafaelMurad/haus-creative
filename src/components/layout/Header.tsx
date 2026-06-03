@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
@@ -11,7 +10,6 @@ import { Logo, MenuIcon } from "../ui";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
   const { isVisible } = useScrollDirection({
     hideThreshold: 100,
     topThreshold: 50,
@@ -21,10 +19,6 @@ export function Header() {
 
   const showHeader = isVisible || isMenuOpen;
 
-  // Use dark text on pages with white backgrounds (about, contact)
-  // Use light text on pages with dark hero backgrounds (home, work, project detail)
-  const isDarkText = pathname === "/about" || pathname === "/contact";
-
   return (
     <>
       <header
@@ -33,8 +27,8 @@ export function Header() {
           flex items-center justify-between
           px-5 py-7 md:pl-[34px] md:pr-[44px]
           transition-all duration-300 ease-out
+          text-black
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
-          ${isDarkText ? "text-black" : "text-white"}
         `}
       >
         <Link
@@ -61,7 +55,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[18px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
+              className="text-[15px] leading-[1.21em] uppercase transition-opacity duration-250 hover:opacity-50"
             >
               {link.title}
             </Link>
