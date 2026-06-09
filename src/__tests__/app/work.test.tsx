@@ -25,13 +25,16 @@ describe("Work page", () => {
     });
   });
 
-  it("does not render the first (intro) project", () => {
+  it("excludes the intro entry, rendering the intro project only once", () => {
     render(<WorkPage />);
 
+    // The work page drops featuredProjects[0] (the intro hero, SK). SK still
+    // appears once via the numbered work list, so exactly one gallery-sk tile is
+    // expected — guarding against the intro entry being rendered a second time.
     const introProject = featuredProjects[0];
     expect(
-      screen.queryByTestId(`gallery-${introProject.id}`),
-    ).not.toBeInTheDocument();
+      screen.getAllByTestId(`gallery-${introProject.id}`),
+    ).toHaveLength(1);
   });
 
   it("renders the correct number of gallery items", () => {
