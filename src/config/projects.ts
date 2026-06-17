@@ -1198,6 +1198,9 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-7-mobile.webp",
         alt: "bfj gallery image 6",
         span: "full",
+        // Space below the horizontal photo so the bfj-8/9 module isn't touching it
+        // (Figma comment #14). 150 desktop; 0 mobile (BFJ mobile stays flush).
+        spaceAfter: { mobile: 0, desktop: 150 },
       },
       {
         type: "image",
