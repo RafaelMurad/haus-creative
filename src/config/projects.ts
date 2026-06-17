@@ -963,7 +963,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-8-mobile.webp",
         alt: "sk image 7",
         span: "full",
-        spaceBefore: true,
+        // Match Marie Claire's full-width rows: 150px above AND below so the
+        // module under the horizontal photo isn't touching it (Figma comment #12).
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
       {
         type: "image",
@@ -996,7 +999,9 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-13-mobile.webp",
         alt: "sk image 12",
         span: "full",
-        spaceBefore: true,
+        // Match Marie Claire's full-width rows: 150px above AND below (Figma comment #13 "aqui tb").
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
       {
         type: "image",
