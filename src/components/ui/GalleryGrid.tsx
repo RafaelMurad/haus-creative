@@ -109,17 +109,26 @@ export function GalleryGrid({ media, fullRowSpacing = 0 }: GalleryGridProps) {
       {rows.map((row, rowIndex) => {
         const isFullRow = row.length === 1 && (row[0].span === "full" || !hasHalfPair(row));
         const lastItem = row[row.length - 1];
+        // The final row never emits trailing bottom space, so every project ends
+        // flush at its last asset and the Credits section's own top margin is the
+        // single, uniform gap below the gallery (Figma: credits spacing must be
+        // identical across all projects). Without this, a last item's spaceAfter
+        // (e.g. mc-arabia-11's 150) gets added on top of the Credits margin.
+        const isLastRow = rowIndex === rows.length - 1;
 
         // Row-level top spacing: row[0].spaceBefore overrides `fullRowSpacing`.
+        // On the last row, full-row fullRowSpacing applies as top-only (never "py")
+        // so it doesn't add a trailing bottom gap.
         const topSpacing =
           row[0].spaceBefore !== undefined && row[0].spaceBefore !== false
             ? rowSpacing(row[0].spaceBefore, "pt")
             : isFullRow
-              ? rowSpacing(fullRowSpacing, rowIndex === 0 ? "pb" : "py")
+              ? rowSpacing(fullRowSpacing, rowIndex === 0 ? "pb" : isLastRow ? "pt" : "py")
               : null;
-        // Row-level bottom spacing: last item's spaceAfter.
+        // Row-level bottom spacing: last item's spaceAfter — suppressed on the
+        // final row so it can't bleed into the gap before Credits.
         const bottomSpacing =
-          lastItem.spaceAfter !== undefined && lastItem.spaceAfter !== false
+          !isLastRow && lastItem.spaceAfter !== undefined && lastItem.spaceAfter !== false
             ? rowSpacing(lastItem.spaceAfter, "pb")
             : null;
 
