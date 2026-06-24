@@ -37,29 +37,32 @@ body {
 .sticky-title {
   position: sticky;
   top: 50vh;
-  transform: translateY(-50%);
 
   opacity: 0;
-  margin-left: -24px;
+  /* Slide-in offset (X) + vertical centering (Y) folded into one transform so
+     the slide animates on the compositor (GPU) instead of margin-left, which
+     would trigger a layout/reflow on every frame of the 0.7s transition across
+     all 12 tiles — the main source of mobile scroll jank. */
+  transform: translate(-24px, -50%);
 
-  will-change: opacity, margin-left;
+  will-change: opacity, transform;
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
 
   transition:
     opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-    margin-left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sticky-title[data-visible="true"] {
   opacity: 1;
-  margin-left: 0;
+  transform: translate(0, -50%);
 }
 
 /* Use larger offset on desktop */
 @media (min-width: 768px) {
   .sticky-title {
-    margin-left: -48px;
+    transform: translate(-48px, -50%);
   }
 }
 
