@@ -124,6 +124,14 @@ export interface ProjectDetail {
   // Client logo overlay on hero
   clientLogo?: string;
 
+  /**
+   * Header/logo/burger-menu colour while this project's hero is in view.
+   * Defaults to "dark" (black). Use "light" (white) for projects with a dark
+   * hero (e.g. Vivara, Life). The header reverts to black once scrolled past
+   * the hero onto the white content. Read by the global Header via usePathname.
+   */
+  headerTheme?: "light" | "dark";
+
   // Metadata
   year?: string;
   credits?: ProjectCredit[];
@@ -413,6 +421,7 @@ export const projects: ProjectDetail[] = [
     client: "Wao Cosmo",
     title: "Wao Cosmo",
     subtitle: "Visual Design",
+    headerTheme: "light",
     description:
       "Comprehensive visual identity and brand design for Wao Cosmo, creating a distinctive visual language across all touchpoints.",
 
@@ -601,6 +610,7 @@ export const projects: ProjectDetail[] = [
     client: "Vivara",
     title: "Vivara",
     subtitle: "Art Direction",
+    headerTheme: "light",
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
@@ -763,6 +773,7 @@ export const projects: ProjectDetail[] = [
     client: "Life",
     title: "Life",
     subtitle: "Creative Strategy",
+    headerTheme: "light",
     description:
       "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
 
@@ -963,7 +974,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-8-mobile.webp",
         alt: "sk image 7",
         span: "full",
-        spaceBefore: true,
+        // Match Marie Claire's full-width rows: 150px above AND below so the
+        // module under the horizontal photo isn't touching it (Figma comment #12).
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
       {
         type: "image",
@@ -996,7 +1010,9 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/sk/sk-13-mobile.webp",
         alt: "sk image 12",
         span: "full",
-        spaceBefore: true,
+        // Match Marie Claire's full-width rows: 150px above AND below (Figma comment #13 "aqui tb").
+        spaceBefore: 150,
+        spaceAfter: 150,
       },
       {
         type: "image",
@@ -1193,6 +1209,9 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/bfj/bfj-7-mobile.webp",
         alt: "bfj gallery image 6",
         span: "full",
+        // Space below the horizontal photo so the bfj-8/9 module isn't touching it
+        // (Figma comment #14). 150 desktop; 0 mobile (BFJ mobile stays flush).
+        spaceAfter: { mobile: 0, desktop: 150 },
       },
       {
         type: "image",
@@ -1345,6 +1364,7 @@ export const projects: ProjectDetail[] = [
     client: "Bride Story",
     title: "Bride Story",
     subtitle: "Art Direction",
+    headerTheme: "light",
     description:
       "Art direction and visual storytelling for Bride Story, capturing the elegance and emotion of bridal fashion through refined creative direction.",
 

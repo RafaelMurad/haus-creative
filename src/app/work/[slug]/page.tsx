@@ -70,6 +70,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
              Vivara, MC Arabia). Desktop renders the video at h-dvh.
           3. Default → h-dvh on both breakpoints. */}
       <section
+        id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
           project.heroImage?.objectFit === "contain"
             ? project.heroImage?.mobileFit === "natural"
@@ -218,7 +219,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             Left: title + campaign tagline (uppercase) + agency line.
             Right: description body. Mobile: stacked single column. */}
         <div className="px-[21px] md:px-[34px] pt-[70px] md:pt-[70px]">
-          <div className="flex flex-col md:flex-row gap-[49px] md:gap-[60px]">
+          <div className="flex flex-col gap-[24px] md:flex-row md:gap-[60px]">
             {/* Left column: title + editorial subtitle + agency */}
             <div className="flex-1 md:max-w-[400px]">
               <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
@@ -233,7 +234,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               </p>
             </div>
 
-            {/* Right column: description (prefer longer introText if present) */}
+            {/* Right column: description. Desktop unchanged; mobile stacks tightly
+                under the agency (gap-24, was 49 — Figma #20). */}
             <div className="flex-1 md:max-w-[460px]">
               <p className="text-[14px] leading-[1.4em] text-black">
                 {project.introText ?? project.description}
@@ -252,7 +254,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             was), Credits label + content fill the right half.
             Mobile: Credits stacked first, then Back to top below. */}
         {project.credits && project.credits.length > 0 && (
-          <div className="px-[34px] md:px-0 mt-20 md:mt-[81px]">
+          <div className="px-[34px] md:px-0 mt-[81px]">
             <div className="flex flex-col md:flex-row">
               {/* Back to top — desktop only, in left column */}
               <div className="hidden md:block md:w-1/2 md:pl-[34px]">
