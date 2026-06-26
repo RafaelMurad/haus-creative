@@ -127,8 +127,10 @@ describe("ProjectPage", () => {
     if (imageProject) {
       render(<ProjectPage params={{ slug: imageProject.slug }} />);
 
-      const heroImg = screen.getByAltText(imageProject.heroImage!.alt);
-      expect(heroImg).toBeInTheDocument();
+      // contain / dual-breakpoint heroes render a mobile + desktop <img> that
+      // share the same alt (one hidden per breakpoint via CSS), so assert ≥1.
+      const heroImgs = screen.getAllByAltText(imageProject.heroImage!.alt);
+      expect(heroImgs.length).toBeGreaterThan(0);
     }
   });
 
