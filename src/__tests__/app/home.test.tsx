@@ -51,13 +51,17 @@ describe("Home page", () => {
     });
   });
 
-  it("does not render the intro project as a WorkGalleryItem", () => {
+  it("renders the intro hero project as both the hero and a single work tile", () => {
     render(<Home />);
 
+    // SK serves as the intro hero (featuredProjects[0]) AND remains a navigable
+    // work tile in the grid, so it intentionally appears in both spots. getByTestId
+    // also guards against the intro entry being double-rendered as a work tile.
     const introProject = featuredProjects[0];
+    expect(screen.getByTestId("intro-hero")).toBeInTheDocument();
     expect(
-      screen.queryByTestId(`work-gallery-${introProject.id}`),
-    ).not.toBeInTheDocument();
+      screen.getByTestId(`work-gallery-${introProject.id}`),
+    ).toBeInTheDocument();
   });
 
   it("passes galleryMedia and carouselConfig from project config", () => {
