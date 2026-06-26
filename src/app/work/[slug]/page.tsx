@@ -70,6 +70,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
              Vivara, MC Arabia). Desktop renders the video at h-dvh.
           3. Default → h-dvh on both breakpoints. */}
       <section
+        id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
           project.heroImage?.objectFit === "contain"
             ? project.heroImage?.mobileFit === "natural"

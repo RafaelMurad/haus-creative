@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { getProjectBySlug } from "@/config/projects";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { MobileMenu } from "./MobileMenu";
@@ -19,6 +21,38 @@ export function Header() {
 
   const showHeader = isVisible || isMenuOpen;
 
+  // Per-project header colour. Dark-hero projects (e.g. Vivara, Life) set
+  // headerTheme: "light" so the logo + menu render white — but only while the
+  // hero sits under the header. Once scrolled onto the white content below, the
+  // header reverts to black so it stays legible.
+  const pathname = usePathname();
+  const slug = pathname?.startsWith("/work/") ? pathname.split("/")[2] : undefined;
+  const wantsLight = slug ? getProjectBySlug(slug)?.headerTheme === "light" : false;
+
+  // Default true so a light-theme page paints white over its dark hero on the
+  // first frame (no black flash before the observer fires).
+  const [overHero, setOverHero] = useState(true);
+
+  useEffect(() => {
+    if (!wantsLight) {
+      setOverHero(false);
+      return;
+    }
+    setOverHero(true);
+    const hero = document.getElementById("project-hero");
+    if (!hero) return;
+    // isIntersecting stays true while the hero still occupies the area just below
+    // the header band; it flips false once the hero's bottom scrolls above it.
+    const observer = new IntersectionObserver(
+      ([entry]) => setOverHero(entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px", threshold: 0 },
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [wantsLight, pathname]);
+
+  const textColor = wantsLight && overHero ? "text-white" : "text-black";
+
   return (
     <>
       <header
@@ -27,7 +61,7 @@ export function Header() {
           flex items-center justify-between
           px-5 py-7 md:pl-[34px] md:pr-[44px]
           transition-all duration-300 ease-out
-          text-black
+          ${textColor}
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
         `}
       >
