@@ -85,6 +85,39 @@ body {
 }
 
 /* ===========================================
+   PAGE TRANSITION
+   Fading into a project page uses a full-screen veil, not a fade of the page
+   content: the veil is a single solid <div> whose opacity animates on the
+   compositor (off the main thread), so it stays smooth while the heavy project
+   page mounts behind it, and it masks content-pop until the page has painted.
+   PageTransition replays this cover→reveal on each in-app project navigation by
+   toggling --active. `both` fill leaves it hidden at opacity 0; pointer-events
+   :none keeps it inert between transitions. Neutralised under reduced-motion.
+   =========================================== */
+
+.page-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60; /* above the fixed header (z-50) so the whole page fades in */
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-veil--active {
+  animation: pageVeilReveal 450ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes pageVeilReveal {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ===========================================
    BASE LAYER
    =========================================== */
 
