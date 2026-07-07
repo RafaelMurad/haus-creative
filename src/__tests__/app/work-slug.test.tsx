@@ -141,6 +141,24 @@ describe("ProjectPage", () => {
     }
   });
 
+  it("keeps viewport height on the hero section for video projects", () => {
+    // Regression: contain-mode heroImages set md:h-auto, which collapses the
+    // section to zero height when the hero is an absolutely-positioned video.
+    const videoProjects = projects.filter((p) => p.heroVideo);
+    expect(videoProjects.length).toBeGreaterThan(0);
+
+    videoProjects.forEach((project) => {
+      const { container, unmount } = render(
+        <ProjectPage params={{ slug: project.slug }} />,
+      );
+      const section = container.querySelector("#project-hero");
+      expect(section).toBeInTheDocument();
+      expect(section!.className).not.toContain("md:h-auto");
+      expect(section!.className).toMatch(/h-dvh/);
+      unmount();
+    });
+  });
+
   it("renders hero video when project has heroVideo with mobile source", () => {
     // ouronyx has heroVideo.mobile
     const videoProject = projects.find((p) => p.heroVideo?.mobile);

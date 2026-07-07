@@ -61,23 +61,25 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   return (
     <div id="top" className="min-h-screen bg-white text-black">
       {/* Hero Section.
-          Three height modes:
-          1. heroImage.objectFit === "contain" → no h-dvh; image renders at
+          Three height modes (video first — its children are absolutely
+          positioned, so the section must own its height or it collapses):
+          1. heroVideo → h-dvh on desktop; mobile uses the 440/864 design box
+             when a mobile hero asset exists (matches delivered mobile videos).
+          2. heroImage.objectFit === "contain" → no h-dvh; image renders at
              natural aspect (full width, auto height). Used when client-supplied
              titles need to stay un-cropped (e.g. Bride Story "BRIDE" text).
-          2. heroVideo + heroImage.mobile → mobile uses the mobile asset's natural
-             aspect (440/864 — matches delivered EXPORT mobile heroes for BFJ,
-             Vivara, MC Arabia). Desktop renders the video at h-dvh.
           3. Default → h-dvh on both breakpoints. */}
       <section
         id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
-          project.heroImage?.objectFit === "contain"
-            ? project.heroImage?.mobileFit === "natural"
-              ? "h-auto"
-              : "h-dvh md:h-auto"
-            : project.heroVideo && project.heroImage?.mobile
+          project.heroVideo
+            ? project.heroImage?.mobile
               ? "aspect-[440/864] md:aspect-auto md:h-dvh"
+              : "h-dvh"
+            : project.heroImage?.objectFit === "contain"
+              ? project.heroImage?.mobileFit === "natural"
+                ? "h-auto"
+                : "h-dvh md:h-auto"
               : "h-dvh"
         }`}
       >
