@@ -1312,6 +1312,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction and visual storytelling for Bride Story, capturing the elegance and emotion of bridal fashion through refined creative direction.",
 
+    heroVideo: {
+      desktop: "/assets/bride-story/bride-story-hero-video.mp4",
+      mobile: "/assets/bride-story/bride-story-hero-video-mobile.mp4",
+      poster: "/assets/bride-story/bride-story-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/bride-story/bride-story-1.webp",
       mobile: "/assets/bride-story/bride-story-1-mobile.webp",
