@@ -1100,6 +1100,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Digital design and creative direction for BFJ, delivering impactful visual experiences across digital platforms.",
 
+    heroVideo: {
+      desktop: "/assets/bfj/bfj-hero-video.mp4",
+      mobile: "/assets/bfj/bfj-hero-video-mobile.mp4",
+      poster: "/assets/bfj/bfj-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/bfj/bfj-1.webp",
       alt: "bfj hero",
