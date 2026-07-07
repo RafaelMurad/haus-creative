@@ -44,6 +44,12 @@ jest.mock("@/components/ui", () => ({
   GalleryGrid: ({ media }: { media: unknown[] }) => (
     <div data-testid="gallery-grid" data-count={media.length} />
   ),
+  // Real component — the hero tests below assert its resolved source.
+  HeroVideo: (
+    jest.requireActual("@/components/ui/HeroVideo") as {
+      HeroVideo: typeof import("@/components/ui/HeroVideo").HeroVideo;
+    }
+  ).HeroVideo,
 }));
 
 describe("ProjectPage", () => {
@@ -144,9 +150,9 @@ describe("ProjectPage", () => {
       const video = container.querySelector("video");
       expect(video).toBeInTheDocument();
 
-      // Should have two <source> elements
-      const sources = container.querySelectorAll("video source");
-      expect(sources.length).toBe(2);
+      // After hydration HeroVideo resolves a single src for the current
+      // breakpoint (jest matchMedia mock reports desktop).
+      expect(video!.getAttribute("src")).toBe(videoProject.heroVideo!.desktop);
     }
   });
 
@@ -164,11 +170,8 @@ describe("ProjectPage", () => {
       const video = container.querySelector("video");
       expect(video).toBeInTheDocument();
 
-      // Mobile source should fall back to desktop src
-      const sources = container.querySelectorAll("video source");
-      expect(sources[0].getAttribute("src")).toBe(
-        videoProject.heroVideo!.desktop,
-      );
+      // Desktop-only heroVideo resolves to the desktop file
+      expect(video!.getAttribute("src")).toBe(videoProject.heroVideo!.desktop);
     }
   });
 

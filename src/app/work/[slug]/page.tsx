@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
-import { GalleryGrid } from "@/components/ui";
+import { GalleryGrid, HeroVideo } from "@/components/ui";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 
@@ -53,26 +53,13 @@ export default function ProjectPage({ params }: ProjectPageProps) {
       {/* Hero Section - Full viewport with video/image */}
       <section className="relative w-full h-dvh bg-black overflow-hidden">
         {project.heroVideo ? (
-          <video
-            className="absolute inset-0 w-full h-full"
-            style={{
-              objectFit: project.heroVideo.objectFit ?? "cover",
-              objectPosition: project.heroVideo.objectPosition ?? "center",
-            }}
-            playsInline
-            autoPlay
-            loop
-            muted
+          <HeroVideo
+            desktop={project.heroVideo.desktop}
+            mobile={project.heroVideo.mobile}
             poster={project.heroVideo.poster}
-            preload="metadata"
-          >
-            <source
-              src={project.heroVideo.mobile || project.heroVideo.desktop}
-              type="video/mp4"
-              media="(max-width: 768px)"
-            />
-            <source src={project.heroVideo.desktop} type="video/mp4" />
-          </video>
+            objectFit={project.heroVideo.objectFit}
+            objectPosition={project.heroVideo.objectPosition}
+          />
         ) : project.heroImage ? (
           project.heroImage.mobile ? (
             <picture>
