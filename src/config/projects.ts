@@ -1239,9 +1239,9 @@ export const projects: ProjectDetail[] = [
       "A premium digital experience showcasing luxury aesthetics through immersive visuals and seamless interactions.",
 
     heroVideo: {
-      desktop: "/assets/ouronyx/ouronyx-video.mp4",
-      mobile: "/assets/ouronyx/ouronyx-video-mobile.mp4",
-      poster: "/assets/ouronyx/ouronyx-cover.webp",
+      desktop: "/assets/ouronyx/ouronyx-hero-video.mp4",
+      mobile: "/assets/ouronyx/ouronyx-hero-video-mobile.mp4",
+      poster: "/assets/ouronyx/ouronyx-hero-cover.webp",
     },
 
     heroImage: {
