@@ -857,6 +857,13 @@ export const projects: ProjectDetail[] = [
     description:
       "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
 
+    heroVideo: {
+      desktop: "/assets/sk/sk-hero-video.mp4",
+      // No mobile banner delivered yet (SK-II/MOBILE/VIDEO/ empty as of 2026-07-07);
+      // renderer falls back to desktop on mobile until Vitor uploads it.
+      poster: "/assets/sk/sk-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/sk/sk-1.webp",
       mobile: "/assets/sk/sk-1-mobile.webp",
