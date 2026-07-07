@@ -1431,6 +1431,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Creative direction for the Harrods Dining Hall experience.",
 
+    heroVideo: {
+      desktop: "/assets/harrods/harrods-hero-video.mp4",
+      mobile: "/assets/harrods/harrods-hero-video-mobile.mp4",
+      poster: "/assets/harrods/harrods-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/harrods/harrods-1.webp",
       mobile: "/assets/harrods/harrods-1-mobile.webp",
