@@ -559,6 +559,12 @@ export const projects: ProjectDetail[] = [
     // Figma gaps: 156px between full-width and pair rows; consecutive pairs are flush.
     fullRowSpacing: 156,
 
+    heroVideo: {
+      desktop: "/assets/vivara/vivara-hero-video.mp4",
+      mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
+      poster: "/assets/vivara/vivara-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
       mobile: "/assets/vivara/vivara-1-mobile.webp",
