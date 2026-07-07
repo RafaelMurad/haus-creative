@@ -5,7 +5,7 @@ describe("getProjectBySlug", () => {
     const project = getProjectBySlug("ouronyx");
     expect(project).toBeDefined();
     expect(project?.id).toBe("ouronyx");
-    expect(project?.title).toBe("Ouronyx");
+    expect(project?.title).toBe("OURONYX");
   });
 
   it("should return undefined for a non-existent slug", () => {

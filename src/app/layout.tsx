@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Header } from "../components/layout";
+import { Header, ScrollManager, PageTransition } from "../components/layout";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { JsonLd } from "@/components/seo";
 import { siteConfig } from "@/config/site";
@@ -78,8 +78,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             Skip to main content
           </a>
           <Header />
+          <ScrollManager />
           <main id="main-content" tabIndex={-1} className="min-h-screen">
-            {children}
+            <PageTransition>{children}</PageTransition>
           </main>
         </ErrorBoundary>
       </body>

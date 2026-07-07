@@ -50,7 +50,8 @@ export default function About() {
             </div>
           </div>
 
-          {/* Contact section */}
+          {/* Contact section — visible on both breakpoints per Figma
+              About-D (in left column under body text). */}
           <div className="mt-16 md:mt-20 pb-8 md:pl-[9px]">
             <h2 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
               Contact
@@ -81,8 +82,8 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Image (desktop only) + bottom-right social links */}
-        <div className="hidden md:flex md:w-1/2 md:flex-col">
+        {/* Right column - Image (desktop only) */}
+        <div className="hidden md:block md:w-1/2">
           <div className="relative h-[528px] overflow-hidden">
             <Image
               src="/assets/about/about.webp"
@@ -92,23 +93,6 @@ export default function About() {
               sizes="50vw"
               priority
             />
-          </div>
-
-          {/* Desktop bottom-right social links per Figma About-D */}
-          <div className="flex-1 flex items-end justify-end pb-8 pr-[44px]">
-            <div className="flex gap-[21px] text-[15px] leading-[1.21em]">
-              {siteConfig.socialLinks.map((link) => (
-                <a
-                  key={`footer-${link.title}`}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-50 transition-opacity"
-                >
-                  {link.title}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
       </div>
