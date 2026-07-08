@@ -300,13 +300,16 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
 
-    // Desktop-only for now: the delivered YSL-HomeBanner-Mobile.mp4 is a
-    // byte-for-byte duplicate of gallery clip 3 (md5 534aebbc…), not a
-    // portrait banner — re-export requested from client. Until then the
-    // renderer plays the desktop banner on mobile (logo is centered, crops
-    // safely).
+    // Both Figma frames tag the hero as video, but the delivered
+    // YSL-HomeBanner-Mobile.mp4 is a byte-for-byte duplicate of gallery
+    // clip 3 (md5 534aebbc…) — re-export requested (docs/CLIENT-ASKS.md).
+    // Until it lands, mobile explicitly plays the desktop banner (the logo
+    // is centered, so it crops safely in the 440/864 box). Without the
+    // explicit mobile entry the renderer would fall back to the static
+    // heroImage.mobile instead (the SK behaviour).
     heroVideo: {
       desktop: "/assets/ysl/ysl-hero-video.mp4",
+      mobile: "/assets/ysl/ysl-hero-video.mp4",
       poster: "/assets/ysl/ysl-hero-cover.webp",
     },
 
