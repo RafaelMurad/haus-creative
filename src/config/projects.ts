@@ -390,10 +390,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-8-mobile.webp",
         alt: "ysl image 7",
         span: "full",
-        // 75px desktop air — video slots above (ysl-7) and below (ysl-9) are
-        // edge-to-edge. Mobile stays flush per review.
-        spaceBefore: { mobile: 0, desktop: 75 },
-        spaceAfter: { mobile: 0, desktop: 75 },
+        // 75 desktop / 55 mobile air both sides — video slots above (ysl-7)
+        // and below (ysl-9) are edge-to-edge.
+        spaceBefore: { mobile: 55, desktop: 75 },
+        spaceAfter: { mobile: 55, desktop: 75 },
       },
       {
         // Video3 — man in black with LIBRE (same clip both breakpoints)
