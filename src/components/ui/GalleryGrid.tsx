@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ProjectMedia } from "@/config/projects";
+import { GalleryVideo } from "./GalleryVideo";
 
 // Dev-only slot badge. Shows the slot identifier (e.g. "mc-arabia-3", "ysl-2")
 // in a corner overlay so the user can reference individual slots while reviewing.
@@ -265,26 +266,7 @@ function MaskFrame({ item, index, sizes, paired }: GalleryItemProps) {
   const imgClass = "w-full h-auto block";
 
   if (item.type === "video") {
-    return (
-      <video
-        className={imgClass}
-        playsInline
-        autoPlay
-        loop
-        muted
-        poster={item.poster}
-        preload={index < 2 ? "metadata" : "none"}
-      >
-        {item.mobile && (
-          <source
-            src={item.mobile}
-            type="video/mp4"
-            media="(max-width: 767.98px)"
-          />
-        )}
-        <source src={item.desktop} type="video/mp4" />
-      </video>
-    );
+    return <GalleryVideo item={item} index={index} />;
   }
 
   if (item.mobile) {

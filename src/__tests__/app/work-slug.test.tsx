@@ -44,6 +44,12 @@ jest.mock("@/components/ui", () => ({
   GalleryGrid: ({ media }: { media: unknown[] }) => (
     <div data-testid="gallery-grid" data-count={media.length} />
   ),
+  // Real component — the hero tests below assert its resolved source.
+  HeroVideo: (
+    jest.requireActual("@/components/ui/HeroVideo") as {
+      HeroVideo: typeof import("@/components/ui/HeroVideo").HeroVideo;
+    }
+  ).HeroVideo,
 }));
 
 describe("ProjectPage", () => {
@@ -135,9 +141,49 @@ describe("ProjectPage", () => {
     }
   });
 
+  it("keeps viewport height on the hero section for desktop-video projects", () => {
+    // Regression: contain-mode heroImages set md:h-auto, which collapses the
+    // section to zero height when the hero is an absolutely-positioned video.
+    // Mobile-only heroVideos (no desktop file) legitimately keep md:h-auto —
+    // their desktop hero is the in-flow static image.
+    const videoProjects = projects.filter((p) => p.heroVideo?.desktop);
+    expect(videoProjects.length).toBeGreaterThan(0);
+
+    videoProjects.forEach((project) => {
+      const { container, unmount } = render(
+        <ProjectPage params={{ slug: project.slug }} />,
+      );
+      const section = container.querySelector("#project-hero");
+      expect(section).toBeInTheDocument();
+      expect(section!.className).not.toContain("md:h-auto");
+      expect(section!.className).toMatch(/h-dvh/);
+      unmount();
+    });
+  });
+
+  it("renders static desktop hero for mobile-only heroVideo projects", () => {
+    // mc-arabia: video plays only below the breakpoint; desktop (the jsdom
+    // default via the matchMedia mock) shows the static heroImage instead.
+    const mobileOnlyProject = projects.find(
+      (p) => p.heroVideo?.mobile && !p.heroVideo.desktop,
+    );
+
+    if (mobileOnlyProject) {
+      const { container } = render(
+        <ProjectPage params={{ slug: mobileOnlyProject.slug }} />,
+      );
+
+      expect(container.querySelector("video")).not.toBeInTheDocument();
+      const heroImgs = screen.getAllByAltText(mobileOnlyProject.heroImage!.alt);
+      expect(heroImgs.length).toBeGreaterThan(0);
+    }
+  });
+
   it("renders hero video when project has heroVideo with mobile source", () => {
     // ouronyx has heroVideo.mobile
-    const videoProject = projects.find((p) => p.heroVideo?.mobile);
+    const videoProject = projects.find(
+      (p) => p.heroVideo?.desktop && p.heroVideo.mobile,
+    );
 
     if (videoProject) {
       const { container } = render(
@@ -147,9 +193,9 @@ describe("ProjectPage", () => {
       const video = container.querySelector("video");
       expect(video).toBeInTheDocument();
 
-      // Should have two <source> elements
-      const sources = container.querySelectorAll("video source");
-      expect(sources.length).toBe(2);
+      // After hydration HeroVideo resolves a single src for the current
+      // breakpoint (jest matchMedia mock reports desktop).
+      expect(video!.getAttribute("src")).toBe(videoProject.heroVideo!.desktop);
     }
   });
 
@@ -167,11 +213,8 @@ describe("ProjectPage", () => {
       const video = container.querySelector("video");
       expect(video).toBeInTheDocument();
 
-      // Mobile source should fall back to desktop src
-      const sources = container.querySelectorAll("video source");
-      expect(sources[0].getAttribute("src")).toBe(
-        videoProject.heroVideo!.desktop,
-      );
+      // Desktop-only heroVideo resolves to the desktop file
+      expect(video!.getAttribute("src")).toBe(videoProject.heroVideo!.desktop);
     }
   });
 

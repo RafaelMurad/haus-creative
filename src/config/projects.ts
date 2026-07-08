@@ -96,7 +96,8 @@ export interface ProjectDetail {
 
   // Hero Media
   heroVideo?: {
-    desktop: string;
+    /** Omit for mobile-only hero video — desktop then falls back to heroImage. */
+    desktop?: string;
     mobile?: string;
     poster?: string;
     /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
@@ -180,12 +181,12 @@ export const projects: ProjectDetail[] = [
     editorialSubtitle: "September Issue - Back to Work Editorial",
     agency: "ITP Media",
 
-    // heroVideo available but disabled until landscape version is provided:
-    // heroVideo: {
-    //   desktop: "/assets/mc-arabia/mc-arabia-hero-video.mp4",
-    //   mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
-    //   poster: "/assets/mc-arabia/mc-arabia-hero.webp",
-    // },
+    // Per Figma, the hero video is mobile-only (tag on the mobile frame);
+    // desktop keeps the static editorial image below.
+    heroVideo: {
+      mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
+      poster: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
+    },
 
     heroImage: {
       desktop: "/assets/mc-arabia/mc-arabia-hero.webp",
@@ -299,6 +300,19 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
 
+    // Both Figma frames tag the hero as video, but the delivered
+    // YSL-HomeBanner-Mobile.mp4 is a byte-for-byte duplicate of gallery
+    // clip 3 (md5 534aebbc…) — re-export requested (docs/CLIENT-ASKS.md).
+    // Until it lands, mobile explicitly plays the desktop banner (the logo
+    // is centered, so it crops safely in the 440/864 box). Without the
+    // explicit mobile entry the renderer would fall back to the static
+    // heroImage.mobile instead (the SK behaviour).
+    heroVideo: {
+      desktop: "/assets/ysl/ysl-hero-video.mp4",
+      mobile: "/assets/ysl/ysl-hero-video.mp4",
+      poster: "/assets/ysl/ysl-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/ysl/ysl-1.webp",
       mobile: "/assets/ysl/ysl-1-mobile.webp",
@@ -326,13 +340,18 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-2-mobile.webp",
         alt: "ysl image 1",
         span: "full",
-        spaceAfter: { mobile: 55, desktop: 0 },
+        // 75 desktop / 55 mobile below — the video slot underneath is
+        // edge-to-edge; 55 is the standard mobile gap used on per-slot
+        // overrides across projects.
+        spaceAfter: { mobile: 55, desktop: 75 },
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-3.webp",
-        mobile: "/assets/ysl/ysl-3-mobile.webp",
-        alt: "ysl image 2",
+        // Video1 — woman with lipstick (same clip both breakpoints; the
+        // delivered MOBILE/01.mp4 is byte-identical to YSL-Video1.mp4).
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-3.mp4",
+        poster: "/assets/ysl/ysl-3.webp",
+        alt: "ysl video 2",
       },
       {
         type: "image",
@@ -346,6 +365,11 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-5-mobile.webp",
         alt: "ysl image 4",
         span: "full",
+        // The neighbouring video slots are edge-to-edge clips (no baked-in
+        // whitespace like the desktop image EXPORTs), so this row needs
+        // explicit desktop air — 75px per review. Mobile stays flush.
+        spaceBefore: { mobile: 0, desktop: 75 },
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         type: "image",
@@ -354,10 +378,11 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 5",
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-7.webp",
-        mobile: "/assets/ysl/ysl-7-mobile.webp",
-        alt: "ysl image 6",
+        // Video2 — BABYCAT spray (same clip both breakpoints)
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-7.mp4",
+        poster: "/assets/ysl/ysl-7.webp",
+        alt: "ysl video 6",
       },
       {
         type: "image",
@@ -365,14 +390,17 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-8-mobile.webp",
         alt: "ysl image 7",
         span: "full",
-        spaceBefore: { mobile: 55, desktop: 0 },
-        spaceAfter: { mobile: 55, desktop: 0 },
+        // 75 desktop / 55 mobile air both sides — video slots above (ysl-7)
+        // and below (ysl-9) are edge-to-edge.
+        spaceBefore: { mobile: 55, desktop: 75 },
+        spaceAfter: { mobile: 55, desktop: 75 },
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-9.webp",
-        mobile: "/assets/ysl/ysl-9-mobile.webp",
-        alt: "ysl image 8",
+        // Video3 — man in black with LIBRE (same clip both breakpoints)
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-9.mp4",
+        poster: "/assets/ysl/ysl-9.webp",
+        alt: "ysl video 8",
       },
       {
         type: "image",
@@ -386,6 +414,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-11-mobile.webp",
         alt: "ysl image 10",
         span: "full",
+        // 75px desktop air — video slots in the pairs above (ysl-9) and
+        // below (ysl-13). Mobile stays flush per review.
+        spaceBefore: { mobile: 0, desktop: 75 },
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         type: "image",
@@ -394,10 +426,13 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 11",
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-13.webp",
-        mobile: "/assets/ysl/ysl-13-mobile.webp",
-        alt: "ysl image 12",
+        // Video4 — Eid retail display; mobile is a genuinely different edit
+        // (18.8s event cut vs 22.3s display cut), so both files ship.
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-13.mp4",
+        mobile: "/assets/ysl/ysl-video-13-mobile.mp4",
+        poster: "/assets/ysl/ysl-13.webp",
+        alt: "ysl video 12",
       },
     ],
 
@@ -614,6 +649,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
 
+    heroVideo: {
+      desktop: "/assets/vivara/vivara-hero-video.mp4",
+      mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
+      poster: "/assets/vivara/vivara-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/vivara/vivara-1.webp",
       mobile: "/assets/vivara/vivara-1-mobile.webp",
@@ -777,6 +818,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
 
+    heroVideo: {
+      desktop: "/assets/life/life-hero-video.mp4",
+      mobile: "/assets/life/life-hero-video-mobile.mp4",
+      poster: "/assets/life/life-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/life/life-1.webp",
       mobile: "/assets/life/life-1-mobile.webp",
@@ -910,6 +957,13 @@ export const projects: ProjectDetail[] = [
     subtitle: "Brand Development",
     description:
       "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
+
+    heroVideo: {
+      desktop: "/assets/sk/sk-hero-video.mp4",
+      // No mobile banner delivered yet (SK-II/MOBILE/VIDEO/ empty as of 2026-07-07);
+      // mobile shows the static heroImage.mobile until Vitor uploads it.
+      poster: "/assets/sk/sk-hero-cover.webp",
+    },
 
     heroImage: {
       desktop: "/assets/sk/sk-1.webp",
@@ -1151,6 +1205,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Creative direction and digital design for Bucherer Fine Jewellery.",
 
+    heroVideo: {
+      desktop: "/assets/bfj/bfj-hero-video.mp4",
+      mobile: "/assets/bfj/bfj-hero-video-mobile.mp4",
+      poster: "/assets/bfj/bfj-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/bfj/bfj-1.webp",
       mobile: "/assets/bfj/bfj-1-mobile.webp",
@@ -1287,6 +1347,12 @@ export const projects: ProjectDetail[] = [
     description:
       "Lorem Ipsum",
 
+    heroVideo: {
+      desktop: "/assets/ouronyx/ouronyx-hero-video.mp4",
+      mobile: "/assets/ouronyx/ouronyx-hero-video-mobile.mp4",
+      poster: "/assets/ouronyx/ouronyx-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/ouronyx/ouronyx-1.webp",
       mobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
@@ -1367,6 +1433,12 @@ export const projects: ProjectDetail[] = [
     headerTheme: "light",
     description:
       "Art direction and visual storytelling for Bride Story, capturing the elegance and emotion of bridal fashion through refined creative direction.",
+
+    heroVideo: {
+      desktop: "/assets/bride-story/bride-story-hero-video.mp4",
+      mobile: "/assets/bride-story/bride-story-hero-video-mobile.mp4",
+      poster: "/assets/bride-story/bride-story-hero-cover.webp",
+    },
 
     heroImage: {
       desktop: "/assets/bride-story/bride-story-1.webp",
@@ -1478,6 +1550,12 @@ export const projects: ProjectDetail[] = [
     subtitle: "Dining Hall",
     description:
       "Creative direction for the Harrods Dining Hall experience.",
+
+    heroVideo: {
+      desktop: "/assets/harrods/harrods-hero-video.mp4",
+      mobile: "/assets/harrods/harrods-hero-video-mobile.mp4",
+      poster: "/assets/harrods/harrods-hero-cover.webp",
+    },
 
     heroImage: {
       desktop: "/assets/harrods/harrods-1.webp",

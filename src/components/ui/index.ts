@@ -1,5 +1,5 @@
 export { GalleryGrid } from "./GalleryGrid";
-export { LazyVideo } from "./LazyVideo";
+export { HeroVideo } from "./HeroVideo";
 export { Logo } from "./Logo";
 export { MediaRenderer } from "./MediaRenderer";
 export { MenuIcon } from "./MenuIcon";
