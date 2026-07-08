@@ -410,6 +410,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-11-mobile.webp",
         alt: "ysl image 10",
         span: "full",
+        // 75px desktop air — video slots in the pairs above (ysl-9) and
+        // below (ysl-13). Mobile 60 matches the project fullRowSpacing.
+        spaceBefore: { mobile: 60, desktop: 75 },
+        spaceAfter: { mobile: 60, desktop: 75 },
       },
       {
         type: "image",
