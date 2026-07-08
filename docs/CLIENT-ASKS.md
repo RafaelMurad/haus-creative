@@ -18,18 +18,16 @@ version of the gold-logo banner animation.
 (the YSL logo is centered, so it crops safely). Swapping in the real file
 later is a one-line config change.
 
-## 2. SK-II — mobile banner never uploaded
+## 2. SK-II — confirm the empty mobile VIDEO folder
 
-`EXPORT/SK-II/MOBILE/VIDEO/` was created on **7 Jul at 11:19** but is still
-empty. The desktop file (`SK II - BANNER DESKTOP.mp4`) is delivered and live —
-per the Figma tags it plays in the **sk-8 gallery slot** (SK's hero stays a
-static image).
+Per review (2026-07-08), SK plays the delivered video in the **sk-8 gallery
+slot on desktop only** — mobile shows the static image, as designed (SK's
+hero is static on both breakpoints). But `EXPORT/SK-II/MOBILE/VIDEO/` was
+created on 7 Jul and left empty.
 
-**Ask:** upload the SK-II mobile video (the portrait cut for that gallery
-slot) into that folder.
-
-**Meanwhile on the site:** the desktop file plays in the sk-8 slot on mobile
-too.
+**Ask (low priority):** confirm the empty folder is vestigial and no SK-II
+mobile video is coming. If one is intended after all, upload it there and
+we'll wire it.
 
 ## Resolved — no action needed
 
