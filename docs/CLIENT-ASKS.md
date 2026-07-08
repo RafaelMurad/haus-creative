@@ -37,8 +37,11 @@ we'll wire it.
 
 ## Pending on our side (not client asks)
 
-- **WAO** — 10 new clips in `EXPORT/WAO/VIDEOS/` need Figma slot mapping
-  (none labeled "banner"); waiting on the tagged column screenshot.
+- ~~WAO~~ resolved 2026-07-08: all 10 clips mapped via the tagged columns to
+  slots wao-2 and wao-13…21 (hero untagged → stays static). Wired.
 - ~~Bucherer Summer~~ resolved 2026-07-08: the tagged column shows one video
   (both frames) at the bucherer-8 collage slot — the March `4x5.mp4` covers
   it; no banner expected. Wired.
+
+**All 11 projects are now reviewed against their Figma tags and wired.** The
+only outstanding items are asks #1 and #2 above.
