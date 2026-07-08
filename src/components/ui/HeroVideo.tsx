@@ -1,6 +1,9 @@
 "use client";
 
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  MOBILE_MEDIA_QUERY,
+  useResponsiveVideoSource,
+} from "@/hooks/useMediaQuery";
 
 interface HeroVideoProps {
   /** Omit to render no video on desktop (mobile-only hero, e.g. MC Arabia). */
@@ -33,14 +36,12 @@ export function HeroVideo({
   objectFit = "cover",
   objectPosition = "center",
 }: HeroVideoProps) {
-  const isMobile = useMediaQuery("(max-width: 767.98px)");
-  const resolved =
-    isMobile === null ? null : isMobile ? (mobile ?? desktop) : desktop;
+  const resolved = useResponsiveVideoSource(desktop, mobile);
 
   if (!desktop && !mobile) return null;
   // Breakpoint known but this side has no file (e.g. desktop viewport on a
   // mobile-only hero) — render nothing.
-  if (isMobile !== null && !resolved) return null;
+  if (resolved === undefined) return null;
 
   return (
     <video
@@ -58,11 +59,7 @@ export function HeroVideo({
       {resolved === null && (
         <>
           {mobile && (
-            <source
-              src={mobile}
-              type="video/mp4"
-              media="(max-width: 767.98px)"
-            />
+            <source src={mobile} type="video/mp4" media={MOBILE_MEDIA_QUERY} />
           )}
           {desktop && <source src={desktop} type="video/mp4" />}
         </>

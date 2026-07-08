@@ -1,7 +1,10 @@
 "use client";
 
 import type { ProjectMedia } from "@/config/projects";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  MOBILE_MEDIA_QUERY,
+  useResponsiveVideoSource,
+} from "@/hooks/useMediaQuery";
 
 interface GalleryVideoProps {
   item: ProjectMedia;
@@ -18,13 +21,7 @@ interface GalleryVideoProps {
  * resize by itself.
  */
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
-  const isMobile = useMediaQuery("(max-width: 767.98px)");
-  const resolved =
-    isMobile === null
-      ? null
-      : isMobile
-        ? (item.mobile ?? item.desktop)
-        : item.desktop;
+  const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
 
   return (
     <video
@@ -44,7 +41,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
             <source
               src={item.mobile}
               type="video/mp4"
-              media="(max-width: 767.98px)"
+              media={MOBILE_MEDIA_QUERY}
             />
           )}
           <source src={item.desktop} type="video/mp4" />
