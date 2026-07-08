@@ -337,7 +337,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-2-mobile.webp",
         alt: "ysl image 1",
         span: "full",
-        spaceAfter: { mobile: 55, desktop: 0 },
+        // Desktop 75 matches ysl-5's air — the video slot below is edge-to-edge.
+        spaceAfter: { mobile: 55, desktop: 75 },
       },
       {
         // Video1 — woman with lipstick (same clip both breakpoints; the
@@ -360,11 +361,11 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 4",
         span: "full",
         // The neighbouring video slots are edge-to-edge clips (no baked-in
-        // whitespace like the desktop image EXPORTs), so this row needs the
-        // standard 150px desktop air explicitly. Mobile keeps the project's
+        // whitespace like the desktop image EXPORTs), so this row needs
+        // explicit desktop air — 75px per review. Mobile keeps the project's
         // usual 60.
-        spaceBefore: { mobile: 60, desktop: 150 },
-        spaceAfter: { mobile: 60, desktop: 150 },
+        spaceBefore: { mobile: 60, desktop: 75 },
+        spaceAfter: { mobile: 60, desktop: 75 },
       },
       {
         type: "image",
