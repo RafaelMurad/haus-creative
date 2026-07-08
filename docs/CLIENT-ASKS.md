@@ -39,6 +39,6 @@ we'll wire it.
 
 - **WAO** — 10 new clips in `EXPORT/WAO/VIDEOS/` need Figma slot mapping
   (none labeled "banner"); waiting on the tagged column screenshot.
-- **Bucherer Summer** — only the March `4x5.mp4` exists; the design marks the
-  project as video. Confirm against the tagged Figma column whether that file
-  covers it or a banner is expected (if a banner is expected, it becomes ask #3).
+- ~~Bucherer Summer~~ resolved 2026-07-08: the tagged column shows one video
+  (both frames) at the bucherer-8 collage slot — the March `4x5.mp4` covers
+  it; no banner expected. Wired.
