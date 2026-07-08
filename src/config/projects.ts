@@ -1355,7 +1355,6 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/bfj/bfj-10.webp",
         mobile: "/assets/bfj/bfj-10-mobile.webp",
         alt: "bfj gallery image 9",
-        spaceBefore: { mobile: 0, desktop: 100 },
       },
       {
         type: "image",
