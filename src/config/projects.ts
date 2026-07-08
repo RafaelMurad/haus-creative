@@ -1167,10 +1167,12 @@ export const projects: ProjectDetail[] = [
         alt: "bucherer image 6",
       },
       {
-        type: "image",
-        desktop: "/assets/bucherer/bucherer-8.webp",
-        mobile: "/assets/bucherer/bucherer-8-mobile.webp",
-        alt: "bucherer image 7",
+        // Figma tags this slot as the project's one video (both frames) —
+        // the March 4x5.mp4 collage clip. Same file plays on mobile.
+        type: "video",
+        desktop: "/assets/bucherer/bucherer-video-8.mp4",
+        poster: "/assets/bucherer/bucherer-8.webp",
+        alt: "bucherer video 7",
       },
       {
         type: "image",
