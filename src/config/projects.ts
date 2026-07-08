@@ -482,10 +482,11 @@ export const projects: ProjectDetail[] = [
 
     media: [
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-2.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-2-mobile.webp",
-        alt: "wao-cosmo image 1",
+        type: "video",
+        // Video1 — COSMOPOLITAN covers collage (Figma-tagged slot)
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-2.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-2.webp",
+        alt: "wao-cosmo video 1",
       },
       {
         type: "image",
@@ -550,61 +551,70 @@ export const projects: ProjectDetail[] = [
         alt: "wao-cosmo image 11",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-13.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-13-mobile.webp",
-        alt: "wao-cosmo image 12",
+        type: "video",
+        // Video2 — white puffer with dog
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-13.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-13.webp",
+        alt: "wao-cosmo video 12",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-14.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-14-mobile.webp",
-        alt: "wao-cosmo image 13",
+        type: "video",
+        // Video3 — dark photo collage
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-14.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-14.webp",
+        alt: "wao-cosmo video 13",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-15.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-15-mobile.webp",
-        alt: "wao-cosmo image 14",
+        type: "video",
+        // Video4 — street duo ("My name is Zumi")
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
+        alt: "wao-cosmo video 14",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-16.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-16-mobile.webp",
-        alt: "wao-cosmo image 15",
+        type: "video",
+        // Video5 — red dress on the curb
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
+        alt: "wao-cosmo video 15",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-17.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-17-mobile.webp",
-        alt: "wao-cosmo image 16",
+        type: "video",
+        // Video6 — yellow dress at the doorway
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
+        alt: "wao-cosmo video 16",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-18.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-18-mobile.webp",
-        alt: "wao-cosmo image 17",
+        type: "video",
+        // Video7 — VETEMENTS coat over the bridge
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
+        alt: "wao-cosmo video 17",
         spaceBefore: true,
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-19.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-19-mobile.webp",
-        alt: "wao-cosmo image 18",
+        type: "video",
+        // Video8 — escalator
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
+        alt: "wao-cosmo video 18",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-20-mobile.webp",
-        alt: "wao-cosmo image 19",
+        type: "video",
+        // Video9 — tan coat, blurred street
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
+        alt: "wao-cosmo video 19",
         spaceBefore: { mobile: 55, desktop: 55 },
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-21-mobile.webp",
-        alt: "wao-cosmo image 20",
+        type: "video",
+        // Video10 — evening street reflection
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
+        alt: "wao-cosmo video 20",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
