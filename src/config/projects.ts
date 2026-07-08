@@ -300,6 +300,16 @@ export const projects: ProjectDetail[] = [
     description:
       "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
 
+    // Desktop-only for now: the delivered YSL-HomeBanner-Mobile.mp4 is a
+    // byte-for-byte duplicate of gallery clip 3 (md5 534aebbc…), not a
+    // portrait banner — re-export requested from client. Until then the
+    // renderer plays the desktop banner on mobile (logo is centered, crops
+    // safely).
+    heroVideo: {
+      desktop: "/assets/ysl/ysl-hero-video.mp4",
+      poster: "/assets/ysl/ysl-hero-cover.webp",
+    },
+
     heroImage: {
       desktop: "/assets/ysl/ysl-1.webp",
       mobile: "/assets/ysl/ysl-1-mobile.webp",
@@ -330,10 +340,12 @@ export const projects: ProjectDetail[] = [
         spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-3.webp",
-        mobile: "/assets/ysl/ysl-3-mobile.webp",
-        alt: "ysl image 2",
+        // Video1 — woman with lipstick (same clip both breakpoints; the
+        // delivered MOBILE/01.mp4 is byte-identical to YSL-Video1.mp4).
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-3.mp4",
+        poster: "/assets/ysl/ysl-3.webp",
+        alt: "ysl video 2",
       },
       {
         type: "image",
@@ -355,10 +367,11 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 5",
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-7.webp",
-        mobile: "/assets/ysl/ysl-7-mobile.webp",
-        alt: "ysl image 6",
+        // Video2 — BABYCAT spray (same clip both breakpoints)
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-7.mp4",
+        poster: "/assets/ysl/ysl-7.webp",
+        alt: "ysl video 6",
       },
       {
         type: "image",
@@ -370,10 +383,11 @@ export const projects: ProjectDetail[] = [
         spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-9.webp",
-        mobile: "/assets/ysl/ysl-9-mobile.webp",
-        alt: "ysl image 8",
+        // Video3 — man in black with LIBRE (same clip both breakpoints)
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-9.mp4",
+        poster: "/assets/ysl/ysl-9.webp",
+        alt: "ysl video 8",
       },
       {
         type: "image",
@@ -395,10 +409,13 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 11",
       },
       {
-        type: "image",
-        desktop: "/assets/ysl/ysl-13.webp",
-        mobile: "/assets/ysl/ysl-13-mobile.webp",
-        alt: "ysl image 12",
+        // Video4 — Eid retail display; mobile is a genuinely different edit
+        // (18.8s event cut vs 22.3s display cut), so both files ship.
+        type: "video",
+        desktop: "/assets/ysl/ysl-video-13.mp4",
+        mobile: "/assets/ysl/ysl-video-13-mobile.mp4",
+        poster: "/assets/ysl/ysl-13.webp",
+        alt: "ysl video 12",
       },
     ],
 

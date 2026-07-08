@@ -73,11 +73,12 @@ describe("GalleryGrid", () => {
     const { container } = render(<GalleryGrid media={media} />);
     const video = container.querySelector("video");
     expect(video).toBeInTheDocument();
-    const source = video?.querySelector("source");
-    expect(source).toHaveAttribute("src", "/assets/gallery/vid-1.mp4");
+    // GalleryVideo resolves a single src for the current breakpoint after
+    // hydration (jest matchMedia mock reports desktop).
+    expect(video).toHaveAttribute("src", "/assets/gallery/vid-1.mp4");
   });
 
-  it("renders video with mobile source when provided", () => {
+  it("resolves the desktop file when a mobile source is provided (desktop viewport)", () => {
     const media: ProjectMedia[] = [
       {
         type: "video",
@@ -87,10 +88,10 @@ describe("GalleryGrid", () => {
       },
     ];
     const { container } = render(<GalleryGrid media={media} />);
-    const sources = container.querySelectorAll("source");
-    expect(sources).toHaveLength(2);
-    expect(sources[0]).toHaveAttribute("src", "/vid-mobile.mp4");
-    expect(sources[1]).toHaveAttribute("src", "/vid.mp4");
+    expect(container.querySelector("video")).toHaveAttribute(
+      "src",
+      "/vid.mp4",
+    );
   });
 
   // =========================================================================
