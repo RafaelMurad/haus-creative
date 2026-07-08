@@ -340,9 +340,10 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-2-mobile.webp",
         alt: "ysl image 1",
         span: "full",
-        // Desktop-only air (75) — the video slot below is edge-to-edge.
-        // Mobile stays flush per review.
-        spaceAfter: { mobile: 0, desktop: 75 },
+        // 75 desktop / 55 mobile below — the video slot underneath is
+        // edge-to-edge; 55 is the standard mobile gap used on per-slot
+        // overrides across projects.
+        spaceAfter: { mobile: 55, desktop: 75 },
       },
       {
         // Video1 — woman with lipstick (same clip both breakpoints; the
