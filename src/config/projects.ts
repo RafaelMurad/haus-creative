@@ -40,6 +40,24 @@ export interface ProjectMedia {
   /** Poster image for video items — shown before playback starts. */
   poster?: string;
 
+  /**
+   * Designed card aspect for video slots, as "width/height" (take it from the
+   * slot's still, e.g. "720/960"). The clip renders object-cover inside this
+   * box, so pair rows keep the designed alignment when the delivered clip's
+   * dimensions differ from the still's. Omit to render at the clip's natural
+   * aspect.
+   */
+  aspect?: string;
+
+  /**
+   * CSS inset (top right bottom left) locating the video within its aspect
+   * card — for slots whose still bakes framing whitespace around the photo.
+   * Measured from the still (cropdetect). The still renders as the card
+   * (frame included) and the clip plays over its photo area. Requires
+   * `aspect`.
+   */
+  inset?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -482,10 +500,12 @@ export const projects: ProjectDetail[] = [
 
     media: [
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-2.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-2-mobile.webp",
-        alt: "wao-cosmo image 1",
+        type: "video",
+        // Video1 — COSMOPOLITAN covers collage (Figma-tagged slot)
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-2.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-2.webp",
+        aspect: "720/960",
+        alt: "wao-cosmo video 1",
       },
       {
         type: "image",
@@ -550,61 +570,96 @@ export const projects: ProjectDetail[] = [
         alt: "wao-cosmo image 11",
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-13.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-13-mobile.webp",
-        alt: "wao-cosmo image 12",
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-14.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-14-mobile.webp",
-        alt: "wao-cosmo image 13",
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-15.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-15-mobile.webp",
-        alt: "wao-cosmo image 14",
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-16.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-16-mobile.webp",
-        alt: "wao-cosmo image 15",
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-17.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-17-mobile.webp",
-        alt: "wao-cosmo image 16",
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-18.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-18-mobile.webp",
-        alt: "wao-cosmo image 17",
-        spaceBefore: true,
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-19.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-19-mobile.webp",
-        alt: "wao-cosmo image 18",
+        type: "video",
+        // Video2 — white puffer with dog
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-13.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-13.webp",
+        aspect: "720/1137",
+        alt: "wao-cosmo video 12",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-20-mobile.webp",
-        alt: "wao-cosmo image 19",
+        type: "video",
+        // Video3 — dark photo collage
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-14.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-14.webp",
+        aspect: "720/1065",
+        inset: "12.77% 5.83% 12.11% 11.11%",
+        alt: "wao-cosmo video 13",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "video",
+        // Video4 — street duo ("My name is Zumi")
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
+        aspect: "720/1065",
+        // Top gutter bumped from the measured 0% per review — was too close
+        // to the row above.
+        inset: "5% 11.39% 0% 5.56%",
+        alt: "wao-cosmo video 14",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "video",
+        // Video5 — red dress on the curb
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
+        aspect: "720/1194",
+        inset: "0% 5.56% 10.89% 11.39%",
+        alt: "wao-cosmo video 15",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "video",
+        // Video6 — yellow dress at the doorway
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
+        aspect: "720/1194",
+        inset: "10.89% 11.39% 0% 5.56%",
+        alt: "wao-cosmo video 16",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "video",
+        // Video7 — VETEMENTS coat over the bridge
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
+        aspect: "720/1191",
+        inset: "0% 5.56% 10.83% 11.39%",
+        alt: "wao-cosmo video 17",
+        // Was `true` (38 desktop / 15 mobile); desktop kept, mobile
+        // standardised to the 55 gap used between stacked slots.
+        spaceBefore: { mobile: 55, desktop: 38 },
+      },
+      {
+        type: "video",
+        // Video8 — escalator
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
+        aspect: "720/1191",
+        inset: "10.92% 11.39% 0% 5.56%",
+        alt: "wao-cosmo video 18",
+        spaceBefore: { mobile: 55, desktop: 0 },
+      },
+      {
+        type: "video",
+        // Video9 — tan coat, blurred street
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
+        aspect: "720/1194",
+        inset: "0% 5.56% 19.1% 11.39%",
+        alt: "wao-cosmo video 19",
         spaceBefore: { mobile: 55, desktop: 55 },
       },
       {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-21-mobile.webp",
-        alt: "wao-cosmo image 20",
+        type: "video",
+        // Video10 — evening street reflection
+        desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
+        poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
+        aspect: "720/1194",
+        inset: "10.89% 11.39% 6.2% 5.56%",
+        alt: "wao-cosmo video 20",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
       {

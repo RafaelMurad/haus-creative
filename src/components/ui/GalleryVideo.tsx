@@ -23,15 +23,19 @@ interface GalleryVideoProps {
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
   const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
 
-  return (
+  const video = (
     <video
       key={resolved ?? "pre-hydration"}
-      className="w-full h-auto block"
+      className={
+        item.aspect
+          ? "block w-full h-auto md:h-full md:object-cover"
+          : "w-full h-auto block"
+      }
       playsInline
       autoPlay
       loop
       muted
-      poster={item.poster}
+      poster={item.inset ? undefined : item.poster}
       preload={index < 2 ? "metadata" : "none"}
       src={resolved ?? undefined}
     >
@@ -49,4 +53,29 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       )}
     </video>
   );
+
+  // Desktop only: the designed card box (aspect from the slot still) with
+  // the clip inset inside it — the framing whitespace stays as page
+  // background. The inset sits on a plain div because absolutely-positioned
+  // replaced elements (video) don't stretch between top/bottom offsets;
+  // divs do, and the video fills the div. On mobile both wrappers are
+  // inert and the clip renders natural-aspect edge-to-edge, stacking like
+  // the static images (per-slot mobile spacing comes from config).
+  if (item.aspect) {
+    return (
+      <div
+        className="relative w-full md:aspect-[var(--card-ar)]"
+        style={{ "--card-ar": item.aspect } as React.CSSProperties}
+      >
+        <div
+          className="md:absolute md:[inset:var(--card-inset)]"
+          style={{ "--card-inset": item.inset ?? "0" } as React.CSSProperties}
+        >
+          {video}
+        </div>
+      </div>
+    );
+  }
+
+  return video;
 }
