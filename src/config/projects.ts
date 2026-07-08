@@ -359,6 +359,12 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-5-mobile.webp",
         alt: "ysl image 4",
         span: "full",
+        // The neighbouring video slots are edge-to-edge clips (no baked-in
+        // whitespace like the desktop image EXPORTs), so this row needs the
+        // standard 150px desktop air explicitly. Mobile keeps the project's
+        // usual 60.
+        spaceBefore: { mobile: 60, desktop: 150 },
+        spaceAfter: { mobile: 60, desktop: 150 },
       },
       {
         type: "image",
