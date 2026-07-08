@@ -28,14 +28,15 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       key={resolved ?? "pre-hydration"}
       className={
         item.aspect
-          ? "absolute inset-0 w-full h-full object-cover"
+          ? "absolute object-cover"
           : "w-full h-auto block"
       }
+      style={item.aspect ? { inset: item.inset ?? 0 } : undefined}
       playsInline
       autoPlay
       loop
       muted
-      poster={item.poster}
+      poster={item.inset ? undefined : item.poster}
       preload={index < 2 ? "metadata" : "none"}
       src={resolved ?? undefined}
     >
@@ -55,7 +56,9 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
   );
 
   // The designed card box (from the slot still) — the clip covers it, so
-  // pair rows keep their designed alignment when clip dims differ.
+  // pair rows keep their designed alignment when clip dims differ. Framed
+  // slots (`inset`) position the clip inside the card, leaving the framing
+  // whitespace around it as plain page background.
   if (item.aspect) {
     return (
       <div className="relative w-full" style={{ aspectRatio: item.aspect }}>

@@ -49,6 +49,15 @@ export interface ProjectMedia {
    */
   aspect?: string;
 
+  /**
+   * CSS inset (top right bottom left) locating the video within its aspect
+   * card — for slots whose still bakes framing whitespace around the photo.
+   * Measured from the still (cropdetect). The still renders as the card
+   * (frame included) and the clip plays over its photo area. Requires
+   * `aspect`.
+   */
+  inset?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -574,6 +583,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-14.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-14.webp",
         aspect: "720/1065",
+        inset: "12.77% 5.83% 12.11% 11.11%",
         alt: "wao-cosmo video 13",
       },
       {
@@ -582,6 +592,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
         aspect: "720/1065",
+        inset: "0% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 14",
       },
       {
@@ -590,6 +601,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
         aspect: "720/1194",
+        inset: "0% 5.56% 10.89% 11.39%",
         alt: "wao-cosmo video 15",
       },
       {
@@ -598,6 +610,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
         aspect: "720/1194",
+        inset: "10.89% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 16",
       },
       {
@@ -606,6 +619,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
         aspect: "720/1191",
+        inset: "0% 5.56% 10.83% 11.39%",
         alt: "wao-cosmo video 17",
         spaceBefore: true,
       },
@@ -615,6 +629,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
         aspect: "720/1191",
+        inset: "10.92% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 18",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
@@ -624,6 +639,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
         aspect: "720/1194",
+        inset: "0% 5.56% 19.1% 11.39%",
         alt: "wao-cosmo video 19",
         spaceBefore: { mobile: 55, desktop: 55 },
       },
@@ -633,6 +649,7 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
         aspect: "720/1194",
+        inset: "10.89% 11.39% 6.2% 5.56%",
         alt: "wao-cosmo video 20",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
