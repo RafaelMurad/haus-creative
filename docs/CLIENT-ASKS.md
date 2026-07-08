@@ -21,11 +21,15 @@ later is a one-line config change.
 ## 2. SK-II — mobile banner never uploaded
 
 `EXPORT/SK-II/MOBILE/VIDEO/` was created on **7 Jul at 11:19** but is still
-empty. Desktop (`SK II - BANNER DESKTOP.mp4`) is delivered and live.
+empty. The desktop file (`SK II - BANNER DESKTOP.mp4`) is delivered and live —
+per the Figma tags it plays in the **sk-8 gallery slot** (SK's hero stays a
+static image).
 
-**Ask:** upload the SK-II mobile banner video into that folder.
+**Ask:** upload the SK-II mobile video (the portrait cut for that gallery
+slot) into that folder.
 
-**Meanwhile on the site:** SK's mobile hero shows the static mobile image.
+**Meanwhile on the site:** the desktop file plays in the sk-8 slot on mobile
+too.
 
 ## Resolved — no action needed
 

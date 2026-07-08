@@ -958,13 +958,8 @@ export const projects: ProjectDetail[] = [
     description:
       "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
 
-    heroVideo: {
-      desktop: "/assets/sk/sk-hero-video.mp4",
-      // No mobile banner delivered yet (SK-II/MOBILE/VIDEO/ empty as of 2026-07-07);
-      // mobile shows the static heroImage.mobile until Vitor uploads it.
-      poster: "/assets/sk/sk-hero-cover.webp",
-    },
-
+    // Per Figma, SK's hero is static — the delivered "BANNER" video is the
+    // sk-8 gallery slot below, not a hero.
     heroImage: {
       desktop: "/assets/sk/sk-1.webp",
       mobile: "/assets/sk/sk-1-mobile.webp",
@@ -1023,10 +1018,14 @@ export const projects: ProjectDetail[] = [
         alt: "sk image 6",
       },
       {
-        type: "image",
-        desktop: "/assets/sk/sk-8.webp",
-        mobile: "/assets/sk/sk-8-mobile.webp",
-        alt: "sk image 7",
+        // Figma tags this slot (not the hero) as the video — the delivered
+        // "SK II - BANNER DESKTOP.mp4" plays here. No mobile cut delivered
+        // yet (docs/CLIENT-ASKS.md); the desktop file plays on mobile
+        // meanwhile.
+        type: "video",
+        desktop: "/assets/sk/sk-video-8.mp4",
+        poster: "/assets/sk/sk-8.webp",
+        alt: "sk video 7",
         span: "full",
         // Match Marie Claire's full-width rows: 150px above AND below so the
         // module under the horizontal photo isn't touching it (Figma comment #12).
