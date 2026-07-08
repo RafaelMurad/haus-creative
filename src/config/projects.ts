@@ -96,7 +96,8 @@ export interface ProjectDetail {
 
   // Hero Media
   heroVideo?: {
-    desktop: string;
+    /** Omit for mobile-only hero video — desktop then falls back to heroImage. */
+    desktop?: string;
     mobile?: string;
     poster?: string;
     /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
@@ -180,12 +181,12 @@ export const projects: ProjectDetail[] = [
     editorialSubtitle: "September Issue - Back to Work Editorial",
     agency: "ITP Media",
 
-    // heroVideo available but disabled until landscape version is provided:
-    // heroVideo: {
-    //   desktop: "/assets/mc-arabia/mc-arabia-hero-video.mp4",
-    //   mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
-    //   poster: "/assets/mc-arabia/mc-arabia-hero.webp",
-    // },
+    // Per Figma, the hero video is mobile-only (tag on the mobile frame);
+    // desktop keeps the static editorial image below.
+    heroVideo: {
+      mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
+      poster: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
+    },
 
     heroImage: {
       desktop: "/assets/mc-arabia/mc-arabia-hero.webp",

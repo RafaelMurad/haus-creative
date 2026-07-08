@@ -3,7 +3,8 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface HeroVideoProps {
-  desktop: string;
+  /** Omit to render no video on desktop (mobile-only hero, e.g. MC Arabia). */
+  desktop?: string;
   mobile?: string;
   poster?: string;
   objectFit?: "cover" | "contain";
@@ -19,8 +20,11 @@ interface HeroVideoProps {
  * video never swaps files when the window is resized. This component tracks
  * the breakpoint with matchMedia and remounts the element (`key`) with the
  * right file instead. Until the breakpoint is known (SSR + first paint) it
- * renders both sources and lets the browser pick, so no-JS and first-paint
- * behavior match the previous markup.
+ * renders the provided sources and lets the browser pick, so no-JS and
+ * first-paint behavior match the previous markup.
+ *
+ * When only one side has a file, the other side renders nothing — the page
+ * supplies its own fallback (e.g. the static heroImage on desktop).
  */
 export function HeroVideo({
   desktop,
@@ -29,9 +33,14 @@ export function HeroVideo({
   objectFit = "cover",
   objectPosition = "center",
 }: HeroVideoProps) {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 767.98px)");
   const resolved =
     isMobile === null ? null : isMobile ? (mobile ?? desktop) : desktop;
+
+  if (!desktop && !mobile) return null;
+  // Breakpoint known but this side has no file (e.g. desktop viewport on a
+  // mobile-only hero) — render nothing.
+  if (isMobile !== null && !resolved) return null;
 
   return (
     <video
@@ -49,9 +58,13 @@ export function HeroVideo({
       {resolved === null && (
         <>
           {mobile && (
-            <source src={mobile} type="video/mp4" media="(max-width: 768px)" />
+            <source
+              src={mobile}
+              type="video/mp4"
+              media="(max-width: 767.98px)"
+            />
           )}
-          <source src={desktop} type="video/mp4" />
+          {desktop && <source src={desktop} type="video/mp4" />}
         </>
       )}
     </video>

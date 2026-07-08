@@ -72,7 +72,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
       <section
         id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
-          project.heroVideo
+          project.heroVideo?.desktop
             ? project.heroImage?.mobile
               ? "aspect-[440/864] md:aspect-auto md:h-dvh"
               : "h-dvh"
@@ -92,7 +92,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <span className="ml-1 opacity-60">·hero</span>
           </div>
         )}
-        {project.heroVideo ? (
+        {project.heroVideo?.desktop ? (
           <>
             {/* Mobile fallback: static heroImage only when no mobile video was
                 delivered — the Jul 2 batch added true portrait crops for most
@@ -141,7 +141,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               //   (e.g. "BRIDE", "Harrods Dining Hall") don't get cropped.
               return (
                 <>
-                  {project.heroImage.mobile && (
+                  {/* Mobile static image yields to a mobile hero video below */}
+                  {project.heroImage.mobile && !project.heroVideo?.mobile && (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={project.heroImage.mobile}
@@ -191,6 +192,20 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             );
           })()
         ) : null}
+
+        {/* Mobile-only hero video (e.g. MC Arabia): the static heroImage above
+            keeps the desktop; crossing the breakpoint swaps the source to the
+            delivered portrait banner (HeroVideo renders nothing on desktop). */}
+        {!project.heroVideo?.desktop && project.heroVideo?.mobile && (
+          <div className="absolute inset-0 md:hidden">
+            <HeroVideo
+              mobile={project.heroVideo.mobile}
+              poster={project.heroVideo.poster}
+              objectFit={project.heroVideo.objectFit}
+              objectPosition={project.heroVideo.objectPosition}
+            />
+          </div>
+        )}
 
         {/* Client logo overlay - hidden when hero video is present (logo baked into video) */}
         {project.clientLogo && !project.heroVideo && (

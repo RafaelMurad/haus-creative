@@ -141,10 +141,12 @@ describe("ProjectPage", () => {
     }
   });
 
-  it("keeps viewport height on the hero section for video projects", () => {
+  it("keeps viewport height on the hero section for desktop-video projects", () => {
     // Regression: contain-mode heroImages set md:h-auto, which collapses the
     // section to zero height when the hero is an absolutely-positioned video.
-    const videoProjects = projects.filter((p) => p.heroVideo);
+    // Mobile-only heroVideos (no desktop file) legitimately keep md:h-auto —
+    // their desktop hero is the in-flow static image.
+    const videoProjects = projects.filter((p) => p.heroVideo?.desktop);
     expect(videoProjects.length).toBeGreaterThan(0);
 
     videoProjects.forEach((project) => {
@@ -159,9 +161,29 @@ describe("ProjectPage", () => {
     });
   });
 
+  it("renders static desktop hero for mobile-only heroVideo projects", () => {
+    // mc-arabia: video plays only below the breakpoint; desktop (the jsdom
+    // default via the matchMedia mock) shows the static heroImage instead.
+    const mobileOnlyProject = projects.find(
+      (p) => p.heroVideo?.mobile && !p.heroVideo.desktop,
+    );
+
+    if (mobileOnlyProject) {
+      const { container } = render(
+        <ProjectPage params={{ slug: mobileOnlyProject.slug }} />,
+      );
+
+      expect(container.querySelector("video")).not.toBeInTheDocument();
+      const heroImgs = screen.getAllByAltText(mobileOnlyProject.heroImage!.alt);
+      expect(heroImgs.length).toBeGreaterThan(0);
+    }
+  });
+
   it("renders hero video when project has heroVideo with mobile source", () => {
     // ouronyx has heroVideo.mobile
-    const videoProject = projects.find((p) => p.heroVideo?.mobile);
+    const videoProject = projects.find(
+      (p) => p.heroVideo?.desktop && p.heroVideo.mobile,
+    );
 
     if (videoProject) {
       const { container } = render(

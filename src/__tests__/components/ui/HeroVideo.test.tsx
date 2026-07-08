@@ -54,6 +54,38 @@ describe("HeroVideo", () => {
     );
   });
 
+  it("renders nothing on desktop for a mobile-only hero video", () => {
+    mockMatchMedia(false);
+    const { container } = render(<HeroVideo mobile="/m.mp4" />);
+
+    expect(container.querySelector("video")).not.toBeInTheDocument();
+  });
+
+  it("plays the mobile file on mobile for a mobile-only hero video", () => {
+    mockMatchMedia(true);
+    const { container } = render(<HeroVideo mobile="/m.mp4" />);
+
+    expect(container.querySelector("video")!.getAttribute("src")).toBe(
+      "/m.mp4",
+    );
+  });
+
+  it("appears and disappears as the breakpoint flips on a mobile-only hero video", () => {
+    const media = mockMatchMedia(true);
+    const { container } = render(<HeroVideo mobile="/m.mp4" />);
+    expect(container.querySelector("video")!.getAttribute("src")).toBe(
+      "/m.mp4",
+    );
+
+    media.fire(false);
+    expect(container.querySelector("video")).not.toBeInTheDocument();
+
+    media.fire(true);
+    expect(container.querySelector("video")!.getAttribute("src")).toBe(
+      "/m.mp4",
+    );
+  });
+
   it("swaps the source when the viewport crosses the breakpoint", () => {
     const media = mockMatchMedia(false);
     const { container } = render(
