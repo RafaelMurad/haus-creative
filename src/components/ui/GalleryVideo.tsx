@@ -27,7 +27,9 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
     <video
       key={resolved ?? "pre-hydration"}
       className={
-        item.aspect ? "w-full h-full object-cover" : "w-full h-auto block"
+        item.aspect
+          ? "block w-full h-auto md:h-full md:object-cover"
+          : "w-full h-auto block"
       }
       playsInline
       autoPlay
@@ -52,17 +54,23 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
     </video>
   );
 
-  // The designed card box (from the slot still) — the clip covers it, so
-  // pair rows keep their designed alignment when clip dims differ. Framed
-  // slots (`inset`) position the clip inside the card, leaving the framing
-  // whitespace around it as page background. The inset sits on a plain div:
-  // absolutely-positioned replaced elements (video) don't stretch between
-  // top/bottom offsets — they'd render at intrinsic size and overflow the
-  // card — but divs do, and the video fills the div with w/h 100%.
+  // Desktop only: the designed card box (aspect from the slot still) with
+  // the clip inset inside it — the framing whitespace stays as page
+  // background. The inset sits on a plain div because absolutely-positioned
+  // replaced elements (video) don't stretch between top/bottom offsets;
+  // divs do, and the video fills the div. On mobile both wrappers are
+  // inert and the clip renders natural-aspect edge-to-edge, stacking like
+  // the static images (per-slot mobile spacing comes from config).
   if (item.aspect) {
     return (
-      <div className="relative w-full" style={{ aspectRatio: item.aspect }}>
-        <div className="absolute" style={{ inset: item.inset ?? 0 }}>
+      <div
+        className="relative w-full md:aspect-[var(--card-ar)]"
+        style={{ "--card-ar": item.aspect } as React.CSSProperties}
+      >
+        <div
+          className="md:absolute md:[inset:var(--card-inset)]"
+          style={{ "--card-inset": item.inset ?? "0" } as React.CSSProperties}
+        >
           {video}
         </div>
       </div>

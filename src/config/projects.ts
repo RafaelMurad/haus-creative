@@ -576,6 +576,7 @@ export const projects: ProjectDetail[] = [
         poster: "/assets/wao-cosmo/wao-cosmo-13.webp",
         aspect: "720/1137",
         alt: "wao-cosmo video 12",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "video",
@@ -585,6 +586,7 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1065",
         inset: "12.77% 5.83% 12.11% 11.11%",
         alt: "wao-cosmo video 13",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "video",
@@ -596,6 +598,7 @@ export const projects: ProjectDetail[] = [
         // to the row above.
         inset: "5% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 14",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "video",
@@ -605,6 +608,7 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1194",
         inset: "0% 5.56% 10.89% 11.39%",
         alt: "wao-cosmo video 15",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "video",
@@ -614,6 +618,7 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1194",
         inset: "10.89% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 16",
+        spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
         type: "video",
@@ -623,7 +628,9 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1191",
         inset: "0% 5.56% 10.83% 11.39%",
         alt: "wao-cosmo video 17",
-        spaceBefore: true,
+        // Was `true` (38 desktop / 15 mobile); desktop kept, mobile
+        // standardised to the 55 gap used between stacked slots.
+        spaceBefore: { mobile: 55, desktop: 38 },
       },
       {
         type: "video",
