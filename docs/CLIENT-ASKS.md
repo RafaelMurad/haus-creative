@@ -29,6 +29,19 @@ created on 7 Jul and left empty.
 mobile video is coming. If one is intended after all, upload it there and
 we'll wire it.
 
+## 3. Ouronyx — two gallery images never delivered
+
+The Ouronyx Figma gallery has ~10 rows beyond what was in the image drops.
+Most of the "missing" rows turned out to be the delivered videos (now wired),
+but two pair rows need image partners that were never exported:
+
+- the **woman with hands on face** (pairs with the phone-UI video, WEB 2)
+- the **woman with arms up in black** (pairs with the magazine-spread video, WEB 3)
+
+**Ask:** export those two images (desktop + mobile crops like the other
+OUR_WEB/OUR_MOB files). The two videos for those rows are delivered and
+ready — the rows go live as soon as the images land.
+
 ## Resolved — no action needed
 
 - **MC Arabia desktop banner** — not missing after all: per the Figma tags,
