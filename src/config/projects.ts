@@ -1466,69 +1466,53 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx image 6",
       },
       {
-        // WEB 1 — the 52s brand film. It opens on exactly this slot's still
-        // (studio with stool), which stays as the poster. Real mobile edit
-        // delivered (MOBILE 1, 440×550).
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-8.mp4",
-        mobile: "/assets/ouronyx/ouronyx-video-8-mobile.mp4",
-        poster: "/assets/ouronyx/ouronyx-8.webp",
-        alt: "ouronyx video 7",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-8.webp",
+        mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
+        alt: "ouronyx image 7",
         span: "full",
         spaceBefore: { mobile: 0, desktop: 60 },
       },
-      // Slots 9-12 (Figma rows: [hands-on-face image | WEB 2 phone-UI video]
-      // and [WEB 3 spread video | arms-up image]) are BLOCKED on two images
-      // never delivered — see docs/CLIENT-ASKS.md #3. Insert here when they
-      // land; asset names below already carry their final positions.
+      // Slots 9-12 (Figma rows: [hands-on-face image | phone-UI video] and
+      // [tablet-mockup video | arms-up image]) are BLOCKED on two images
+      // never delivered — see docs/CLIENT-ASKS.md #3. The clips (WEB 2/3)
+      // are delivered and ready; insert the rows here when the images land.
       {
-        // WEB 4 — website mockup film, full-width
+        // Tagged video — the wide website mockup film (WEB 4).
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-13.mp4",
         poster: "/assets/ouronyx/ouronyx-13.webp",
         alt: "ouronyx video 13",
         span: "full",
       },
+      // Slots 14-18 are STATICS per the Figma tags (only the hero, phone-UI,
+      // tablet and website rows are video). Stills come from the delivered
+      // clips' design frames; desktop-only until mobile crops arrive
+      // (renderer falls back to desktop per the no-manual-crops rule).
       {
-        // WEB 5 — cream OURONYX quote card (484×638 source; aspect matches
-        // its pair partner so the row aligns)
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-14.mp4",
-        poster: "/assets/ouronyx/ouronyx-14.webp",
-        aspect: "720/900",
-        alt: "ouronyx video 14",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-14.webp",
+        alt: "ouronyx image 14",
       },
       {
-        // WEB 7 — woman portrait
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-15.mp4",
-        poster: "/assets/ouronyx/ouronyx-15.webp",
-        aspect: "720/900",
-        alt: "ouronyx video 15",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-15.webp",
+        alt: "ouronyx image 15",
       },
       {
-        // WEB 6 — woman on stool
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-16.mp4",
-        poster: "/assets/ouronyx/ouronyx-16.webp",
-        alt: "ouronyx video 16",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-16.webp",
+        alt: "ouronyx image 16",
       },
       {
-        // WEB 8 — man portrait
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-17.mp4",
-        poster: "/assets/ouronyx/ouronyx-17.webp",
-        alt: "ouronyx video 17",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-17.webp",
+        alt: "ouronyx image 17",
       },
       {
-        // WEB 9 — interview film; opens on the black OURONYX logo card,
-        // which is the design's final full row (and the poster). Distinct
-        // portrait mobile edit (MOBILE 9, 720×900).
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-18.mp4",
-        mobile: "/assets/ouronyx/ouronyx-video-18-mobile.mp4",
-        poster: "/assets/ouronyx/ouronyx-18.webp",
-        alt: "ouronyx video 18",
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-18.webp",
+        alt: "ouronyx image 18",
         span: "full",
         spaceBefore: { mobile: 55, desktop: 60 },
       },
