@@ -1018,17 +1018,26 @@ export const projects: ProjectDetail[] = [
         alt: "sk image 6",
       },
       {
-        // Figma tags this slot (not the hero) as the video — the delivered
-        // "SK II - BANNER DESKTOP.mp4" plays here. No mobile cut delivered
-        // yet (docs/CLIENT-ASKS.md); the desktop file plays on mobile
-        // meanwhile.
+        // Figma tags this slot (not the hero) as the video — desktop only.
+        // Mobile shows the static sk-8 crop via the mobileOnly twin below.
         type: "video",
         desktop: "/assets/sk/sk-video-8.mp4",
         poster: "/assets/sk/sk-8.webp",
         alt: "sk video 7",
         span: "full",
+        desktopOnly: true,
         // Match Marie Claire's full-width rows: 150px above AND below so the
         // module under the horizontal photo isn't touching it (Figma comment #12).
+        spaceBefore: 150,
+        spaceAfter: 150,
+      },
+      {
+        type: "image",
+        desktop: "/assets/sk/sk-8.webp",
+        mobile: "/assets/sk/sk-8-mobile.webp",
+        alt: "sk image 7",
+        span: "full",
+        mobileOnly: true,
         spaceBefore: 150,
         spaceAfter: 150,
       },
