@@ -23,10 +23,14 @@ interface GalleryVideoProps {
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
   const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
 
-  return (
+  const video = (
     <video
       key={resolved ?? "pre-hydration"}
-      className="w-full h-auto block"
+      className={
+        item.aspect
+          ? "absolute inset-0 w-full h-full object-cover"
+          : "w-full h-auto block"
+      }
       playsInline
       autoPlay
       loop
@@ -49,4 +53,16 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       )}
     </video>
   );
+
+  // The designed card box (from the slot still) — the clip covers it, so
+  // pair rows keep their designed alignment when clip dims differ.
+  if (item.aspect) {
+    return (
+      <div className="relative w-full" style={{ aspectRatio: item.aspect }}>
+        {video}
+      </div>
+    );
+  }
+
+  return video;
 }

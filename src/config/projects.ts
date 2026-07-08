@@ -40,6 +40,15 @@ export interface ProjectMedia {
   /** Poster image for video items — shown before playback starts. */
   poster?: string;
 
+  /**
+   * Designed card aspect for video slots, as "width/height" (take it from the
+   * slot's still, e.g. "720/960"). The clip renders object-cover inside this
+   * box, so pair rows keep the designed alignment when the delivered clip's
+   * dimensions differ from the still's. Omit to render at the clip's natural
+   * aspect.
+   */
+  aspect?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -486,6 +495,7 @@ export const projects: ProjectDetail[] = [
         // Video1 — COSMOPOLITAN covers collage (Figma-tagged slot)
         desktop: "/assets/wao-cosmo/wao-cosmo-video-2.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-2.webp",
+        aspect: "720/960",
         alt: "wao-cosmo video 1",
       },
       {
@@ -555,6 +565,7 @@ export const projects: ProjectDetail[] = [
         // Video2 — white puffer with dog
         desktop: "/assets/wao-cosmo/wao-cosmo-video-13.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-13.webp",
+        aspect: "720/1137",
         alt: "wao-cosmo video 12",
       },
       {
@@ -562,6 +573,7 @@ export const projects: ProjectDetail[] = [
         // Video3 — dark photo collage
         desktop: "/assets/wao-cosmo/wao-cosmo-video-14.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-14.webp",
+        aspect: "720/1065",
         alt: "wao-cosmo video 13",
       },
       {
@@ -569,6 +581,7 @@ export const projects: ProjectDetail[] = [
         // Video4 — street duo ("My name is Zumi")
         desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
+        aspect: "720/1065",
         alt: "wao-cosmo video 14",
       },
       {
@@ -576,6 +589,7 @@ export const projects: ProjectDetail[] = [
         // Video5 — red dress on the curb
         desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
+        aspect: "720/1194",
         alt: "wao-cosmo video 15",
       },
       {
@@ -583,6 +597,7 @@ export const projects: ProjectDetail[] = [
         // Video6 — yellow dress at the doorway
         desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
+        aspect: "720/1194",
         alt: "wao-cosmo video 16",
       },
       {
@@ -590,6 +605,7 @@ export const projects: ProjectDetail[] = [
         // Video7 — VETEMENTS coat over the bridge
         desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
+        aspect: "720/1191",
         alt: "wao-cosmo video 17",
         spaceBefore: true,
       },
@@ -598,6 +614,7 @@ export const projects: ProjectDetail[] = [
         // Video8 — escalator
         desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
+        aspect: "720/1191",
         alt: "wao-cosmo video 18",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
@@ -606,6 +623,7 @@ export const projects: ProjectDetail[] = [
         // Video9 — tan coat, blurred street
         desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
+        aspect: "720/1194",
         alt: "wao-cosmo video 19",
         spaceBefore: { mobile: 55, desktop: 55 },
       },
@@ -614,6 +632,7 @@ export const projects: ProjectDetail[] = [
         // Video10 — evening street reflection
         desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
+        aspect: "720/1194",
         alt: "wao-cosmo video 20",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
