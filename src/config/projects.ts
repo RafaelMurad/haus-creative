@@ -592,7 +592,9 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
         poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
         aspect: "720/1065",
-        inset: "0% 11.39% 0% 5.56%",
+        // Top gutter bumped from the measured 0% per review — was too close
+        // to the row above.
+        inset: "5% 11.39% 0% 5.56%",
         alt: "wao-cosmo video 14",
       },
       {
