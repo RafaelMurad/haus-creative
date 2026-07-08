@@ -43,5 +43,8 @@ we'll wire it.
   (both frames) at the bucherer-8 collage slot — the March `4x5.mp4` covers
   it; no banner expected. Wired.
 
-**All 11 projects are now reviewed against their Figma tags and wired.** The
-only outstanding items are asks #1 and #2 above.
+**Tag-reviewed and wired:** MC Arabia, YSL, Vivara, SK, Bucherer Summer, WAO.
+**Still to review against tagged columns:** Harrods and Ouronyx (their
+numbered gallery clips — 7 and 9 files — are delivered but unwired; their
+hero banners are live from filename inference), plus Life / Bride Story / BFJ
+(hero banners live from inference; tags not yet checked).
