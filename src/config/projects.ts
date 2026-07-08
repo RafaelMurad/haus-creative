@@ -340,8 +340,9 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ysl/ysl-2-mobile.webp",
         alt: "ysl image 1",
         span: "full",
-        // Desktop 75 matches ysl-5's air — the video slot below is edge-to-edge.
-        spaceAfter: { mobile: 55, desktop: 75 },
+        // Desktop-only air (75) — the video slot below is edge-to-edge.
+        // Mobile stays flush per review.
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         // Video1 — woman with lipstick (same clip both breakpoints; the
@@ -365,10 +366,9 @@ export const projects: ProjectDetail[] = [
         span: "full",
         // The neighbouring video slots are edge-to-edge clips (no baked-in
         // whitespace like the desktop image EXPORTs), so this row needs
-        // explicit desktop air — 75px per review. Mobile keeps the project's
-        // usual 60.
-        spaceBefore: { mobile: 60, desktop: 75 },
-        spaceAfter: { mobile: 60, desktop: 75 },
+        // explicit desktop air — 75px per review. Mobile stays flush.
+        spaceBefore: { mobile: 0, desktop: 75 },
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         type: "image",
@@ -390,9 +390,9 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 7",
         span: "full",
         // 75px desktop air — video slots above (ysl-7) and below (ysl-9) are
-        // edge-to-edge.
-        spaceBefore: { mobile: 55, desktop: 75 },
-        spaceAfter: { mobile: 55, desktop: 75 },
+        // edge-to-edge. Mobile stays flush per review.
+        spaceBefore: { mobile: 0, desktop: 75 },
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         // Video3 — man in black with LIBRE (same clip both breakpoints)
@@ -414,9 +414,9 @@ export const projects: ProjectDetail[] = [
         alt: "ysl image 10",
         span: "full",
         // 75px desktop air — video slots in the pairs above (ysl-9) and
-        // below (ysl-13). Mobile 60 matches the project fullRowSpacing.
-        spaceBefore: { mobile: 60, desktop: 75 },
-        spaceAfter: { mobile: 60, desktop: 75 },
+        // below (ysl-13). Mobile stays flush per review.
+        spaceBefore: { mobile: 0, desktop: 75 },
+        spaceAfter: { mobile: 0, desktop: 75 },
       },
       {
         type: "image",
