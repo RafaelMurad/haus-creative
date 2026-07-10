@@ -64,8 +64,15 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
   if (item.aspect) {
     return (
       <div
-        className="relative w-full md:aspect-[var(--card-ar)]"
-        style={{ "--card-ar": item.aspect } as React.CSSProperties}
+        className="relative w-full md:aspect-[var(--card-ar)] md:bg-[var(--card-bg)]"
+        style={
+          {
+            "--card-ar": item.aspect,
+            // Painted card background behind the inset clip (e.g. the beige
+            // Ouronyx panel). Transparent when unset.
+            "--card-bg": item.bgColor ?? "transparent",
+          } as React.CSSProperties
+        }
       >
         <div
           className="md:absolute md:[inset:var(--card-inset)]"

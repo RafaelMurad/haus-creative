@@ -1519,14 +1519,23 @@ export const projects: ProjectDetail[] = [
       // clips' design frames; desktop-only until mobile crops arrive
       // (renderer falls back to desktop per the no-manual-crops rule).
       {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-14.webp",
-        alt: "ouronyx image 14",
+        // Tagged video — cream OURONYX "Light" card (WEB 5), inset on the
+        // beige panel per Figma (color sampled from the delivered covers).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-14.mp4",
+        poster: "/assets/ouronyx/ouronyx-14.webp",
+        aspect: "720/900",
+        inset: "14.6% 16.4% 14.6% 16.9%",
+        bgColor: "#dbbfa9",
+        alt: "ouronyx video 14",
       },
       {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-15.webp",
-        alt: "ouronyx image 15",
+        // Tagged video — smiling woman (WEB 6); natural 720×900 matches the
+        // partner card, so the pair aligns.
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-15.mp4",
+        poster: "/assets/ouronyx/ouronyx-15.webp",
+        alt: "ouronyx video 15",
       },
       {
         type: "image",
