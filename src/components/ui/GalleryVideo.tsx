@@ -61,6 +61,12 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
   // divs do, and the video fills the div. On mobile both wrappers are
   // inert and the clip renders natural-aspect edge-to-edge, stacking like
   // the static images (per-slot mobile spacing comes from config).
+  // Mobile card gutter — insets the clip from the column edges (mobileOnly
+  // slots never render on md+, so no breakpoint gating needed).
+  if (item.mobileGutter) {
+    return <div style={{ paddingInline: item.mobileGutter }}>{video}</div>;
+  }
+
   if (item.aspect) {
     return (
       <div

@@ -58,6 +58,14 @@ export interface ProjectMedia {
    */
   inset?: string;
 
+  /**
+   * Horizontal gutter (CSS padding-inline, e.g. "13%") around a video on
+   * MOBILE — for mobile cards the design insets from the column edges.
+   * Desktop framing uses `aspect`/`inset` instead; use this on mobileOnly
+   * slots (it applies at all widths, but such slots never render on md+).
+   */
+  mobileGutter?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -1503,6 +1511,8 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video close-up",
         span: "full",
         mobileOnly: true,
+        // Side gutters per Figma — the card is inset from the column edges.
+        mobileGutter: "13%",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
       {
