@@ -1491,14 +1491,15 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video 10",
       },
       {
-        // Mobile-only card (delivery MOBILE 7 — byte-identical to WEB 7,
-        // reusing the slot-15 asset) — the design's mobile column inserts
-        // this warm close-up right after the phone-UI video; desktop has no
-        // equivalent slot. span+mobileOnly = own row that vanishes on md,
-        // so the desktop pair grouping is untouched.
+        // Mobile-only card — delivery MOBILE 7 (the denim-interview clip
+        // with the warm close-up scenes; ouronyx-video-15 is a DIFFERENT
+        // clip, WEB 6). The design's mobile column inserts this right after
+        // the phone-UI video; desktop has no equivalent slot.
+        // span+mobileOnly = own row that vanishes on md, so the desktop
+        // pair grouping is untouched.
         type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-15.mp4",
-        poster: "/assets/ouronyx/ouronyx-interview.webp",
+        desktop: "/assets/ouronyx/ouronyx-video-closeup.mp4",
+        poster: "/assets/ouronyx/ouronyx-closeup.webp",
         alt: "ouronyx video close-up",
         span: "full",
         mobileOnly: true,
