@@ -1479,6 +1479,8 @@ export const projects: ProjectDetail[] = [
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-9.webp",
         alt: "ouronyx image 9",
+        // Usual Ouronyx desktop gap to the studio row above (matches slot 8).
+        spaceBefore: { mobile: 0, desktop: 60 },
       },
       {
         // Tagged video — Instagram/phone UI (WEB 2; MOBILE 2 edit below md)
