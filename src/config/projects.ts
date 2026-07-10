@@ -1510,6 +1510,9 @@ export const projects: ProjectDetail[] = [
         poster: "/assets/ouronyx/ouronyx-13.webp",
         alt: "ouronyx video 13",
         span: "full",
+        // Usual Ouronyx 60px desktop air both sides; mobile untouched.
+        spaceBefore: { mobile: 0, desktop: 60 },
+        spaceAfter: { mobile: 0, desktop: 60 },
       },
       // Slots 14-18 are STATICS per the Figma tags (only the hero, phone-UI,
       // tablet and website rows are video). Stills come from the delivered
