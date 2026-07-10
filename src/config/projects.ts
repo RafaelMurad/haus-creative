@@ -1472,10 +1472,35 @@ export const projects: ProjectDetail[] = [
         span: "full",
         spaceBefore: { mobile: 0, desktop: 60 },
       },
-      // Slots 9-12 (Figma rows: [hands-on-face image | phone-UI video] and
-      // [tablet-mockup video | arms-up image]) are BLOCKED on two images
-      // never delivered — see docs/CLIENT-ASKS.md #3. The clips (WEB 2/3)
-      // are delivered and ready; insert the rows here when the images land.
+      // Rows 9-12 — user-supplied stills (2026-07-10, Figma exports) paired
+      // with the tagged phone-UI and tablet-mockup videos. Both videos have
+      // distinct delivered mobile edits.
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-9.webp",
+        alt: "ouronyx image 9",
+      },
+      {
+        // Tagged video — Instagram/phone UI (WEB 2; MOBILE 2 edit below md)
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-10.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-10-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-10.webp",
+        alt: "ouronyx video 10",
+      },
+      {
+        // Tagged video — tablet website mockup (WEB 3; MOBILE 3 edit below md)
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-11.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-11-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-11.webp",
+        alt: "ouronyx video 11",
+      },
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-12.webp",
+        alt: "ouronyx image 12",
+      },
       {
         // Tagged video — the wide website mockup film (WEB 4).
         type: "video",
