@@ -1499,6 +1499,17 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video 10",
       },
       {
+        // Mobile-only: per design review (Diego), the arms-up image follows
+        // the phone-UI video on mobile, flush (no gap) — desktop shows it
+        // in the 11|12 pair (that slot is desktopOnly).
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-12.webp",
+        mobile: "/assets/ouronyx/ouronyx-12-mobile.webp",
+        alt: "ouronyx image 12",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
         // Mobile-only card — delivery MOBILE 7 (the denim-interview clip
         // with the warm close-up scenes; ouronyx-video-15 is a DIFFERENT
         // clip, WEB 6). The design's mobile column inserts this right after
@@ -1525,9 +1536,12 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video 11",
       },
       {
+        // Desktop pair partner of the tablet video; on mobile this image
+        // renders earlier (after the phone-UI video) via its mobileOnly twin.
         type: "image",
         desktop: "/assets/ouronyx/ouronyx-12.webp",
         alt: "ouronyx image 12",
+        desktopOnly: true,
       },
       {
         // Tagged video — the wide website mockup film (WEB 4).
