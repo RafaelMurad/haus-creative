@@ -1514,6 +1514,7 @@ export const projects: ProjectDetail[] = [
         // Side gutters per Figma — the card is inset from the column edges.
         mobileGutter: "13%",
         spaceBefore: { mobile: 55, desktop: 0 },
+        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         // Tagged video — tablet website mockup (WEB 3; MOBILE 3 edit below md)
@@ -1522,8 +1523,6 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/ouronyx/ouronyx-video-11-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-11.webp",
         alt: "ouronyx video 11",
-        // Standard 55 mobile gap below (left pair item → mobile-only padding).
-        spaceAfter: { mobile: 55, desktop: 0 },
       },
       {
         type: "image",
