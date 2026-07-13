@@ -1554,9 +1554,11 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/ouronyx/ouronyx-video-14.mp4",
         poster: "/assets/ouronyx/ouronyx-14.webp",
         // The beige panel from an earlier design pass was a mistake
-        // (confirmed by the designer) — the cream clip IS the card, filling
-        // the pair-aligned 720/900 box directly on white.
+        // (confirmed by the designer) — the cream card sits inset on WHITE
+        // within the pair-aligned 720/900 box (same measured geometry,
+        // panel colour dropped).
         aspect: "720/900",
+        inset: "14.6% 16.4% 14.6% 16.9%",
         // Mobile: the cream card sits inset from the column edges per Figma.
         mobileGutter: "13%",
         alt: "ouronyx video 14",
