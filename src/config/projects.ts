@@ -1557,6 +1557,8 @@ export const projects: ProjectDetail[] = [
         aspect: "720/900",
         inset: "14.6% 16.4% 14.6% 16.9%",
         bgColor: "#dbbfa9",
+        // Mobile: the cream card sits inset from the column edges per Figma.
+        mobileGutter: "13%",
         alt: "ouronyx video 14",
       },
       {
