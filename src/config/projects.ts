@@ -1473,24 +1473,17 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx image 6",
       },
       {
-        // Per Vitor's Figma comment ("VIDEO 1"): the 52s brand film plays
-        // here on DESKTOP — it opens on exactly this slot's still, which
-        // stays as poster. Mobile keeps the static image (twin below).
+        // Per Vitor's Figma comments ("VIDEO 1" desktop / "VIDEO MOBILE 1"
+        // mobile): the 52s brand film plays here on both breakpoints, each
+        // with its delivered edit. It opens on exactly this slot's still,
+        // which stays as poster.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-8.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-8-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-8.webp",
         alt: "ouronyx video 7",
         span: "full",
-        desktopOnly: true,
         spaceBefore: { mobile: 0, desktop: 60 },
-      },
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-8.webp",
-        mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
-        alt: "ouronyx image 7",
-        span: "full",
-        mobileOnly: true,
       },
       // Rows 9-12 — user-supplied stills (2026-07-10, Figma exports) paired
       // with the tagged phone-UI and tablet-mockup videos. Both videos have
