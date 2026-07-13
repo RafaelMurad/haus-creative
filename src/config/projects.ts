@@ -1569,14 +1569,20 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video 15",
       },
       {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-16.webp",
-        alt: "ouronyx image 16",
+        // Vitor pin "VIDEO 7" — the denim stool interview clip (same file
+        // both breakpoints; opens on this slot's still, kept as poster).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-16.mp4",
+        poster: "/assets/ouronyx/ouronyx-16.webp",
+        alt: "ouronyx video 16",
       },
       {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-17.webp",
-        alt: "ouronyx image 17",
+        // Vitor pin "VIDEO 8" — the man portrait clip (same file both
+        // breakpoints; opens on this slot's still, kept as poster).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-17.mp4",
+        poster: "/assets/ouronyx/ouronyx-17.webp",
+        alt: "ouronyx video 17",
       },
       {
         type: "image",
