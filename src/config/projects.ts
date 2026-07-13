@@ -1515,25 +1515,10 @@ export const projects: ProjectDetail[] = [
         mobileOnly: true,
       },
       {
-        // Mobile-only card — delivery MOBILE 7 (the denim-interview clip
-        // with the warm close-up scenes; ouronyx-video-15 is a DIFFERENT
-        // clip, WEB 6). The design's mobile column inserts this right after
-        // the phone-UI video; desktop has no equivalent slot.
-        // span+mobileOnly = own row that vanishes on md, so the desktop
-        // pair grouping is untouched.
-        type: "video",
-        desktop: "/assets/ouronyx/ouronyx-video-closeup.mp4",
-        poster: "/assets/ouronyx/ouronyx-closeup.webp",
-        alt: "ouronyx video close-up",
-        span: "full",
-        mobileOnly: true,
-        // Side gutters per Figma — the card is inset from the column edges.
-        mobileGutter: "13%",
-        spaceBefore: { mobile: 55, desktop: 0 },
-        spaceAfter: { mobile: 55, desktop: 0 },
-      },
-      {
-        // Tagged video — tablet website mockup (WEB 3; MOBILE 3 edit below md)
+        // Tagged video — tablet website mockup (WEB 3; MOBILE 3 edit below
+        // md — Vitor's mobile pin "VIDEO 3" confirms this card follows the
+        // arms-up image directly; the MOBILE 7 close-up card was removed
+        // per review 2026-07-13)
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-11.mp4",
         mobile: "/assets/ouronyx/ouronyx-video-11-mobile.mp4",
