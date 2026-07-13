@@ -1434,6 +1434,19 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
 
+    // Placeholder credits (same set as the other projects) until the real
+    // Ouronyx crew list is supplied from the Figma column.
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
       {
         type: "image",
