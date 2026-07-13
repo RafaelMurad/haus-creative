@@ -84,12 +84,12 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
     video
   );
 
-  // Mobile card gutter — insets the card from the column edges below md
-  // only, composing with (not replacing) the desktop framing above.
+  // Mobile card gutter — insets the card on all four sides below md only,
+  // composing with (not replacing) the desktop framing above.
   if (item.mobileGutter) {
     return (
       <div
-        className="px-[var(--m-gutter)] md:px-0"
+        className="p-[var(--m-gutter)] md:p-0"
         style={{ "--m-gutter": item.mobileGutter } as React.CSSProperties}
       >
         {framed}

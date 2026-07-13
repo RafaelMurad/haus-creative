@@ -59,10 +59,9 @@ export interface ProjectMedia {
   inset?: string;
 
   /**
-   * Horizontal gutter (CSS padding-inline, e.g. "13%") around a video on
-   * MOBILE — for mobile cards the design insets from the column edges.
-   * Desktop framing uses `aspect`/`inset` instead; use this on mobileOnly
-   * slots (it applies at all widths, but such slots never render on md+).
+   * Gutter around a video card on MOBILE — padding on ALL FOUR sides
+   * (e.g. "13%", relative to width per CSS % padding), applied below md
+   * only. Composes with the desktop `aspect`/`inset` framing.
    */
   mobileGutter?: string;
 
