@@ -1585,24 +1585,16 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx video 17",
       },
       {
-        // Vitor pin "VIDEO 9" (mobile column) — the interview film's
-        // MOBILE 9 edit plays here on mobile; it opens on the black logo
-        // card, kept as poster. Desktop keeps the still (twin below).
+        // Vitor pins "VIDEO 9" (both frames) — the interview film plays on
+        // both breakpoints with its delivered edits (WEB 9 wide, MOBILE 9
+        // portrait). Both open on the black logo card, kept as poster.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-18.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-18-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-18.webp",
         alt: "ouronyx video 18",
         span: "full",
-        mobileOnly: true,
-        spaceBefore: { mobile: 55, desktop: 0 },
-      },
-      {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-18.webp",
-        alt: "ouronyx image 18",
-        span: "full",
-        desktopOnly: true,
-        spaceBefore: { mobile: 0, desktop: 60 },
+        spaceBefore: { mobile: 55, desktop: 60 },
       },
     ],
 
