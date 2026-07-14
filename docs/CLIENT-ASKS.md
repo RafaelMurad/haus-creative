@@ -29,6 +29,12 @@ created on 7 Jul and left empty.
 mobile video is coming. If one is intended after all, upload it there and
 we'll wire it.
 
+## 4. Ouronyx — real credits list
+
+The footer currently shows the shared placeholder crew (same as the other
+projects). **Ask:** the actual Ouronyx credits (the small text block at the
+end of the Figma column) — roles + names.
+
 ## ~~3. Ouronyx — two gallery images never delivered~~ RESOLVED 2026-07-10
 
 Rafael exported the two missing pair-partner stills from Figma directly
