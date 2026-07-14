@@ -61,21 +61,41 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
   // divs do, and the video fills the div. On mobile both wrappers are
   // inert and the clip renders natural-aspect edge-to-edge, stacking like
   // the static images (per-slot mobile spacing comes from config).
-  if (item.aspect) {
+  const framed = item.aspect ? (
+    <div
+      className="relative w-full md:aspect-[var(--card-ar)] md:bg-[var(--card-bg)]"
+      style={
+        {
+          "--card-ar": item.aspect,
+          // Painted card background behind the inset clip (e.g. the beige
+          // Ouronyx panel). Transparent when unset.
+          "--card-bg": item.bgColor ?? "transparent",
+        } as React.CSSProperties
+      }
+    >
+      <div
+        className="md:absolute md:[inset:var(--card-inset)]"
+        style={{ "--card-inset": item.inset ?? "0" } as React.CSSProperties}
+      >
+        {video}
+      </div>
+    </div>
+  ) : (
+    video
+  );
+
+  // Mobile card gutter — insets the card on all four sides below md only,
+  // composing with (not replacing) the desktop framing above.
+  if (item.mobileGutter) {
     return (
       <div
-        className="relative w-full md:aspect-[var(--card-ar)]"
-        style={{ "--card-ar": item.aspect } as React.CSSProperties}
+        className="p-[var(--m-gutter)] md:p-0"
+        style={{ "--m-gutter": item.mobileGutter } as React.CSSProperties}
       >
-        <div
-          className="md:absolute md:[inset:var(--card-inset)]"
-          style={{ "--card-inset": item.inset ?? "0" } as React.CSSProperties}
-        >
-          {video}
-        </div>
+        {framed}
       </div>
     );
   }
 
-  return video;
+  return framed;
 }

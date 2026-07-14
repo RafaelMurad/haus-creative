@@ -58,6 +58,13 @@ export interface ProjectMedia {
    */
   inset?: string;
 
+  /**
+   * Gutter around a video card on MOBILE — padding on ALL FOUR sides
+   * (e.g. "13%", relative to width per CSS % padding), applied below md
+   * only. Composes with the desktop `aspect`/`inset` framing.
+   */
+  mobileGutter?: string;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -1355,7 +1362,6 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/bfj/bfj-10.webp",
         mobile: "/assets/bfj/bfj-10-mobile.webp",
         alt: "bfj gallery image 9",
-        spaceBefore: { mobile: 0, desktop: 100 },
       },
       {
         type: "image",
@@ -1428,6 +1434,19 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
 
+    // Placeholder credits (same set as the other projects) until the real
+    // Ouronyx crew list is supplied from the Figma column.
+    credits: [
+      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Photographer", name: "Ekin Can Bayrakdar" },
+      { role: "Stylist", name: "Rachel Davis" },
+      { role: "Make Up", name: "Kenny Leung" },
+      { role: "Hair Stylist", name: "Christopher Gatt" },
+      { role: "Casting Director", name: "Lewis Water" },
+      { role: "Model", name: "Aishwarya Gupta" },
+      { role: "Post Production", name: "Retush" },
+    ],
+
     media: [
       {
         type: "image",
@@ -1466,12 +1485,132 @@ export const projects: ProjectDetail[] = [
         alt: "ouronyx image 6",
       },
       {
-        type: "image",
-        desktop: "/assets/ouronyx/ouronyx-8.webp",
-        mobile: "/assets/ouronyx/ouronyx-8-mobile.webp",
-        alt: "ouronyx image 7",
+        // Per Vitor's Figma comments ("VIDEO 1" desktop / "VIDEO MOBILE 1"
+        // mobile): the 52s brand film plays here on both breakpoints, each
+        // with its delivered edit. It opens on exactly this slot's still,
+        // which stays as poster.
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-8.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-8-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-8.webp",
+        alt: "ouronyx video 7",
         span: "full",
         spaceBefore: { mobile: 0, desktop: 60 },
+      },
+      // Rows 9-12 — user-supplied stills (2026-07-10, Figma exports) paired
+      // with the tagged phone-UI and tablet-mockup videos. Both videos have
+      // distinct delivered mobile edits.
+      {
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-9.webp",
+        alt: "ouronyx image 9",
+        // Usual Ouronyx desktop gap to the studio row above (matches slot 8).
+        spaceBefore: { mobile: 0, desktop: 60 },
+      },
+      {
+        // Tagged video — Instagram/phone UI (WEB 2; MOBILE 2 edit below md)
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-10.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-10-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-10.webp",
+        alt: "ouronyx video 10",
+      },
+      {
+        // Mobile-only: per design review (Diego), the arms-up image follows
+        // the phone-UI video on mobile, flush (no gap) — desktop shows it
+        // in the 11|12 pair (that slot is desktopOnly).
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-12.webp",
+        mobile: "/assets/ouronyx/ouronyx-12-mobile.webp",
+        alt: "ouronyx image 12",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
+        // Tagged video — tablet website mockup (WEB 3; MOBILE 3 edit below
+        // md — Vitor's mobile pin "VIDEO 3" confirms this card follows the
+        // arms-up image directly; the MOBILE 7 close-up card was removed
+        // per review 2026-07-13)
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-11.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-11-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-11.webp",
+        alt: "ouronyx video 11",
+      },
+      {
+        // Desktop pair partner of the tablet video; on mobile this image
+        // renders earlier (after the phone-UI video) via its mobileOnly twin.
+        type: "image",
+        desktop: "/assets/ouronyx/ouronyx-12.webp",
+        alt: "ouronyx image 12",
+        desktopOnly: true,
+      },
+      {
+        // Tagged video — the wide website mockup film (WEB 4).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-13.mp4",
+        poster: "/assets/ouronyx/ouronyx-13.webp",
+        alt: "ouronyx video 13",
+        span: "full",
+        // Usual Ouronyx 60px desktop air both sides; mobile untouched.
+        spaceBefore: { mobile: 0, desktop: 60 },
+        spaceAfter: { mobile: 0, desktop: 60 },
+      },
+      // Slots 14-18 are STATICS per the Figma tags (only the hero, phone-UI,
+      // tablet and website rows are video). Stills come from the delivered
+      // clips' design frames; desktop-only until mobile crops arrive
+      // (renderer falls back to desktop per the no-manual-crops rule).
+      {
+        // Tagged video — cream OURONYX "Light" card (WEB 5), inset on the
+        // beige panel per Figma (color sampled from the delivered covers).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-14.mp4",
+        poster: "/assets/ouronyx/ouronyx-14.webp",
+        // The beige panel from an earlier design pass was a mistake
+        // (confirmed by the designer) — the cream card sits inset on WHITE
+        // within the pair-aligned 720/900 box (same measured geometry,
+        // panel colour dropped).
+        aspect: "720/900",
+        inset: "14.6% 16.4% 14.6% 16.9%",
+        // Mobile: the cream card sits inset from the column edges per Figma.
+        mobileGutter: "13%",
+        alt: "ouronyx video 14",
+      },
+      {
+        // Tagged video — smiling woman (WEB 6); natural 720×900 matches the
+        // partner card, so the pair aligns.
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-15.mp4",
+        poster: "/assets/ouronyx/ouronyx-15.webp",
+        alt: "ouronyx video 15",
+      },
+      {
+        // Vitor pin "VIDEO 7" — the denim stool interview clip (same file
+        // both breakpoints; opens on this slot's still, kept as poster).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-16.mp4",
+        poster: "/assets/ouronyx/ouronyx-16.webp",
+        alt: "ouronyx video 16",
+      },
+      {
+        // Vitor pin "VIDEO 8" — the man portrait clip (same file both
+        // breakpoints; opens on this slot's still, kept as poster).
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-17.mp4",
+        poster: "/assets/ouronyx/ouronyx-17.webp",
+        alt: "ouronyx video 17",
+      },
+      {
+        // Vitor pins "VIDEO 9" (both frames) — the interview film plays on
+        // both breakpoints with its delivered edits (WEB 9 wide, MOBILE 9
+        // portrait). Both open on the black logo card, kept as poster.
+        type: "video",
+        desktop: "/assets/ouronyx/ouronyx-video-18.mp4",
+        mobile: "/assets/ouronyx/ouronyx-video-18-mobile.mp4",
+        poster: "/assets/ouronyx/ouronyx-18.webp",
+        alt: "ouronyx video 18",
+        span: "full",
+        spaceBefore: { mobile: 55, desktop: 60 },
       },
     ],
 
