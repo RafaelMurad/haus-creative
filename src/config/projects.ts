@@ -2021,9 +2021,6 @@ export const projects: ProjectDetail[] = [
         aspect: "719/1066",
         inset: "0.6% 5.7% 0.4% 12.0%",
         alt: "harrods video 15",
-        // Mobile separation from the cocktails clip directly above
-        // (desktop pair row untouched).
-        spaceBefore: { mobile: 44, desktop: 0 },
       },
       {
         type: "image",
