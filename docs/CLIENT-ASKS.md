@@ -35,6 +35,27 @@ The footer currently shows the shared placeholder crew (same as the other
 projects). **Ask:** the actual Ouronyx credits (the small text block at the
 end of the Figma column) — roles + names.
 
+## 5. Ouronyx — hi-res re-exports for the small clips (2026-07-14)
+
+Vitor's review flagged Ouronyx video quality (worst: the wordmark card, his
+"qualidade muito ruim" note). Verified: the shipped files are lossless
+remuxes of the delivery — the quality ceiling is the exports themselves.
+`WEB 2/3/5` are 484×638 and `MOBILE 2/3` are 300×388; all are logo/phone-UI
+animations (vector-origin), soft even at native size, upscaled 2–4× on the
+site. **Answer to Vitor's question: yes, it's an export problem.**
+
+**Ask (via Diego):** re-export OURONYX WEB 2, WEB 3, WEB 5 at ≥720w and
+MOBILE 2, MOBILE 3 at ≥440w (ideally 720w), same content/timing. Meanwhile
+we render them smaller in-frame to reduce the upscale.
+
+## 6. BFJ — original of the balcony image (bfj-11) via Diego (2026-07-14)
+
+Vitor: "BFJ mobile ta sem qualidade essa imagem, é o Diego que tem [o
+original]". Confirmed: both variants (720×901 desktop, 440×523 mobile) come
+from the same soft master — it reads like a video frame-grab; no better copy
+exists in any delivery. **Ask:** the original still (≥1440w), and we swap it
+in with no config change.
+
 ## ~~3. Ouronyx — two gallery images never delivered~~ RESOLVED 2026-07-10
 
 Rafael exported the two missing pair-partner stills from Figma directly
@@ -58,8 +79,7 @@ if dedicated crops are wanted.
   (both frames) at the bucherer-8 collage slot — the March `4x5.mp4` covers
   it; no banner expected. Wired.
 
-**Tag-reviewed and wired:** MC Arabia, YSL, Vivara, SK, Bucherer Summer, WAO.
-**Still to review against tagged columns:** Harrods and Ouronyx (their
-numbered gallery clips — 7 and 9 files — are delivered but unwired; their
-hero banners are live from filename inference), plus Life / Bride Story / BFJ
-(hero banners live from inference; tags not yet checked).
+**Tag-reviewed and wired:** MC Arabia, YSL, Vivara, SK, Bucherer Summer, WAO,
+Ouronyx (comment pins, PR #45), Harrods (comment pins, PR #46).
+**Still to review against tagged columns:** Life / Bride Story / BFJ
+(hero banners live from filename inference; tags not yet checked).
