@@ -1832,8 +1832,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-6-mobile.webp",
         alt: "harrods image 5",
         span: "full",
-        spaceBefore: { mobile: 0, desktop: 100 },
-        spaceAfter: { mobile: 55, desktop: 100 },
+        spaceBefore: { mobile: 0, desktop: 50 },
+        spaceAfter: { mobile: 55, desktop: 50 },
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 3"): the caviar clip plays in
@@ -1884,8 +1884,8 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-11-mobile.webp",
         alt: "harrods image 10",
         span: "full",
-        spaceBefore: { mobile: 0, desktop: 100 },
-        spaceAfter: { mobile: 0, desktop: 100 },
+        spaceBefore: { mobile: 0, desktop: 50 },
+        spaceAfter: { mobile: 0, desktop: 50 },
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 5"): the sushi clip plays in
