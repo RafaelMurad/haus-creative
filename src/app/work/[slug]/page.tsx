@@ -280,7 +280,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               {/* Label column */}
-              <div className="md:w-[120px] flex-shrink-0 mb-4 md:mb-0">
+              <div className="md:w-[120px] flex-shrink-0 mb-[55px] md:mb-0">
                 <p className="text-[14px] font-semibold leading-[1.21em] text-black">
                   Credits
                 </p>
