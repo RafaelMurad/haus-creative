@@ -1948,6 +1948,10 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1065",
         inset: "0.4% 5.8% 0.5% 11.9%",
         alt: "harrods video 11",
+        // Mobile separation from the stills around it (desktop pair row
+        // untouched).
+        spaceBefore: { mobile: 44, desktop: 0 },
+        spaceAfter: { mobile: 44, desktop: 0 },
       },
       {
         type: "image",
@@ -1988,6 +1992,9 @@ export const projects: ProjectDetail[] = [
         aspect: "719/1066",
         inset: "0.6% 5.7% 0.4% 12.0%",
         alt: "harrods video 15",
+        // Mobile separation from the cocktails clip directly above
+        // (desktop pair row untouched).
+        spaceBefore: { mobile: 44, desktop: 0 },
       },
       {
         type: "image",
