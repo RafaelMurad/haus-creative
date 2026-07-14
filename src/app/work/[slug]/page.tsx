@@ -265,7 +265,9 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             was), Credits label + content fill the right half.
             Mobile: Credits stacked first, then Back to top below. */}
         {project.credits && project.credits.length > 0 && (
-          <div className="px-[34px] md:px-0 mt-[81px]">
+          <div className="px-[34px] md:px-0 mt-[44px] md:mt-[50px]">
+            {/* Gap above = the standard inter-asset spacing (44 mobile /
+                50 desktop) so the section break reads consistent site-wide. */}
             <div className="flex flex-col md:flex-row">
               {/* Back to top — desktop only, in left column */}
               <div className="hidden md:block md:w-1/2 md:pl-[34px]">
