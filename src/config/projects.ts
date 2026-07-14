@@ -1819,17 +1819,34 @@ export const projects: ProjectDetail[] = [
         alt: "harrods image 2",
       },
       {
+        // Mobile twin for VIDEO 2: on the mobile Figma column Vitor pins the
+        // clip on the champagne-woman frame — which is harrods-4's MOBILE
+        // crop (the mobile column swaps this pair's positions vs desktop).
+        // Same clip file as the desktop slot-5 card; the full-bleed woman
+        // crop stays as poster. Full-span row so desktop pairing is
+        // untouched.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-5.mp4",
+        poster: "/assets/harrods/harrods-4-mobile.webp",
+        alt: "harrods video 3",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
         type: "image",
         desktop: "/assets/harrods/harrods-4.webp",
         mobile: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods image 3",
         // Middle-aligned against the taller portrait video in the pair.
         align: "center",
+        // Mobile shows this position as the VIDEO 2 twin above.
+        desktopOnly: true,
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 2"): the dining-montage clip
-        // plays in this pair slot. WEB 2 ≡ MOBILE 2 byte-for-byte, so the one
-        // file serves both breakpoints.
+        // plays in this pair slot on DESKTOP. On mobile the clip moves one
+        // position earlier (the pin sits on the woman frame there) and this
+        // slot renders its framed still instead — see the twins around it.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
         poster: "/assets/harrods/harrods-5.webp",
@@ -1838,9 +1855,18 @@ export const projects: ProjectDetail[] = [
         // outer edge. The clip plays inside that photo area.
         aspect: "720/1065",
         inset: "0.4% 11.7% 0.5% 6.1%",
-        // Mobile still is a framed card too: uniform 60px on 440 wide.
-        mobileGutter: "13.6%",
         alt: "harrods video 4",
+        desktopOnly: true,
+      },
+      {
+        // Mobile twin for the slot-5 position: the framed gold-bag card
+        // (its 60px margins are baked into the mobile crop).
+        type: "image",
+        desktop: "/assets/harrods/harrods-5.webp",
+        mobile: "/assets/harrods/harrods-5-mobile.webp",
+        alt: "harrods image 4",
+        span: "full",
+        mobileOnly: true,
       },
       {
         type: "image",
