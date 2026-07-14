@@ -1791,10 +1791,26 @@ export const projects: ProjectDetail[] = [
 
     media: [
       {
+        // Per Vitor's Figma comment pin ("VIDEO 1" — pinned on the MOBILE
+        // column only): the dining clip plays in this slot below md; desktop
+        // keeps the still (SK sk-8 twin pattern, mirrored). Full-span row of
+        // its own so the desktop pair flow is untouched; the mobile still is
+        // full-bleed, so the clip runs edge-to-edge at natural aspect.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-2.mp4",
+        poster: "/assets/harrods/harrods-2-mobile.webp",
+        alt: "harrods video 1",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
+        // Desktop half of the twin — static on desktop per the pin's
+        // mobile-only placement.
         type: "image",
         desktop: "/assets/harrods/harrods-2.webp",
         mobile: "/assets/harrods/harrods-2-mobile.webp",
         alt: "harrods image 1",
+        desktopOnly: true,
       },
       {
         type: "image",
