@@ -1,14 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { MediaRenderer, SimpleCarousel } from "@/components/ui";
+import { HeroVideo, MediaRenderer, SimpleCarousel } from "@/components/ui";
 import { useSlideInOnView } from "@/hooks/useSlideInOnView";
 import type { Project } from "@/config/site";
-import type { ProjectMedia } from "@/config/projects";
+import type { ProjectDetail, ProjectMedia } from "@/config/projects";
 import type { CarouselConfig } from "@/types/carousel";
 
 interface WorkGalleryItemProps {
   project: Project;
+  /**
+   * The project page's hero video — when provided, plays as the cover with the
+   * same per-breakpoint sources as /work/[slug]. The static media stays
+   * underneath as the loading backdrop and as the fallback on breakpoints the
+   * video doesn't cover (e.g. MC Arabia is mobile-only). Home tiles are
+   * full-bleed, so the video always object-covers regardless of the project
+   * page's objectFit.
+   */
+  heroVideo?: ProjectDetail["heroVideo"];
   /** Gallery media for carousel display. When provided with carouselConfig, renders a carousel instead of a single image. */
   galleryMedia?: ProjectMedia[];
   /** Carousel animation/timing config. Required alongside galleryMedia for carousel mode. */
@@ -30,6 +39,7 @@ interface WorkGalleryItemProps {
  */
 export function WorkGalleryItem({
   project,
+  heroVideo,
   galleryMedia,
   carouselConfig,
 }: WorkGalleryItemProps) {
@@ -53,10 +63,21 @@ export function WorkGalleryItem({
             className="transition-opacity duration-300 group-hover:opacity-90"
           />
         ) : (
-          <MediaRenderer
-            media={project.media}
-            className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-          />
+          <>
+            <MediaRenderer
+              media={project.media}
+              className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+            />
+            {heroVideo && (
+              <div className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-90">
+                <HeroVideo
+                  desktop={heroVideo.desktop}
+                  mobile={heroVideo.mobile}
+                  poster={heroVideo.poster}
+                />
+              </div>
+            )}
+          </>
         )}
       </Link>
 

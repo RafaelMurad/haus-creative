@@ -55,6 +55,7 @@ export default function Home() {
           <WorkGalleryItem
             key={project.id}
             project={project}
+            heroVideo={detail?.heroVideo}
             galleryMedia={galleryMedia}
             carouselConfig={hasHomepageCarousel ? carouselConfig : undefined}
           />
