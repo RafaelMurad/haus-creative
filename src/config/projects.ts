@@ -1842,6 +1842,8 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/harrods/harrods-8.webp",
         mobile: "/assets/harrods/harrods-8-mobile.webp",
         alt: "harrods image 7",
+        // Middle-aligned against the taller portrait video in the pair.
+        align: "center",
       },
       {
         type: "image",
