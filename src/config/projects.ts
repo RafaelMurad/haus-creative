@@ -1829,10 +1829,13 @@ export const projects: ProjectDetail[] = [
         spaceAfter: { mobile: 55, desktop: 100 },
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-7.webp",
-        mobile: "/assets/harrods/harrods-7-mobile.webp",
-        alt: "harrods image 6",
+        // Per Vitor's Figma comment pin ("VIDEO 3"): the caviar clip plays in
+        // this pair slot. WEB 3 ≡ MOBILE 3 byte-for-byte — one file, both
+        // breakpoints; the slot still stays as poster.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-7.mp4",
+        poster: "/assets/harrods/harrods-7.webp",
+        alt: "harrods video 6",
       },
       {
         type: "image",
