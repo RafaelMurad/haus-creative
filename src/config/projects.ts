@@ -1943,11 +1943,10 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/harrods/harrods-video-12.mp4",
         poster: "/assets/harrods/harrods-12.webp",
         // Left-cell card, same geometry as slot 7: photo 592×1056 at (86,4)
-        // in the 720×1065 canvas.
+        // in the 720×1065 canvas. Mobile plays full-bleed (gutter removed
+        // per review 2026-07-14).
         aspect: "720/1065",
         inset: "0.4% 5.8% 0.5% 11.9%",
-        // Mobile still is a framed card: uniform 60px on 440 wide.
-        mobileGutter: "13.6%",
         alt: "harrods video 11",
       },
       {
@@ -1984,11 +1983,10 @@ export const projects: ProjectDetail[] = [
         poster: "/assets/harrods/harrods-16.webp",
         // Left-cell card: photo 592×1056 at (86,6). This still exports at
         // 719×1066 (off-by-one vs the 720×1065 siblings), so the numbers
-        // are taken from the actual file.
+        // are taken from the actual file. Mobile plays full-bleed (gutter
+        // removed per review 2026-07-14).
         aspect: "719/1066",
         inset: "0.6% 5.7% 0.4% 12.0%",
-        // Mobile still is a framed card: uniform 60px on 440 wide.
-        mobileGutter: "13.6%",
         alt: "harrods video 15",
       },
       {
