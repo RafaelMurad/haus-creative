@@ -1954,10 +1954,33 @@ export const projects: ProjectDetail[] = [
         spaceAfter: { mobile: 44, desktop: 0 },
       },
       {
+        // Desktop cell of the 12|13 pair; on mobile this position renders
+        // via the two mobileOnly fulls below (user-supplied carpaccio card
+        // first, then this slot's own crop).
         type: "image",
         desktop: "/assets/harrods/harrods-13.webp",
         mobile: "/assets/harrods/harrods-13-mobile.webp",
         alt: "harrods image 12",
+        desktopOnly: true,
+      },
+      {
+        // Mobile-only: user-supplied carpaccio close-up (Figma export,
+        // framed-card format with the 60px margins baked in) — inserted
+        // before slot 13 per review 2026-07-14.
+        type: "image",
+        desktop: "/assets/harrods/harrods-12a-mobile.webp",
+        alt: "harrods image 11a",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
+        // Mobile twin for the slot-13 position.
+        type: "image",
+        desktop: "/assets/harrods/harrods-13.webp",
+        mobile: "/assets/harrods/harrods-13-mobile.webp",
+        alt: "harrods image 12",
+        span: "full",
+        mobileOnly: true,
       },
       {
         type: "image",
