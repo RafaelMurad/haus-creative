@@ -1921,8 +1921,10 @@ export const projects: ProjectDetail[] = [
         aspect: "720/1065",
         inset: "0.4% 11.4% 0.5% 6.4%",
         alt: "harrods video 9",
-        spaceBefore: { mobile: 55, desktop: 0 },
-        spaceAfter: { mobile: 55, desktop: 0 },
+        // 20% off the standard 55 per review — the stack around this clip
+        // read too airy on mobile.
+        spaceBefore: { mobile: 44, desktop: 0 },
+        spaceAfter: { mobile: 44, desktop: 0 },
       },
       {
         type: "image",
