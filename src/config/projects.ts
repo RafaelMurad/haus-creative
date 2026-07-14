@@ -2025,9 +2025,11 @@ export const projects: ProjectDetail[] = [
       {
         // Renders on both breakpoints: desktop as the pair partner of the
         // chocolate clip, mobile stacked after it (per the mobile column).
-        // No mobile crop delivered — the desktop card shows as-is below md.
+        // Mobile crop = delivered HAR_MOB_16 (centered card), fixing the
+        // off-center look of the asymmetric desktop card below md.
         type: "image",
         desktop: "/assets/harrods/harrods-17.webp",
+        mobile: "/assets/harrods/harrods-17-mobile.webp",
         alt: "harrods image 16",
       },
     ],
