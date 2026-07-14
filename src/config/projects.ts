@@ -68,6 +68,13 @@ export interface ProjectMedia {
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
+  /**
+   * Vertical alignment of this slot within its pair row on desktop — "center"
+   * middle-aligns a shorter item against a taller pair partner (e.g. a still
+   * next to a portrait video). Defaults to top. No effect on mobile stacking.
+   */
+  align?: "center";
+
   /** Frame presentation style. Defaults to 'mask'. */
   frame?: GalleryFrame;
 
@@ -1784,10 +1791,26 @@ export const projects: ProjectDetail[] = [
 
     media: [
       {
+        // Per Vitor's Figma comment pin ("VIDEO 1" — pinned on the MOBILE
+        // column only): the dining clip plays in this slot below md; desktop
+        // keeps the still (SK sk-8 twin pattern, mirrored). Full-span row of
+        // its own so the desktop pair flow is untouched; the mobile still is
+        // full-bleed, so the clip runs edge-to-edge at natural aspect.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-2.mp4",
+        poster: "/assets/harrods/harrods-2-mobile.webp",
+        alt: "harrods video 1",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
+        // Desktop half of the twin — static on desktop per the pin's
+        // mobile-only placement.
         type: "image",
         desktop: "/assets/harrods/harrods-2.webp",
         mobile: "/assets/harrods/harrods-2-mobile.webp",
         alt: "harrods image 1",
+        desktopOnly: true,
       },
       {
         type: "image",
@@ -1796,16 +1819,54 @@ export const projects: ProjectDetail[] = [
         alt: "harrods image 2",
       },
       {
+        // Mobile twin for VIDEO 2: on the mobile Figma column Vitor pins the
+        // clip on the champagne-woman frame — which is harrods-4's MOBILE
+        // crop (the mobile column swaps this pair's positions vs desktop).
+        // Same clip file as the desktop slot-5 card; the full-bleed woman
+        // crop stays as poster. Full-span row so desktop pairing is
+        // untouched.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-5.mp4",
+        poster: "/assets/harrods/harrods-4-mobile.webp",
+        alt: "harrods video 3",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
         type: "image",
         desktop: "/assets/harrods/harrods-4.webp",
         mobile: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods image 3",
+        // Middle-aligned against the taller portrait video in the pair.
+        align: "center",
+        // Mobile shows this position as the VIDEO 2 twin above.
+        desktopOnly: true,
       },
       {
+        // Per Vitor's Figma comment pin ("VIDEO 2"): the dining-montage clip
+        // plays in this pair slot on DESKTOP. On mobile the clip moves one
+        // position earlier (the pin sits on the woman frame there) and this
+        // slot renders its framed still instead — see the twins around it.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-5.mp4",
+        poster: "/assets/harrods/harrods-5.webp",
+        // The still bakes the card frame: photo 592×1056 at (44,4) in the
+        // 720×1065 canvas — tight inner edge (toward the pair gap), wide
+        // outer edge. The clip plays inside that photo area.
+        aspect: "720/1065",
+        inset: "0.4% 11.7% 0.5% 6.1%",
+        alt: "harrods video 4",
+        desktopOnly: true,
+      },
+      {
+        // Mobile twin for the slot-5 position: the framed gold-bag card
+        // (its 60px margins are baked into the mobile crop).
         type: "image",
         desktop: "/assets/harrods/harrods-5.webp",
         mobile: "/assets/harrods/harrods-5-mobile.webp",
         alt: "harrods image 4",
+        span: "full",
+        mobileOnly: true,
       },
       {
         type: "image",
@@ -1813,34 +1874,57 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-6-mobile.webp",
         alt: "harrods image 5",
         span: "full",
-        spaceBefore: { mobile: 0, desktop: 100 },
-        spaceAfter: { mobile: 55, desktop: 100 },
+        spaceBefore: { mobile: 0, desktop: 50 },
+        spaceAfter: { mobile: 27, desktop: 50 },
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-7.webp",
-        mobile: "/assets/harrods/harrods-7-mobile.webp",
-        alt: "harrods image 6",
+        // Per Vitor's Figma comment pin ("VIDEO 3"): the caviar clip plays in
+        // this pair slot. WEB 3 ≡ MOBILE 3 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-7.mp4",
+        poster: "/assets/harrods/harrods-7.webp",
+        // Mirror of slot 5's card: photo 592×1056 at (86,4) — wide outer
+        // edge (left cell), tight inner edge. Mobile still is full-bleed,
+        // so no mobileGutter here.
+        aspect: "720/1065",
+        inset: "0.4% 5.8% 0.5% 11.9%",
+        alt: "harrods video 6",
       },
       {
         type: "image",
         desktop: "/assets/harrods/harrods-8.webp",
         mobile: "/assets/harrods/harrods-8-mobile.webp",
         alt: "harrods image 7",
+        // Middle-aligned against the taller portrait video in the pair.
+        align: "center",
       },
       {
+        // Desktop only: the mobile crop of this still is the burrata dish,
+        // which would duplicate the VIDEO 4 clip right below it in the
+        // mobile stack (removed per review 2026-07-14).
         type: "image",
         desktop: "/assets/harrods/harrods-9.webp",
         mobile: "/assets/harrods/harrods-9-mobile.webp",
         alt: "harrods image 8",
+        desktopOnly: true,
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-10.webp",
-        mobile: "/assets/harrods/harrods-10-mobile.webp",
-        alt: "harrods image 9",
-        spaceBefore: { mobile: 55, desktop: 0 },
-        spaceAfter: { mobile: 55, desktop: 0 },
+        // Per Vitor's Figma comment pin ("VIDEO 4"): the burrata clip plays
+        // in this pair slot. WEB 4 ≡ MOBILE 4 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-10.mp4",
+        poster: "/assets/harrods/harrods-10.webp",
+        // Right-cell card like slot 5: photo 592×1056 at (46,4) in the
+        // 720×1065 canvas. Mobile still is full-bleed — no gutter.
+        aspect: "720/1065",
+        inset: "0.4% 11.4% 0.5% 6.4%",
+        alt: "harrods video 9",
+        // 20% off the standard 55 per review — the stack around this clip
+        // read too airy on mobile.
+        spaceBefore: { mobile: 44, desktop: 0 },
+        spaceAfter: { mobile: 44, desktop: 0 },
       },
       {
         type: "image",
@@ -1848,20 +1932,58 @@ export const projects: ProjectDetail[] = [
         mobile: "/assets/harrods/harrods-11-mobile.webp",
         alt: "harrods image 10",
         span: "full",
-        spaceBefore: { mobile: 0, desktop: 100 },
-        spaceAfter: { mobile: 0, desktop: 100 },
+        spaceBefore: { mobile: 0, desktop: 50 },
+        spaceAfter: { mobile: 0, desktop: 50 },
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-12.webp",
-        mobile: "/assets/harrods/harrods-12-mobile.webp",
-        alt: "harrods image 11",
+        // Per Vitor's Figma comment pin ("VIDEO 5"): the sushi clip plays in
+        // this pair slot. WEB 5 ≡ MOBILE 5 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-12.mp4",
+        poster: "/assets/harrods/harrods-12.webp",
+        // Left-cell card, same geometry as slot 7: photo 592×1056 at (86,4)
+        // in the 720×1065 canvas. Mobile plays full-bleed (gutter removed
+        // per review 2026-07-14).
+        aspect: "720/1065",
+        inset: "0.4% 5.8% 0.5% 11.9%",
+        alt: "harrods video 11",
+        // Mobile separation from the stills around it (desktop pair row
+        // untouched).
+        spaceBefore: { mobile: 44, desktop: 0 },
+        spaceAfter: { mobile: 44, desktop: 0 },
       },
       {
+        // Desktop cell of the 12|13 pair; on mobile this position renders
+        // via the two mobileOnly fulls below (user-supplied carpaccio card
+        // first, then this slot's own crop).
         type: "image",
         desktop: "/assets/harrods/harrods-13.webp",
         mobile: "/assets/harrods/harrods-13-mobile.webp",
         alt: "harrods image 12",
+        desktopOnly: true,
+      },
+      {
+        // Mobile-only: user-supplied carpaccio close-up (Figma export,
+        // framed-card format with the 60px margins baked in) — inserted
+        // before slot 13 per review 2026-07-14.
+        type: "image",
+        desktop: "/assets/harrods/harrods-12a-mobile.webp",
+        alt: "harrods image 11a",
+        span: "full",
+        mobileOnly: true,
+      },
+      {
+        // Mobile twin for the slot-13 position — per Vitor's mobile-column
+        // pin ("VIDEO 6") the cocktails clip plays here below md. Same file
+        // as the desktop slot-15 card; this position's mobile crop is the
+        // cocktails frame and stays as poster.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-15.mp4",
+        poster: "/assets/harrods/harrods-13-mobile.webp",
+        alt: "harrods video 12",
+        span: "full",
+        mobileOnly: true,
       },
       {
         type: "image",
@@ -1870,22 +1992,45 @@ export const projects: ProjectDetail[] = [
         alt: "harrods image 13",
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-15.webp",
-        mobile: "/assets/harrods/harrods-15-mobile.webp",
-        alt: "harrods image 14",
+        // Per Vitor's Figma comment pin ("VIDEO 6"): the cocktails clip plays
+        // in this pair slot. WEB 6 ≡ MOBILE 6 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-15.mp4",
+        poster: "/assets/harrods/harrods-15.webp",
+        // Right-cell card, same geometry as slot 10: photo 592×1056 at
+        // (46,4) in the 720×1065 canvas. Desktop only — on mobile this clip
+        // plays at the slot-13 position per the mobile-column pin, and this
+        // slot's own mobile crop would duplicate it (slot-9 rule).
+        aspect: "720/1065",
+        inset: "0.4% 11.4% 0.5% 6.4%",
+        alt: "harrods video 14",
+        desktopOnly: true,
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-16.webp",
-        mobile: "/assets/harrods/harrods-16-mobile.webp",
-        alt: "harrods image 15",
+        // Per Vitor's Figma comment pin ("VIDEO 7"): the chocolate-dessert
+        // clip plays in this pair slot. WEB 7 ≡ MOBILE 7 byte-for-byte — one
+        // file, both breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-16.mp4",
+        poster: "/assets/harrods/harrods-16.webp",
+        // Left-cell card: photo 592×1056 at (86,6). This still exports at
+        // 719×1066 (off-by-one vs the 720×1065 siblings), so the numbers
+        // are taken from the actual file. Mobile plays full-bleed (gutter
+        // removed per review 2026-07-14).
+        aspect: "719/1066",
+        inset: "0.6% 5.7% 0.4% 12.0%",
+        alt: "harrods video 15",
       },
       {
+        // Renders on both breakpoints: desktop as the pair partner of the
+        // chocolate clip, mobile stacked after it (per the mobile column).
+        // Mobile crop = delivered HAR_MOB_16 (centered card), fixing the
+        // off-center look of the asymmetric desktop card below md.
         type: "image",
         desktop: "/assets/harrods/harrods-17.webp",
+        mobile: "/assets/harrods/harrods-17-mobile.webp",
         alt: "harrods image 16",
-        desktopOnly: true,
       },
     ],
 

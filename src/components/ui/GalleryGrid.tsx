@@ -206,10 +206,14 @@ export function GalleryGrid({ media, fullRowSpacing = 0 }: GalleryGridProps) {
                   : item.desktopOnly && !allDesktopOnly
                     ? "hidden md:block"
                     : "";
+              // Opt-in vertical centering against a taller pair partner —
+              // self-center collapses the cell from stretch to content height,
+              // so it only moves slots that explicitly ask for it.
+              const itemAlign = item.align === "center" ? "md:self-center" : "";
               return (
                 <div
                   key={colIndex}
-                  className={`relative w-full md:w-1/2 ${itemClass} ${desktopReset} ${itemHidden}`.trim()}
+                  className={`relative w-full md:w-1/2 ${itemClass} ${desktopReset} ${itemHidden} ${itemAlign}`.trim()}
                   style={itemStyle}
                 >
                   <SlotBadge item={item} paired />
