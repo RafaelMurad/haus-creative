@@ -2023,10 +2023,12 @@ export const projects: ProjectDetail[] = [
         alt: "harrods video 15",
       },
       {
+        // Renders on both breakpoints: desktop as the pair partner of the
+        // chocolate clip, mobile stacked after it (per the mobile column).
+        // No mobile crop delivered — the desktop card shows as-is below md.
         type: "image",
         desktop: "/assets/harrods/harrods-17.webp",
         alt: "harrods image 16",
-        desktopOnly: true,
       },
     ],
 
