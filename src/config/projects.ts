@@ -1915,10 +1915,17 @@ export const projects: ProjectDetail[] = [
         alt: "harrods image 13",
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-15.webp",
-        mobile: "/assets/harrods/harrods-15-mobile.webp",
-        alt: "harrods image 14",
+        // Per Vitor's Figma comment pin ("VIDEO 6"): the cocktails clip plays
+        // in this pair slot. WEB 6 ≡ MOBILE 6 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-15.mp4",
+        poster: "/assets/harrods/harrods-15.webp",
+        // Right-cell card, same geometry as slot 10: photo 592×1056 at
+        // (46,4) in the 720×1065 canvas. Mobile still is full-bleed.
+        aspect: "720/1065",
+        inset: "0.4% 11.4% 0.5% 6.4%",
+        alt: "harrods video 14",
       },
       {
         type: "image",
