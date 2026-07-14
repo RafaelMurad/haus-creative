@@ -1974,11 +1974,14 @@ export const projects: ProjectDetail[] = [
         mobileOnly: true,
       },
       {
-        // Mobile twin for the slot-13 position.
-        type: "image",
-        desktop: "/assets/harrods/harrods-13.webp",
-        mobile: "/assets/harrods/harrods-13-mobile.webp",
-        alt: "harrods image 12",
+        // Mobile twin for the slot-13 position — per Vitor's mobile-column
+        // pin ("VIDEO 6") the cocktails clip plays here below md. Same file
+        // as the desktop slot-15 card; this position's mobile crop is the
+        // cocktails frame and stays as poster.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-15.mp4",
+        poster: "/assets/harrods/harrods-13-mobile.webp",
+        alt: "harrods video 12",
         span: "full",
         mobileOnly: true,
       },
@@ -1996,10 +1999,13 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/harrods/harrods-video-15.mp4",
         poster: "/assets/harrods/harrods-15.webp",
         // Right-cell card, same geometry as slot 10: photo 592×1056 at
-        // (46,4) in the 720×1065 canvas. Mobile still is full-bleed.
+        // (46,4) in the 720×1065 canvas. Desktop only — on mobile this clip
+        // plays at the slot-13 position per the mobile-column pin, and this
+        // slot's own mobile crop would duplicate it (slot-9 rule).
         aspect: "720/1065",
         inset: "0.4% 11.4% 0.5% 6.4%",
         alt: "harrods video 14",
+        desktopOnly: true,
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 7"): the chocolate-dessert
