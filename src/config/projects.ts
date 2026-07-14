@@ -1888,10 +1888,19 @@ export const projects: ProjectDetail[] = [
         spaceAfter: { mobile: 0, desktop: 100 },
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-12.webp",
-        mobile: "/assets/harrods/harrods-12-mobile.webp",
-        alt: "harrods image 11",
+        // Per Vitor's Figma comment pin ("VIDEO 5"): the sushi clip plays in
+        // this pair slot. WEB 5 ≡ MOBILE 5 byte-for-byte — one file, both
+        // breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-12.mp4",
+        poster: "/assets/harrods/harrods-12.webp",
+        // Left-cell card, same geometry as slot 7: photo 592×1056 at (86,4)
+        // in the 720×1065 canvas.
+        aspect: "720/1065",
+        inset: "0.4% 5.8% 0.5% 11.9%",
+        // Mobile still is a framed card: uniform 60px on 440 wide.
+        mobileGutter: "13.6%",
+        alt: "harrods video 11",
       },
       {
         type: "image",
