@@ -68,6 +68,13 @@ export interface ProjectMedia {
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
+  /**
+   * Vertical alignment of this slot within its pair row on desktop — "center"
+   * middle-aligns a shorter item against a taller pair partner (e.g. a still
+   * next to a portrait video). Defaults to top. No effect on mobile stacking.
+   */
+  align?: "center";
+
   /** Frame presentation style. Defaults to 'mask'. */
   frame?: GalleryFrame;
 
@@ -1800,12 +1807,17 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/harrods/harrods-4.webp",
         mobile: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods image 3",
+        // Middle-aligned against the taller portrait video in the pair.
+        align: "center",
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-5.webp",
-        mobile: "/assets/harrods/harrods-5-mobile.webp",
-        alt: "harrods image 4",
+        // Per Vitor's Figma comment pin ("VIDEO 2"): the dining-montage clip
+        // plays in this pair slot. WEB 2 ≡ MOBILE 2 byte-for-byte, so the one
+        // file serves both breakpoints; the slot still stays as poster.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-5.mp4",
+        poster: "/assets/harrods/harrods-5.webp",
+        alt: "harrods video 4",
       },
       {
         type: "image",
