@@ -1928,10 +1928,20 @@ export const projects: ProjectDetail[] = [
         alt: "harrods video 14",
       },
       {
-        type: "image",
-        desktop: "/assets/harrods/harrods-16.webp",
-        mobile: "/assets/harrods/harrods-16-mobile.webp",
-        alt: "harrods image 15",
+        // Per Vitor's Figma comment pin ("VIDEO 7"): the chocolate-dessert
+        // clip plays in this pair slot. WEB 7 ≡ MOBILE 7 byte-for-byte — one
+        // file, both breakpoints.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-16.mp4",
+        poster: "/assets/harrods/harrods-16.webp",
+        // Left-cell card: photo 592×1056 at (86,6). This still exports at
+        // 719×1066 (off-by-one vs the 720×1065 siblings), so the numbers
+        // are taken from the actual file.
+        aspect: "719/1066",
+        inset: "0.6% 5.7% 0.4% 12.0%",
+        // Mobile still is a framed card: uniform 60px on 440 wide.
+        mobileGutter: "13.6%",
+        alt: "harrods video 15",
       },
       {
         type: "image",
