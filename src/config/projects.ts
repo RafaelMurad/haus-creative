@@ -1875,7 +1875,7 @@ export const projects: ProjectDetail[] = [
         alt: "harrods image 5",
         span: "full",
         spaceBefore: { mobile: 0, desktop: 50 },
-        spaceAfter: { mobile: 55, desktop: 50 },
+        spaceAfter: { mobile: 27, desktop: 50 },
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 3"): the caviar clip plays in
@@ -1900,10 +1900,14 @@ export const projects: ProjectDetail[] = [
         align: "center",
       },
       {
+        // Desktop only: the mobile crop of this still is the burrata dish,
+        // which would duplicate the VIDEO 4 clip right below it in the
+        // mobile stack (removed per review 2026-07-14).
         type: "image",
         desktop: "/assets/harrods/harrods-9.webp",
         mobile: "/assets/harrods/harrods-9-mobile.webp",
         alt: "harrods image 8",
+        desktopOnly: true,
       },
       {
         // Per Vitor's Figma comment pin ("VIDEO 4"): the burrata clip plays
