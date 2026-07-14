@@ -1813,10 +1813,17 @@ export const projects: ProjectDetail[] = [
       {
         // Per Vitor's Figma comment pin ("VIDEO 2"): the dining-montage clip
         // plays in this pair slot. WEB 2 ≡ MOBILE 2 byte-for-byte, so the one
-        // file serves both breakpoints; the slot still stays as poster.
+        // file serves both breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
         poster: "/assets/harrods/harrods-5.webp",
+        // The still bakes the card frame: photo 592×1056 at (44,4) in the
+        // 720×1065 canvas — tight inner edge (toward the pair gap), wide
+        // outer edge. The clip plays inside that photo area.
+        aspect: "720/1065",
+        inset: "0.4% 11.7% 0.5% 6.1%",
+        // Mobile still is a framed card too: uniform 60px on 440 wide.
+        mobileGutter: "13.6%",
         alt: "harrods video 4",
       },
       {
@@ -1831,10 +1838,15 @@ export const projects: ProjectDetail[] = [
       {
         // Per Vitor's Figma comment pin ("VIDEO 3"): the caviar clip plays in
         // this pair slot. WEB 3 ≡ MOBILE 3 byte-for-byte — one file, both
-        // breakpoints; the slot still stays as poster.
+        // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-7.mp4",
         poster: "/assets/harrods/harrods-7.webp",
+        // Mirror of slot 5's card: photo 592×1056 at (86,4) — wide outer
+        // edge (left cell), tight inner edge. Mobile still is full-bleed,
+        // so no mobileGutter here.
+        aspect: "720/1065",
+        inset: "0.4% 5.8% 0.5% 11.9%",
         alt: "harrods video 6",
       },
       {
