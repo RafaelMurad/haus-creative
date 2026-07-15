@@ -710,22 +710,9 @@ export const projects: ProjectDetail[] = [
         alt: "wao-cosmo video 20",
         spaceBefore: { mobile: 55, desktop: 0 },
       },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-21.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-22-mobile.webp",
-        alt: "wao-cosmo image 21 (mobile)",
-        mobileOnly: true,
-        spaceBefore: { mobile: 55, desktop: 0 },
-      },
-      {
-        type: "image",
-        desktop: "/assets/wao-cosmo/wao-cosmo-20.webp",
-        mobile: "/assets/wao-cosmo/wao-cosmo-23-mobile.webp",
-        alt: "wao-cosmo image 22 (mobile)",
-        mobileOnly: true,
-        spaceBefore: { mobile: 55, desktop: 0 },
-      },
+      // The two trailing mobileOnly stills (wao-cosmo-21/20 covers) were
+      // removed per review 2026-07-15 — they duplicated the clips above
+      // them once videos 20/21 started playing on mobile.
     ],
 
     metaTitle: "Wao Cosmo | HAUS Creative",
