@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { GalleryGrid } from "@/components/ui/GalleryGrid";
 import type { ProjectMedia } from "@/config/projects";
 
@@ -260,6 +260,36 @@ describe("GalleryGrid", () => {
       const video = container.querySelector("video")!;
       fireEvent.click(video);
       expect(video.muted).toBe(false);
+    });
+
+    it("mutes the audible clip when it fully leaves the viewport", () => {
+      let ioCallback: IntersectionObserverCallback | undefined;
+      class MockIO {
+        constructor(cb: IntersectionObserverCallback) {
+          ioCallback = cb;
+        }
+        observe = jest.fn();
+        unobserve = jest.fn();
+        disconnect = jest.fn();
+      }
+      (globalThis as Record<string, unknown>).IntersectionObserver = MockIO;
+      try {
+        const { container } = render(
+          <GalleryGrid media={[makeAudioVideo(1)]} />,
+        );
+        const video = container.querySelector("video")!;
+        fireEvent.click(video);
+        expect(video.muted).toBe(false);
+        act(() => {
+          ioCallback?.(
+            [{ isIntersecting: false } as IntersectionObserverEntry],
+            {} as IntersectionObserver,
+          );
+        });
+        expect(video.muted).toBe(true);
+      } finally {
+        delete (globalThis as Record<string, unknown>).IntersectionObserver;
+      }
     });
 
     it("resolves the object form per breakpoint file (desktop viewport)", () => {

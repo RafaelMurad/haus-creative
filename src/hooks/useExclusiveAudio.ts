@@ -39,6 +39,20 @@ export function useExclusiveAudio(enabled: boolean, resyncKey?: unknown) {
     return () => window.removeEventListener(AUDIO_EVENT, onOther);
   }, [enabled, instanceId]);
 
+  // Sound doesn't follow the user away: once the audible clip fully leaves
+  // the viewport, drop back to muted. Observed only while audible (and
+  // re-attached after breakpoint remounts via resyncKey).
+  useEffect(() => {
+    if (!audible) return;
+    const v = videoRef.current;
+    if (!v || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) setAudible(false);
+    });
+    io.observe(v);
+    return () => io.disconnect();
+  }, [audible, resyncKey]);
+
   const toggle = () => {
     setAudible((prev) => {
       const next = !prev;
