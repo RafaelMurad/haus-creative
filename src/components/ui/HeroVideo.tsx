@@ -4,6 +4,8 @@ import {
   MOBILE_MEDIA_QUERY,
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
+import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
+import { AudioToggleButton } from "./AudioToggleButton";
 
 interface HeroVideoProps {
   /** Omit to render no video on desktop (mobile-only hero, e.g. MC Arabia). */
@@ -12,6 +14,12 @@ interface HeroVideoProps {
   poster?: string;
   objectFit?: "cover" | "contain";
   objectPosition?: string;
+  /**
+   * The banner file carries an audio track — show the corner speaker and
+   * unmute on click, sharing the one-audible-at-a-time channel with the
+   * gallery clips. Only set where the file was muxed with audio.
+   */
+  hasAudio?: boolean;
 }
 
 /**
@@ -35,18 +43,21 @@ export function HeroVideo({
   poster,
   objectFit = "cover",
   objectPosition = "center",
+  hasAudio = false,
 }: HeroVideoProps) {
   const resolved = useResponsiveVideoSource(desktop, mobile);
+  const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
 
   if (!desktop && !mobile) return null;
   // Breakpoint known but this side has no file (e.g. desktop viewport on a
   // mobile-only hero) — render nothing.
   if (resolved === undefined) return null;
 
-  return (
+  const video = (
     <video
+      ref={videoRef}
       key={resolved ?? "pre-hydration"}
-      className="absolute inset-0 w-full h-full"
+      className={`absolute inset-0 w-full h-full${hasAudio ? " cursor-pointer" : ""}`}
       style={{ objectFit, objectPosition }}
       playsInline
       autoPlay
@@ -55,6 +66,7 @@ export function HeroVideo({
       poster={poster}
       preload="metadata"
       src={resolved ?? undefined}
+      onClick={hasAudio ? toggle : undefined}
     >
       {resolved === null && (
         <>
@@ -65,5 +77,20 @@ export function HeroVideo({
         </>
       )}
     </video>
+  );
+
+  if (!hasAudio) return video;
+
+  // The hero's parent section is the positioned full-bleed box the video
+  // fills, so the speaker anchors to the same box as a sibling overlay.
+  return (
+    <>
+      {video}
+      <AudioToggleButton
+        audible={audible}
+        onToggle={toggle}
+        className="bottom-5 right-5"
+      />
+    </>
   );
 }

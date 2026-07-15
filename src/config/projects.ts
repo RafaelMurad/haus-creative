@@ -144,6 +144,12 @@ export interface ProjectDetail {
     objectPosition?: string;
     /** CSS object-fit override (e.g. 'contain' to show full video without cropping). Defaults to 'cover'. */
     objectFit?: "cover" | "contain";
+    /**
+     * The banner file was muxed with its source audio — the project-page
+     * hero shows the corner speaker and unmutes on click (same exclusive
+     * channel as the gallery clips). Home covers stay silent regardless.
+     */
+    hasAudio?: boolean;
   };
   heroImage?: {
     desktop: string;
@@ -1774,6 +1780,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/harrods/harrods-hero-video.mp4",
       mobile: "/assets/harrods/harrods-hero-video-mobile.mp4",
       poster: "/assets/harrods/harrods-hero-cover.webp",
+      // Banner files muxed with their source audio (audio-toggle pilot).
+      hasAudio: true,
     },
 
     heroImage: {
