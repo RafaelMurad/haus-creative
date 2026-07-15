@@ -58,6 +58,22 @@ from the same soft master — it reads like a video frame-grab; no better copy
 exists in any delivery. **Ask:** the original still (≥1440w), and we swap it
 in with no config change.
 
+## 7. Silent audio tracks in 12 exports (2026-07-15, FYI)
+
+For the audio-toggle rollout we muxed each clip's delivered soundtrack back
+onto the site files (they were previously stripped). Twelve exports carry
+**digitally silent tracks** (max −91 dB) — those clips got no speaker
+button. If any were meant to have sound, re-export with the mix:
+
+- **Bride Story** — mobile banner only (the desktop banner has a full mix)
+- **Bucherer Summer** — the 4x5 clip
+- **WAO** — Video1 (teaser) and Video3
+- **Ouronyx** — WEB 2/3/5/7/8 + MOBILE 2/3/9 (the phone/tablet/wordmark
+  cards and two interview edits; desktop WEB 9 has sound, its mobile edit
+  doesn't)
+
+No action needed if silence is intentional (likely for the UI mockups).
+
 ## ~~3. Ouronyx — two gallery images never delivered~~ RESOLVED 2026-07-10
 
 Rafael exported the two missing pair-partner stills from Figma directly

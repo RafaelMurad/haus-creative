@@ -17,9 +17,11 @@ interface HeroVideoProps {
   /**
    * The banner file carries an audio track — show the corner speaker and
    * unmute on click, sharing the one-audible-at-a-time channel with the
-   * gallery clips. Only set where the file was muxed with audio.
+   * gallery clips. Only set where the file was muxed with audio; object
+   * form enables it per breakpoint file (some mobile exports ship silent
+   * tracks).
    */
-  hasAudio?: boolean;
+  hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
 }
 
 /**
@@ -46,7 +48,19 @@ export function HeroVideo({
   hasAudio = false,
 }: HeroVideoProps) {
   const resolved = useResponsiveVideoSource(desktop, mobile);
-  const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
+  // Audio presence is a per-file fact — resolve the flag against the file
+  // that's actually playing (the mobile fallback to the desktop file keeps
+  // the desktop flag, e.g. YSL's shared banner).
+  const audioEnabled =
+    typeof hasAudio === "object"
+      ? mobile && resolved === mobile
+        ? !!hasAudio.mobile
+        : !!hasAudio.desktop
+      : hasAudio;
+  const { videoRef, audible, toggle } = useExclusiveAudio(
+    audioEnabled,
+    resolved,
+  );
 
   if (!desktop && !mobile) return null;
   // Breakpoint known but this side has no file (e.g. desktop viewport on a
@@ -57,7 +71,7 @@ export function HeroVideo({
     <video
       ref={videoRef}
       key={resolved ?? "pre-hydration"}
-      className={`absolute inset-0 w-full h-full${hasAudio ? " cursor-pointer" : ""}`}
+      className={`absolute inset-0 w-full h-full${audioEnabled ? " cursor-pointer" : ""}`}
       style={{ objectFit, objectPosition }}
       playsInline
       autoPlay
@@ -66,7 +80,7 @@ export function HeroVideo({
       poster={poster}
       preload="metadata"
       src={resolved ?? undefined}
-      onClick={hasAudio ? toggle : undefined}
+      onClick={audioEnabled ? toggle : undefined}
     >
       {resolved === null && (
         <>
@@ -79,7 +93,7 @@ export function HeroVideo({
     </video>
   );
 
-  if (!hasAudio) return video;
+  if (!audioEnabled) return video;
 
   // The hero's parent section is the positioned full-bleed box the video
   // fills, so the speaker anchors to the same box as a sibling overlay.

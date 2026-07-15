@@ -28,10 +28,17 @@ interface GalleryVideoProps {
  */
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
   const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
-  const { videoRef, audible, toggle } = useExclusiveAudio(
-    !!item.hasAudio,
-    resolved,
-  );
+  // Audio presence is a per-file fact — the object form covers slots whose
+  // mobile edit ships a silent track. Resolve against the file that's
+  // actually playing (mobile fallback to the desktop file keeps the
+  // desktop flag).
+  const hasAudio =
+    typeof item.hasAudio === "object"
+      ? item.mobile && resolved === item.mobile
+        ? !!item.hasAudio.mobile
+        : !!item.hasAudio.desktop
+      : !!item.hasAudio;
+  const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
 
   const video = (
     <video
@@ -41,7 +48,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
         item.aspect
           ? "block w-full h-auto md:h-full md:object-cover"
           : "w-full h-auto block"
-      }${item.hasAudio ? " cursor-pointer" : ""}`}
+      }${hasAudio ? " cursor-pointer" : ""}`}
       playsInline
       autoPlay
       loop
@@ -49,7 +56,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       poster={item.inset ? undefined : item.poster}
       preload={index < 2 ? "metadata" : "none"}
       src={resolved ?? undefined}
-      onClick={item.hasAudio ? toggle : undefined}
+      onClick={hasAudio ? toggle : undefined}
     >
       {resolved === null && (
         <>
@@ -69,7 +76,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
   // Audio clips: anchor the speaker button to the video box itself, so it
   // stays inside the clip on framed cards and gutters alike. The wrapper is
   // h-full on md so the framed (inset) video still fills its card area.
-  const core = item.hasAudio ? (
+  const core = hasAudio ? (
     <div className="relative md:h-full">
       {video}
       <AudioToggleButton audible={audible} onToggle={toggle} />

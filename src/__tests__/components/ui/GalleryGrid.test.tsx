@@ -262,6 +262,29 @@ describe("GalleryGrid", () => {
       expect(video.muted).toBe(false);
     });
 
+    it("resolves the object form per breakpoint file (desktop viewport)", () => {
+      // jest matchMedia mock reports desktop → the desktop flag decides.
+      const media: ProjectMedia[] = [
+        {
+          type: "video",
+          desktop: "/vid-a.mp4",
+          mobile: "/vid-a-mobile.mp4",
+          alt: "Video A",
+          hasAudio: { desktop: true, mobile: false },
+        },
+        {
+          type: "video",
+          desktop: "/vid-b.mp4",
+          mobile: "/vid-b-mobile.mp4",
+          alt: "Video B",
+          hasAudio: { desktop: false, mobile: true },
+        },
+      ];
+      render(<GalleryGrid media={media} />);
+      // Only the desktop-audible clip gets a speaker on a desktop viewport.
+      expect(screen.getAllByRole("button")).toHaveLength(1);
+    });
+
     it("keeps only one clip audible at a time", () => {
       const { container } = render(
         <GalleryGrid media={[makeAudioVideo(1), makeAudioVideo(2)]} />,
