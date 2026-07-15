@@ -3,20 +3,14 @@
 Status as of **2026-07-07**, after wiring the July 2 video batch (PR #41).
 Everything below blocks a specific slot on the site; all other videos are wired.
 
-## 1. YSL — mobile home banner is the wrong file
+## ~~1. YSL — mobile home banner is the wrong file~~ RESOLVED 2026-07-15
 
-`EXPORT/Yves Saint Laurent/MOBILE/VIDEO/YSL-HomeBanner-Mobile.mp4` (uploaded
-24 Feb from the `milito@oui.a…` account) is a **byte-for-byte duplicate of
-gallery clip 3** (the man-in-black LIBRE clip — same md5 `534aebbc…` as
-`WEB/VIDEO/YSL-Video3.mp4` and `MOBILE/VIDEO/03.mp4`). It is not a portrait
-version of the gold-logo banner animation.
-
-**Ask:** re-export the YSL home banner as a portrait/mobile cut
-(720×1280 or 440×864, mp4) and replace the file in that folder.
-
-**Meanwhile on the site:** the desktop banner plays on mobile, center-cropped
-(the YSL logo is centered, so it crops safely). Swapping in the real file
-later is a one-line config change.
+The Drive copy was re-downloaded and md5-verified: still byte-identical to
+gallery clip 3 (`534aebbc…`) — no re-export ever landed. **Decision
+(Rafael):** the delivered file plays as the mobile banner as-is. It's a
+proper 720×1280 portrait edit (gold logo → embossed box → EID MUBARAK
+title), so no crop workaround needed; wired as
+`ysl-hero-video-mobile.mp4` with its audio track. No further ask.
 
 ## 2. SK-II — confirm the empty mobile VIDEO folder
 
