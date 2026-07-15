@@ -1516,6 +1516,11 @@ export const projects: ProjectDetail[] = [
         poster: "/assets/ouronyx/ouronyx-8.webp",
         alt: "ouronyx video 7",
         span: "full",
+        // Mobile-only border (Vitor 2026-07-14): the 440×550 mobile edit
+        // can't survive a full-bleed ~3× phone upscale even at max encode
+        // quality (grain-tuned CRF 20) — rendering it smaller keeps the
+        // title text legible. Desktop (1440×830) stays full-bleed.
+        mobileGutter: "13%",
         spaceBefore: { mobile: 0, desktop: 60 },
       },
       // Rows 9-12 — user-supplied stills (2026-07-10, Figma exports) paired
@@ -1534,6 +1539,13 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/ouronyx/ouronyx-video-10.mp4",
         mobile: "/assets/ouronyx/ouronyx-video-10-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-10.webp",
+        // Quality mitigation (Vitor 2026-07-14, "aumentar as bordas"): the
+        // delivered clip is only 484×638 (mobile 300×388) — rendered smaller
+        // on white so it upscales less. Inner area is ratio-matched to the
+        // clip; interim until the hi-res re-exports (CLIENT-ASKS #5) land.
+        aspect: "720/900",
+        inset: "15% 16.8% 15% 16.8%",
+        mobileGutter: "15%",
         alt: "ouronyx video 10",
       },
       {
@@ -1556,6 +1568,11 @@ export const projects: ProjectDetail[] = [
         desktop: "/assets/ouronyx/ouronyx-video-11.mp4",
         mobile: "/assets/ouronyx/ouronyx-video-11-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-11.webp",
+        // Same quality mitigation as the phone-UI card above (484×638 /
+        // 300×388 sources) — see CLIENT-ASKS #5.
+        aspect: "720/900",
+        inset: "15% 16.8% 15% 16.8%",
+        mobileGutter: "15%",
         alt: "ouronyx video 11",
       },
       {
