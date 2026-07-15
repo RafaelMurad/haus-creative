@@ -45,7 +45,9 @@ animations (vector-origin), soft even at native size, upscaled 2–4× on the
 site. **Answer to Vitor's question: yes, it's an export problem.**
 
 **Ask (via Diego):** re-export OURONYX WEB 2, WEB 3, WEB 5 at ≥720w and
-MOBILE 2, MOBILE 3 at ≥440w (ideally 720w), same content/timing. Meanwhile
+MOBILE 1, MOBILE 2, MOBILE 3 at ≥720w, same content/timing. (MOBILE 1 is the
+film title card — 440×550 at a lavish 2.7 Mbps, i.e. a low-res export of a
+higher-res master; its text can't survive the ~3× phone upscale.) Meanwhile
 we render them smaller in-frame to reduce the upscale.
 
 ## 6. BFJ — original of the balcony image (bfj-11) via Diego (2026-07-14)
