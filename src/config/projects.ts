@@ -65,6 +65,14 @@ export interface ProjectMedia {
    */
   mobileGutter?: string;
 
+  /**
+   * The clip ships with an audio track (per Vitor 2026-07-14, the
+   * Instagram-style toggle): it still autoplays muted, but shows a corner
+   * speaker button and unmutes on click/tap — one clip audible at a time.
+   * Only set on files actually muxed with audio (heroes stay silent).
+   */
+  hasAudio?: boolean;
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -1798,6 +1806,7 @@ export const projects: ProjectDetail[] = [
         // full-bleed, so the clip runs edge-to-edge at natural aspect.
         type: "video",
         desktop: "/assets/harrods/harrods-video-2.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-2-mobile.webp",
         alt: "harrods video 1",
         span: "full",
@@ -1827,6 +1836,7 @@ export const projects: ProjectDetail[] = [
         // untouched.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods video 3",
         span: "full",
@@ -1849,6 +1859,7 @@ export const projects: ProjectDetail[] = [
         // slot renders its framed still instead — see the twins around it.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-5.webp",
         // The still bakes the card frame: photo 592×1056 at (44,4) in the
         // 720×1065 canvas — tight inner edge (toward the pair gap), wide
@@ -1883,6 +1894,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-7.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-7.webp",
         // Mirror of slot 5's card: photo 592×1056 at (86,4) — wide outer
         // edge (left cell), tight inner edge. Mobile still is full-bleed,
@@ -1915,6 +1927,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-10.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-10.webp",
         // Right-cell card like slot 5: photo 592×1056 at (46,4) in the
         // 720×1065 canvas. Mobile still is full-bleed — no gutter.
@@ -1941,6 +1954,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-12.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-12.webp",
         // Left-cell card, same geometry as slot 7: photo 592×1056 at (86,4)
         // in the 720×1065 canvas. Mobile plays full-bleed (gutter removed
@@ -1980,6 +1994,7 @@ export const projects: ProjectDetail[] = [
         // cocktails frame and stays as poster.
         type: "video",
         desktop: "/assets/harrods/harrods-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-13-mobile.webp",
         alt: "harrods video 12",
         span: "full",
@@ -1997,6 +2012,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-15.webp",
         // Right-cell card, same geometry as slot 10: photo 592×1056 at
         // (46,4) in the 720×1065 canvas. Desktop only — on mobile this clip
@@ -2013,6 +2029,7 @@ export const projects: ProjectDetail[] = [
         // file, both breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-16.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-16.webp",
         // Left-cell card: photo 592×1056 at (86,6). This still exports at
         // 719×1066 (off-by-one vs the 720×1065 siblings), so the numbers
