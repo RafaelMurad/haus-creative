@@ -50,9 +50,12 @@ export function WorkGalleryItem({
   return (
     <section className="relative h-dvh w-full overflow-clip pt-[5vh]">
       {/* Media Background - absolute positioned layer */}
+      {/* Hover dim lives on the Link (the whole tile as one unit): with the
+          static cover layered UNDER the hero video, per-layer opacity let
+          the mismatched still ghost through the translucent video. */}
       <Link
         href={project.href}
-        className="absolute inset-0 block group"
+        className="absolute inset-0 block transition-opacity duration-300 hover:opacity-90"
         aria-label={`View ${project.title} project`}
       >
         {useCarousel ? (
@@ -60,16 +63,15 @@ export function WorkGalleryItem({
             items={galleryMedia}
             animation={carouselConfig.animation}
             autoAdvanceTime={carouselConfig.autoAdvanceTime}
-            className="transition-opacity duration-300 group-hover:opacity-90"
           />
         ) : (
           <>
             <MediaRenderer
               media={project.media}
-              className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+              className="h-full w-full object-cover"
             />
             {heroVideo && (
-              <div className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-90">
+              <div className="absolute inset-0">
                 <HeroVideo
                   desktop={heroVideo.desktop}
                   mobile={heroVideo.mobile}
