@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { GalleryGrid } from "@/components/ui/GalleryGrid";
 import type { ProjectMedia } from "@/config/projects";
 
@@ -217,5 +217,114 @@ describe("GalleryGrid", () => {
     ];
     render(<GalleryGrid media={media} />);
     expect(screen.getAllByRole("img")).toHaveLength(6);
+  });
+
+  // =========================================================================
+  // Audio toggle (hasAudio clips — Instagram-style corner speaker)
+  // =========================================================================
+
+  describe("audio toggle", () => {
+    function makeAudioVideo(index = 1): ProjectMedia {
+      return { ...makeVideo(index), hasAudio: true };
+    }
+
+    beforeAll(() => {
+      // jsdom's HTMLMediaElement.play is not implemented — the unmute path
+      // calls it to keep playback going through the gesture.
+      Object.defineProperty(HTMLMediaElement.prototype, "play", {
+        configurable: true,
+        value: jest.fn().mockResolvedValue(undefined),
+      });
+    });
+
+    it("renders no speaker button on ordinary muted clips", () => {
+      render(<GalleryGrid media={[makeVideo(1)]} />);
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
+
+    it("starts muted with the speaker button and unmutes on button click", () => {
+      const { container } = render(<GalleryGrid media={[makeAudioVideo(1)]} />);
+      const video = container.querySelector("video")!;
+      expect(video.muted).toBe(true);
+      fireEvent.click(
+        screen.getByRole("button", { name: "Play video with sound" }),
+      );
+      expect(video.muted).toBe(false);
+      // Second click mutes again (label flipped meanwhile).
+      fireEvent.click(screen.getByRole("button", { name: "Mute video" }));
+      expect(video.muted).toBe(true);
+    });
+
+    it("clicking the video itself toggles the audio", () => {
+      const { container } = render(<GalleryGrid media={[makeAudioVideo(1)]} />);
+      const video = container.querySelector("video")!;
+      fireEvent.click(video);
+      expect(video.muted).toBe(false);
+    });
+
+    it("mutes the audible clip when it fully leaves the viewport", () => {
+      let ioCallback: IntersectionObserverCallback | undefined;
+      class MockIO {
+        constructor(cb: IntersectionObserverCallback) {
+          ioCallback = cb;
+        }
+        observe = jest.fn();
+        unobserve = jest.fn();
+        disconnect = jest.fn();
+      }
+      (globalThis as Record<string, unknown>).IntersectionObserver = MockIO;
+      try {
+        const { container } = render(
+          <GalleryGrid media={[makeAudioVideo(1)]} />,
+        );
+        const video = container.querySelector("video")!;
+        fireEvent.click(video);
+        expect(video.muted).toBe(false);
+        act(() => {
+          ioCallback?.(
+            [{ isIntersecting: false } as IntersectionObserverEntry],
+            {} as IntersectionObserver,
+          );
+        });
+        expect(video.muted).toBe(true);
+      } finally {
+        delete (globalThis as Record<string, unknown>).IntersectionObserver;
+      }
+    });
+
+    it("resolves the object form per breakpoint file (desktop viewport)", () => {
+      // jest matchMedia mock reports desktop → the desktop flag decides.
+      const media: ProjectMedia[] = [
+        {
+          type: "video",
+          desktop: "/vid-a.mp4",
+          mobile: "/vid-a-mobile.mp4",
+          alt: "Video A",
+          hasAudio: { desktop: true, mobile: false },
+        },
+        {
+          type: "video",
+          desktop: "/vid-b.mp4",
+          mobile: "/vid-b-mobile.mp4",
+          alt: "Video B",
+          hasAudio: { desktop: false, mobile: true },
+        },
+      ];
+      render(<GalleryGrid media={media} />);
+      // Only the desktop-audible clip gets a speaker on a desktop viewport.
+      expect(screen.getAllByRole("button")).toHaveLength(1);
+    });
+
+    it("keeps only one clip audible at a time", () => {
+      const { container } = render(
+        <GalleryGrid media={[makeAudioVideo(1), makeAudioVideo(2)]} />,
+      );
+      const videos = container.querySelectorAll("video");
+      fireEvent.click(videos[0]);
+      expect(videos[0].muted).toBe(false);
+      fireEvent.click(videos[1]);
+      expect(videos[1].muted).toBe(false);
+      expect(videos[0].muted).toBe(true);
+    });
   });
 });

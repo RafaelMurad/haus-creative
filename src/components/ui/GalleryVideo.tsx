@@ -5,6 +5,8 @@ import {
   MOBILE_MEDIA_QUERY,
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
+import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
+import { AudioToggleButton } from "./AudioToggleButton";
 
 interface GalleryVideoProps {
   item: ProjectMedia;
@@ -19,18 +21,34 @@ interface GalleryVideoProps {
  * mobile breakpoint — `<source media>` on <video> is only evaluated at load
  * time, so the native two-source markup (kept for SSR/no-JS) never swaps on
  * resize by itself.
+ *
+ * Clips flagged `hasAudio` get the Instagram-style treatment: they autoplay
+ * muted (autoplay policy) with a corner speaker button; clicking the video or
+ * the button unmutes it and mutes every other clip on the page.
  */
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
   const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
+  // Audio presence is a per-file fact — the object form covers slots whose
+  // mobile edit ships a silent track. Resolve against the file that's
+  // actually playing (mobile fallback to the desktop file keeps the
+  // desktop flag).
+  const hasAudio =
+    typeof item.hasAudio === "object"
+      ? item.mobile && resolved === item.mobile
+        ? !!item.hasAudio.mobile
+        : !!item.hasAudio.desktop
+      : !!item.hasAudio;
+  const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
 
   const video = (
     <video
+      ref={videoRef}
       key={resolved ?? "pre-hydration"}
-      className={
+      className={`${
         item.aspect
           ? "block w-full h-auto md:h-full md:object-cover"
           : "w-full h-auto block"
-      }
+      }${hasAudio ? " cursor-pointer" : ""}`}
       playsInline
       autoPlay
       loop
@@ -38,6 +56,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       poster={item.inset ? undefined : item.poster}
       preload={index < 2 ? "metadata" : "none"}
       src={resolved ?? undefined}
+      onClick={hasAudio ? toggle : undefined}
     >
       {resolved === null && (
         <>
@@ -52,6 +71,18 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
         </>
       )}
     </video>
+  );
+
+  // Audio clips: anchor the speaker button to the video box itself, so it
+  // stays inside the clip on framed cards and gutters alike. The wrapper is
+  // h-full on md so the framed (inset) video still fills its card area.
+  const core = hasAudio ? (
+    <div className="relative md:h-full">
+      {video}
+      <AudioToggleButton audible={audible} onToggle={toggle} />
+    </div>
+  ) : (
+    video
   );
 
   // Desktop only: the designed card box (aspect from the slot still) with
@@ -77,11 +108,11 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
         className="md:absolute md:[inset:var(--card-inset)]"
         style={{ "--card-inset": item.inset ?? "0" } as React.CSSProperties}
       >
-        {video}
+        {core}
       </div>
     </div>
   ) : (
-    video
+    core
   );
 
   // Mobile card gutter — insets the card on all four sides below md only,

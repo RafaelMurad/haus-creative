@@ -65,6 +65,17 @@ export interface ProjectMedia {
    */
   mobileGutter?: string;
 
+  /**
+   * The clip ships with an audio track (per Vitor 2026-07-14, the
+   * Instagram-style toggle): it still autoplays muted, but shows a corner
+   * speaker button and unmutes on click/tap — one clip audible at a time.
+   * Only set on files actually muxed with audio. Audio presence is a
+   * per-FILE fact — where the desktop and mobile edits differ (e.g. the
+   * Ouronyx 18 mobile export ships a digitally silent track), use the
+   * object form to enable the toggle per breakpoint file.
+   */
+  hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
+
   /** Layout span: 'full' = full width, 'half' = 50% (paired). Defaults to 'half'. */
   span?: "full" | "half";
 
@@ -136,6 +147,14 @@ export interface ProjectDetail {
     objectPosition?: string;
     /** CSS object-fit override (e.g. 'contain' to show full video without cropping). Defaults to 'cover'. */
     objectFit?: "cover" | "contain";
+    /**
+     * The banner file was muxed with its source audio — the project-page
+     * hero shows the corner speaker and unmutes on click (same exclusive
+     * channel as the gallery clips). Home covers stay silent regardless.
+     * Object form enables it per breakpoint file (Bride Story's mobile
+     * banner export ships a digitally silent track).
+     */
+    hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
   };
   heroImage?: {
     desktop: string;
@@ -218,6 +237,8 @@ export const projects: ProjectDetail[] = [
     heroVideo: {
       mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
       poster: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -343,6 +364,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/ysl/ysl-hero-video.mp4",
       mobile: "/assets/ysl/ysl-hero-video.mp4",
       poster: "/assets/ysl/ysl-hero-cover.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -382,6 +405,7 @@ export const projects: ProjectDetail[] = [
         // delivered MOBILE/01.mp4 is byte-identical to YSL-Video1.mp4).
         type: "video",
         desktop: "/assets/ysl/ysl-video-3.mp4",
+        hasAudio: true,
         poster: "/assets/ysl/ysl-3.webp",
         alt: "ysl video 2",
       },
@@ -413,6 +437,7 @@ export const projects: ProjectDetail[] = [
         // Video2 — BABYCAT spray (same clip both breakpoints)
         type: "video",
         desktop: "/assets/ysl/ysl-video-7.mp4",
+        hasAudio: true,
         poster: "/assets/ysl/ysl-7.webp",
         alt: "ysl video 6",
       },
@@ -431,6 +456,7 @@ export const projects: ProjectDetail[] = [
         // Video3 — man in black with LIBRE (same clip both breakpoints)
         type: "video",
         desktop: "/assets/ysl/ysl-video-9.mp4",
+        hasAudio: true,
         poster: "/assets/ysl/ysl-9.webp",
         alt: "ysl video 8",
       },
@@ -462,6 +488,7 @@ export const projects: ProjectDetail[] = [
         // (18.8s event cut vs 22.3s display cut), so both files ship.
         type: "video",
         desktop: "/assets/ysl/ysl-video-13.mp4",
+        hasAudio: true,
         mobile: "/assets/ysl/ysl-video-13-mobile.mp4",
         poster: "/assets/ysl/ysl-13.webp",
         alt: "ysl video 12",
@@ -587,6 +614,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video2 — white puffer with dog
         desktop: "/assets/wao-cosmo/wao-cosmo-video-13.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-13.webp",
         aspect: "720/1137",
         alt: "wao-cosmo video 12",
@@ -606,6 +634,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video4 — street duo ("My name is Zumi")
         desktop: "/assets/wao-cosmo/wao-cosmo-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-15.webp",
         aspect: "720/1065",
         // Top gutter bumped from the measured 0% per review — was too close
@@ -618,6 +647,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video5 — red dress on the curb
         desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
         aspect: "720/1194",
         inset: "0% 5.56% 10.89% 11.39%",
@@ -628,6 +658,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video6 — yellow dress at the doorway
         desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
         aspect: "720/1194",
         inset: "10.89% 11.39% 0% 5.56%",
@@ -638,6 +669,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video7 — VETEMENTS coat over the bridge
         desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
         aspect: "720/1191",
         inset: "0% 5.56% 10.83% 11.39%",
@@ -650,6 +682,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video8 — escalator
         desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
         aspect: "720/1191",
         inset: "10.92% 11.39% 0% 5.56%",
@@ -660,6 +693,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video9 — tan coat, blurred street
         desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
         aspect: "720/1194",
         inset: "0% 5.56% 19.1% 11.39%",
@@ -670,6 +704,7 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video10 — evening street reflection
         desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
+        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
         aspect: "720/1194",
         inset: "10.89% 11.39% 6.2% 5.56%",
@@ -722,6 +757,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/vivara/vivara-hero-video.mp4",
       mobile: "/assets/vivara/vivara-hero-video-mobile.mp4",
       poster: "/assets/vivara/vivara-hero-cover.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -891,6 +928,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/life/life-hero-video.mp4",
       mobile: "/assets/life/life-hero-video-mobile.mp4",
       poster: "/assets/life/life-hero-cover.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -1091,6 +1130,7 @@ export const projects: ProjectDetail[] = [
         // Mobile shows the static sk-8 crop via the mobileOnly twin below.
         type: "video",
         desktop: "/assets/sk/sk-video-8.mp4",
+        hasAudio: true,
         poster: "/assets/sk/sk-8.webp",
         alt: "sk video 7",
         span: "full",
@@ -1288,6 +1328,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bfj/bfj-hero-video.mp4",
       mobile: "/assets/bfj/bfj-hero-video-mobile.mp4",
       poster: "/assets/bfj/bfj-hero-cover.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -1429,6 +1471,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/ouronyx/ouronyx-hero-video.mp4",
       mobile: "/assets/ouronyx/ouronyx-hero-video-mobile.mp4",
       poster: "/assets/ouronyx/ouronyx-hero-cover.webp",
+      // Banner muxed with its source audio (audio toggle).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -1498,6 +1542,7 @@ export const projects: ProjectDetail[] = [
         // which stays as poster.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-8.mp4",
+        hasAudio: true,
         mobile: "/assets/ouronyx/ouronyx-video-8-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-8.webp",
         alt: "ouronyx video 7",
@@ -1573,6 +1618,7 @@ export const projects: ProjectDetail[] = [
         // Tagged video — the wide website mockup film (WEB 4).
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-13.mp4",
+        hasAudio: true,
         poster: "/assets/ouronyx/ouronyx-13.webp",
         alt: "ouronyx video 13",
         span: "full",
@@ -1605,6 +1651,7 @@ export const projects: ProjectDetail[] = [
         // partner card, so the pair aligns.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/ouronyx/ouronyx-15.webp",
         alt: "ouronyx video 15",
       },
@@ -1630,6 +1677,8 @@ export const projects: ProjectDetail[] = [
         // portrait). Both open on the black logo card, kept as poster.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-18.mp4",
+        // Desktop mix is real; the MOBILE 9 export ships a silent track.
+        hasAudio: { desktop: true, mobile: false },
         mobile: "/assets/ouronyx/ouronyx-video-18-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-18.webp",
         alt: "ouronyx video 18",
@@ -1666,6 +1715,9 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bride-story/bride-story-hero-video.mp4",
       mobile: "/assets/bride-story/bride-story-hero-video-mobile.mp4",
       poster: "/assets/bride-story/bride-story-hero-cover.webp",
+      // Desktop banner has a full mix; the delivered mobile export ships a
+      // digitally silent track (max −91 dB), so no toggle below md.
+      hasAudio: { desktop: true, mobile: false },
     },
 
     heroImage: {
@@ -1783,6 +1835,8 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/harrods/harrods-hero-video.mp4",
       mobile: "/assets/harrods/harrods-hero-video-mobile.mp4",
       poster: "/assets/harrods/harrods-hero-cover.webp",
+      // Banner files muxed with their source audio (audio-toggle pilot).
+      hasAudio: true,
     },
 
     heroImage: {
@@ -1815,6 +1869,7 @@ export const projects: ProjectDetail[] = [
         // full-bleed, so the clip runs edge-to-edge at natural aspect.
         type: "video",
         desktop: "/assets/harrods/harrods-video-2.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-2-mobile.webp",
         alt: "harrods video 1",
         span: "full",
@@ -1844,6 +1899,7 @@ export const projects: ProjectDetail[] = [
         // untouched.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-4-mobile.webp",
         alt: "harrods video 3",
         span: "full",
@@ -1866,6 +1922,7 @@ export const projects: ProjectDetail[] = [
         // slot renders its framed still instead — see the twins around it.
         type: "video",
         desktop: "/assets/harrods/harrods-video-5.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-5.webp",
         // The still bakes the card frame: photo 592×1056 at (44,4) in the
         // 720×1065 canvas — tight inner edge (toward the pair gap), wide
@@ -1900,6 +1957,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-7.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-7.webp",
         // Mirror of slot 5's card: photo 592×1056 at (86,4) — wide outer
         // edge (left cell), tight inner edge. Mobile still is full-bleed,
@@ -1932,6 +1990,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-10.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-10.webp",
         // Right-cell card like slot 5: photo 592×1056 at (46,4) in the
         // 720×1065 canvas. Mobile still is full-bleed — no gutter.
@@ -1958,6 +2017,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-12.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-12.webp",
         // Left-cell card, same geometry as slot 7: photo 592×1056 at (86,4)
         // in the 720×1065 canvas. Mobile plays full-bleed (gutter removed
@@ -1997,6 +2057,7 @@ export const projects: ProjectDetail[] = [
         // cocktails frame and stays as poster.
         type: "video",
         desktop: "/assets/harrods/harrods-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-13-mobile.webp",
         alt: "harrods video 12",
         span: "full",
@@ -2014,6 +2075,7 @@ export const projects: ProjectDetail[] = [
         // breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-15.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-15.webp",
         // Right-cell card, same geometry as slot 10: photo 592×1056 at
         // (46,4) in the 720×1065 canvas. Desktop only — on mobile this clip
@@ -2030,6 +2092,7 @@ export const projects: ProjectDetail[] = [
         // file, both breakpoints.
         type: "video",
         desktop: "/assets/harrods/harrods-video-16.mp4",
+        hasAudio: true,
         poster: "/assets/harrods/harrods-16.webp",
         // Left-cell card: photo 592×1056 at (86,6). This still exports at
         // 719×1066 (off-by-one vs the 720×1065 siblings), so the numbers
