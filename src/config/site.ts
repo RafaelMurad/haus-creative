@@ -129,8 +129,11 @@ export const siteConfig: SiteConfig = {
 // FEATURED PROJECTS - For homepage video sections
 // =============================================================================
 
+// Order per Rafael 2026-07-15: Homebanner, YSL, Vivara, WAO, Harrods,
+// Marie Claire, BFJ, SK-II, Life, Bride, Bucherer Summer, Ouronyx.
 export const featuredProjects: Project[] = [
-  // Intro hero — SK (non-navigable, will be video in future)
+  // 1. Homebanner — intro hero (non-navigable; SK static until Vitor's
+  // showreel edit lands, then it becomes the showreel video)
   {
     id: "sk",
     title: "SK",
@@ -141,19 +144,6 @@ export const featuredProjects: Project[] = [
       src: "/assets/sk/sk-1.webp",
       srcMobile: "/assets/sk/sk-1-mobile.webp",
       alt: "SK brand showcase",
-    },
-  },
-  // 1. Marie Claire Arabia
-  {
-    id: "marie-claire-arabia",
-    title: "Marie Claire Arabia",
-    subtitle: "Creative Direction",
-    href: "/work/marie-claire-arabia",
-    media: {
-      type: "image",
-      src: "/assets/mc-arabia/mc-arabia-home-cover.webp",
-      srcMobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
-      alt: "Marie Claire Arabia editorial",
     },
   },
   // 2. YSL
@@ -182,43 +172,43 @@ export const featuredProjects: Project[] = [
       alt: "Vivara jewellery campaign",
     },
   },
-  // 4. Life
+  // 4. WAO
   {
-    id: "life",
-    title: "Life",
-    subtitle: "Creative Strategy",
-    href: "/work/life",
+    id: "wao-cosmo",
+    title: "Wao Cosmo",
+    subtitle: "Visual Design",
+    href: "/work/wao-cosmo",
     media: {
       type: "image",
-      src: "/assets/life/life-1.webp",
-      srcMobile: "/assets/life/life-1-mobile.webp",
-      alt: "Life project showcase",
+      src: "/assets/wao-cosmo/wao-cosmo-1.webp",
+      srcMobile: "/assets/wao-cosmo/wao-cosmo-1-mobile.webp",
+      alt: "Wao Cosmo visual design",
     },
   },
-  // 5. SK
+  // 5. Harrods
   {
-    id: "sk",
-    title: "SK",
-    subtitle: "Brand Development",
-    href: "/work/sk",
+    id: "harrods",
+    title: "Harrods",
+    subtitle: "Dining Hall",
+    href: "/work/harrods",
     media: {
       type: "image",
-      src: "/assets/sk/sk-1.webp",
-      srcMobile: "/assets/sk/sk-1-mobile.webp",
-      alt: "SK brand showcase",
+      src: "/assets/harrods/harrods-1.webp",
+      srcMobile: "/assets/harrods/harrods-1-mobile.webp",
+      alt: "Harrods Dining Hall",
     },
   },
-  // 6. Bucherer Summer
+  // 6. Marie Claire
   {
-    id: "bucherer-summer",
-    title: "Bucherer Summer",
+    id: "marie-claire-arabia",
+    title: "Marie Claire Arabia",
     subtitle: "Creative Direction",
-    href: "/work/bucherer-summer",
+    href: "/work/marie-claire-arabia",
     media: {
       type: "image",
-      src: "/assets/bucherer/bucherer-1.webp",
-      srcMobile: "/assets/bucherer/bucherer-1-mobile.webp",
-      alt: "Bucherer Summer campaign",
+      src: "/assets/mc-arabia/mc-arabia-home-cover.webp",
+      srcMobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
+      alt: "Marie Claire Arabia editorial",
     },
   },
   // 7. BFJ
@@ -234,30 +224,30 @@ export const featuredProjects: Project[] = [
       alt: "BFJ project showcase",
     },
   },
-  // 8. Wao Cosmo
+  // 8. SK-II
   {
-    id: "wao-cosmo",
-    title: "Wao Cosmo",
-    subtitle: "Visual Design",
-    href: "/work/wao-cosmo",
+    id: "sk",
+    title: "SK",
+    subtitle: "Brand Development",
+    href: "/work/sk",
     media: {
       type: "image",
-      src: "/assets/wao-cosmo/wao-cosmo-1.webp",
-      srcMobile: "/assets/wao-cosmo/wao-cosmo-1-mobile.webp",
-      alt: "Wao Cosmo visual design",
+      src: "/assets/sk/sk-1.webp",
+      srcMobile: "/assets/sk/sk-1-mobile.webp",
+      alt: "SK brand showcase",
     },
   },
-  // 9. Ouronyx
+  // 9. Life
   {
-    id: "ouronyx",
-    title: "Ouronyx",
-    subtitle: "Digital Experience",
-    href: "/work/ouronyx",
+    id: "life",
+    title: "Life",
+    subtitle: "Creative Strategy",
+    href: "/work/life",
     media: {
       type: "image",
-      src: "/assets/ouronyx/ouronyx-1.webp",
-      srcMobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
-      alt: "Ouronyx digital experience",
+      src: "/assets/life/life-1.webp",
+      srcMobile: "/assets/life/life-1-mobile.webp",
+      alt: "Life project showcase",
     },
   },
   // 10. Bride Story
@@ -273,17 +263,30 @@ export const featuredProjects: Project[] = [
       alt: "Bride Story art direction",
     },
   },
-  // 11. Harrods
+  // 11. Bucherer Summer
   {
-    id: "harrods",
-    title: "Harrods",
-    subtitle: "Dining Hall",
-    href: "/work/harrods",
+    id: "bucherer-summer",
+    title: "Bucherer Summer",
+    subtitle: "Creative Direction",
+    href: "/work/bucherer-summer",
     media: {
       type: "image",
-      src: "/assets/harrods/harrods-1.webp",
-      srcMobile: "/assets/harrods/harrods-1-mobile.webp",
-      alt: "Harrods Dining Hall",
+      src: "/assets/bucherer/bucherer-1.webp",
+      srcMobile: "/assets/bucherer/bucherer-1-mobile.webp",
+      alt: "Bucherer Summer campaign",
+    },
+  },
+  // 12. Ouronyx
+  {
+    id: "ouronyx",
+    title: "Ouronyx",
+    subtitle: "Digital Experience",
+    href: "/work/ouronyx",
+    media: {
+      type: "image",
+      src: "/assets/ouronyx/ouronyx-1.webp",
+      srcMobile: "/assets/ouronyx/ouronyx-1-mobile.webp",
+      alt: "Ouronyx digital experience",
     },
   },
 ];
