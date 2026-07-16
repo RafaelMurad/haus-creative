@@ -1,4 +1,5 @@
 import { IntroHero, WorkGalleryItem } from "@/components/home";
+import { SiteFooter } from "@/components/layout";
 import { featuredProjects } from "@/config/site";
 import { projects } from "@/config/projects";
 import type { ProjectMedia } from "@/config/projects";
@@ -61,6 +62,10 @@ export default function Home() {
           />
         );
       })}
+
+      {/* Footer after the last tile (client ask, 2026-07-16) — same shared
+          footer as the project pages. */}
+      <SiteFooter />
     </>
   );
 }
