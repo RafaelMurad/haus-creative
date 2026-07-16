@@ -36,18 +36,19 @@ export default function About() {
             </div>
           </div>
 
-          {/* Image on mobile - between body text and contact section per Figma */}
+          {/* Image on mobile - between body text and contact section per the
+              updated Figma (2026-07): natural aspect within the page gutters —
+              the old fixed-height cover crop cut the portrait at the forehead. */}
           <div className="md:hidden mt-8">
-            <div className="relative h-[292px] overflow-hidden -mx-[21px]">
-              <Image
-                src="/assets/about/about.webp"
-                alt="Studio Haus portrait"
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
-            </div>
+            <Image
+              src="/assets/about/about-portrait.webp"
+              alt="Studio Haus portrait"
+              width={627}
+              height={736}
+              className="w-full h-auto"
+              sizes="100vw"
+              priority
+            />
           </div>
 
           {/* Contact section — visible on both breakpoints per Figma
@@ -82,18 +83,20 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Image (desktop only) */}
-        <div className="hidden md:block md:w-1/2">
-          <div className="relative h-[528px] overflow-hidden">
-            <Image
-              src="/assets/about/about.webp"
-              alt="Studio Haus portrait"
-              fill
-              className="object-cover"
-              sizes="50vw"
-              priority
-            />
-          </div>
+        {/* Right column - Image (desktop only). Updated Figma (2026-07): the
+            portrait renders at its natural 627×736 aspect, top-aligned with
+            the heading and centered in the right half — capped at the
+            source's native width so it never upscales past 1×. */}
+        <div className="hidden md:flex md:w-1/2 md:justify-center md:items-start md:px-8">
+          <Image
+            src="/assets/about/about-portrait.webp"
+            alt="Studio Haus portrait"
+            width={627}
+            height={736}
+            className="w-full h-auto max-w-[627px]"
+            sizes="(min-width: 768px) 627px, 100vw"
+            priority
+          />
         </div>
       </div>
     </div>
