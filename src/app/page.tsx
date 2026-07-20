@@ -53,15 +53,9 @@ export default function Home() {
         // Tiles marked homeCoverUsesMobile play the portrait edit on every
         // breakpoint (e.g. Bride — its landscape banner bakes a title that
         // the full-bleed tile crop would cut; the portrait cut has none).
-        // The poster is dropped too: it's a frame of the LANDSCAPE banner
-        // (title included) — the tile's static backdrop covers the load.
         const heroVideo =
           detail?.heroVideo?.homeCoverUsesMobile && detail.heroVideo.mobile
-            ? {
-                ...detail.heroVideo,
-                desktop: detail.heroVideo.mobile,
-                poster: undefined,
-              }
+            ? { ...detail.heroVideo, desktop: detail.heroVideo.mobile }
             : detail?.heroVideo;
 
         return (

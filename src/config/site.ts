@@ -250,9 +250,7 @@ export const featuredProjects: Project[] = [
       alt: "Life project showcase",
     },
   },
-  // 10. Bride Story — tile backdrop is a text-free frame-0 still of the
-  // portrait banner (the standard stills bake the "BRIDE" title, which
-  // flashed before the video painted and crops in the tile).
+  // 10. Bride Story
   {
     id: "bride-story",
     title: "Bride Story",
@@ -260,8 +258,8 @@ export const featuredProjects: Project[] = [
     href: "/work/bride-story",
     media: {
       type: "image",
-      src: "/assets/bride-story/bride-story-home-cover.webp",
-      srcMobile: "/assets/bride-story/bride-story-home-cover.webp",
+      src: "/assets/bride-story/bride-story-1.webp",
+      srcMobile: "/assets/bride-story/bride-story-1-mobile.webp",
       alt: "Bride Story art direction",
     },
   },
