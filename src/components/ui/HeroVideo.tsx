@@ -71,12 +71,19 @@ export function HeroVideo({
   // mobile-only hero) — render nothing.
   if (resolved === undefined) return null;
 
+  // Whole-frame heroes go contain only ABOVE the lg swap boundary — below
+  // it the portrait edit plays in tall boxes whose ratio it matches, where
+  // cover fills edge-to-edge without cutting anything (contain there would
+  // just add hairline bars, e.g. on home's viewport-ratio tiles).
+  const fitClass =
+    objectFit === "contain" ? "object-cover lg:object-contain" : "object-cover";
+
   const video = (
     <video
       ref={videoRef}
       key={resolved ?? "pre-hydration"}
-      className={`absolute inset-0 w-full h-full${audioEnabled ? " cursor-pointer" : ""}`}
-      style={{ objectFit, objectPosition }}
+      className={`absolute inset-0 w-full h-full ${fitClass}${audioEnabled ? " cursor-pointer" : ""}`}
+      style={{ objectPosition }}
       playsInline
       autoPlay
       loop
