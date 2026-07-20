@@ -1762,6 +1762,12 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bride-story/bride-story-hero-video.mp4",
       mobile: "/assets/bride-story/bride-story-hero-video-mobile.mp4",
       poster: "/assets/bride-story/bride-story-hero-cover.webp",
+      // Whole-frame hero (review 2026-07-20): the baked "BRIDE" title sits
+      // at the frame's left edge and cover-crop cut it in tall windows.
+      // Contain renders the 1920×1080 banner as a natural-aspect band that
+      // scales with the viewport above lg; below lg the portrait edit
+      // plays full-bleed (it's composed for tall boxes).
+      objectFit: "contain",
       // Desktop banner has a full mix; the delivered mobile export ships a
       // digitally silent track (max −91 dB), so no toggle below md.
       hasAudio: { desktop: true, mobile: false },

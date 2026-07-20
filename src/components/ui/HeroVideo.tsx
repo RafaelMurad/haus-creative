@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  MOBILE_MEDIA_QUERY,
+  HERO_MOBILE_MEDIA_QUERY,
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
 import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
@@ -47,7 +47,11 @@ export function HeroVideo({
   objectPosition = "center",
   hasAudio = false,
 }: HeroVideoProps) {
-  const resolved = useResponsiveVideoSource(desktop, mobile);
+  const resolved = useResponsiveVideoSource(
+    desktop,
+    mobile,
+    HERO_MOBILE_MEDIA_QUERY,
+  );
   // Audio presence is a per-file fact — resolve the flag against the file
   // that's actually playing (the mobile fallback to the desktop file keeps
   // the desktop flag, e.g. YSL's shared banner).
@@ -85,7 +89,7 @@ export function HeroVideo({
       {resolved === null && (
         <>
           {mobile && (
-            <source src={mobile} type="video/mp4" media={MOBILE_MEDIA_QUERY} />
+            <source src={mobile} type="video/mp4" media={HERO_MOBILE_MEDIA_QUERY} />
           )}
           {desktop && <source src={desktop} type="video/mp4" />}
         </>
