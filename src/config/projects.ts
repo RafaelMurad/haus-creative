@@ -146,6 +146,14 @@ export interface ProjectDetail {
     desktop?: string;
     mobile?: string;
     poster?: string;
+    /**
+     * Poster for the portrait (mobile) file, shown below the hero swap
+     * boundary — for banners whose landscape poster bakes a title that
+     * would flash over the portrait edit while it loads (Bride). When set,
+     * no poster renders until the breakpoint is known (the black hero
+     * section covers the gap) so the wrong-breakpoint frame never flashes.
+     */
+    posterMobile?: string;
     /** CSS object-position for cropping (e.g. 'top', 'center 20%'). Defaults to 'center'. */
     objectPosition?: string;
     /** CSS object-fit override (e.g. 'contain' to show full video without cropping). Defaults to 'cover'. */
@@ -1762,6 +1770,10 @@ export const projects: ProjectDetail[] = [
       desktop: "/assets/bride-story/bride-story-hero-video.mp4",
       mobile: "/assets/bride-story/bride-story-hero-video-mobile.mp4",
       poster: "/assets/bride-story/bride-story-hero-cover.webp",
+      // Text-free frame-0 of the portrait edit — the landscape poster above
+      // bakes the BRIDE title and flashed over the mobile video while it
+      // loaded (live review 2026-07-20).
+      posterMobile: "/assets/bride-story/bride-story-hero-cover-mobile.webp",
       // Whole-frame hero (review 2026-07-20): the baked "BRIDE" title sits
       // at the frame's left edge and cover-crop cut it in tall windows.
       // Contain renders the 1920×1080 banner as a natural-aspect band that

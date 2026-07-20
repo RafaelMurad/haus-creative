@@ -12,6 +12,12 @@ interface HeroVideoProps {
   desktop?: string;
   mobile?: string;
   poster?: string;
+  /**
+   * Poster for the portrait file (below the hero swap boundary). When set,
+   * the poster renders only after the breakpoint is known so the
+   * wrong-breakpoint frame never flashes over the loading video.
+   */
+  posterMobile?: string;
   objectFit?: "cover" | "contain";
   objectPosition?: string;
   /**
@@ -43,6 +49,7 @@ export function HeroVideo({
   desktop,
   mobile,
   poster,
+  posterMobile,
   objectFit = "cover",
   objectPosition = "center",
   hasAudio = false,
@@ -52,6 +59,18 @@ export function HeroVideo({
     mobile,
     HERO_MOBILE_MEDIA_QUERY,
   );
+  // Poster is per-file where a mobile poster exists: the landscape poster
+  // bakes content (e.g. Bride's title) that must not flash over the
+  // portrait edit. Pre-hydration renders none in that case — the black
+  // hero section covers the gap. Without posterMobile, behavior is
+  // unchanged (single poster at all times).
+  const activePoster = posterMobile
+    ? resolved === null
+      ? undefined
+      : mobile && resolved === mobile
+        ? posterMobile
+        : poster
+    : poster;
   // Audio presence is a per-file fact — resolve the flag against the file
   // that's actually playing (the mobile fallback to the desktop file keeps
   // the desktop flag, e.g. YSL's shared banner).
@@ -81,7 +100,7 @@ export function HeroVideo({
       autoPlay
       loop
       muted
-      poster={poster}
+      poster={activePoster}
       preload="metadata"
       src={resolved ?? undefined}
       onClick={audioEnabled ? toggle : undefined}

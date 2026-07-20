@@ -125,6 +125,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 desktop={project.heroVideo.desktop}
                 mobile={project.heroVideo.mobile}
                 poster={project.heroVideo.poster}
+                posterMobile={project.heroVideo.posterMobile}
                 objectFit={project.heroVideo.objectFit}
                 objectPosition={project.heroVideo.objectPosition}
                 hasAudio={project.heroVideo.hasAudio}
@@ -208,6 +209,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <HeroVideo
               mobile={project.heroVideo.mobile}
               poster={project.heroVideo.poster}
+              posterMobile={project.heroVideo.posterMobile}
               objectFit={project.heroVideo.objectFit}
               objectPosition={project.heroVideo.objectPosition}
               hasAudio={project.heroVideo.hasAudio}

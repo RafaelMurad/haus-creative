@@ -76,6 +76,7 @@ export function WorkGalleryItem({
                   desktop={heroVideo.desktop}
                   mobile={heroVideo.mobile}
                   poster={heroVideo.poster}
+                  posterMobile={heroVideo.posterMobile}
                 />
               </div>
             )}
