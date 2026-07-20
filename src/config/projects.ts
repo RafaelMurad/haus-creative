@@ -1906,16 +1906,11 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
 
-    credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
-    ],
+    // No credits: the client text batch (2026-07-20) provided none for
+    // Harrods, so the section is omitted entirely (it renders only when
+    // the list is non-empty) — see CLIENT-ASKS #8. The old shared
+    // placeholder crew was removed per review; add the real list when
+    // Vitor sends it.
 
     media: [
       {

@@ -32,9 +32,9 @@ Ricciardo / Caroline Issa / Jessica Kahawaty, Post Spring Studios. Wired.
 ## 8. Harrods — credits list (2026-07-20)
 
 The site-text batch covered every project's credits EXCEPT Harrods (its
-section has intro copy only). The page still shows the shared placeholder
-crew. **Ask:** the Harrods Restaurants credits — roles + names (or confirm
-the credits block should be dropped for this project).
+section has intro copy only). Per review the placeholder crew was removed
+and **the Credits section is omitted on /work/harrods** until the real
+list arrives. **Ask:** the Harrods Restaurants credits — roles + names.
 
 ## 5. Ouronyx — hi-res re-exports for the small clips (2026-07-14)
 
