@@ -239,14 +239,10 @@ export const projects: ProjectDetail[] = [
     editorialSubtitle: "Creative Direction",
     location: "London, UK",
 
-    // Per Figma, the hero video is mobile-only (tag on the mobile frame);
-    // desktop keeps the static editorial image below.
-    heroVideo: {
-      mobile: "/assets/mc-arabia/mc-arabia-hero-video-mobile.mp4",
-      poster: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
-      // Banner muxed with its source audio (audio toggle).
-      hasAudio: true,
-    },
+    // Hero is fully static per review 2026-07-20 — the mobile-only hero
+    // video (Figma-tagged, wired 2026-07-07) was retired; mobile shows the
+    // cover image like desktop. The mp4 stays on disk if it's ever wanted
+    // back (mc-arabia-hero-video-mobile.mp4).
 
     heroImage: {
       desktop: "/assets/mc-arabia/mc-arabia-hero.webp",
