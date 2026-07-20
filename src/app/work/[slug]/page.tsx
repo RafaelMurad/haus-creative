@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
 import { GalleryGrid, HeroVideo } from "@/components/ui";
-import { siteConfig } from "@/config/site";
+import { SiteFooter } from "@/components/layout";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -315,40 +314,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         )}
 
         {/* Divider — both mobile + desktop per updated Figma */}
-        <div className="px-[17px] md:px-[34px] mt-[71px] md:mt-[81px] md:pr-[44px]">
-          <div className="w-full h-[0.5px] bg-black" />
-        </div>
-
-        {/* Footer Section */}
-        <div className="px-[21px] md:px-[41px] md:pr-[44px]">
-          {/* Mobile: stacked vertically. Desktop: email left, social right */}
-          <div className="flex flex-col md:flex-row md:justify-between pt-[71px] md:pt-[60px] pb-[60px] md:pb-[40px]">
-            {/* Contact Email — plain <a> for native mailto: handling */}
-            <div>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-[15px] leading-[1.21em] hover:opacity-50 transition-opacity"
-              >
-                {siteConfig.email}
-              </a>
-            </div>
-
-            {/* Social Links - vertical on mobile, horizontal on desktop */}
-            <div className="flex flex-col md:flex-row gap-[18px] md:gap-[21px] mt-[38px] md:mt-0">
-              {siteConfig.socialLinks.map((link) => (
-                <Link
-                  key={link.title}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[15px] leading-[1.21em] hover:opacity-50 transition-opacity"
-                >
-                  {link.title}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Footer Section — shared component (also on home) */}
+        <SiteFooter />
       </section>
     </div>
   );
