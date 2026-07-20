@@ -73,9 +73,16 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
           project.heroVideo?.desktop
-            ? project.heroImage?.mobile
-              ? "aspect-[440/864] md:aspect-auto md:h-dvh"
-              : "h-dvh"
+            ? project.heroVideo.objectFit === "contain"
+              ? // Whole-frame hero (e.g. Bride's baked left-edge title):
+                // the portrait edit fills its design box up to lg (heroes
+                // swap files at the lg boundary), then the landscape banner
+                // renders as a natural-aspect band that scales with the
+                // viewport — the whole frame stays visible at any size.
+                "aspect-[440/864] lg:aspect-[1920/1080] lg:h-auto"
+              : project.heroImage?.mobile
+                ? "aspect-[440/864] md:aspect-auto md:h-dvh"
+                : "h-dvh"
             : project.heroImage?.objectFit === "contain"
               ? project.heroImage?.mobileFit === "natural"
                 ? "h-auto"
