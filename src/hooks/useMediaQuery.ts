@@ -6,6 +6,15 @@ import { useEffect, useState } from "react";
 export const MOBILE_MEDIA_QUERY = "(max-width: 767.98px)";
 
 /**
+ * Hero banners swap to the portrait edit below Tailwind's `lg` boundary
+ * (tablet-sized and down, review 2026-07-20): the landscape banners bake
+ * titles into the frame edges, which cover-crop cuts on tablet-ish
+ * viewports — the portrait edits are composed for tall boxes. Gallery
+ * clips keep MOBILE_MEDIA_QUERY, aligned with the md: layout classes.
+ */
+export const HERO_MOBILE_MEDIA_QUERY = "(max-width: 1023.98px)";
+
+/**
  * Tracks a CSS media query and re-evaluates on viewport changes.
  *
  * Returns `null` on the server and during the first client render (before
@@ -42,8 +51,9 @@ export function useMediaQuery(query: string): boolean | null {
 export function useResponsiveVideoSource(
   desktop?: string,
   mobile?: string,
+  query: string = MOBILE_MEDIA_QUERY,
 ): string | null | undefined {
-  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
+  const isMobile = useMediaQuery(query);
   if (isMobile === null) return null;
   return isMobile ? (mobile ?? desktop) : desktop;
 }
