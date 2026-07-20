@@ -155,6 +155,13 @@ export interface ProjectDetail {
      * banner export ships a digitally silent track).
      */
     hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
+    /**
+     * The HOME tile plays the portrait (mobile) edit on every breakpoint —
+     * for banners whose landscape cut bakes text into the frame edges
+     * (Bride's "BRIDE" title), which the full-bleed tile crop would cut.
+     * The portrait edit carries no baked text, so it crops safely.
+     */
+    homeCoverUsesMobile?: boolean;
   };
   heroImage?: {
     desktop: string;
@@ -1707,6 +1714,9 @@ export const projects: ProjectDetail[] = [
       // scales with the viewport above lg; below lg the portrait edit
       // plays full-bleed (it's composed for tall boxes).
       objectFit: "contain",
+      // The home tile stays a standard full-bleed cover — it plays the
+      // portrait edit at every size instead (no baked text to crop).
+      homeCoverUsesMobile: true,
       // Desktop banner has a full mix; the delivered mobile export ships a
       // digitally silent track (max −91 dB), so no toggle below md.
       hasAudio: { desktop: true, mobile: false },
