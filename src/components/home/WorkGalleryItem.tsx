@@ -71,19 +71,11 @@ export function WorkGalleryItem({
               className="h-full w-full object-cover"
             />
             {heroVideo && (
-              <div
-                className={`absolute inset-0${
-                  // Whole-frame heroes (e.g. Bride's baked title) letterbox
-                  // on black inside the h-dvh tile above lg — the mismatched
-                  // static cover must not peek around the contained video.
-                  heroVideo.objectFit === "contain" ? " lg:bg-black" : ""
-                }`}
-              >
+              <div className="absolute inset-0">
                 <HeroVideo
                   desktop={heroVideo.desktop}
                   mobile={heroVideo.mobile}
                   poster={heroVideo.poster}
-                  objectFit={heroVideo.objectFit}
                 />
               </div>
             )}
