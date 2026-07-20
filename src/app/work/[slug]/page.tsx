@@ -233,26 +233,43 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             Right: description body. Mobile: stacked single column. */}
         <div className="px-[21px] md:px-[34px] pt-[70px] md:pt-[70px]">
           <div className="flex flex-col gap-[24px] md:flex-row md:gap-[60px]">
-            {/* Left column: title + editorial subtitle + agency */}
+            {/* Left column: title + discipline (uppercase) + location +
+                agency — lines render only when the client copy provides
+                them (order per the 2026-07-20 text delivery). */}
             <div className="flex-1 md:max-w-[400px]">
               <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
                 {project.title}
               </h1>
-              <p className="text-[14px] leading-[1.4em] uppercase tracking-wide mb-[14px]">
-                {project.editorialSubtitle ?? "LOREM IPSUM EDITORIAL"}
-              </p>
-              <p className="text-[14px] leading-[1.4em]">
-                <span className="font-semibold">Agency:</span>{" "}
-                {project.agency ?? "Lorem Ipsum"}
-              </p>
+              {project.editorialSubtitle && (
+                <p className="text-[14px] leading-[1.4em] uppercase tracking-wide mb-[14px]">
+                  {project.editorialSubtitle}
+                </p>
+              )}
+              {project.location && (
+                <p className="text-[14px] leading-[1.4em] mb-[14px]">
+                  {project.location}
+                </p>
+              )}
+              {project.agency && (
+                <p className="text-[14px] leading-[1.4em]">
+                  <span className="font-semibold">Agency:</span>{" "}
+                  {project.agency}
+                </p>
+              )}
             </div>
 
-            {/* Right column: description. Desktop unchanged; mobile stacks tightly
-                under the agency (gap-24, was 49 — Figma #20). */}
-            <div className="flex-1 md:max-w-[460px]">
-              <p className="text-[14px] leading-[1.4em] text-black">
-                {project.introText ?? project.description}
-              </p>
+            {/* Right column: intro body — one <p> per paragraph. Desktop
+                unchanged; mobile stacks tightly under the agency (gap-24,
+                was 49 — Figma #20). */}
+            <div className="flex-1 md:max-w-[460px] space-y-[1em]">
+              {(Array.isArray(project.introText)
+                ? project.introText
+                : [project.introText ?? project.description]
+              ).map((paragraph, i) => (
+                <p key={i} className="text-[14px] leading-[1.4em] text-black">
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>
