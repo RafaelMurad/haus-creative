@@ -155,8 +155,14 @@ describe("ProjectPage", () => {
       );
       const section = container.querySelector("#project-hero");
       expect(section).toBeInTheDocument();
-      expect(section!.className).not.toContain("md:h-auto");
-      expect(section!.className).toMatch(/h-dvh/);
+      if (project.heroVideo?.objectFit === "contain") {
+        // Whole-frame video mode (Bride): md:h-auto is collapse-safe here
+        // because the md aspect box gives the section intrinsic height.
+        expect(section!.className).toContain("md:aspect-[1920/1080]");
+      } else {
+        expect(section!.className).not.toContain("md:h-auto");
+        expect(section!.className).toMatch(/h-dvh/);
+      }
       unmount();
     });
   });

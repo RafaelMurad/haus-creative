@@ -73,9 +73,15 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         id="project-hero"
         className={`relative w-full bg-black overflow-hidden ${
           project.heroVideo?.desktop
-            ? project.heroImage?.mobile
-              ? "aspect-[440/864] md:aspect-auto md:h-dvh"
-              : "h-dvh"
+            ? project.heroVideo.objectFit === "contain"
+              ? // Whole-frame video hero (e.g. Bride's baked left-edge title,
+                // which cover-crop cut on narrow windows): desktop renders a
+                // natural-aspect 16:9 band that scales with the viewport;
+                // mobile keeps the 440/864 design box (its own portrait edit).
+                "aspect-[440/864] md:aspect-[1920/1080] md:h-auto"
+              : project.heroImage?.mobile
+                ? "aspect-[440/864] md:aspect-auto md:h-dvh"
+                : "h-dvh"
             : project.heroImage?.objectFit === "contain"
               ? project.heroImage?.mobileFit === "natural"
                 ? "h-auto"
