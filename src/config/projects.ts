@@ -249,6 +249,10 @@ export const projects: ProjectDetail[] = [
       mobile: "/assets/mc-arabia/mc-arabia-hero-mobile.webp",
       alt: "Marie Claire Arabia September Issue editorial",
       objectFit: "contain",
+      // The mobile still bakes the "marie claire" masthead to the frame
+      // edge — cover-crop clipped it once the mobile hero went static
+      // (review 2026-07-20); natural renders the 440×864 cover art whole.
+      mobileFit: "natural",
     },
 
     year: "2024",
