@@ -131,10 +131,13 @@ export interface ProjectDetail {
 
   // Content
   description: string;
-  introText?: string;
-  /** Campaign tagline shown in the intro block, uppercase (e.g. "SEPTEMBER ISSUE - BACK TO WORK EDITORIAL") */
+  /** Intro body (right column). Array = multiple paragraphs (client copy 2026-07-20). */
+  introText?: string | string[];
+  /** Discipline line shown uppercase in the intro block (e.g. "Creative Direction") */
   editorialSubtitle?: string;
-  /** Agency name shown in the intro block under the campaign tagline */
+  /** Location line under the discipline (e.g. "Dubai, UAE" / "Shot in Zurich, Switzerland") */
+  location?: string;
+  /** Agency line ("Agency: X") — omitted entirely when the project has none */
   agency?: string;
 
   // Hero Media
@@ -224,13 +227,17 @@ export const projects: ProjectDetail[] = [
     slug: "marie-claire-arabia",
     client: "Marie Claire Arabia",
     title: "Marie Claire Arabia",
-    subtitle: "September Issue - Back to Work Editorial",
+    subtitle: "Creative Direction",
     description:
-      "Creative direction for the September Issue Back to Work editorial, combining bold fashion statements with refined art direction.",
-    introText:
-      "A striking editorial for Marie Claire Arabia's September Issue, exploring the return to professional elegance through contemporary fashion photography.",
-    editorialSubtitle: "September Issue - Back to Work Editorial",
-    agency: "ITP Media",
+      "Commissioned for Marie Claire Arabia's September issue, this editorial reimagined back-to-office dressing through a contemporary fashion perspective.",
+    // Client copy 2026-07-20 — the text lists no agency for this project
+    // (the earlier "ITP Media" line was dropped with it).
+    introText: [
+      "Commissioned for Marie Claire Arabia's September issue, this editorial reimagined back-to-office dressing through a contemporary fashion perspective.",
+      "Shot across the streets of Central London, the story portrays the modern executive woman: confident, ambitious and effortlessly elegant. Combining cinematic urban imagery with refined editorial styling.",
+    ],
+    editorialSubtitle: "Creative Direction",
+    location: "London, UK",
 
     // Per Figma, the hero video is mobile-only (tag on the mobile frame);
     // desktop keeps the static editorial image below.
@@ -348,10 +355,18 @@ export const projects: ProjectDetail[] = [
     id: "ysl",
     slug: "ysl",
     client: "YSL",
-    title: "Yves Saint Laurent",
-    subtitle: "Art Direction",
+    title: "YSL Beauty - The Golden Celebration",
+    subtitle: "Creative Direction",
     description:
-      "Art direction for Yves Saint Laurent, crafting a visual narrative that honours the maison's heritage while pushing creative boundaries.",
+      "YSL Beauty's first global Eid campaign marked a milestone for the luxury house, celebrating one of the region's most important cultural moments through a contemporary lens.",
+    editorialSubtitle: "Creative Direction",
+    location: "Dubai, UAE",
+    agency: "Mazarine",
+    introText: [
+      "YSL Beauty's first global Eid campaign marked a milestone for the luxury house, celebrating one of the region's most important cultural moments through a contemporary lens.",
+      "Inspired by the warmth and cinematic beauty of desert sunsets, I collaborated with YSL Beauty's global and regional teams to develop the creative direction for a series of capsule films featuring brand ambassadors from the GCC and Southeast Asia.",
+      "The challenge was to honour local cultural nuances while remaining unmistakably YSL, balancing authenticity with the brand's iconic visual codes. The result was a refined campaign that connected with regional audiences while maintaining a cohesive global luxury identity.",
+    ],
 
     // Both Figma frames tag the hero as video. The delivered
     // YSL-HomeBanner-Mobile.mp4 is byte-identical to gallery clip 3
@@ -377,14 +392,10 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      {
+        role: "Talent",
+        name: "Nada Daeshen (GCC), Meerqeen (Malaysia), Luna Maya (Indonesia)",
+      },
     ],
 
     media: [
@@ -512,11 +523,17 @@ export const projects: ProjectDetail[] = [
     id: "wao-cosmo",
     slug: "wao-cosmo",
     client: "Wao Cosmo",
-    title: "Wao Cosmo",
-    subtitle: "Visual Design",
+    title: "WAOMAG Showcase",
+    subtitle: "Creative Direction",
     headerTheme: "light",
     description:
-      "Comprehensive visual identity and brand design for Wao Cosmo, creating a distinctive visual language across all touchpoints.",
+      "As founder and Creative Director of We Are One Magazine (WAOMAG), I use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
+    editorialSubtitle: "Creative Direction",
+    location: "São Paulo, Brazil",
+    introText: [
+      "As founder and Creative Director of We Are One Magazine (WAOMAG), I use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
+      "From fashion editorials exploring unconventional photographic techniques to experimental editorial design, cultural interviews, street-style storytelling and AI-generated fashion films, WAOMAG continuously pushes the boundaries of visual communication while remaining rooted in a cosmopolitan perspective.",
+    ],
 
     heroImage: {
       desktop: "/assets/wao-cosmo/wao-cosmo-1.webp",
@@ -528,14 +545,11 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Vitor Milito" },
+      { role: "Photographer", name: "Muraca" },
+      { role: "Model", name: "Luiza Tozelli (WAY)" },
+      { role: "Stylist", name: "Paulo Faria" },
+      { role: "HMU", name: "Vini Vieira" },
     ],
 
     media: [
@@ -733,11 +747,18 @@ export const projects: ProjectDetail[] = [
     id: "vivara",
     slug: "vivara",
     client: "Vivara",
-    title: "Vivara",
+    title: "Vivara - Summer Campaign",
     subtitle: "Art Direction",
     headerTheme: "light",
     description:
-      "Art direction for Vivara jewellery, creating elevated visual campaigns that capture the brand's refined elegance.",
+      "For over a decade, Gisele Bündchen has been the face of Vivara, appearing in four major campaigns each year.",
+    editorialSubtitle: "Art Direction",
+    location: "São Paulo, Brazil",
+    agency: "GB65",
+    introText: [
+      "For over a decade, Gisele Bündchen has been the face of Vivara, appearing in four major campaigns each year. The creative challenge is continually reinventing the visual narrative while preserving the strength and recognition of such an enduring partnership.",
+      "Working under the creative direction of Giovanni Bianco, I contributed to campaigns that refreshed the brand's aesthetic season after season, balancing timeless elegance with contemporary luxury to keep each collection feeling distinctive and relevant.",
+    ],
 
     heroVideo: {
       desktop: "/assets/vivara/vivara-hero-video.mp4",
@@ -757,14 +778,14 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Giovanni Bianco" },
+      { role: "Art Director", name: "Vitor Milito" },
+      { role: "Photographers", name: "MAR+VIN" },
+      { role: "Talent", name: "Gisele Bündchen" },
+      { role: "HMU", name: "Henrique Martins" },
+      { role: "Styling", name: "Pedro Sales" },
+      { role: "DoP", name: "William Etchebehere" },
+      { role: "Post Production", name: "Bruno Rezende" },
     ],
 
     media: [
@@ -904,11 +925,18 @@ export const projects: ProjectDetail[] = [
     id: "life",
     slug: "life",
     client: "Life",
-    title: "Life",
-    subtitle: "Creative Strategy",
+    title: "Life By Vivara - Summer Campaign",
+    subtitle: "Art Direction",
     headerTheme: "light",
     description:
-      "Creative strategy and visual direction for Life, developing a compelling brand narrative through considered design.",
+      "Featuring actress Marina Ruy Barbosa, the Life by Vivara Summer Campaign drew inspiration from Marrakech, capturing a vibrant, contemporary expression of luxury.",
+    editorialSubtitle: "Art Direction",
+    location: "São Paulo, Brazil",
+    agency: "GB65",
+    introText: [
+      "Featuring actress Marina Ruy Barbosa, the Life by Vivara Summer Campaign drew inspiration from Marrakech, capturing a vibrant, contemporary expression of luxury designed to resonate with a younger generation of consumers.",
+      "Working alongside Creative Director Giovanni Bianco, I contributed to the campaign's visual development, helping shape a world that balanced aspirational fashion imagery with the warmth, colour and energy of its destination-inspired narrative.",
+    ],
 
     heroVideo: {
       desktop: "/assets/life/life-hero-video.mp4",
@@ -928,14 +956,14 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Giovanni Bianco" },
+      { role: "Art Director", name: "Vitor Milito" },
+      { role: "Photographer", name: "Lufree" },
+      { role: "Talent", name: "Marina Ruy Barbosa" },
+      { role: "HMU", name: "Henrique Martins" },
+      { role: "Styling", name: "Rita Lazzarotti" },
+      { role: "DoP", name: "William Etchebehere" },
+      { role: "Post Production", name: "Bruno Rezende" },
     ],
 
     fullRowSpacing: 150,
@@ -1047,10 +1075,18 @@ export const projects: ProjectDetail[] = [
     id: "sk",
     slug: "sk",
     client: "SK",
-    title: "SK",
-    subtitle: "Brand Development",
+    title: "SK-II - Your Truest Self",
+    subtitle: "Creative Direction",
     description:
-      "Brand development and visual identity for SK, establishing a cohesive design language across all brand touchpoints.",
+      "Working with Shophouse, I contributed to the global visual refresh of SK-II, helping define a new creative direction for talent, product and ingredient imagery.",
+    editorialSubtitle: "Creative Direction",
+    location: "Shot in New York, Hong Kong and Tokyo",
+    agency: "Shophouse",
+    introText: [
+      "Working with Shophouse, I contributed to the global visual refresh of SK-II, helping define a new creative direction for talent, product and ingredient imagery.",
+      "The campaign established a comprehensive visual system that became the foundation for brand assets and creative guidelines used by agency partners across local markets. Principal photography took place in Hong Kong, while product and ingredient imagery was produced in New York.",
+      "The creative challenge was to reinforce SK-II's leadership across Asia while broadening its appeal to Western audiences. This meant finding a contemporary visual expression for the brand's 50-year heritage and its iconic ingredient, Pitera™, through a more optimistic, natural aesthetic, combining dynamic talent imagery, minimalist product photography and multisensory ingredient visualisation.",
+    ],
 
     // Per Figma, SK's hero is static — the delivered "BANNER" video is the
     // sk-8 gallery slot below, not a hero.
@@ -1064,14 +1100,10 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Vitor Milito" },
+      { role: "Photographer & Director", name: "Paola Kudacki" },
+      { role: "Still Life", name: "Kat Borchart" },
+      { role: "Talent", name: "Tang Wei, Haruka Ayase" },
     ],
 
     media: [
@@ -1210,10 +1242,18 @@ export const projects: ProjectDetail[] = [
     id: "bucherer-summer",
     slug: "bucherer-summer",
     client: "Bucherer",
-    title: "Bucherer Summer",
+    title: "Bucherer - The Summer of Indulgence",
     subtitle: "Creative Direction",
     description:
-      "Creative direction for Bucherer's summer campaign, bringing dynamic motion design and animation to the luxury watch and jewellery brand.",
+      "The Summer of Indulgence was a 360° campaign celebrating the pleasures of the season while showcasing Bucherer's jewellery, watches and luxury retail experience.",
+    editorialSubtitle: "Creative Direction",
+    location: "Shot in Zurich, Switzerland",
+    agency: "Spring Studios",
+    introText: [
+      "The Summer of Indulgence was a 360° campaign celebrating the pleasures of the season while showcasing Bucherer's jewellery, watches and luxury retail experience.",
+      "Inspired by the warmth and joy of summer, we developed a vibrant creative concept built around colourful visuals, playful copy and nostalgic ice cream references. Bucherer boutiques were transformed into luxurious gelaterias, inviting customers to indulge in scoops of flavour while discovering the latest collections.",
+      "The campaign unified multiple retail offerings under a single creative platform, delivering a cohesive brand experience across retail, digital, social media and marketing communications.",
+    ],
 
     heroImage: {
       desktop: "/assets/bucherer/bucherer-1.webp",
@@ -1278,14 +1318,12 @@ export const projects: ProjectDetail[] = [
     ],
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Vitor Milito" },
+      { role: "Copywriter", name: "Vanessa da Silva" },
+      { role: "Photographer", name: "Armin Zogbaum" },
+      { role: "Set Designer", name: "Rahel Morgen" },
+      { role: "Producer", name: "Maria De Luca" },
+      { role: "Post Production", name: "Spring Studios" },
     ],
 
     metaTitle: "Bucherer Summer | HAUS Creative",
@@ -1305,10 +1343,18 @@ export const projects: ProjectDetail[] = [
     id: "bfj",
     slug: "bfj",
     client: "Bucherer Fine Jewellery",
-    title: "Bucherer Fine Jewellery",
-    subtitle: "Lorem Ipsum",
+    title: "Bucherer Fine Jewellery - Collections",
+    subtitle: "Creative Direction",
     description:
-      "Creative direction and digital design for Bucherer Fine Jewellery.",
+      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each jewellery collection.",
+    editorialSubtitle: "Creative Direction",
+    location: "Shot in Cape Town, South Africa",
+    agency: "Spring Studios",
+    introText: [
+      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each jewellery collection.",
+      "From the bohemian spirit of Peekaboo to the understated minimalism of B Dimension, we developed eight unique personas, each defined by their own lifestyle, aspirations and attitude.",
+      "Across multiple locations, we produced editorial photography, still life and film that brought each collection to life. The resulting assets were deployed across digital campaigns, e-commerce, social media, DOOH, print collateral and in-store experiences, establishing a cohesive visual language across every customer touchpoint.",
+    ],
 
     heroVideo: {
       desktop: "/assets/bfj/bfj-hero-video.mp4",
@@ -1328,14 +1374,12 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Art Director", name: "Vitor Milito" },
+      { role: "CD Copy", name: "Jessica Clark" },
+      { role: "Photographers", name: "Sebastian Sabal-Bruce, Luke Kuisis" },
+      { role: "Film Director", name: "Jon Clements" },
+      { role: "Stylist", name: "Anne-Marie Curtis" },
+      { role: "Post Production", name: "Spring Studios" },
     ],
 
     media: [
@@ -1448,10 +1492,18 @@ export const projects: ProjectDetail[] = [
     id: "ouronyx",
     slug: "ouronyx",
     client: "OURONYX",
-    title: "OURONYX",
-    subtitle: "Lorem Ipsum",
+    title: "OURONYX - Beauty Has Power",
+    subtitle: "Creative Direction",
     description:
-      "Lorem Ipsum",
+      "Beauty Has Power was the launch campaign for OURONYX, a next-generation aesthetic wellness brand, created to build awareness and drive conversion across key international markets.",
+    editorialSubtitle: "Creative Direction",
+    location: "London, UK",
+    agency: "Spring Studios",
+    introText: [
+      "Beauty Has Power was the launch campaign for OURONYX, a next-generation aesthetic wellness brand, created to build awareness and drive conversion across key international markets.",
+      "From the outset, I helped shape the brand's creative vision, from naming, visual identity and clinic interiors to the art direction of the launch campaign. We developed a sophisticated visual language featuring premium talent that reflected the brand's international audience and elevated positioning.",
+      "Beyond the campaign, the project encompassed a complete digital ecosystem, including doctor-led video content, an immersive website with interactive features and an integrated booking platform, alongside a comprehensive social media programme supporting both launch and ongoing brand growth.",
+    ],
 
     heroVideo: {
       desktop: "/assets/ouronyx/ouronyx-hero-video.mp4",
@@ -1473,15 +1525,17 @@ export const projects: ProjectDetail[] = [
 
     // Placeholder credits (same set as the other projects) until the real
     // Ouronyx crew list is supplied from the Figma column.
+    // Real credits per the client text delivery 2026-07-20 (closes
+    // CLIENT-ASKS #4 — was the shared placeholder crew).
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Directors", name: "Vitor Milito, Jessica Clark" },
+      { role: "Photographer", name: "Scott Trindle" },
+      { role: "Film Director", name: "Kloss Films" },
+      {
+        role: "Talent",
+        name: "Daniel Ricciardo, Caroline Issa, Jessica Kahawaty",
+      },
+      { role: "Post Production", name: "Spring Studios" },
     ],
 
     media: [
@@ -1691,11 +1745,18 @@ export const projects: ProjectDetail[] = [
     id: "bride-story",
     slug: "bride-story",
     client: "Bride Story",
-    title: "Bride Story",
-    subtitle: "Art Direction",
+    title: "BRIDE Magazine",
+    subtitle: "Creative Direction",
     headerTheme: "light",
     description:
-      "Art direction and visual storytelling for Bride Story, capturing the elegance and emotion of bridal fashion through refined creative direction.",
+      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform creative business.",
+    editorialSubtitle: "Creative Direction",
+    location: "São Paulo, Brazil",
+    introText: [
+      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform creative business.",
+      "I conceived and launched BRIDE Magazine, leading its editorial vision while developing the publication's branding and design system. I oversaw creative direction across content, design and production, while building strategic partnerships with brands, photographers, designers and industry collaborators.",
+      "Under this expanded vision, BRIDE also evolved into a creative agency, delivering branding, editorial and design projects for clients across the luxury wedding ecosystem. The result was a cohesive brand platform that extended BRIDE's influence beyond the event, establishing it as a year-round creative and editorial authority within the industry.",
+    ],
 
     heroVideo: {
       desktop: "/assets/bride-story/bride-story-hero-video.mp4",
@@ -1722,14 +1783,18 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
+      { role: "Creative Director", name: "Vitor Milito" },
+      {
+        role: "Photographers",
+        name: "Fernando Tomaz, Hugo Toni, Marcio Scavone, Alex Korolkovas",
+      },
+      { role: "Stylists", name: "Thiago Biagi, Henrique Tank" },
+      { role: "HMU", name: "Krishna Carvalho" },
+      {
+        role: "Models",
+        name: "Isabel Hickman, Amanda Lopes, Paula Zago, Michele Provenze",
+      },
+      { role: "Post Production", name: "Bruno Rezende, Fujioka" },
     ],
 
     media: [
@@ -1818,10 +1883,16 @@ export const projects: ProjectDetail[] = [
     id: "harrods",
     slug: "harrods",
     client: "Harrods",
-    title: "Harrods",
-    subtitle: "Dining Hall",
+    title: "Harrods Restaurants",
+    subtitle: "Creative Direction",
     description:
-      "Creative direction for the Harrods Dining Hall experience.",
+      "When Harrods set out to reposition its portfolio of restaurants, I was brought in to lead the destination's creative direction across digital channels.",
+    editorialSubtitle: "Creative Direction",
+    location: "London, UK",
+    introText: [
+      "When Harrods set out to reposition its portfolio of restaurants, I was brought in to lead the destination's creative direction across digital channels.",
+      "Over the course of a year, I helped relaunch the restaurants' digital presence, developed paid campaign creative, and planned and directed a continuous programme of organic content production across five restaurants. The strategy established a more cohesive visual identity while driving growth across social channels, particularly Instagram.",
+    ],
 
     heroVideo: {
       desktop: "/assets/harrods/harrods-hero-video.mp4",
@@ -1841,16 +1912,11 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
 
-    credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
-      { role: "Photographer", name: "Ekin Can Bayrakdar" },
-      { role: "Stylist", name: "Rachel Davis" },
-      { role: "Make Up", name: "Kenny Leung" },
-      { role: "Hair Stylist", name: "Christopher Gatt" },
-      { role: "Casting Director", name: "Lewis Water" },
-      { role: "Model", name: "Aishwarya Gupta" },
-      { role: "Post Production", name: "Retush" },
-    ],
+    // No credits: the client text batch (2026-07-20) provided none for
+    // Harrods, so the section is omitted entirely (it renders only when
+    // the list is non-empty) — see CLIENT-ASKS #8. The old shared
+    // placeholder crew was removed per review; add the real list when
+    // Vitor sends it.
 
     media: [
       {

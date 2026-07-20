@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { getAllProjectSlugs, getProjectBySlug } from "@/config/projects";
 import { GalleryGrid, HeroVideo } from "@/components/ui";
-import { siteConfig } from "@/config/site";
+import { SiteFooter } from "@/components/layout";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -240,26 +239,43 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             Right: description body. Mobile: stacked single column. */}
         <div className="px-[21px] md:px-[34px] pt-[70px] md:pt-[70px]">
           <div className="flex flex-col gap-[24px] md:flex-row md:gap-[60px]">
-            {/* Left column: title + editorial subtitle + agency */}
+            {/* Left column: title + discipline (uppercase) + location +
+                agency — lines render only when the client copy provides
+                them (order per the 2026-07-20 text delivery). */}
             <div className="flex-1 md:max-w-[400px]">
               <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
                 {project.title}
               </h1>
-              <p className="text-[14px] leading-[1.4em] uppercase tracking-wide mb-[14px]">
-                {project.editorialSubtitle ?? "LOREM IPSUM EDITORIAL"}
-              </p>
-              <p className="text-[14px] leading-[1.4em]">
-                <span className="font-semibold">Agency:</span>{" "}
-                {project.agency ?? "Lorem Ipsum"}
-              </p>
+              {project.editorialSubtitle && (
+                <p className="text-[14px] leading-[1.4em] uppercase tracking-wide mb-[14px]">
+                  {project.editorialSubtitle}
+                </p>
+              )}
+              {project.location && (
+                <p className="text-[14px] leading-[1.4em] mb-[14px]">
+                  {project.location}
+                </p>
+              )}
+              {project.agency && (
+                <p className="text-[14px] leading-[1.4em]">
+                  <span className="font-semibold">Agency:</span>{" "}
+                  {project.agency}
+                </p>
+              )}
             </div>
 
-            {/* Right column: description. Desktop unchanged; mobile stacks tightly
-                under the agency (gap-24, was 49 — Figma #20). */}
-            <div className="flex-1 md:max-w-[460px]">
-              <p className="text-[14px] leading-[1.4em] text-black">
-                {project.introText ?? project.description}
-              </p>
+            {/* Right column: intro body — one <p> per paragraph. Desktop
+                unchanged; mobile stacks tightly under the agency (gap-24,
+                was 49 — Figma #20). */}
+            <div className="flex-1 md:max-w-[460px] space-y-[1em]">
+              {(Array.isArray(project.introText)
+                ? project.introText
+                : [project.introText ?? project.description]
+              ).map((paragraph, i) => (
+                <p key={i} className="text-[14px] leading-[1.4em] text-black">
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
         </div>
@@ -322,40 +338,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         )}
 
         {/* Divider — both mobile + desktop per updated Figma */}
-        <div className="px-[17px] md:px-[34px] mt-[71px] md:mt-[81px] md:pr-[44px]">
-          <div className="w-full h-[0.5px] bg-black" />
-        </div>
-
-        {/* Footer Section */}
-        <div className="px-[21px] md:px-[41px] md:pr-[44px]">
-          {/* Mobile: stacked vertically. Desktop: email left, social right */}
-          <div className="flex flex-col md:flex-row md:justify-between pt-[71px] md:pt-[60px] pb-[60px] md:pb-[40px]">
-            {/* Contact Email — plain <a> for native mailto: handling */}
-            <div>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-[15px] leading-[1.21em] hover:opacity-50 transition-opacity"
-              >
-                {siteConfig.email}
-              </a>
-            </div>
-
-            {/* Social Links - vertical on mobile, horizontal on desktop */}
-            <div className="flex flex-col md:flex-row gap-[18px] md:gap-[21px] mt-[38px] md:mt-0">
-              {siteConfig.socialLinks.map((link) => (
-                <Link
-                  key={link.title}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[15px] leading-[1.21em] hover:opacity-50 transition-opacity"
-                >
-                  {link.title}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Footer Section — shared component (also on home) */}
+        <SiteFooter />
       </section>
     </div>
   );

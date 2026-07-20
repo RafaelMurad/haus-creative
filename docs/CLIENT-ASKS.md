@@ -23,11 +23,18 @@ created on 7 Jul and left empty.
 mobile video is coming. If one is intended after all, upload it there and
 we'll wire it.
 
-## 4. Ouronyx — real credits list
+## ~~4. Ouronyx — real credits list~~ RESOLVED 2026-07-20
 
-The footer currently shows the shared placeholder crew (same as the other
-projects). **Ask:** the actual Ouronyx credits (the small text block at the
-end of the Figma column) — roles + names.
+Delivered in the site-text batch: Creative Directors Vitor Milito & Jessica
+Clark, Photographer Scott Trindle, Film Director Kloss Films, Talent Daniel
+Ricciardo / Caroline Issa / Jessica Kahawaty, Post Spring Studios. Wired.
+
+## 8. Harrods — credits list (2026-07-20)
+
+The site-text batch covered every project's credits EXCEPT Harrods (its
+section has intro copy only). Per review the placeholder crew was removed
+and **the Credits section is omitted on /work/harrods** until the real
+list arrives. **Ask:** the Harrods Restaurants credits — roles + names.
 
 ## 5. Ouronyx — hi-res re-exports for the small clips (2026-07-14)
 
