@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 export const MOBILE_MEDIA_QUERY = "(max-width: 767.98px)";
 
 /**
- * Hero banners swap to the portrait edit below Tailwind's `lg` boundary
- * (tablet-sized and down, review 2026-07-20): the landscape banners bake
- * titles into the frame edges, which cover-crop cuts on tablet-ish
- * viewports — the portrait edits are composed for tall boxes. Gallery
- * clips keep MOBILE_MEDIA_QUERY, aligned with the md: layout classes.
+ * Hero banners swap to the portrait edit when the viewport is tablet-sized
+ * OR taller than square (review 2026-07-20): the landscape banners bake
+ * titles into the frame edges, and cover-crop cuts them in any tall box —
+ * width alone misses wide-but-tall desktop windows (e.g. 1440×1775). The
+ * portrait edits are composed for tall boxes. Gallery clips keep
+ * MOBILE_MEDIA_QUERY, aligned with the md: layout classes.
  */
-export const HERO_MOBILE_MEDIA_QUERY = "(max-width: 1023.98px)";
+export const HERO_MOBILE_MEDIA_QUERY =
+  "(max-width: 1023.98px), (max-aspect-ratio: 1/1)";
 
 /**
  * Tracks a CSS media query and re-evaluates on viewport changes.
