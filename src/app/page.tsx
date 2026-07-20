@@ -50,19 +50,12 @@ export default function Home() {
         const galleryMedia = hasHomepageCarousel && detail
           ? getHomepageMedia(detail.media, carouselConfig!.homepageIndices)
           : undefined;
-        // Tiles marked homeCoverUsesMobile play the portrait edit on every
-        // breakpoint (e.g. Bride — its landscape banner bakes a title that
-        // the full-bleed tile crop would cut; the portrait cut has none).
-        const heroVideo =
-          detail?.heroVideo?.homeCoverUsesMobile && detail.heroVideo.mobile
-            ? { ...detail.heroVideo, desktop: detail.heroVideo.mobile }
-            : detail?.heroVideo;
 
         return (
           <WorkGalleryItem
             key={project.id}
             project={project}
-            heroVideo={heroVideo}
+            heroVideo={detail?.heroVideo}
             galleryMedia={galleryMedia}
             carouselConfig={hasHomepageCarousel ? carouselConfig : undefined}
           />
