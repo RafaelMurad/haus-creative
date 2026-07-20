@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Main content - 170px top on mobile, 230px on desktop per Figma */}
-      <div className="pt-[170px] md:pt-[230px] flex flex-col md:flex-row">
+      {/* Main content - 120px top on mobile (was 170 — read as a void under
+          the fixed header, per review 2026-07-16), 230px on desktop. */}
+      <div className="pt-[120px] md:pt-[230px] flex flex-col md:flex-row">
         {/* Left column - Content */}
         <div className="px-[21px] md:pl-[34px] md:pr-8 md:w-1/2 flex flex-col">
           {/* About section */}
