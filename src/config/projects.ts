@@ -690,7 +690,6 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video7 — VETEMENTS coat over the bridge
         desktop: "/assets/wao-cosmo/wao-cosmo-video-18.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-18.webp",
         aspect: "720/1191",
         inset: "0% 5.56% 10.83% 11.39%",
@@ -703,7 +702,6 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video8 — escalator
         desktop: "/assets/wao-cosmo/wao-cosmo-video-19.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-19.webp",
         aspect: "720/1191",
         inset: "10.92% 11.39% 0% 5.56%",
@@ -714,7 +712,6 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video9 — tan coat, blurred street
         desktop: "/assets/wao-cosmo/wao-cosmo-video-20.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-20.webp",
         aspect: "720/1194",
         inset: "0% 5.56% 19.1% 11.39%",
@@ -725,7 +722,6 @@ export const projects: ProjectDetail[] = [
         type: "video",
         // Video10 — evening street reflection
         desktop: "/assets/wao-cosmo/wao-cosmo-video-21.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-21.webp",
         aspect: "720/1194",
         inset: "10.89% 11.39% 6.2% 5.56%",
