@@ -149,7 +149,7 @@ export const featuredProjects: Project[] = [
   // 2. YSL
   {
     id: "ysl",
-    title: "Yves Saint Laurent",
+    title: "Yves Saint Laurent Beauty",
     subtitle: "Art Direction",
     href: "/work/ysl",
     media: {
@@ -175,7 +175,7 @@ export const featuredProjects: Project[] = [
   // 4. WAO
   {
     id: "wao-cosmo",
-    title: "Wao Cosmo",
+    title: "WAOMAG",
     subtitle: "Visual Design",
     href: "/work/wao-cosmo",
     media: {
@@ -214,7 +214,7 @@ export const featuredProjects: Project[] = [
   // 7. BFJ
   {
     id: "bfj",
-    title: "BFJ",
+    title: "Bucherer Fine Jewellery",
     subtitle: "Digital Design",
     href: "/work/bfj",
     media: {
@@ -227,7 +227,7 @@ export const featuredProjects: Project[] = [
   // 8. SK-II
   {
     id: "sk",
-    title: "SK",
+    title: "SK-II",
     subtitle: "Brand Development",
     href: "/work/sk",
     media: {
@@ -240,7 +240,7 @@ export const featuredProjects: Project[] = [
   // 9. Life
   {
     id: "life",
-    title: "Life",
+    title: "Life by Vivara",
     subtitle: "Creative Strategy",
     href: "/work/life",
     media: {
@@ -253,7 +253,7 @@ export const featuredProjects: Project[] = [
   // 10. Bride Story
   {
     id: "bride-story",
-    title: "Bride Story",
+    title: "BRIDE",
     subtitle: "Art Direction",
     href: "/work/bride-story",
     media: {
@@ -266,7 +266,7 @@ export const featuredProjects: Project[] = [
   // 11. Bucherer Summer
   {
     id: "bucherer-summer",
-    title: "Bucherer Summer",
+    title: "BUCHERER",
     subtitle: "Creative Direction",
     href: "/work/bucherer-summer",
     media: {
