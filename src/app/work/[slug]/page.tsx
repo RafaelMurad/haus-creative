@@ -238,13 +238,15 @@ export default function ProjectPage({ params }: ProjectPageProps) {
       <section className="bg-white">
         {/* Intro Section — two-column layout below hero.
             Left: title + campaign tagline (uppercase) + agency line.
-            Right: description body. Mobile: stacked single column. */}
+            Right: description body. Mobile: stacked single column.
+            Column caps sized so the longest campaign title holds one
+            line at 33px (~590px in Inter) — client review 2026-07-23. */}
         <div className="px-[21px] md:px-[34px] pt-[70px] md:pt-[70px]">
           <div className="flex flex-col gap-[24px] md:flex-row md:gap-[60px]">
             {/* Left column: title + discipline (uppercase) + location +
                 agency — lines render only when the client copy provides
                 them (order per the 2026-07-20 text delivery). */}
-            <div className="flex-1 md:max-w-[400px]">
+            <div className="flex-1 md:max-w-[600px]">
               <h1 className="text-[26px] min-[400px]:text-[33px] leading-[1.03em] font-normal mb-[18px]">
                 {project.title}
               </h1>
@@ -269,7 +271,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             {/* Right column: intro body — one <p> per paragraph. Desktop
                 unchanged; mobile stacks tightly under the agency (gap-24,
                 was 49 — Figma #20). */}
-            <div className="flex-1 md:max-w-[460px] space-y-[1em]">
+            <div className="flex-1 md:max-w-[560px] space-y-[1em]">
               {(Array.isArray(project.introText)
                 ? project.introText
                 : [project.introText ?? project.description]
