@@ -59,8 +59,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   const heroLabel = heroMatch ? heroMatch[1] : "hero";
 
   // The " - " in a campaign title is a line delimiter (client review
-  // 2026-07-23): brand on the first line (keeping its hyphen), campaign
-  // beneath. Hyphen-less titles render as-is. The bare hyphen in "SK-II"
+  // 2026-07-23): brand on the first line, campaign beneath, separator
+  // dropped. Hyphen-less titles render as-is. The bare hyphen in "SK-II"
   // is untouched — only the spaced separator splits.
   const titleParts = project.title.split(" - ");
 
@@ -260,7 +260,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 {titleParts.map((part, i) => (
                   <Fragment key={i}>
                     {i > 0 && <br />}
-                    {i < titleParts.length - 1 ? `${part} -` : part}
+                    {part}
                   </Fragment>
                 ))}
               </h1>
