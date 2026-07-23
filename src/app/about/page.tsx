@@ -20,7 +20,7 @@ export default function About() {
           the text block, so the columns can't share one offset. */}
       <div className="pt-[120px] md:pt-0 flex flex-col md:flex-row">
         {/* Left column - Content */}
-        <div className="px-[21px] md:pl-[34px] md:pr-8 md:pt-[230px] md:w-1/2 flex flex-col">
+        <div className="px-[21px] md:pl-[34px] md:pr-10 md:pt-[230px] md:flex-1 md:min-w-0 flex flex-col">
           {/* About section */}
           <div className="flex-1">
             <h1 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
@@ -92,15 +92,18 @@ export default function About() {
             layout; mobile keeps it. Per About-D the portrait is flush to
             the right viewport edge (not centered) and starts above the
             text block, closing the white gulf between text and picture.
-            Natural aspect, capped at the source's native width so it
-            never upscales past 1×. */}
-        <div className="hidden md:flex md:w-1/2 md:justify-end md:items-start md:pt-[145px] md:pl-8">
+            The column takes ~54% of the viewport up to the source's
+            native width (review 2026-07-23: "fazer a imagem tomar mais
+            espaco" on laptop windows / "não colar no texto" — the text
+            column's pr-10 is the minimum air between them); never
+            upscales past 1×. */}
+        <div className="hidden md:block md:flex-none md:w-[min(689px,54vw)] md:pt-[145px]">
           <Image
             src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
             width={689}
             height={736}
-            className="w-full h-auto max-w-[689px]"
+            className="w-full h-auto"
             sizes="(min-width: 768px) 689px, 100vw"
             priority
           />
