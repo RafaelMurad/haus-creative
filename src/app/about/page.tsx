@@ -15,10 +15,12 @@ export default function About() {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Main content - 120px top on mobile (was 170 — read as a void under
-          the fixed header, per review 2026-07-16), 230px on desktop. */}
-      <div className="pt-[120px] md:pt-[230px] flex flex-col md:flex-row">
+          the fixed header, per review 2026-07-16). Desktop top padding lives
+          on each column: per Figma About-D the portrait starts ~85px above
+          the text block, so the columns can't share one offset. */}
+      <div className="pt-[120px] md:pt-0 flex flex-col md:flex-row">
         {/* Left column - Content */}
-        <div className="px-[21px] md:pl-[34px] md:pr-8 md:w-1/2 flex flex-col">
+        <div className="px-[21px] md:pl-[34px] md:pr-8 md:pt-[230px] md:w-1/2 flex flex-col">
           {/* About section */}
           <div className="flex-1">
             <h1 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
@@ -87,9 +89,12 @@ export default function About() {
         {/* Right column - Image (desktop only). Desktop uses its own wider
             689×736 crop (ABOUT-Image-Desktop, 2026-07-23) — the shared
             627×736 portrait read "bem mais retrato" than the About-D
-            layout; mobile keeps it. Natural aspect, top-aligned, capped
-            at the source's native width so it never upscales past 1×. */}
-        <div className="hidden md:flex md:w-1/2 md:justify-center md:items-start md:px-8">
+            layout; mobile keeps it. Per About-D the portrait is flush to
+            the right viewport edge (not centered) and starts above the
+            text block, closing the white gulf between text and picture.
+            Natural aspect, capped at the source's native width so it
+            never upscales past 1×. */}
+        <div className="hidden md:flex md:w-1/2 md:justify-end md:items-start md:pt-[145px] md:pl-8">
           <Image
             src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
