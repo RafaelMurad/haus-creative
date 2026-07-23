@@ -1246,7 +1246,7 @@ export const projects: ProjectDetail[] = [
     id: "bucherer-summer",
     slug: "bucherer-summer",
     client: "Bucherer",
-    title: "Bucherer - The Summer of Indulgence",
+    title: "BUCHERER - The Summer of Indulgence",
     subtitle: "Creative Direction",
     description:
       "The Summer of Indulgence was a 360° campaign celebrating the pleasures of the season while showcasing Bucherer's jewellery, watches and luxury retail experience.",
