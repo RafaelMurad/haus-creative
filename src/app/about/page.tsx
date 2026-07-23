@@ -26,7 +26,7 @@ export default function About() {
             <h1 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
               About Studio Haus
             </h1>
-            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[663px]">
+            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[750px]">
               <p>
                 Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
               </p>
