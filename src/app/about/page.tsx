@@ -84,18 +84,19 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Image (desktop only). Updated Figma (2026-07): the
-            portrait renders at its natural 627×736 aspect, top-aligned with
-            the heading and centered in the right half — capped at the
-            source's native width so it never upscales past 1×. */}
+        {/* Right column - Image (desktop only). Desktop uses its own wider
+            689×736 crop (ABOUT-Image-Desktop, 2026-07-23) — the shared
+            627×736 portrait read "bem mais retrato" than the About-D
+            layout; mobile keeps it. Natural aspect, top-aligned, capped
+            at the source's native width so it never upscales past 1×. */}
         <div className="hidden md:flex md:w-1/2 md:justify-center md:items-start md:px-8">
           <Image
-            src="/assets/about/about-portrait.webp"
+            src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
-            width={627}
+            width={689}
             height={736}
-            className="w-full h-auto max-w-[627px]"
-            sizes="(min-width: 768px) 627px, 100vw"
+            className="w-full h-auto max-w-[689px]"
+            sizes="(min-width: 768px) 689px, 100vw"
             priority
           />
         </div>
