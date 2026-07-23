@@ -92,19 +92,21 @@ export default function About() {
             layout; mobile keeps it. Per About-D the portrait is flush to
             the right viewport edge (not centered) and starts above the
             text block, closing the white gulf between text and picture.
-            The column takes ~54% of the viewport up to the source's
-            native width (review 2026-07-23: "fazer a imagem tomar mais
-            espaco" on laptop windows / "não colar no texto" — the text
-            column's pr-10 is the minimum air between them); never
-            upscales past 1×. */}
-        <div className="hidden md:block md:flex-none md:w-[min(689px,54vw)] md:pt-[145px]">
+            The portrait holds the 1440-Figma PROPORTION (689/1440 ≈ 47vw)
+            at every desktop width — review 2026-07-23: the 1485px look
+            "should look like this on all large screens", a native-width
+            cap that strands the image on wide windows is "never like
+            this". So no px cap: past ~1470 the 689px source upscales
+            (hi-res export asked, CLIENT-ASKS #9). The text column's
+            pr-10 is the minimum air ("não colar no texto"). */}
+        <div className="hidden md:block md:flex-none md:w-[47vw] md:pt-[145px]">
           <Image
             src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
             width={689}
             height={736}
             className="w-full h-auto"
-            sizes="(min-width: 768px) 689px, 100vw"
+            sizes="(min-width: 768px) 47vw, 100vw"
             priority
           />
         </div>
