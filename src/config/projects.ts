@@ -1378,6 +1378,7 @@ export const projects: ProjectDetail[] = [
     year: "2024",
 
     credits: [
+      { role: "Group Creative Director", name: "Matt Brooke" },
       { role: "Art Director", name: "Vitor Milito" },
       { role: "CD Copy", name: "Jessica Clark" },
       { role: "Photographers", name: "Sebastian Sabal-Bruce, Luke Kuisis" },

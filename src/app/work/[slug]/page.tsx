@@ -306,53 +306,16 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         {/* Credits Section with Back-to-top link.
             Desktop: ↑ Back to top sits in the left column (where the spacer
             was), Credits label + content fill the right half.
-            Mobile: Credits stacked first, then Back to top below. */}
-        {project.credits && project.credits.length > 0 && (
-          <div className="px-[34px] md:px-0 mt-[44px] md:mt-[50px]">
-            {/* Gap above = the standard inter-asset spacing (44 mobile /
-                50 desktop) so the section break reads consistent site-wide. */}
-            <div className="flex flex-col md:flex-row">
-              {/* Back to top — desktop only, in left column */}
-              <div className="hidden md:block md:w-1/2 md:pl-[34px]">
-                <a
-                  href="#top"
-                  className="text-[14px] font-semibold leading-[1.21em] text-black hover:opacity-50 transition-opacity inline-flex items-center gap-1"
-                >
-                  <span aria-hidden>↑</span> Back to top
-                </a>
-              </div>
-
-              {/* Label column */}
-              <div className="md:w-[120px] flex-shrink-0 mb-[55px] md:mb-0">
-                <p className="text-[14px] font-semibold leading-[1.21em] text-black">
-                  Credits
-                </p>
-              </div>
-
-              {/* Content column — Figma spec: Inter 18px / 28px line-height.
-                  Film-credits style (review 2026-07-23): role on its own
-                  line in bold, no colon; each comma-joined name on its own
-                  line below in normal weight, flush with the role — bold vs
-                  normal is the only differentiation. */}
-              <div className="flex-1">
-                <div className="text-[18px] leading-[28px] text-black">
-                  {project.credits.map((credit, index) => (
-                    <p key={index}>
-                      <span className="font-semibold">{credit.role}</span>
-                      {credit.name.split(", ").map((name, i) => (
-                        <Fragment key={i}>
-                          <br />
-                          {name}
-                        </Fragment>
-                      ))}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Back to top — mobile only, below credits */}
-            <div className="md:hidden mt-[55px]">
+            Mobile: Credits stacked first, then Back to top below.
+            Back to top renders on EVERY project — credits are conditional
+            (Harrods/Bucherer Summer have none, review 2026-07-23: "Harrods
+            case ta sem esse back to top"). */}
+        <div className="px-[34px] md:px-0 mt-[44px] md:mt-[50px]">
+          {/* Gap above = the standard inter-asset spacing (44 mobile /
+              50 desktop) so the section break reads consistent site-wide. */}
+          <div className="flex flex-col md:flex-row">
+            {/* Back to top — desktop only, in left column */}
+            <div className="hidden md:block md:w-1/2 md:pl-[34px]">
               <a
                 href="#top"
                 className="text-[14px] font-semibold leading-[1.21em] text-black hover:opacity-50 transition-opacity inline-flex items-center gap-1"
@@ -360,8 +323,55 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 <span aria-hidden>↑</span> Back to top
               </a>
             </div>
+
+            {project.credits && project.credits.length > 0 && (
+              <>
+                {/* Label column */}
+                <div className="md:w-[120px] flex-shrink-0 mb-[55px] md:mb-0">
+                  <p className="text-[14px] font-semibold leading-[1.21em] text-black">
+                    Credits
+                  </p>
+                </div>
+
+                {/* Content column — Figma spec: Inter 18px / 28px line-height.
+                    Film-credits style (review 2026-07-23): role on its own
+                    line in bold, no colon; each comma-joined name on its own
+                    line below in normal weight, flush with the role — bold vs
+                    normal is the only differentiation. */}
+                <div className="flex-1">
+                  <div className="text-[18px] leading-[28px] text-black">
+                    {project.credits.map((credit, index) => (
+                      <p key={index}>
+                        <span className="font-semibold">{credit.role}</span>
+                        {credit.name.split(", ").map((name, i) => (
+                          <Fragment key={i}>
+                            <br />
+                            {name}
+                          </Fragment>
+                        ))}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        )}
+
+          {/* Back to top — mobile only, below credits (or straight after
+              the gallery when a project has none) */}
+          <div
+            className={`md:hidden ${
+              project.credits && project.credits.length > 0 ? "mt-[55px]" : ""
+            }`}
+          >
+            <a
+              href="#top"
+              className="text-[14px] font-semibold leading-[1.21em] text-black hover:opacity-50 transition-opacity inline-flex items-center gap-1"
+            >
+              <span aria-hidden>↑</span> Back to top
+            </a>
+          </div>
+        </div>
 
         {/* Divider — both mobile + desktop per updated Figma */}
         {/* Footer Section — shared component (also on home) */}
