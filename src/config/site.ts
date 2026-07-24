@@ -105,7 +105,9 @@ export interface SiteConfig {
 // =============================================================================
 
 export const siteConfig: SiteConfig = {
-  name: "HAUS",
+  // Browser-tab / metadata brand — "STUDIO HAUS", never "HAUS Creative"
+  // (client note 2026-07-23).
+  name: "STUDIO HAUS",
   description:
     "We are a creative studio specializing in digital experiences, brand identity, and immersive design for forward-thinking brands.",
   email: "contact@studiohauscreative.com",

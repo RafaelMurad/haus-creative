@@ -6,7 +6,7 @@ import type { ProjectMedia } from "@/config/projects";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "HAUS | Creative Direction + Design",
+  // No title override — the root default ("STUDIO HAUS") applies untemplated.
   description:
     "Studio Haus Creative specialises in 360° campaigns, branded content, and immersive digital experiences for luxury and forward-thinking brands.",
   alternates: {
