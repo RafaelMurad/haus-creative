@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Over 15 years of experience creating compelling 360° campaigns, branded content, and design for industry leaders including Rolex, Swarovski, Mercedes-Benz, and Harrods.",
+    "Studio Haus Creative is an independent creative consultancy specialising in luxury branding, image-making and global campaign direction.",
   alternates: {
     canonical: "/about",
   },
@@ -15,24 +15,43 @@ export default function About() {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Main content - 120px top on mobile (was 170 — read as a void under
-          the fixed header, per review 2026-07-16), 230px on desktop. */}
+          the fixed header, per review 2026-07-16), 230px on desktop. Both
+          columns share the offset: the portrait top-aligns with the ABOUT US
+          heading (review 2026-07-23 — the Figma's higher image was tuned for
+          the old short copy and read misaligned with the 7-paragraph text). */}
       <div className="pt-[120px] md:pt-[230px] flex flex-col md:flex-row">
         {/* Left column - Content */}
-        <div className="px-[21px] md:pl-[34px] md:pr-8 md:w-1/2 flex flex-col">
+        <div className="px-[21px] md:pl-[34px] md:pr-10 md:flex-1 md:min-w-0 flex flex-col">
           {/* About section */}
           <div className="flex-1">
-            <h1 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
-              About Studio Haus
+            {/* Copy per the TEXTO PARA SITE update (2026-07-23) — heading is
+                "About Us", not "About Studio Haus", per Vitor's note. */}
+            {/* Section labels scale with the body copy (15/19) — at 14px they
+                read undersized against the 19px paragraphs (review 2026-07-23). */}
+            <h1 className="text-[15px] md:text-[19px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
+              About Us
             </h1>
-            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[663px]">
+            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[750px]">
               <p>
-                Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
+                Studio Haus Creative is an independent creative consultancy specialising in luxury branding, image-making and global campaign direction.
               </p>
               <p>
-                Working at the intersection of advertising, branding, and experiences, my projects are marked by a refined and precise style with an editorially driven approach, where every detail is considered.
+                We partner with brands and agencies to create distinctive visual identities, culturally resonant narratives and editorially driven campaign platforms across luxury Hospitality, Real Estate, Fashion, Beauty, Jewellery, Watches and Automotive.
               </p>
               <p>
-                My client roster includes industry leaders such as Rolex, Swarovski, Mercedes-Benz, Bucherer, Hublot, Breitling, Victoria Beckham, Harrods, John Lewis to name a few.
+                Led by Vitor Milito, a Creative &amp; Design Director with a background shaped between Milan and London, the studio combines European visual culture with strategic brand thinking to build brands from inception, reposition established businesses and direct international campaigns across multiple markets.
+              </p>
+              <p>
+                Our work has included projects for Rolex, Hublot, Breitling, Swarovski, Bucherer, Yves Saint Laurent Beauty, Victoria Beckham Beauty, SK-II, Harrods, Formula 1, Mercedes-Benz and Bugatti, among others.
+              </p>
+              <p>
+                Operating across Europe, the Middle East, LATAM and APAC, Studio Haus Creative delivers Brand Strategy, Creative Direction, Visual Identity, Campaign Development and high-end content systems for global luxury audiences.
+              </p>
+              <p>
+                Based between London, Dubai and São Paulo.
+              </p>
+              <p>
+                Vitor Milito currently serves as Creative Director Consultant at OUI Agency, a Dubai-based boutique luxury branding and creative agency, where he leads creative strategy, brand development and campaign direction for leading regional and international clients.
               </p>
             </div>
           </div>
@@ -55,7 +74,7 @@ export default function About() {
           {/* Contact section — visible on both breakpoints per Figma
               About-D (in left column under body text). */}
           <div className="mt-16 md:mt-20 pb-8 md:pl-[9px]">
-            <h2 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
+            <h2 className="text-[15px] md:text-[19px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
               Contact
             </h2>
             <div className="space-y-[19px] text-[15px] leading-[1.21em]">
@@ -84,18 +103,27 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Image (desktop only). Updated Figma (2026-07): the
-            portrait renders at its natural 627×736 aspect, top-aligned with
-            the heading and centered in the right half — capped at the
-            source's native width so it never upscales past 1×. */}
-        <div className="hidden md:flex md:w-1/2 md:justify-center md:items-start md:px-8">
+        {/* Right column - Image (desktop only). Desktop uses its own wider
+            689×736 crop (ABOUT-Image-Desktop, 2026-07-23) — the shared
+            627×736 portrait read "bem mais retrato" than the About-D
+            layout; mobile keeps it. Per About-D the portrait is flush to
+            the right viewport edge (not centered) and starts above the
+            text block, closing the white gulf between text and picture.
+            The portrait holds the 1440-Figma PROPORTION (689/1440 ≈ 47vw)
+            at every desktop width — review 2026-07-23: the 1485px look
+            "should look like this on all large screens", a native-width
+            cap that strands the image on wide windows is "never like
+            this". So no px cap: past ~1470 the 689px source upscales
+            (hi-res export asked, CLIENT-ASKS #9). The text column's
+            pr-10 is the minimum air ("não colar no texto"). */}
+        <div className="hidden md:block md:flex-none md:w-[47vw]">
           <Image
-            src="/assets/about/about-portrait.webp"
+            src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
-            width={627}
+            width={689}
             height={736}
-            className="w-full h-auto max-w-[627px]"
-            sizes="(min-width: 768px) 627px, 100vw"
+            className="w-full h-auto"
+            sizes="(min-width: 768px) 47vw, 100vw"
             priority
           />
         </div>

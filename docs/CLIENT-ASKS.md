@@ -36,6 +36,15 @@ section has intro copy only). Per review the placeholder crew was removed
 and **the Credits section is omitted on /work/harrods** until the real
 list arrives. **Ask:** the Harrods Restaurants credits — roles + names.
 
+## 9. About — hi-res desktop portrait (2026-07-23)
+
+The About-D layout locks the desktop portrait to ~47% of the viewport at
+any window size (review 2026-07-23: the 1485px proportions "should look
+like this on all large screens"). The delivered `ABOUT-Image-Desktop.png`
+is 689×736 — on windows wider than ~1470, and on any retina display, it
+renders upscaled and reads soft. **Ask:** the same crop at ≥2000px wide;
+we file-swap with no config change.
+
 ## 5. Ouronyx — hi-res re-exports for the small clips (2026-07-14)
 
 Vitor's review flagged Ouronyx video quality (worst: the wordmark card, his
