@@ -119,9 +119,9 @@ describe("ProjectPage", () => {
 
       expect(screen.getByText("Credits")).toBeInTheDocument();
       projectWithCredits.credits!.forEach((credit) => {
-        // Role renders as "Role:" (no pre-colon space, review 2026-07-23);
+        // Film-credits style (review 2026-07-23): bold role line, no colon;
         // comma-joined names render one per line without the commas.
-        expect(screen.getByText(`${credit.role}:`)).toBeInTheDocument();
+        expect(screen.getByText(credit.role)).toBeInTheDocument();
         credit.name.split(", ").forEach((name) => {
           expect(
             screen.getAllByText(name, { exact: false }).length,

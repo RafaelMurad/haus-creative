@@ -330,25 +330,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               {/* Content column — Figma spec: Inter 18px / 28px line-height.
-                  Review 2026-07-23: no space before the colon; comma-joined
-                  names render one per line, aligned under the first NAME
-                  (not the role) and without the commas — the flex row keeps
-                  the stacked names in their own column. */}
+                  Film-credits style (review 2026-07-23): role on its own
+                  line in bold, no colon; each comma-joined name on its own
+                  line below in normal weight, flush with the role — bold vs
+                  normal is the only differentiation. */}
               <div className="flex-1">
-                <div className="text-[18px] leading-[28px]">
+                <div className="text-[18px] leading-[28px] text-black">
                   {project.credits.map((credit, index) => (
-                    <p key={index} className="flex">
-                      <span className="shrink-0 text-black">
-                        {credit.role}:&nbsp;
-                      </span>
-                      <span className="text-black">
-                        {credit.name.split(", ").map((name, i) => (
-                          <Fragment key={i}>
-                            {i > 0 && <br />}
-                            {name}
-                          </Fragment>
-                        ))}
-                      </span>
+                    <p key={index}>
+                      <span className="font-semibold">{credit.role}</span>
+                      {credit.name.split(", ").map((name, i) => (
+                        <Fragment key={i}>
+                          <br />
+                          {name}
+                        </Fragment>
+                      ))}
                     </p>
                   ))}
                 </div>
