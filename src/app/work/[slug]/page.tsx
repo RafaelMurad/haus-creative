@@ -329,14 +329,26 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 </p>
               </div>
 
-              {/* Content column — Figma spec: Inter 18px / 28px line-height */}
+              {/* Content column — Figma spec: Inter 18px / 28px line-height.
+                  Review 2026-07-23: no space before the colon; comma-joined
+                  names render one per line, aligned under the first NAME
+                  (not the role) and without the commas — the flex row keeps
+                  the stacked names in their own column. */}
               <div className="flex-1">
                 <div className="text-[18px] leading-[28px]">
                   {project.credits.map((credit, index) => (
-                    <p key={index}>
-                      <span className="text-black">{credit.role}</span>
-                      <span className="text-black"> : </span>
-                      <span className="text-black">{credit.name}</span>
+                    <p key={index} className="flex">
+                      <span className="shrink-0 text-black">
+                        {credit.role}:&nbsp;
+                      </span>
+                      <span className="text-black">
+                        {credit.name.split(", ").map((name, i) => (
+                          <Fragment key={i}>
+                            {i > 0 && <br />}
+                            {name}
+                          </Fragment>
+                        ))}
+                      </span>
                     </p>
                   ))}
                 </div>
