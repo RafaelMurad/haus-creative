@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Over 15 years of experience creating compelling 360° campaigns, branded content, and design for industry leaders including Rolex, Swarovski, Mercedes-Benz, and Harrods.",
+    "Studio Haus Creative is an independent creative consultancy specialising in luxury branding, image-making and global campaign direction.",
   alternates: {
     canonical: "/about",
   },
@@ -23,18 +23,32 @@ export default function About() {
         <div className="px-[21px] md:pl-[34px] md:pr-10 md:pt-[230px] md:flex-1 md:min-w-0 flex flex-col">
           {/* About section */}
           <div className="flex-1">
+            {/* Copy per the TEXTO PARA SITE update (2026-07-23) — heading is
+                "About Us", not "About Studio Haus", per Vitor's note. */}
             <h1 className="text-[14px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
-              About Studio Haus
+              About Us
             </h1>
             <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[750px]">
               <p>
-                Over 15 years of extensive experience creating compelling 360° campaigns, branded content and design.
+                Studio Haus Creative is an independent creative consultancy specialising in luxury branding, image-making and global campaign direction.
               </p>
               <p>
-                Working at the intersection of advertising, branding, and experiences, my projects are marked by a refined and precise style with an editorially driven approach, where every detail is considered.
+                We partner with brands and agencies to create distinctive visual identities, culturally resonant narratives and editorially driven campaign platforms across luxury Hospitality, Real Estate, Fashion, Beauty, Jewellery, Watches and Automotive.
               </p>
               <p>
-                My client roster includes industry leaders such as Rolex, Swarovski, Mercedes-Benz, Bucherer, Hublot, Breitling, Victoria Beckham, Harrods, John Lewis to name a few.
+                Led by Vitor Milito, a Creative &amp; Design Director with a background shaped between Milan and London, the studio combines European visual culture with strategic brand thinking to build brands from inception, reposition established businesses and direct international campaigns across multiple markets.
+              </p>
+              <p>
+                Our work has included projects for Rolex, Hublot, Breitling, Swarovski, Bucherer, Yves Saint Laurent Beauty, Victoria Beckham Beauty, SK-II, Harrods, Formula 1, Mercedes-Benz and Bugatti, among others.
+              </p>
+              <p>
+                Operating across Europe, the Middle East, LATAM and APAC, Studio Haus Creative delivers Brand Strategy, Creative Direction, Visual Identity, Campaign Development and high-end content systems for global luxury audiences.
+              </p>
+              <p>
+                Based between London, Dubai and São Paulo.
+              </p>
+              <p>
+                Vitor Milito currently serves as Creative Director Consultant at OUI Agency, a Dubai-based boutique luxury branding and creative agency, where he leads creative strategy, brand development and campaign direction for leading regional and international clients.
               </p>
             </div>
           </div>
