@@ -4,19 +4,19 @@ import { siteConfig } from "@/config/site";
 
 // next/image is auto-mocked by next/jest; next/link likewise
 describe("About page", () => {
-  it("renders the 'About Studio Haus' heading", () => {
+  it("renders the 'About Us' heading", () => {
     render(<About />);
 
     expect(
-      screen.getByRole("heading", { name: /about studio haus/i }),
+      screen.getByRole("heading", { name: /about us/i }),
     ).toBeInTheDocument();
   });
 
-  it("displays the agency experience paragraph", () => {
+  it("displays the studio introduction paragraph", () => {
     render(<About />);
 
     expect(
-      screen.getByText(/over 15 years of extensive experience/i),
+      screen.getByText(/independent creative consultancy/i),
     ).toBeInTheDocument();
   });
 

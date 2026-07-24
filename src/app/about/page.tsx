@@ -15,12 +15,13 @@ export default function About() {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Main content - 120px top on mobile (was 170 — read as a void under
-          the fixed header, per review 2026-07-16). Desktop top padding lives
-          on each column: per Figma About-D the portrait starts ~85px above
-          the text block, so the columns can't share one offset. */}
-      <div className="pt-[120px] md:pt-0 flex flex-col md:flex-row">
+          the fixed header, per review 2026-07-16), 230px on desktop. Both
+          columns share the offset: the portrait top-aligns with the ABOUT US
+          heading (review 2026-07-23 — the Figma's higher image was tuned for
+          the old short copy and read misaligned with the 7-paragraph text). */}
+      <div className="pt-[120px] md:pt-[230px] flex flex-col md:flex-row">
         {/* Left column - Content */}
-        <div className="px-[21px] md:pl-[34px] md:pr-10 md:pt-[230px] md:flex-1 md:min-w-0 flex flex-col">
+        <div className="px-[21px] md:pl-[34px] md:pr-10 md:flex-1 md:min-w-0 flex flex-col">
           {/* About section */}
           <div className="flex-1">
             {/* Copy per the TEXTO PARA SITE update (2026-07-23) — heading is
@@ -113,7 +114,7 @@ export default function About() {
             this". So no px cap: past ~1470 the 689px source upscales
             (hi-res export asked, CLIENT-ASKS #9). The text column's
             pr-10 is the minimum air ("não colar no texto"). */}
-        <div className="hidden md:block md:flex-none md:w-[47vw] md:pt-[145px]">
+        <div className="hidden md:block md:flex-none md:w-[47vw]">
           <Image
             src="/assets/about/about-portrait-desktop.webp"
             alt="Studio Haus portrait"
