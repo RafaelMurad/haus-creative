@@ -666,9 +666,10 @@ export const projects: ProjectDetail[] = [
       },
       {
         type: "video",
-        // Video5 — red dress on the curb
+        // Video5 — red dress on the curb. Audio removed per review
+        // 2026-07-27 ("tirar o audio desses") — only the street
+        // interviews (13, 15) keep the speaker.
         desktop: "/assets/wao-cosmo/wao-cosmo-video-16.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-16.webp",
         aspect: "720/1194",
         inset: "0% 5.56% 10.89% 11.39%",
@@ -677,9 +678,9 @@ export const projects: ProjectDetail[] = [
       },
       {
         type: "video",
-        // Video6 — yellow dress at the doorway
+        // Video6 — yellow dress at the doorway. Audio removed per review
+        // 2026-07-27 (same note as video 16).
         desktop: "/assets/wao-cosmo/wao-cosmo-video-17.mp4",
-        hasAudio: true,
         poster: "/assets/wao-cosmo/wao-cosmo-17.webp",
         aspect: "720/1194",
         inset: "10.89% 11.39% 0% 5.56%",
