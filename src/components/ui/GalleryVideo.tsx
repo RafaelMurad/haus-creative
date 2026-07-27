@@ -6,6 +6,7 @@ import {
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
 import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
+import { useInViewPlayback } from "@/hooks/useInViewPlayback";
 import { AudioToggleButton } from "./AudioToggleButton";
 
 interface GalleryVideoProps {
@@ -22,7 +23,11 @@ interface GalleryVideoProps {
  * time, so the native two-source markup (kept for SSR/no-JS) never swaps on
  * resize by itself.
  *
- * Clips flagged `hasAudio` get the Instagram-style treatment: they autoplay
+ * Playback is scroll-gated (useInViewPlayback): a clip starts from frame 0
+ * when it enters the viewport instead of autoplaying at page load already
+ * mid-film, and pauses/resumes as it leaves and re-enters.
+ *
+ * Clips flagged `hasAudio` get the Instagram-style treatment: they play
  * muted (autoplay policy) with a corner speaker button; clicking the video or
  * the button unmutes it and mutes every other clip on the page.
  */
@@ -39,6 +44,7 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
         : !!item.hasAudio.desktop
       : !!item.hasAudio;
   const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
+  useInViewPlayback(videoRef, resolved);
 
   const video = (
     <video
@@ -50,7 +56,6 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
           : "w-full h-auto block"
       }${hasAudio ? " cursor-pointer" : ""}`}
       playsInline
-      autoPlay
       loop
       muted
       poster={item.inset ? undefined : item.poster}
