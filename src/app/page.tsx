@@ -64,8 +64,12 @@ export default function Home() {
       })}
 
       {/* Footer after the last tile (client ask, 2026-07-16) — same shared
-          footer as the project pages. */}
-      <SiteFooter />
+          footer as the project pages. Desktop-only since review 2026-07-23:
+          "só no mobile que achei estranho" — mobile home ends on the last
+          full-bleed tile. */}
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { WorkGalleryItem } from "@/components/home";
+import { SiteFooter } from "@/components/layout";
 import { featuredProjects } from "@/config/site";
 import type { Metadata } from "next";
 
@@ -20,6 +21,12 @@ export default function WorkPage() {
       {projects.map((project) => (
         <WorkGalleryItem key={project.id} project={project} />
       ))}
+
+      {/* Footer per review 2026-07-23 ("eu deixaria no WORK") — desktop-only,
+          same treatment as home: mobile ends on the last full-bleed tile. */}
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </>
   );
 }

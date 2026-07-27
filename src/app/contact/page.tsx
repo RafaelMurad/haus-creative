@@ -71,8 +71,10 @@ export default function ContactPage() {
           <div className="flex-1 md:max-w-[1115px]">
             <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
               We are always looking to connect with creatives globally. We
-              operate hybrid in remote between London and São Paulo. Reach
-              out via{" "}
+              operate hybrid in remote between London and São Paulo.
+              {/* "Reach out via…" starts its own line (review 2026-07-23). */}
+              <br />
+              Reach out via{" "}
               <a
                 href={`mailto:${siteConfig.email}`}
                 className="hover:opacity-50 transition-opacity"

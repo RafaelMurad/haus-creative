@@ -119,8 +119,14 @@ describe("ProjectPage", () => {
 
       expect(screen.getByText("Credits")).toBeInTheDocument();
       projectWithCredits.credits!.forEach((credit) => {
+        // Film-credits style (review 2026-07-23): bold role line, no colon;
+        // comma-joined names render one per line without the commas.
         expect(screen.getByText(credit.role)).toBeInTheDocument();
-        expect(screen.getByText(credit.name)).toBeInTheDocument();
+        credit.name.split(", ").forEach((name) => {
+          expect(
+            screen.getAllByText(name, { exact: false }).length,
+          ).toBeGreaterThan(0);
+        });
       });
     }
   });
