@@ -531,7 +531,7 @@ export const projects: ProjectDetail[] = [
     id: "wao-cosmo",
     slug: "wao-cosmo",
     client: "Wao Cosmo",
-    title: "WAOMAG Showcase",
+    title: "WAOMAG",
     subtitle: "Creative Direction",
     headerTheme: "light",
     description:
