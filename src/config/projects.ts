@@ -535,11 +535,11 @@ export const projects: ProjectDetail[] = [
     subtitle: "Creative Direction",
     headerTheme: "light",
     description:
-      "As founder and Creative Director of We Are One Magazine (WAOMAG), I use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
+      "As founder and Creative Director of We Are One Magazine (WAOMAG), we use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
     editorialSubtitle: "Creative Direction",
     location: "São Paulo, Brazil",
     introText: [
-      "As founder and Creative Director of We Are One Magazine (WAOMAG), I use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
+      "As founder and Creative Director of We Are One Magazine (WAOMAG), we use the channel as a laboratory for experimentation across image-making, graphic design, culture and emerging creative technologies.",
       "From fashion editorials exploring unconventional photographic techniques to experimental editorial design, cultural interviews, street-style storytelling and AI-generated fashion films, WAOMAG continuously pushes the boundaries of visual communication while remaining rooted in a cosmopolitan perspective.",
     ],
 
