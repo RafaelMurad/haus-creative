@@ -308,8 +308,7 @@ describe("generateMetadata", () => {
     const project = getProjectBySlug(slug)!;
     const metadata = await generateMetadata({ params: { slug } });
 
-    const expectedTitle =
-      project.metaTitle || `${project.title} | HAUS Creative`;
+    const expectedTitle = project.metaTitle || project.title;
     expect(metadata.title).toBe(expectedTitle);
   });
 
@@ -322,7 +321,7 @@ describe("generateMetadata", () => {
     });
 
     const metadata = await generateMetadata({ params: { slug: projects[0].slug } });
-    expect(metadata.title).toBe(`${originalProject.title} | HAUS Creative`);
+    expect(metadata.title).toBe(originalProject.title);
   });
 
   it("falls back to project description when metaDescription is absent", async () => {

@@ -11,7 +11,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://studiohauscreative.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteConfig.name} | Creative Direction + Design`,
+    default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: siteUrl,
     siteName: "Studio Haus Creative",
-    title: `${siteConfig.name} | Creative Direction + Design`,
+    title: siteConfig.name,
     description: siteConfig.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | Creative Direction + Design`,
+    title: siteConfig.name,
     description: siteConfig.description,
   },
   robots: {

@@ -345,7 +345,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Marie Claire Arabia | HAUS Creative",
+    metaTitle: "Marie Claire Arabia",
     metaDescription:
       "Creative direction for Marie Claire Arabia September Issue - Back to Work Editorial by Studio Haus Creative.",
     ogImage: "/assets/mc-arabia/mc-arabia-hero.webp",
@@ -513,7 +513,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "YSL | HAUS Creative",
+    metaTitle: "Yves Saint Laurent Beauty",
     metaDescription:
       "Art direction for Yves Saint Laurent by Studio Haus Creative.",
     ogImage: "/assets/ysl/ysl-1.webp",
@@ -733,7 +733,7 @@ export const projects: ProjectDetail[] = [
       // them once videos 20/21 started playing on mobile.
     ],
 
-    metaTitle: "Wao Cosmo | HAUS Creative",
+    metaTitle: "WAOMAG",
     metaDescription:
       "Visual identity and brand design for Wao Cosmo by Studio Haus Creative.",
     ogImage: "/assets/wao-cosmo/wao-cosmo-1.webp",
@@ -911,7 +911,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Vivara | HAUS Creative",
+    metaTitle: "Vivara",
     metaDescription:
       "Art direction for Vivara jewellery campaigns by Studio Haus Creative.",
     ogImage: "/assets/vivara/vivara-1.webp",
@@ -1061,7 +1061,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Life | HAUS Creative",
+    metaTitle: "Life by Vivara",
     metaDescription:
       "Creative strategy and visual direction for Life by Studio Haus Creative.",
     ogImage: "/assets/life/life-1.webp",
@@ -1228,7 +1228,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "SK | HAUS Creative",
+    metaTitle: "SK-II",
     metaDescription:
       "Brand development and visual identity for SK by Studio Haus Creative.",
     ogImage: "/assets/sk/sk-1.webp",
@@ -1330,7 +1330,7 @@ export const projects: ProjectDetail[] = [
       { role: "Post Production", name: "Spring Studios" },
     ],
 
-    metaTitle: "Bucherer Summer | HAUS Creative",
+    metaTitle: "BUCHERER",
     metaDescription:
       "Creative direction for Bucherer Summer campaign by Studio Haus Creative.",
     ogImage: "/assets/bucherer/bucherer-1.webp",
@@ -1478,7 +1478,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "BFJ | HAUS Creative",
+    metaTitle: "Bucherer Fine Jewellery",
     metaDescription:
       "Digital design and creative direction for BFJ by Studio Haus Creative.",
     ogImage: "/assets/bfj/bfj-1.webp",
@@ -1731,7 +1731,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Ouronyx | HAUS Creative",
+    metaTitle: "Ouronyx",
     metaDescription:
       "Premium digital experience for luxury brand Ouronyx by Studio Haus Creative.",
     ogImage: "/assets/ouronyx/ouronyx-1.webp",
@@ -1873,7 +1873,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Bride Story | HAUS Creative",
+    metaTitle: "BRIDE",
     metaDescription:
       "Art direction and visual storytelling for Bride Story by Studio Haus Creative.",
     ogImage: "/assets/bride-story/bride-story-1.webp",
@@ -2180,7 +2180,7 @@ export const projects: ProjectDetail[] = [
       },
     ],
 
-    metaTitle: "Harrods | HAUS Creative",
+    metaTitle: "Harrods",
     metaDescription:
       "Creative direction for the Harrods Dining Hall experience by Studio Haus Creative.",
     ogImage: "/assets/harrods/harrods-1.webp",

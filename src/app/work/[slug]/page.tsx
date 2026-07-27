@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   if (!project) return {};
 
   return {
-    title: project.metaTitle || `${project.title} | HAUS Creative`,
+    // Bare name only — the root layout template appends "| STUDIO HAUS".
+    title: project.metaTitle || project.title,
     description: project.metaDescription || project.description,
     alternates: {
       canonical: `/work/${params.slug}`,
