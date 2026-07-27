@@ -5,6 +5,7 @@ import {
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
 import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
+import { useInViewPlayback } from "@/hooks/useInViewPlayback";
 import { AudioToggleButton } from "./AudioToggleButton";
 
 interface HeroVideoProps {
@@ -44,6 +45,12 @@ interface HeroVideoProps {
  *
  * When only one side has a file, the other side renders nothing — the page
  * supplies its own fallback (e.g. the static heroImage on desktop).
+ *
+ * Playback is scroll-gated (useInViewPlayback). The project-page hero sits
+ * at the top and is in view on load, so it still starts right away — but on
+ * the home page, where the same component layers each tile's banner, a tile
+ * below the fold now starts from frame 0 when scrolled to instead of already
+ * being mid-film.
  */
 export function HeroVideo({
   desktop,
@@ -84,6 +91,7 @@ export function HeroVideo({
     audioEnabled,
     resolved,
   );
+  useInViewPlayback(videoRef, resolved);
 
   if (!desktop && !mobile) return null;
   // Breakpoint known but this side has no file (e.g. desktop viewport on a
@@ -97,7 +105,6 @@ export function HeroVideo({
       className={`absolute inset-0 w-full h-full${audioEnabled ? " cursor-pointer" : ""}`}
       style={{ objectFit, objectPosition }}
       playsInline
-      autoPlay
       loop
       muted
       poster={activePoster}

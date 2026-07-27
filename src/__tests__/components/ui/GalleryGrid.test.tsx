@@ -272,6 +272,7 @@ describe("GalleryGrid", () => {
         unobserve = jest.fn();
         disconnect = jest.fn();
       }
+      const prevIO = globalThis.IntersectionObserver;
       (globalThis as Record<string, unknown>).IntersectionObserver = MockIO;
       try {
         const { container } = render(
@@ -288,7 +289,54 @@ describe("GalleryGrid", () => {
         });
         expect(video.muted).toBe(true);
       } finally {
-        delete (globalThis as Record<string, unknown>).IntersectionObserver;
+        (globalThis as Record<string, unknown>).IntersectionObserver = prevIO;
+      }
+    });
+
+    it("scroll-gates playback: no autoplay, plays on enter, pauses on exit", () => {
+      // Element-matched capture — find the observer watching the video node
+      // (the audio hook registers observers of its own).
+      const observed: Array<[Element, IntersectionObserverCallback]> = [];
+      class MockIO {
+        private cb: IntersectionObserverCallback;
+        constructor(cb: IntersectionObserverCallback) {
+          this.cb = cb;
+        }
+        observe = (el: Element) => {
+          observed.push([el, this.cb]);
+        };
+        unobserve = jest.fn();
+        disconnect = jest.fn();
+      }
+      const prevIO = globalThis.IntersectionObserver;
+      (globalThis as Record<string, unknown>).IntersectionObserver = MockIO;
+      try {
+        const { container } = render(<GalleryGrid media={[makeVideo(1)]} />);
+        const video = container.querySelector("video")!;
+        expect(video).not.toHaveAttribute("autoplay");
+
+        const pair = observed.find(([el]) => el === video);
+        expect(pair).toBeDefined();
+
+        video.play = jest.fn().mockResolvedValue(undefined);
+        video.pause = jest.fn();
+        act(() => {
+          pair![1](
+            [{ isIntersecting: true } as IntersectionObserverEntry],
+            {} as IntersectionObserver,
+          );
+        });
+        expect(video.play).toHaveBeenCalled();
+
+        act(() => {
+          pair![1](
+            [{ isIntersecting: false } as IntersectionObserverEntry],
+            {} as IntersectionObserver,
+          );
+        });
+        expect(video.pause).toHaveBeenCalled();
+      } finally {
+        (globalThis as Record<string, unknown>).IntersectionObserver = prevIO;
       }
     });
 
