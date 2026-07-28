@@ -31,6 +31,28 @@ export function useInViewPlayback(
       else v.pause();
     });
     io.observe(v);
-    return () => io.disconnect();
+
+    // Look-ahead prefetch: one viewport before the clip scrolls in, upgrade
+    // preload so the file buffers during the approach instead of at entry.
+    // Without this, a preload="none" clip fetches its first byte only when
+    // play() fires at the viewport edge — on a cold CDN region the visitor
+    // stares at the poster while megabytes stream in (Vitor's "video da
+    // esquerda não tá tocando", review 2026-07-27). One-shot per element;
+    // playback stays gated at the true boundary above, so the frame-0 rule
+    // is untouched.
+    const prefetch = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        v.preload = "auto";
+        prefetch.disconnect();
+      },
+      { rootMargin: "100% 0px" },
+    );
+    prefetch.observe(v);
+
+    return () => {
+      io.disconnect();
+      prefetch.disconnect();
+    };
   }, [videoRef, resyncKey]);
 }

@@ -26,9 +26,11 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 
 - ✅ **Marie Claire** — novo `MC_MOB_01` (versão 27/07, masthead centralizado) no hero mobile.
 
-## Ainda aberto (não entrou neste deploy)
+## Vídeos
 
-- ⏳ **Harrods** — vídeo do par (cena do jantar) não tocando no desktop — em investigação ([#77](https://github.com/RafaelMurad/haus-creative/issues/77)).
+- ✅ **Harrods (e todos os vídeos do site)** — o vídeo do jantar que "não tocava" no desktop: o clipe só começava a baixar quando entrava na tela (7,5 MB na hora = poster parado). Agora todo vídeo pré-carrega **uma tela antes** de aparecer — chega no viewport já com buffer e toca na hora, do frame 0 ([#77](https://github.com/RafaelMurad/haus-creative/issues/77)).
+
+## Ainda aberto (não entrou neste deploy)
 - ⏳ **Ouronyx 10/11** — esperando os re-exports com áudio do Diego ([#79](https://github.com/RafaelMurad/haus-creative/issues/79)).
 - ⏳ **Domínio** — esperando login do cPanel ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
 - ⏳ **Showreel** — esperando o edit ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).
