@@ -2,39 +2,56 @@ import React, { useRef } from "react";
 import { render, act } from "@testing-library/react";
 import { useInViewPlayback } from "@/hooks/useInViewPlayback";
 
-// Capture the observer callback so tests can trigger intersections manually
-let observerCallback: IntersectionObserverCallback;
-const mockObserve = jest.fn();
-const mockDisconnect = jest.fn();
+// The hook creates TWO observers per element: the playback gate (no
+// rootMargin) and the look-ahead prefetch (rootMargin one viewport out).
+// Track every instance with its options so tests can address each.
+interface MockObserver {
+  callback: IntersectionObserverCallback;
+  options?: IntersectionObserverInit;
+  observe: jest.Mock;
+  disconnect: jest.Mock;
+}
+let observers: MockObserver[] = [];
 
 beforeEach(() => {
   jest.clearAllMocks();
-  observerCallback = undefined as unknown as IntersectionObserverCallback;
+  observers = [];
 
-  global.IntersectionObserver = jest.fn((callback) => {
-    observerCallback = callback;
-    return {
-      observe: mockObserve,
-      unobserve: jest.fn(),
-      disconnect: mockDisconnect,
-      root: null,
-      rootMargin: "",
-      thresholds: [],
-      takeRecords: jest.fn(),
-    };
-  }) as unknown as typeof IntersectionObserver;
+  global.IntersectionObserver = jest.fn(
+    (callback: IntersectionObserverCallback, options?: IntersectionObserverInit) => {
+      const instance: MockObserver = {
+        callback,
+        options,
+        observe: jest.fn(),
+        disconnect: jest.fn(),
+      };
+      observers.push(instance);
+      return {
+        observe: instance.observe,
+        unobserve: jest.fn(),
+        disconnect: instance.disconnect,
+        root: null,
+        rootMargin: options?.rootMargin ?? "",
+        thresholds: [],
+        takeRecords: jest.fn(),
+      };
+    },
+  ) as unknown as typeof IntersectionObserver;
 });
+
+const playbackObservers = () => observers.filter((o) => !o.options?.rootMargin);
+const prefetchObservers = () => observers.filter((o) => o.options?.rootMargin);
 
 // Helper component that attaches the hook to a real <video> element
 function Clip({ resyncKey }: { resyncKey?: unknown }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   useInViewPlayback(videoRef, resyncKey);
-  return <video ref={videoRef} data-testid="clip" muted />;
+  return <video ref={videoRef} data-testid="clip" muted preload="none" />;
 }
 
-function triggerIntersection(isIntersecting: boolean) {
+function trigger(observer: MockObserver, isIntersecting: boolean) {
   act(() => {
-    observerCallback(
+    observer.callback(
       [{ isIntersecting } as IntersectionObserverEntry],
       {} as IntersectionObserver,
     );
@@ -46,7 +63,8 @@ describe("useInViewPlayback", () => {
     const { getByTestId } = render(<Clip />);
     const video = getByTestId("clip") as HTMLVideoElement;
 
-    expect(mockObserve).toHaveBeenCalledWith(video);
+    expect(playbackObservers()).toHaveLength(1);
+    expect(playbackObservers()[0].observe).toHaveBeenCalledWith(video);
     expect(video).not.toHaveAttribute("autoplay");
   });
 
@@ -56,7 +74,7 @@ describe("useInViewPlayback", () => {
     video.play = jest.fn().mockResolvedValue(undefined);
     video.pause = jest.fn();
 
-    triggerIntersection(true);
+    trigger(playbackObservers()[0], true);
 
     expect(video.play).toHaveBeenCalled();
     expect(video.pause).not.toHaveBeenCalled();
@@ -68,27 +86,28 @@ describe("useInViewPlayback", () => {
     video.play = jest.fn().mockResolvedValue(undefined);
     video.pause = jest.fn();
 
-    triggerIntersection(true);
-    triggerIntersection(false);
+    trigger(playbackObservers()[0], true);
+    trigger(playbackObservers()[0], false);
 
     expect(video.pause).toHaveBeenCalled();
   });
 
-  it("re-attaches the observer when resyncKey changes (breakpoint remount)", () => {
+  it("re-attaches the observers when resyncKey changes (breakpoint remount)", () => {
     const { rerender } = render(<Clip resyncKey="/a.mp4" />);
-    expect(mockObserve).toHaveBeenCalledTimes(1);
+    expect(playbackObservers()).toHaveLength(1);
 
     rerender(<Clip resyncKey="/b.mp4" />);
 
-    expect(mockDisconnect).toHaveBeenCalled();
-    expect(mockObserve).toHaveBeenCalledTimes(2);
+    expect(playbackObservers()[0].disconnect).toHaveBeenCalled();
+    expect(playbackObservers()).toHaveLength(2);
   });
 
-  it("disconnects the observer on unmount", () => {
+  it("disconnects both observers on unmount", () => {
     const { unmount } = render(<Clip />);
     unmount();
 
-    expect(mockDisconnect).toHaveBeenCalled();
+    expect(playbackObservers()[0].disconnect).toHaveBeenCalled();
+    expect(prefetchObservers()[0].disconnect).toHaveBeenCalled();
   });
 
   it("falls back to playing immediately when IntersectionObserver is unavailable", () => {
@@ -104,5 +123,45 @@ describe("useInViewPlayback", () => {
       playSpy.mockRestore();
       (globalThis as Record<string, unknown>).IntersectionObserver = prevIO;
     }
+  });
+
+  describe("look-ahead prefetch", () => {
+    it("registers a second observer with a one-viewport rootMargin", () => {
+      const { getByTestId } = render(<Clip />);
+      const video = getByTestId("clip") as HTMLVideoElement;
+
+      expect(prefetchObservers()).toHaveLength(1);
+      expect(prefetchObservers()[0].options?.rootMargin).toBe("100% 0px");
+      expect(prefetchObservers()[0].observe).toHaveBeenCalledWith(video);
+    });
+
+    it("upgrades preload to auto on approach WITHOUT playing", () => {
+      const { getByTestId } = render(<Clip />);
+      const video = getByTestId("clip") as HTMLVideoElement;
+      video.play = jest.fn().mockResolvedValue(undefined);
+
+      trigger(prefetchObservers()[0], true);
+
+      expect(video.preload).toBe("auto");
+      expect(video.play).not.toHaveBeenCalled();
+    });
+
+    it("is one-shot: disconnects after the first approach", () => {
+      render(<Clip />);
+
+      trigger(prefetchObservers()[0], true);
+
+      expect(prefetchObservers()[0].disconnect).toHaveBeenCalled();
+    });
+
+    it("does not upgrade preload while still out of prefetch range", () => {
+      const { getByTestId } = render(<Clip />);
+      const video = getByTestId("clip") as HTMLVideoElement;
+
+      trigger(prefetchObservers()[0], false);
+
+      expect(video.preload).toBe("none");
+      expect(prefetchObservers()[0].disconnect).not.toHaveBeenCalled();
+    });
   });
 });
