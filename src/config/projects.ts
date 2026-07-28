@@ -241,7 +241,10 @@ export const projects: ProjectDetail[] = [
     // Client copy 2026-07-20 — the text lists no agency for this project
     // (the earlier "ITP Media" line was dropped with it).
     introText: [
-      "Commissioned for Marie Claire Arabia's September issue, this editorial reimagined back-to-office dressing through a contemporary fashion perspective.",
+      // \u2060 (word joiner) after each hyphen keeps "back-to-office"
+      // whole at any line end (review 2026-07-27); the SEO description
+      // above stays free of control characters.
+      "Commissioned for Marie Claire Arabia's September issue, this editorial reimagined back-\u2060to-\u2060office dressing through a contemporary fashion perspective.",
       "Shot across the streets of Central London, the story portrays the modern executive woman: confident, ambitious and effortlessly elegant. Combining cinematic urban imagery with refined editorial styling.",
     ],
     editorialSubtitle: "Creative Direction",
@@ -761,8 +764,10 @@ export const projects: ProjectDetail[] = [
     location: "São Paulo, Brazil",
     agency: "GB65",
     introText: [
-      "For over a decade, Gisele Bündchen has been the face of Vivara, appearing in four major campaigns each year. The creative challenge is continually reinventing the visual narrative while preserving the strength and recognition of such an enduring partnership.",
-      "Working under the creative direction of Giovanni Bianco, I contributed to campaigns that refreshed the brand's aesthetic season after season, balancing timeless elegance with contemporary luxury to keep each collection feeling distinctive and relevant.",
+      // \u00A0 bindings: "The" and "I" sat stranded at mobile line ends
+      // (review 2026-07-27) — each wraps together with its next word.
+      "For over a decade, Gisele Bündchen has been the face of Vivara, appearing in four major campaigns each year. The\u00A0creative challenge is continually reinventing the visual narrative while preserving the strength and recognition of such an enduring partnership.",
+      "Working under the creative direction of Giovanni Bianco, I\u00A0contributed to campaigns that refreshed the brand's aesthetic season after season, balancing timeless elegance with contemporary luxury to keep each collection feeling distinctive and relevant.",
     ],
 
     heroVideo: {
@@ -1357,8 +1362,11 @@ export const projects: ProjectDetail[] = [
     agency: "Spring Studios",
     introText: [
       "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each collection.",
-      "From the bohemian spirit of Peekaboo to the understated minimalism of B Dimension, we developed eight unique personas, defined by their own lifestyle and attitude.",
-      "Across multiple locations, we produced editorial photography, still life and film that brought each collection to life. The resulting assets were deployed across digital campaigns, e-commerce, social media, DOOH, print collateral and in-store experiences, establishing a cohesive visual language across every customer touchpoint.",
+      // "we\u00A0developed" sends "we" down off the desktop first line;
+      // "e-\u2060commerce" (word joiner) never splits after the "e-"
+      // (review 2026-07-27).
+      "From the bohemian spirit of Peekaboo to the understated minimalism of B Dimension, we\u00A0developed eight unique personas, defined by their own lifestyle and attitude.",
+      "Across multiple locations, we produced editorial photography, still life and film that brought each collection to life. The resulting assets were deployed across digital campaigns, e-\u2060commerce, social media, DOOH, print collateral and in-store experiences, establishing a cohesive visual language across every customer touchpoint.",
     ],
 
     heroVideo: {

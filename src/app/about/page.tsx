@@ -26,12 +26,14 @@ export default function About() {
           <div className="flex-1">
             {/* Copy per the TEXTO PARA SITE update (2026-07-23) — heading is
                 "About Us", not "About Studio Haus", per Vitor's note. */}
-            {/* Section labels scale with the body copy (15/19) — at 14px they
-                read undersized against the 19px paragraphs (review 2026-07-23). */}
-            <h1 className="text-[15px] md:text-[19px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
+            {/* Section labels scale with the body copy (15/16) — at 14px they
+                read undersized against the paragraphs (review 2026-07-23).
+                Desktop body 19→16 per review 2026-07-27 ("menor que essa mas
+                maior que" the 14px case descriptions). */}
+            <h1 className="text-[15px] md:text-[16px] font-bold uppercase leading-[1.21em] text-black mb-[23px] md:mb-[58px]">
               About Us
             </h1>
-            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[19px] md:leading-[1.68em] max-w-[750px]">
+            <div className="md:pl-[4px] space-y-6 text-[15px] leading-[1.21em] md:text-[16px] md:leading-[1.68em] max-w-[750px]">
               <p>
                 Studio Haus Creative is an independent creative consultancy specialising in luxury branding, image-making and global campaign direction.
               </p>
@@ -74,7 +76,7 @@ export default function About() {
           {/* Contact section — visible on both breakpoints per Figma
               About-D (in left column under body text). */}
           <div className="mt-16 md:mt-20 pb-8 md:pl-[9px]">
-            <h2 className="text-[15px] md:text-[19px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
+            <h2 className="text-[15px] md:text-[16px] font-bold uppercase leading-[1.21em] text-black mb-[37px]">
               Contact
             </h2>
             <div className="space-y-[19px] text-[15px] leading-[1.21em]">
