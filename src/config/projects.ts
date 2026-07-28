@@ -265,7 +265,7 @@ export const projects: ProjectDetail[] = [
 
     year: "2024",
     credits: [
-      { role: "Art Direction", name: "Vitor Milito (Studio Haus)" },
+      { role: "Art Direction", name: "Vitor Milito" },
       { role: "Photographer", name: "Ekin Can Bayrakdar" },
       { role: "Stylist", name: "Rachel Davis" },
       { role: "Make Up", name: "Kenny Leung" },
@@ -373,7 +373,7 @@ export const projects: ProjectDetail[] = [
     introText: [
       "YSL Beauty's first global Eid campaign marked a milestone for the luxury house, celebrating one of the region's most important cultural moments through a contemporary lens.",
       "Inspired by the warmth and cinematic beauty of desert sunsets, I collaborated with YSL Beauty's global and regional teams to develop the creative direction for a series of capsule films featuring brand ambassadors from the GCC and Southeast Asia.",
-      "The challenge was to honour local cultural nuances while remaining unmistakably YSL, balancing authenticity with the brand's iconic visual codes. The result was a refined campaign that connected with regional audiences while maintaining a cohesive global luxury identity.",
+      "The challenge was to honour local cultural nuances while remaining unmistakably YSL, balancing authenticity with the brand's iconic visual codes. The result was a refined campaign that connected with regional audiences while maintaining a cohesive global identity.",
     ],
 
     // Both Figma frames tag the hero as video. The delivered
@@ -1257,7 +1257,7 @@ export const projects: ProjectDetail[] = [
     introText: [
       "The Summer of Indulgence was a 360° campaign celebrating the pleasures of the season while showcasing Bucherer's jewellery, watches and luxury retail experience.",
       "Inspired by the warmth and joy of summer, we developed a vibrant creative concept built around colourful visuals, playful copy and nostalgic ice cream references. Bucherer boutiques were transformed into luxurious gelaterias, inviting customers to indulge in scoops of flavour while discovering the latest collections.",
-      "The campaign unified multiple retail offerings under a single creative platform, delivering a cohesive brand experience across retail, digital, social media and marketing communications.",
+      "The campaign unified multiple retail offerings under a single creative platform, delivering a cohesive brand experience across advertising, retail, digital and social media.",
     ],
 
     heroImage: {
@@ -1351,13 +1351,13 @@ export const projects: ProjectDetail[] = [
     title: "Bucherer Fine Jewellery - Collections",
     subtitle: "Creative Direction",
     description:
-      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each jewellery collection.",
+      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each collection.",
     editorialSubtitle: "Creative Direction",
     location: "Shot in Cape Town, South Africa",
     agency: "Spring Studios",
     introText: [
-      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each jewellery collection.",
-      "From the bohemian spirit of Peekaboo to the understated minimalism of B Dimension, we developed eight unique personas, each defined by their own lifestyle, aspirations and attitude.",
+      "Spring Studios was commissioned to develop a comprehensive content strategy for Bucherer Fine Jewellery, creating distinct visual worlds for each collection.",
+      "From the bohemian spirit of Peekaboo to the understated minimalism of B Dimension, we developed eight unique personas, defined by their own lifestyle and attitude.",
       "Across multiple locations, we produced editorial photography, still life and film that brought each collection to life. The resulting assets were deployed across digital campaigns, e-commerce, social media, DOOH, print collateral and in-store experiences, establishing a cohesive visual language across every customer touchpoint.",
     ],
 
@@ -1507,7 +1507,7 @@ export const projects: ProjectDetail[] = [
     agency: "Spring Studios",
     introText: [
       "Beauty Has Power was the launch campaign for OURONYX, a next-generation aesthetic wellness brand, created to build awareness and drive conversion across key international markets.",
-      "From the outset, I helped shape the brand's creative vision, from naming, visual identity and clinic interiors to the art direction of the launch campaign. We developed a sophisticated visual language featuring premium talent that reflected the brand's international audience and elevated positioning.",
+      "From the outset, I helped shape the brand's creative vision, from naming, visual identity and clinic interiors to the art direction of the launch campaign. We developed a sophisticated visual language featuring premium talent that reflected the brand's international audience and positioning.",
       "Beyond the campaign, the project encompassed a complete digital ecosystem, including doctor-led video content, an immersive website with interactive features and an integrated booking platform, alongside a comprehensive social media programme supporting both launch and ongoing brand growth.",
     ],
 
@@ -1755,11 +1755,11 @@ export const projects: ProjectDetail[] = [
     subtitle: "Creative Direction",
     headerTheme: "light",
     description:
-      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform creative business.",
+      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform business.",
     editorialSubtitle: "Creative Direction",
     location: "São Paulo, Brazil",
     introText: [
-      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform creative business.",
+      "As Creative Director of BRIDE, São Paulo's leading trade fair for the luxury wedding industry, I expanded the brand beyond the annual event into a multi-platform business.",
       "I conceived and launched BRIDE Magazine, leading its editorial vision while developing the publication's branding and design system. I oversaw creative direction across content, design and production, while building strategic partnerships with brands, photographers, designers and industry collaborators.",
       "Under this expanded vision, BRIDE also evolved into a creative agency, delivering branding, editorial and design projects for clients across the luxury wedding ecosystem. The result was a cohesive brand platform that extended BRIDE's influence beyond the event, establishing it as a year-round creative and editorial authority within the industry.",
     ],
