@@ -59,7 +59,12 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
       loop
       muted
       poster={item.inset ? undefined : item.poster}
-      preload={index < 2 ? "metadata" : "none"}
+      // Always "none": the look-ahead observer (useInViewPlayback) upgrades
+      // any clip within a viewport of the fold to "auto" at mount, which
+      // covers what the old index<2 metadata heuristic did — and unlike it,
+      // never fetches for hidden wrong-breakpoint twins (index 0/1
+      // mobileOnly clips were pulling moov bytes on desktop).
+      preload="none"
       src={resolved ?? undefined}
       onClick={hasAudio ? toggle : undefined}
     >
