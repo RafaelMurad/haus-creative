@@ -40,6 +40,14 @@ export interface Project {
   subtitle?: string;
   href: string;
   media: MediaSource;      // Primary media (can be video, image, or gif)
+  /**
+   * Studio showreel layered over the intro tile's static media (HeroVideo,
+   * scroll-gated) — desktop-only until a mobile edit is delivered; the
+   * static media stays as the mobile view and the loading backdrop.
+   * Deliberately NOT the legacy videoSrc field: that one feeds
+   * createMediaSource's autoplay path.
+   */
+  showreel?: { desktop: string; hasAudio?: boolean };
   // Legacy support - will be converted to media internally
   videoSrc?: string;
   videoSrcMobile?: string;
@@ -134,8 +142,9 @@ export const siteConfig: SiteConfig = {
 // Order per Rafael 2026-07-15: Homebanner, YSL, Vivara, WAO, Harrods,
 // Marie Claire, BFJ, SK-II, Life, Bride, Bucherer Summer, Ouronyx.
 export const featuredProjects: Project[] = [
-  // 1. Homebanner — intro hero (non-navigable; SK static until Vitor's
-  // showreel edit lands, then it becomes the showreel video)
+  // 1. Homebanner — intro hero (non-navigable). The desktop showreel
+  // (delivered 2026-07-30, 1080p with full mix) plays over the SK still;
+  // mobile keeps the static image until a mobile edit lands.
   {
     id: "sk",
     title: "SK",
@@ -147,6 +156,7 @@ export const featuredProjects: Project[] = [
       srcMobile: "/assets/sk/sk-1-mobile.webp",
       alt: "SK brand showcase",
     },
+    showreel: { desktop: "/assets/home/showreel.mp4", hasAudio: true },
   },
   // 2. YSL
   {

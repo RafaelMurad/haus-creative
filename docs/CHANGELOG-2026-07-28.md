@@ -36,6 +36,7 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 
 - ✅ **Harrods** — o vídeo do jantar (par de cima) agora toca também no desktop, na mesma caixa da imagem (a foto vira o poster). Era o twin mobile-only da leitura antiga do pin no Figma.
 
+- ✅ **Showreel na home** — o edit de 30/07 (1080p, mix completo) toca no topo da home no desktop, com botão de som. No mobile continua a imagem até chegar o edit vertical ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).
+
 ## Ainda aberto (não entrou neste deploy)
 - ⏳ **Domínio** — esperando login do cPanel ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
-- ⏳ **Showreel** — esperando o edit ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).

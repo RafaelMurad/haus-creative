@@ -17,6 +17,13 @@ export const MOBILE_MEDIA_QUERY = "(max-width: 767.98px)";
 export const HERO_MOBILE_MEDIA_QUERY = "(max-width: 1023.98px)";
 
 /**
+ * Inverse of HERO_MOBILE_MEDIA_QUERY — gates a desktop-only hero's
+ * pre-hydration <source> so phones never fetch it (see
+ * useResponsiveVideoSource's mobileFallback: false).
+ */
+export const HERO_DESKTOP_MEDIA_QUERY = "(min-width: 1024px)";
+
+/**
  * Tracks a CSS media query and re-evaluates on viewport changes.
  *
  * Returns `null` on the server and during the first client render (before
@@ -49,13 +56,20 @@ export function useMediaQuery(query: string): boolean | null {
  *   (e.g. desktop viewport on a mobile-only hero); callers render nothing.
  * - `string` — the file to play, remount-keyed by callers so crossing the
  *   breakpoint swaps sources.
+ *
+ * `mobileFallback` (default true): a missing mobile file falls back to the
+ * desktop file — the gallery/tile behavior (e.g. YSL's mobile banner plays
+ * the desktop cut). Pass false for desktop-only media that must NOT leak
+ * onto phones (e.g. the 16:9 home showreel: cover-cropped to a 9:16 sliver
+ * and a heavyweight download on mobile data).
  */
 export function useResponsiveVideoSource(
   desktop?: string,
   mobile?: string,
   query: string = MOBILE_MEDIA_QUERY,
+  mobileFallback: boolean = true,
 ): string | null | undefined {
   const isMobile = useMediaQuery(query);
   if (isMobile === null) return null;
-  return isMobile ? (mobile ?? desktop) : desktop;
+  return isMobile ? (mobile ?? (mobileFallback ? desktop : undefined)) : desktop;
 }

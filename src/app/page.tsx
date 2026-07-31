@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <>
       {/* Introductory Hero - Full viewport, no text */}
-      <IntroHero media={introProject.media} />
+      <IntroHero media={introProject.media} showreel={introProject.showreel} />
 
       {/* Work Gallery Items - Each navigable to its own page.
           Carousel effects are OFF by default. To enable per-project,

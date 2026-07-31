@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  HERO_DESKTOP_MEDIA_QUERY,
   HERO_MOBILE_MEDIA_QUERY,
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
@@ -29,6 +30,13 @@ interface HeroVideoProps {
    * tracks).
    */
   hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
+  /**
+   * Default true: a missing mobile file plays the desktop file below the
+   * breakpoint (YSL's shared banner). False = strictly desktop-only — the
+   * mobile side renders nothing and the pre-hydration <source> is gated so
+   * phones never fetch a byte (the home showreel).
+   */
+  mobileFallback?: boolean;
 }
 
 /**
@@ -60,11 +68,13 @@ export function HeroVideo({
   objectFit = "cover",
   objectPosition = "center",
   hasAudio = false,
+  mobileFallback = true,
 }: HeroVideoProps) {
   const resolved = useResponsiveVideoSource(
     desktop,
     mobile,
     HERO_MOBILE_MEDIA_QUERY,
+    mobileFallback,
   );
   // Poster is per-file where a mobile poster exists: the landscape poster
   // bakes content (e.g. Bride's title) that must not flash over the
@@ -117,7 +127,13 @@ export function HeroVideo({
           {mobile && (
             <source src={mobile} type="video/mp4" media={HERO_MOBILE_MEDIA_QUERY} />
           )}
-          {desktop && <source src={desktop} type="video/mp4" />}
+          {desktop && (
+            <source
+              src={desktop}
+              type="video/mp4"
+              media={mobileFallback ? undefined : HERO_DESKTOP_MEDIA_QUERY}
+            />
+          )}
         </>
       )}
     </video>
