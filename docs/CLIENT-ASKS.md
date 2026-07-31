@@ -84,6 +84,10 @@ button. If any were meant to have sound, re-export with the mix:
 
 No action needed if silence is intentional (likely for the UI mockups).
 
+**Update 2026-07-31:** WEB 7 + WEB 8 re-delivered at 720×900 with the real
+interview mixes — wired to slots 16/17 with the audio toggle. Still silent:
+WEB 2/3/5 + MOBILE 2/3/9 (UI mockup cards; presumed intentional).
+
 ## ~~3. Ouronyx — two gallery images never delivered~~ RESOLVED 2026-07-10
 
 Rafael exported the two missing pair-partner stills from Figma directly

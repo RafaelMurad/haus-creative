@@ -1712,16 +1712,22 @@ export const projects: ProjectDetail[] = [
       {
         // Vitor pin "VIDEO 7" — the denim stool interview clip (same file
         // both breakpoints; opens on this slot's still, kept as poster).
+        // 2026-07-31 re-export (delivery "OURONYX - WEB 7"): 720×900 with
+        // the real interview mix — replaces the silent 9.9s edit.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-16.mp4",
+        hasAudio: true,
         poster: "/assets/ouronyx/ouronyx-16.webp",
         alt: "ouronyx video 16",
       },
       {
         // Vitor pin "VIDEO 8" — the man portrait clip (same file both
         // breakpoints; opens on this slot's still, kept as poster).
+        // 2026-07-31 re-export (delivery "OURONYX - WEB 8"): 720×900 with
+        // the real interview mix — replaces the silent 12.8s edit.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-17.mp4",
+        hasAudio: true,
         poster: "/assets/ouronyx/ouronyx-17.webp",
         alt: "ouronyx video 17",
       },
