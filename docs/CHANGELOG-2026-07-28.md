@@ -34,6 +34,8 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 
 - ✅ **Ouronyx** — os dois vídeos de entrevista (mulher + Daniel Ricciardo) substituídos pelos re-exports do Di: 720×900 com o áudio real da entrevista — botão de som ativo nos dois ([#79](https://github.com/RafaelMurad/haus-creative/issues/79)).
 
+- ✅ **Harrods** — o vídeo do jantar (par de cima) agora toca também no desktop, na mesma caixa da imagem (a foto vira o poster). Era o twin mobile-only da leitura antiga do pin no Figma.
+
 ## Ainda aberto (não entrou neste deploy)
 - ⏳ **Domínio** — esperando login do cPanel ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
 - ⏳ **Showreel** — esperando o edit ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).
