@@ -30,7 +30,10 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 
 - ✅ **Harrods (e todos os vídeos do site)** — o vídeo do jantar que "não tocava" no desktop: o clipe só começava a baixar quando entrava na tela (7,5 MB na hora = poster parado). Agora todo vídeo pré-carrega **uma tela antes** de aparecer — chega no viewport já com buffer e toca na hora, do frame 0 ([#77](https://github.com/RafaelMurad/haus-creative/issues/77)).
 
+## 2026-07-31
+
+- ✅ **Ouronyx** — os dois vídeos de entrevista (mulher + Daniel Ricciardo) substituídos pelos re-exports do Di: 720×900 com o áudio real da entrevista — botão de som ativo nos dois ([#79](https://github.com/RafaelMurad/haus-creative/issues/79)).
+
 ## Ainda aberto (não entrou neste deploy)
-- ⏳ **Ouronyx 10/11** — esperando os re-exports com áudio do Diego ([#79](https://github.com/RafaelMurad/haus-creative/issues/79)).
 - ⏳ **Domínio** — esperando login do cPanel ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
 - ⏳ **Showreel** — esperando o edit ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).
