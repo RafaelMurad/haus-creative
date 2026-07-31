@@ -1958,12 +1958,18 @@ export const projects: ProjectDetail[] = [
         mobileOnly: true,
       },
       {
-        // Desktop half of the twin — static on desktop per the pin's
-        // mobile-only placement.
-        type: "image",
-        desktop: "/assets/harrods/harrods-2.webp",
-        mobile: "/assets/harrods/harrods-2-mobile.webp",
-        alt: "harrods image 1",
+        // Desktop half of the twin — now plays the clip here too (Vitor
+        // 2026-07-31: "esse video da esquerda continua como imagem apenas
+        // no desktop"; supersedes the mobile-only pin reading of PR #46).
+        // aspect (without inset) keeps the still's exact 720/1065 box: the
+        // 1080×2048 clip cover-fills it and the old still stays as poster,
+        // so the pair layout and first paint are unchanged.
+        type: "video",
+        desktop: "/assets/harrods/harrods-video-2.mp4",
+        hasAudio: true,
+        poster: "/assets/harrods/harrods-2.webp",
+        aspect: "720/1065",
+        alt: "harrods video 1",
         desktopOnly: true,
       },
       {
