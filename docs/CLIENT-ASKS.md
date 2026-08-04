@@ -60,6 +60,26 @@ film title card — 440×550 at a lavish 2.7 Mbps, i.e. a low-res export of a
 higher-res master; its text can't survive the ~3× phone upscale.) Meanwhile
 we render them smaller in-frame to reduce the upscale.
 
+## Export bitrate targets for Diego (2026-07-29 — applies to #5 and all future video deliveries)
+
+Site policy: we never re-encode delivered files (quality rule, 2026-07-28) —
+so right-sizing must happen at export time, from the masters. Several current
+exports carry 2–4× the bitrate their on-site display size needs (e.g.
+`MC mobile banner` at 5.5 Mbps for 720×1280); that is the main reason clips
+feel slow to start on cold caches. Targets (H.264 High, `+faststart`):
+
+| export size | target bitrate |
+|---|---|
+| 1080×1920 portrait | ~2.5 Mbps |
+| 720×1280 | ~2 Mbps |
+| ≤720×900 gallery clips | ~1.2 Mbps |
+| 440×864 mobile heroes | ~1 Mbps |
+
+Audio: include a track only where the clip is meant to speak (interviews,
+banners with a mix) — muted-loop clips ship smaller without one. This is
+guidance for exports in flight and future ones; no re-delivery needed for
+files that already look right.
+
 ## 6. BFJ — original of the balcony image (bfj-11) via Diego (2026-07-14)
 
 Vitor: "BFJ mobile ta sem qualidade essa imagem, é o Diego que tem [o

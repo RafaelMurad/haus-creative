@@ -126,6 +126,10 @@ function ImageMedia({
           alt={media.alt || ""}
           className={className}
           loading={priority ? "eager" : "lazy"}
+          // The priority image is the LCP candidate (home intro still) —
+          // fetchpriority lifts it above the video/script queue. Lowercase
+          // attribute: React 18 passes it through as-is.
+          {...(priority ? ({ fetchpriority: "high" } as object) : {})}
         />
       </picture>
     );

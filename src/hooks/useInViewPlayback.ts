@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { registerForWarming } from "@/lib/videoWarmQueue";
 
 /**
  * Scroll-gated playback for the muted looping clips: play while any part of
@@ -40,19 +41,42 @@ export function useInViewPlayback(
     // esquerda não tá tocando", review 2026-07-27). One-shot per element;
     // playback stays gated at the true boundary above, so the frame-0 rule
     // is untouched.
-    const prefetch = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        v.preload = "auto";
-        prefetch.disconnect();
-      },
-      { rootMargin: "100% 0px" },
-    );
-    prefetch.observe(v);
+    //
+    // Attached only after the window load event: prefetch is an optimization
+    // for the NEXT viewport, so it must never compete with the current one —
+    // measured on prod (2026-08-04), near-fold clips warming at landing
+    // delayed the LCP image behind megabytes of video. In-view clips are
+    // unaffected: play() above forces their fetch immediately.
+    let prefetch: IntersectionObserver | null = null;
+    const attachPrefetch = () => {
+      prefetch = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          // Direct upgrade for the approaching clip (covers mobile, where
+          // the background warmer is deliberately off).
+          v.preload = "auto";
+          prefetch?.disconnect();
+        },
+        { rootMargin: "100% 0px" },
+      );
+      prefetch.observe(v);
+    };
+    if (document.readyState === "complete") {
+      attachPrefetch();
+    } else {
+      window.addEventListener("load", attachPrefetch, { once: true });
+    }
+
+    // Background page warmer: desktop visitors get every registered clip
+    // buffered top-to-bottom after load, so scrolling never catches one
+    // mid-download ("all content ready when I scroll", 2026-08-04).
+    const unregister = registerForWarming(v);
 
     return () => {
       io.disconnect();
-      prefetch.disconnect();
+      prefetch?.disconnect();
+      window.removeEventListener("load", attachPrefetch);
+      unregister();
     };
   }, [videoRef, resyncKey]);
 }

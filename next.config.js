@@ -20,6 +20,21 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Media assets: Vercel's default for public/ is max-age=0 +
+        // must-revalidate — every repeat visit revalidates each multi-MB
+        // video. One day fresh + a week stale-while-revalidate keeps repeat
+        // plays instant. NOT immutable: delivered files are replaced under
+        // the same name (Diego re-exports), so a returning visitor must
+        // never be pinned to an old file for more than a day.
+        source: "/assets/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           {
