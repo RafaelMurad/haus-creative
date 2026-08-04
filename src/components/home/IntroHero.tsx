@@ -5,7 +5,7 @@ import type { MediaSource, Project } from "@/config/site";
 
 interface IntroHeroProps {
   media: MediaSource;
-  /** Studio showreel — layered over the static media, desktop-only. */
+  /** Studio showreel — layered over the static media, per-breakpoint edits. */
   showreel?: Project["showreel"];
 }
 
@@ -30,7 +30,10 @@ export function IntroHero({ media, showreel }: IntroHeroProps) {
       {showreel && (
         <HeroVideo
           desktop={showreel.desktop}
+          mobile={showreel.mobile}
           hasAudio={showreel.hasAudio}
+          // Without a mobile file, phones keep the static media (never the
+          // heavyweight desktop cut); with one, this flag is inert.
           mobileFallback={false}
         />
       )}

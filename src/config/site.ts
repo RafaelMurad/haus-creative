@@ -47,7 +47,11 @@ export interface Project {
    * Deliberately NOT the legacy videoSrc field: that one feeds
    * createMediaSource's autoplay path.
    */
-  showreel?: { desktop: string; hasAudio?: boolean };
+  showreel?: {
+    desktop: string;
+    mobile?: string;
+    hasAudio?: boolean | { desktop?: boolean; mobile?: boolean };
+  };
   // Legacy support - will be converted to media internally
   videoSrc?: string;
   videoSrcMobile?: string;
@@ -156,7 +160,15 @@ export const featuredProjects: Project[] = [
       srcMobile: "/assets/sk/sk-1-mobile.webp",
       alt: "SK brand showcase",
     },
-    showreel: { desktop: "/assets/home/showreel.mp4", hasAudio: true },
+    // Mobile edit delivered 2026-08-04 as a plain WhatsApp video —
+    // 480×848, WhatsApp-recompressed (soft on retina) with a digitally
+    // silent track (no speaker below the breakpoint). File-swap when the
+    // original export arrives as a document; no config change needed.
+    showreel: {
+      desktop: "/assets/home/showreel.mp4",
+      mobile: "/assets/home/showreel-mobile.mp4",
+      hasAudio: { desktop: true, mobile: false },
+    },
   },
   // 2. YSL
   {
