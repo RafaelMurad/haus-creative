@@ -57,11 +57,11 @@ describe("Contact page", () => {
     });
   });
 
-  it("describes global operations with London and São Paulo hubs", () => {
+  it("describes global operations with London, Dubai and São Paulo hubs", () => {
     render(<ContactPage />);
 
     expect(
-      screen.getByText(/operate globally with hubs in london/i),
+      screen.getByText(/operate globally with hubs in london, dubai and são paulo/i),
     ).toBeInTheDocument();
   });
 });

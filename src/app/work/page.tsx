@@ -1,6 +1,7 @@
 import { WorkGalleryItem } from "@/components/home";
 import { SiteFooter } from "@/components/layout";
 import { featuredProjects } from "@/config/site";
+import { projects as projectDetails } from "@/config/projects";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,14 +13,23 @@ export const metadata: Metadata = {
   },
 };
 
+/** slug → project detail, for the tile hero videos (same lookup as home). */
+const projectBySlug = new Map(projectDetails.map((p) => [p.slug, p]));
+
 export default function WorkPage() {
   const [, ...projects] = featuredProjects;
 
   return (
     <>
-      {/* Work Gallery Items - Each navigable to its own page, like Home but without IntroHero */}
+      {/* Work Gallery Items - Each navigable to its own page, like Home but
+          without IntroHero. Tiles play the same hero videos as home since
+          2026-08-04 ("página work ainda está só com imagens não vídeos"). */}
       {projects.map((project) => (
-        <WorkGalleryItem key={project.id} project={project} />
+        <WorkGalleryItem
+          key={project.id}
+          project={project}
+          heroVideo={projectBySlug.get(project.id)?.heroVideo}
+        />
       ))}
 
       {/* Footer per review 2026-07-23 ("eu deixaria no WORK") — desktop-only,
