@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Studio Haus Creative. Operating globally with hubs in London and São Paulo for strategy, creative direction, design, production, and post-production.",
+    "Get in touch with Studio Haus Creative. Operating globally with hubs in London, Dubai and São Paulo for strategy, creative direction, design, production, and post-production.",
   alternates: {
     canonical: "/contact",
   },
@@ -49,7 +49,8 @@ export default function ContactPage() {
           </div>
           <div className="flex-1 md:max-w-[1115px]">
             <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
-              We operate globally with hubs in London and São Paulo, building and scaling up bespoke teams to provide the best talent for each client. From strategy, creative direction, design through Production and Post Production. Get in touch to discuss how we can collaborate together.
+              {/* "London, Dubai and São Paulo" per Vitor 2026-08-04. */}
+              We operate globally with hubs in London, Dubai and São Paulo, building and scaling up bespoke teams to provide the best talent for each client. From strategy, creative direction, design through Production and Post Production. Get in touch to discuss how we can collaborate together.
             </p>
           </div>
         </div>
@@ -70,8 +71,8 @@ export default function ContactPage() {
           </div>
           <div className="flex-1 md:max-w-[1115px]">
             <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
-              We are always looking to connect with creatives globally. We
-              operate hybrid in remote between London and São Paulo.
+              {/* "We operate hybrid in remote…" removed per Vitor 2026-08-04. */}
+              We are always looking to connect with creatives globally.
               {/* "Reach out via…" starts its own line (review 2026-07-23). */}
               <br />
               Reach out via{" "}
