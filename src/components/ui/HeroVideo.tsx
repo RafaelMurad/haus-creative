@@ -118,7 +118,12 @@ export function HeroVideo({
       loop
       muted
       poster={activePoster}
-      preload="metadata"
+      // "none", not "metadata": with 7 tile heroes on the home page, the
+      // metadata hint let Chrome read megabytes of below-fold clips at
+      // landing (measured 3.6 MB, starving the LCP image). In-view heroes
+      // still start instantly — the look-ahead observer flips preload to
+      // "auto" at mount and play() forces the fetch regardless.
+      preload="none"
       src={resolved ?? undefined}
       onClick={audioEnabled ? toggle : undefined}
     >

@@ -163,5 +163,25 @@ describe("useInViewPlayback", () => {
       expect(video.preload).toBe("none");
       expect(prefetchObservers()[0].disconnect).not.toHaveBeenCalled();
     });
+
+    it("defers attaching until the window load event while the page is still loading", () => {
+      const spy = jest
+        .spyOn(document, "readyState", "get")
+        .mockReturnValue("loading");
+      try {
+        render(<Clip />);
+        // Playback gate attaches immediately; prefetch waits for load.
+        expect(playbackObservers()).toHaveLength(1);
+        expect(prefetchObservers()).toHaveLength(0);
+
+        act(() => {
+          window.dispatchEvent(new Event("load"));
+        });
+
+        expect(prefetchObservers()).toHaveLength(1);
+      } finally {
+        spy.mockRestore();
+      }
+    });
   });
 });
