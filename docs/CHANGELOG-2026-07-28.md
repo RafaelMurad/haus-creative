@@ -38,5 +38,11 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 
 - ✅ **Showreel na home** — o edit de 30/07 (1080p, mix completo) toca no topo da home no desktop, com botão de som. No mobile continua a imagem até chegar o edit vertical ([#81](https://github.com/RafaelMurad/haus-creative/issues/81)).
 
-## Ainda aberto (não entrou neste deploy)
-- ⏳ **Domínio** — esperando login do cPanel ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
+## 2026-08-04 — LANÇAMENTO 🚀
+
+- ✅ **studiohauscreative.com é o site novo.** Nameservers trocados no GoDaddy → site na Vercel com certificado (cadeado) automático; www redireciona; **email intacto o tempo todo** (caixa da Acquahost preservada + SPF novo). O site antigo (Cargo) saiu do ar ([#80](https://github.com/RafaelMurad/haus-creative/issues/80)).
+
+### Lembretes para o Vitor
+- ⚠️ **Renovar o domínio antes de 2 de setembro de 2026** (R$109,99/ano no GoDaddy) — sem isso site E email caem.
+- Trocar a senha do GoDaddy (ela passou pelo WhatsApp).
+- Pode **cancelar o Cargo Collective** (site antigo). **Manter a Acquahost** (é o email).
