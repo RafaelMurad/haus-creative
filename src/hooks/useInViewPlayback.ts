@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { registerForWarming, prioritizeWarming } from "@/lib/videoWarmQueue";
 
 /**
  * Scroll-gated playback for the muted looping clips: play while any part of
@@ -51,7 +52,10 @@ export function useInViewPlayback(
       prefetch = new IntersectionObserver(
         ([entry]) => {
           if (!entry.isIntersecting) return;
+          // Direct upgrade for the approaching clip AND a queue bump — if
+          // the background warmer is busy elsewhere, this clip goes next.
           v.preload = "auto";
+          prioritizeWarming(v);
           prefetch?.disconnect();
         },
         { rootMargin: "100% 0px" },
@@ -64,10 +68,16 @@ export function useInViewPlayback(
       window.addEventListener("load", attachPrefetch, { once: true });
     }
 
+    // Background page warmer: desktop visitors get every registered clip
+    // buffered top-to-bottom after load, so scrolling never catches one
+    // mid-download ("all content ready when I scroll", 2026-08-04).
+    const unregister = registerForWarming(v);
+
     return () => {
       io.disconnect();
       prefetch?.disconnect();
       window.removeEventListener("load", attachPrefetch);
+      unregister();
     };
   }, [videoRef, resyncKey]);
 }
