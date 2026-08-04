@@ -46,3 +46,8 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 - ⚠️ **Renovar o domínio antes de 2 de setembro de 2026** (R$109,99/ano no GoDaddy) — sem isso site E email caem.
 - Trocar a senha do GoDaddy (ela passou pelo WhatsApp).
 - Pode **cancelar o Cargo Collective** (site antigo). **Manter a Acquahost** (é o email).
+
+## 2026-08-04 (tarde)
+
+- ✅ **Showreel mobile no ar** — o edit vertical de 04/08 toca no topo da home no celular. ⚠️ O arquivo veio comprimido pelo WhatsApp (480p, meio suave em tela retina) e sem áudio — quando o Vitor mandar o export original **como documento**, é só trocar o arquivo.
+- ✅ **Site muito mais rápido** (PR #93, medido): home LCP 3,4s → 0,09s; nada de vídeo invisível baixando na chegada; revisita das páginas quase instantânea (cache); e em desktop a página inteira se pré-carrega em paralelo — rolou, tocou.
