@@ -3,29 +3,26 @@
 import { MOBILE_MEDIA_QUERY } from "@/hooks/useMediaQuery";
 
 /**
- * Page-wide background warmer: after the window load event, every registered
- * clip is upgraded to preload="auto" ONE AT A TIME in document (scroll)
- * order, so by the time the visitor scrolls to a clip it is already
- * buffered ("all content ready when I scroll down", 2026-08-04).
+ * Page-wide background warmer: at the window load event, every registered
+ * clip is upgraded to preload="auto" IN PARALLEL, so the whole page reaches
+ * instant-start as fast as the connection allows ("max 2–3s, everything
+ * ready", 2026-08-04).
  *
- * Design constraints:
- * - Starts only after `load` + a grace delay — the warm-up must never
- *   compete with the LCP image or the in-view hero's own stream.
- * - Strictly sequential: seven clips fetched in parallel starve each other
- *   AND the clip the visitor is actually watching; one at a time finishes
- *   top-of-page first, matching scroll order.
- * - `prioritize()` lets the look-ahead observer bump an approaching clip to
- *   the front when the visitor scrolls faster than the queue.
- * - Desktop only, and never under Save-Data: eagerly pulling a whole page
- *   of video onto a phone plan is hostile. Mobile keeps the one-viewport
- *   look-ahead behavior.
+ * Parallel, not sequential: the goal is every clip holding its first few
+ * seconds ASAP — a shared pipe fills all buffers together, so the bottom of
+ * the page gets its first seconds before the top gets its fifteenth.
+ * Chrome's own paused-media buffering goal (~10–15s per clip, then
+ * `suspend`) caps how much each element takes, so this converges instead of
+ * downloading whole files.
+ *
+ * Exempt: mobile viewports and Save-Data users — forcing a page's worth of
+ * video onto a phone plan is hostile; they keep the one-viewport look-ahead
+ * from useInViewPlayback.
  */
 
-const WARM_START_DELAY_MS = 1500;
 const PER_CLIP_TIMEOUT_MS = 20_000;
 
 const queue: HTMLVideoElement[] = [];
-const prioritized = new Set<HTMLVideoElement>();
 let started = false;
 let running = false;
 
@@ -48,11 +45,9 @@ function fullyBuffered(v: HTMLVideoElement): boolean {
 
 /**
  * Resolves when the browser has buffered as much of the clip as it is
- * willing to hold for a paused element. Chrome never fills a paused video
- * to 100% — it buffers its look-ahead goal (typically 10–15s) and then
- * fires `suspend` and idles. That suspend IS the "warmed" signal: the clip
- * starts instantly on scroll and streams on as it plays. The timeout is
- * only a safety net for stalled networks.
+ * willing to hold for a paused element (Chrome buffers its look-ahead goal,
+ * then fires `suspend` and idles — that IS instant-start readiness; the
+ * rest streams during playback). Timeout is a stalled-network safety net.
  */
 function warm(v: HTMLVideoElement): Promise<void> {
   return new Promise((resolve) => {
@@ -80,7 +75,7 @@ function warm(v: HTMLVideoElement): Promise<void> {
     v.preload = "auto";
     check();
     // Already idle with data (e.g. the look-ahead warmed it and Chrome
-    // suspended before the queue got here) — nothing left to wait for.
+    // suspended before we got here) — nothing left to wait for.
     if (v.networkState === HTMLMediaElement.NETWORK_IDLE && v.buffered.length > 0) {
       done();
     }
@@ -93,28 +88,19 @@ async function run(): Promise<void> {
   try {
     while (queue.length > 0) {
       if (!eligible()) return;
-      // Approaching clips (bumped by the look-ahead observer) win; the rest
-      // go in document order = scroll order. Re-evaluated every step so
-      // bumps and late registrations slot in correctly.
-      queue.sort((a, b) => {
-        const pa = prioritized.has(a) ? 0 : 1;
-        const pb = prioritized.has(b) ? 0 : 1;
-        if (pa !== pb) return pa - pb;
-        return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING
-          ? -1
-          : 1;
-      });
-      const v = queue.shift()!;
-      prioritized.delete(v);
-      // Skip detached elements, already-warm clips, and hidden breakpoint
-      // twins (0-size; their files are shared with a visible sibling slot).
-      if (!v.isConnected || fullyBuffered(v)) continue;
-      if (v.getClientRects().length === 0) continue;
-      await warm(v);
+      const batch = queue.splice(0, queue.length).filter(
+        (v) =>
+          v.isConnected &&
+          !fullyBuffered(v) &&
+          // Hidden breakpoint twins (0-size) share their file with a
+          // visible sibling slot — warming them would double-fetch.
+          v.getClientRects().length > 0,
+      );
+      await Promise.all(batch.map(warm));
     }
   } finally {
     running = false;
-    // Late registrations while the last clip was warming.
+    // Registrations that arrived while the batch was warming.
     if (queue.length > 0 && eligible()) void run();
   }
 }
@@ -122,7 +108,9 @@ async function run(): Promise<void> {
 function ensureStarted(): void {
   if (started || typeof window === "undefined") return;
   started = true;
-  const kick = () => setTimeout(() => void run(), WARM_START_DELAY_MS);
+  // Zero-delay defer so every registration in the same hydration pass joins
+  // ONE parallel batch instead of the first clip batching alone.
+  const kick = () => setTimeout(() => void run(), 0);
   if (document.readyState === "complete") kick();
   else window.addEventListener("load", kick, { once: true });
 }
@@ -132,16 +120,10 @@ export function registerForWarming(v: HTMLVideoElement): () => void {
   if (!queue.includes(v)) queue.push(v);
   ensureStarted();
   if (started && !running && document.readyState === "complete") {
-    setTimeout(() => void run(), WARM_START_DELAY_MS);
+    setTimeout(() => void run(), 0);
   }
   return () => {
     const i = queue.indexOf(v);
     if (i >= 0) queue.splice(i, 1);
-    prioritized.delete(v);
   };
-}
-
-/** The look-ahead observer bumps an approaching clip ahead of the rest. */
-export function prioritizeWarming(v: HTMLVideoElement): void {
-  if (queue.includes(v)) prioritized.add(v);
 }

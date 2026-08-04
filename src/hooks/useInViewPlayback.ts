@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
-import { registerForWarming, prioritizeWarming } from "@/lib/videoWarmQueue";
+import { registerForWarming } from "@/lib/videoWarmQueue";
 
 /**
  * Scroll-gated playback for the muted looping clips: play while any part of
@@ -52,10 +52,9 @@ export function useInViewPlayback(
       prefetch = new IntersectionObserver(
         ([entry]) => {
           if (!entry.isIntersecting) return;
-          // Direct upgrade for the approaching clip AND a queue bump — if
-          // the background warmer is busy elsewhere, this clip goes next.
+          // Direct upgrade for the approaching clip (covers mobile, where
+          // the background warmer is deliberately off).
           v.preload = "auto";
-          prioritizeWarming(v);
           prefetch?.disconnect();
         },
         { rootMargin: "100% 0px" },
