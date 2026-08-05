@@ -1670,9 +1670,10 @@ export const projects: ProjectDetail[] = [
       },
       {
         // Tagged video — the wide website mockup film (WEB 4).
+        // No speaker: "esse não precisa de áudio" (Vitor 2026-08-04, sent
+        // this card's frame) — plays muted; track stripped losslessly.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-13.mp4",
-        hasAudio: true,
         poster: "/assets/ouronyx/ouronyx-13.webp",
         alt: "ouronyx video 13",
         span: "full",

@@ -108,11 +108,10 @@ No action needed if silence is intentional (likely for the UI mockups).
 interview mixes — wired to slots 16/17 with the audio toggle. Still silent:
 WEB 2/3/5 + MOBILE 2/3/9 (UI mockup cards; presumed intentional).
 
-**Update 2026-08-04 (Vitor, WhatsApp):** confirmed for the laptop+phone
-site-mockup card ("Beauty Has Power" hero) — **no audio needed**, silence is
-intentional; keep it on the re-export list, no urgency ("não precisa ser
-agora, só deixa na lista"). When Diego's hi-res re-export of that card
-arrives (#5), wire it silent — no `hasAudio` flag.
+**Update 2026-08-05 (corrected):** the laptop+phone card Vitor flagged
+("Beauty Has Power" hero) is the already-wired slot 13 (WEB 4). Done per his
+note: `hasAudio` removed (no speaker) and the track stripped losslessly. If
+a re-export of this card ever arrives, keep it silent.
 
 ## ~~3. Ouronyx — two gallery images never delivered~~ RESOLVED 2026-07-10
 
