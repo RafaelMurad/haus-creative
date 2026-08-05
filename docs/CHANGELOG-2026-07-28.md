@@ -66,6 +66,8 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 - ✅ **Harrods — banner desktop com o áudio certo** — mesmo edit de 15s, re-export com a mixagem corrigida.
 - ✅ **BFJ — imagem da sacada nítida** — a foto original (BUC_WEB_11) substituiu o frame de vídeo lavado no slot 11, **desktop e mobile**.
 
+- ✅ **Email clicável à prova de falha** — clicar no email (rodapé, contato, menu mobile) abre o app de email nativo E copia o endereço com um "copied ✓" discreto — ninguém mais fica sem resposta ao clicar.
+
 ## Ainda aberto (não entrou neste deploy)
 
 - ⏳ **Diego**: re-exports em alta dos cards de UI do Ouronyx (#5) + versão ≥1440w e crop mobile da sacada BFJ (#6) + re-exports nos bitrates da tabelinha (velocidade em conexão lenta).

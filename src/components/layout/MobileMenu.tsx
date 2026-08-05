@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { EmailLink } from "@/components/ui/EmailLink";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -67,13 +68,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         `}
         style={{ transitionDelay: isOpen ? "200ms" : "0ms" }}
       >
-        <a
-          href={`mailto:${siteConfig.email}`}
-          tabIndex={isOpen ? 0 : -1}
-          className="text-[15px] leading-[1.21em] transition-opacity duration-250 hover:opacity-50"
-        >
-          {siteConfig.email}
-        </a>
+        <EmailLink email={siteConfig.email} tabIndex={isOpen ? 0 : -1} className="text-[15px] leading-[1.21em] transition-opacity duration-250 hover:opacity-50" />
       </div>
 
       {/* Social Links */}
