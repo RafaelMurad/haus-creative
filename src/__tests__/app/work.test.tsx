@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import WorkPage from "@/app/work/page";
 import { featuredProjects } from "@/config/site";
+import { projects } from "@/config/projects";
 
 // Mock child components to isolate the page logic
 jest.mock("@/components/home", () => ({
@@ -11,6 +12,12 @@ jest.mock("@/components/home", () => ({
   }) => <div data-testid={`gallery-${project.id}`}>{project.title}</div>,
 }));
 
+const hiddenIds = new Set(
+  projects.filter((p) => p.hidden).map((p) => p.slug),
+);
+const visibleWork = (list: typeof featuredProjects) =>
+  list.filter((p) => !hiddenIds.has(p.id));
+
 describe("Work page", () => {
   it("renders WorkGalleryItem for each project except the first (intro)", () => {
     render(<WorkPage />);
@@ -18,11 +25,19 @@ describe("Work page", () => {
     // First project is the intro hero, excluded from work page
     const [, ...workProjects] = featuredProjects;
 
-    workProjects.forEach((project) => {
+    visibleWork(workProjects).forEach((project) => {
       expect(
         screen.getByTestId(`gallery-${project.id}`),
       ).toBeInTheDocument();
     });
+    // Hidden projects (YSL, deactivated 2026-08-04) render no tile here either.
+    workProjects
+      .filter((p) => hiddenIds.has(p.id))
+      .forEach((project) => {
+        expect(
+          screen.queryByTestId(`gallery-${project.id}`),
+        ).not.toBeInTheDocument();
+      });
   });
 
   it("excludes the intro entry, rendering the intro project only once", () => {
@@ -42,6 +57,6 @@ describe("Work page", () => {
 
     const [, ...workProjects] = featuredProjects;
     const items = screen.getAllByTestId(/^gallery-/);
-    expect(items).toHaveLength(workProjects.length);
+    expect(items).toHaveLength(visibleWork(workProjects).length);
   });
 });

@@ -49,11 +49,12 @@ describe("getAllProjectSlugs", () => {
     });
   });
 
-  it("should include all 10 named project slugs", () => {
+  it("should include the named project slugs (YSL hidden 2026-08-04)", () => {
     const slugs = getAllProjectSlugs();
     expect(slugs).toContain("ouronyx");
     expect(slugs).toContain("marie-claire-arabia");
-    expect(slugs).toContain("ysl");
+    // YSL is temporarily deactivated — out of slugs/sitemap/params.
+    expect(slugs).not.toContain("ysl");
     expect(slugs).toContain("wao-cosmo");
     expect(slugs).toContain("vivara");
     expect(slugs).toContain("bucherer-summer");
@@ -63,9 +64,9 @@ describe("getAllProjectSlugs", () => {
     expect(slugs).toContain("bride-story");
   });
 
-  it("should return exactly 11 project slugs", () => {
+  it("should return one slug per non-hidden project", () => {
     const slugs = getAllProjectSlugs();
-    expect(slugs.length).toBe(11);
+    expect(slugs.length).toBe(projects.filter((p) => !p.hidden).length);
   });
 
   it("should not contain old gallery slugs", () => {

@@ -152,7 +152,7 @@ describe("ProjectPage", () => {
     // section to zero height when the hero is an absolutely-positioned video.
     // Mobile-only heroVideos (no desktop file) legitimately keep md:h-auto —
     // their desktop hero is the in-flow static image.
-    const videoProjects = projects.filter((p) => p.heroVideo?.desktop);
+    const videoProjects = projects.filter((p) => p.heroVideo?.desktop && !p.hidden);
     expect(videoProjects.length).toBeGreaterThan(0);
 
     videoProjects.forEach((project) => {
@@ -195,7 +195,7 @@ describe("ProjectPage", () => {
   it("renders hero video when project has heroVideo with mobile source", () => {
     // ouronyx has heroVideo.mobile
     const videoProject = projects.find(
-      (p) => p.heroVideo?.desktop && p.heroVideo.mobile,
+      (p) => p.heroVideo?.desktop && p.heroVideo.mobile && !p.hidden,
     );
 
     if (videoProject) {
@@ -215,7 +215,7 @@ describe("ProjectPage", () => {
   it("renders hero video without mobile source (falls back to desktop)", () => {
     // wao-cosmo has heroVideo but no mobile
     const videoProject = projects.find(
-      (p) => p.heroVideo && !p.heroVideo.mobile,
+      (p) => p.heroVideo && !p.heroVideo.mobile && !p.hidden,
     );
 
     if (videoProject) {
