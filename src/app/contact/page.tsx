@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import { EmailLink } from "@/components/ui/EmailLink";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -24,10 +23,12 @@ export default function ContactPage() {
           </div>
           <div className="flex-1">
             <p className="text-[15px] leading-[1.53em] md:text-[18px] md:leading-[1.55em]">
-<EmailLink
-                email={siteConfig.email}
+              <a
+                href={`mailto:${siteConfig.email}`}
                 className="hover:opacity-50 transition-opacity"
-              />
+              >
+                {siteConfig.email}
+              </a>
             </p>
           </div>
         </div>
@@ -75,10 +76,12 @@ export default function ContactPage() {
               {/* "Reach out via…" starts its own line (review 2026-07-23). */}
               <br />
               Reach out via{" "}
-<EmailLink
-                email={siteConfig.email}
+              <a
+                href={`mailto:${siteConfig.email}`}
                 className="hover:opacity-50 transition-opacity"
-              />{" "}
+              >
+                {siteConfig.email}
+              </a>{" "}
               at any time.
             </p>
           </div>

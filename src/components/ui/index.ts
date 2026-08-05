@@ -1,4 +1,3 @@
-export { EmailLink } from "./EmailLink";
 export { GalleryGrid } from "./GalleryGrid";
 export { HeroVideo } from "./HeroVideo";
 export { Logo } from "./Logo";
