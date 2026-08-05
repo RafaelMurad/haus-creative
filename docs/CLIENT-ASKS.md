@@ -88,11 +88,12 @@ from the same soft master — it reads like a video frame-grab; no better copy
 exists in any delivery. **Ask:** the original still (≥1440w), and we swap it
 in with no config change.
 
-**Update 2026-08-05:** `BUC_WEB_11.png` delivered and swapped in (desktop).
-It's the real photo source — sharpness fixed — but at 720×901, not the
-≥1440w asked; retina/large screens still upscale. Mobile (440×523) not
-re-delivered — its crop keeps the old soft file. Residual ask (low
-priority): the ≥1440w export + a mobile crop.
+**Update 2026-08-05:** `BUC_WEB_11.png` delivered and swapped in — desktop
+AND mobile (user call: mobile shows the same sharp image full-frame; no
+fabricated crop). It's the real photo source — sharpness fixed — but at
+720×901, not the ≥1440w asked; retina/large screens still upscale.
+Residual ask (low priority): the ≥1440w export; a dedicated mobile crop
+only if Vitor wants different framing there.
 
 ## 7. Silent audio tracks in 12 exports (2026-07-15, FYI)
 
