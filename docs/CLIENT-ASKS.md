@@ -80,13 +80,19 @@ banners with a mix) — muted-loop clips ship smaller without one. This is
 guidance for exports in flight and future ones; no re-delivery needed for
 files that already look right.
 
-## 6. BFJ — original of the balcony image (bfj-11) via Diego (2026-07-14)
+## ~~6. BFJ — original of the balcony image (bfj-11)~~ DESKTOP RESOLVED 2026-08-05
 
 Vitor: "BFJ mobile ta sem qualidade essa imagem, é o Diego que tem [o
 original]". Confirmed: both variants (720×901 desktop, 440×523 mobile) come
 from the same soft master — it reads like a video frame-grab; no better copy
 exists in any delivery. **Ask:** the original still (≥1440w), and we swap it
 in with no config change.
+
+**Update 2026-08-05:** `BUC_WEB_11.png` delivered and swapped in (desktop).
+It's the real photo source — sharpness fixed — but at 720×901, not the
+≥1440w asked; retina/large screens still upscale. Mobile (440×523) not
+re-delivered — its crop keeps the old soft file. Residual ask (low
+priority): the ≥1440w export + a mobile crop.
 
 ## 7. Silent audio tracks in 12 exports (2026-07-15, FYI)
 
