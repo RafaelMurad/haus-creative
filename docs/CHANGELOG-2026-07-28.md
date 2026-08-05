@@ -64,7 +64,7 @@ do review para o Vitor conferir item a item. PRs: #83 (copy), #86 (tipografia),
 - ✅ **Ouronyx** — card do site (laptop + celular) sem botão de som; e o vídeo dos médicos ganhou áudio no mobile (o Diego tinha atualizado o arquivo no Drive — baixado e trocado).
 - ✅ **YSL desativado temporariamente** — sem tile na home/WORK, página 404, fora do sitemap. Reativar é apagar uma linha ("vamos ativar mais pra frente").
 - ✅ **Harrods — banner desktop com o áudio certo** — mesmo edit de 15s, re-export com a mixagem corrigida.
-- ✅ **BFJ — imagem da sacada nítida** — a foto original (BUC_WEB_11) substituiu o frame de vídeo lavado no slot 11 (desktop).
+- ✅ **BFJ — imagem da sacada nítida** — a foto original (BUC_WEB_11) substituiu o frame de vídeo lavado no slot 11, **desktop e mobile**.
 
 ## Ainda aberto (não entrou neste deploy)
 
