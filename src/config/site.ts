@@ -164,10 +164,12 @@ export const featuredProjects: Project[] = [
     // 480×848, WhatsApp-recompressed (soft on retina) with a digitally
     // silent track (no speaker below the breakpoint). File-swap when the
     // original export arrives as a document; no config change needed.
+    // No speaker anywhere on home ("none of the assets on home should
+    // have sound", 2026-08-05) — tracks stripped losslessly; originals
+    // archived in the asset drop.
     showreel: {
       desktop: "/assets/home/showreel.mp4",
       mobile: "/assets/home/showreel-mobile.mp4",
-      hasAudio: { desktop: true, mobile: false },
     },
   },
   // 2. YSL
