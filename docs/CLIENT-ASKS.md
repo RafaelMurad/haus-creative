@@ -108,13 +108,13 @@ No action needed if silence is intentional (likely for the UI mockups).
 interview mixes — wired to slots 16/17 with the audio toggle. Still silent:
 WEB 2/3/5 + MOBILE 2/3/9 (UI mockup cards; presumed intentional).
 
-**Update 2026-08-05 — MOBILE 9 CONFIRMED ASK:** Vitor flagged the doctors'
-interview on mobile ("os médicos da Ouronyx no mobile (último vídeo) está sem
-áudio"). The MOBILE 9 export has carried a digitally silent track since
-delivery (desktop WEB 9 has the full mix; the edits differ — 21.5s landscape
-vs 14.9s portrait — so the audio can't be transplanted). **Ask (via Diego):
-re-export OURONYX MOBILE 9 with the interview mix.** On arrival: file-swap
-`ouronyx-video-18-mobile.mp4` + flip `hasAudio.mobile` to true.
+**~~MOBILE 9 ask~~ RESOLVED same day (2026-08-05):** Vitor flagged the
+doctors' interview silent on mobile; turned out Diego had already refreshed
+the Drive copy with the mix (same 14.958s edit, real audio) — the July 2 zip
+copy was the silent one. Downloaded fresh, file-swapped
+`ouronyx-video-18-mobile.mp4`, `hasAudio` now plain `true`. ⚠️ Lesson: Drive
+files get replaced in place — when a "silent/wrong export" complaint comes
+in, re-check the CURRENT Drive copy before filing a Diego ask.
 
 **Update 2026-08-05 (corrected):** the laptop+phone card Vitor flagged
 ("Beauty Has Power" hero) is the already-wired slot 13 (WEB 4). Done per his

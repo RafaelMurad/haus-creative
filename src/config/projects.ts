@@ -1738,8 +1738,10 @@ export const projects: ProjectDetail[] = [
         // portrait). Both open on the black logo card, kept as poster.
         type: "video",
         desktop: "/assets/ouronyx/ouronyx-video-18.mp4",
-        // Desktop mix is real; the MOBILE 9 export ships a silent track.
-        hasAudio: { desktop: true, mobile: false },
+        // Both mixes real since 2026-08-05: Diego quietly refreshed the
+        // Drive MOBILE 9 with the interview audio (same 14.958s edit) —
+        // Vitor flagged the silent mobile playback and it was file-swapped.
+        hasAudio: true,
         mobile: "/assets/ouronyx/ouronyx-video-18-mobile.mp4",
         poster: "/assets/ouronyx/ouronyx-18.webp",
         alt: "ouronyx video 18",
