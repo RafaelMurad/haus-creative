@@ -44,7 +44,9 @@ export default function Home() {
       {/* Work Gallery Items - Each navigable to its own page.
           Carousel effects are OFF by default. To enable per-project,
           add homepageIndices to the project's carousel config in projects.ts. */}
-      {workProjects.map((project) => {
+      {workProjects
+        .filter((project) => !projectBySlug.get(project.id)?.hidden)
+        .map((project) => {
         const detail = projectBySlug.get(project.id);
         const carouselConfig = detail?.carousel;
         const hasHomepageCarousel = carouselConfig?.homepageIndices && carouselConfig.homepageIndices.length > 0;
@@ -61,7 +63,7 @@ export default function Home() {
             carouselConfig={hasHomepageCarousel ? carouselConfig : undefined}
           />
         );
-      })}
+        })}
 
       {/* Footer after the last tile (client ask, 2026-07-16) — same shared
           footer as the project pages. Desktop-only since review 2026-07-23:

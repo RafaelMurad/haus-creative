@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const project = getProjectBySlug(params.slug);
 
-  if (!project) return {};
+  if (!project || project.hidden) return {};
 
   return {
     // Bare name only — the root layout template appends "| STUDIO HAUS".
@@ -45,7 +45,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 export default function ProjectPage({ params }: ProjectPageProps) {
   const project = getProjectBySlug(params.slug);
 
-  if (!project) {
+  // Hidden projects 404 like they don't exist (YSL deactivated 2026-08-04).
+  if (!project || project.hidden) {
     notFound();
   }
 

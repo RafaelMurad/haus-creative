@@ -28,6 +28,12 @@ jest.mock("@/components/home", () => ({
   ),
 }));
 
+const hiddenIds = new Set(
+  projects.filter((p) => p.hidden).map((p) => p.slug),
+);
+const visibleWork = (list: typeof featuredProjects) =>
+  list.filter((p) => !hiddenIds.has(p.id));
+
 describe("Home page", () => {
   it("renders IntroHero with the first featured project's media", () => {
     render(<Home />);
@@ -44,11 +50,19 @@ describe("Home page", () => {
 
     const [, ...workProjects] = featuredProjects;
 
-    workProjects.forEach((project) => {
+    visibleWork(workProjects).forEach((project) => {
       expect(
         screen.getByTestId(`work-gallery-${project.id}`),
       ).toBeInTheDocument();
     });
+    // Hidden projects (YSL, deactivated 2026-08-04) render no tile.
+    workProjects
+      .filter((p) => hiddenIds.has(p.id))
+      .forEach((project) => {
+        expect(
+          screen.queryByTestId(`work-gallery-${project.id}`),
+        ).not.toBeInTheDocument();
+      });
   });
 
   it("renders the intro hero project as both the hero and a single work tile", () => {
@@ -70,7 +84,7 @@ describe("Home page", () => {
     // At least some projects should have gallery media from the projects config
     const [, ...workProjects] = featuredProjects;
     const items = screen.getAllByTestId(/^work-gallery-/);
-    expect(items).toHaveLength(workProjects.length);
+    expect(items).toHaveLength(visibleWork(workProjects).length);
   });
 });
 
@@ -82,7 +96,7 @@ describe("getHomepageMedia logic", () => {
     const [, ...workProjects] = featuredProjects;
 
     // With carousels off (no homepageIndices), no project gets gallery media
-    workProjects.forEach((project) => {
+    visibleWork(workProjects).forEach((project) => {
       const item = screen.getByTestId(`work-gallery-${project.id}`);
       expect(item.getAttribute("data-has-gallery-media")).toBe("false");
     });
@@ -94,7 +108,7 @@ describe("getHomepageMedia logic", () => {
     const [, ...workProjects] = featuredProjects;
 
     // Find a project that has homepageIndices configured
-    workProjects.forEach((project) => {
+    visibleWork(workProjects).forEach((project) => {
       const detail = projects.find((p) => p.slug === project.id);
       if (detail?.carousel?.homepageIndices && detail.carousel.homepageIndices.length > 0) {
         const item = screen.getByTestId(`work-gallery-${project.id}`);
@@ -114,7 +128,7 @@ describe("getHomepageMedia logic", () => {
 
     const [, ...workProjects] = featuredProjects;
 
-    workProjects.forEach((project) => {
+    visibleWork(workProjects).forEach((project) => {
       const item = screen.getByTestId(`work-gallery-${project.id}`);
       const mediaCount = Number(item.getAttribute("data-gallery-media-count"));
       expect(mediaCount).toBe(0);

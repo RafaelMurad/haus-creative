@@ -24,7 +24,9 @@ export default function WorkPage() {
       {/* Work Gallery Items - Each navigable to its own page, like Home but
           without IntroHero. Tiles play the same hero videos as home since
           2026-08-04 ("página work ainda está só com imagens não vídeos"). */}
-      {projects.map((project) => (
+      {projects
+        .filter((project) => !projectBySlug.get(project.id)?.hidden)
+        .map((project) => (
         <WorkGalleryItem
           key={project.id}
           project={project}

@@ -128,6 +128,12 @@ export interface ProjectDetail {
   client: string;
   title: string;
   subtitle?: string;
+  /**
+   * Temporarily deactivated: no home/work tile, /work/[slug] 404s, out of
+   * the sitemap and static params. Config (assets, copy, slots) stays
+   * intact — reactivating is deleting this flag.
+   */
+  hidden?: boolean;
 
   // Content
   description: string;
@@ -365,6 +371,9 @@ export const projects: ProjectDetail[] = [
   {
     id: "ysl",
     slug: "ysl",
+    // Deactivated per Vitor 2026-08-04 ("deixa o YSL por enquanto
+    // desativado... vamos ativar mais pra frente") — delete to reactivate.
+    hidden: true,
     client: "YSL",
     title: "YSL Beauty - The Golden Celebration",
     subtitle: "Creative Direction",
@@ -2228,5 +2237,6 @@ export function getProjectBySlug(slug: string): ProjectDetail | undefined {
  * Get all project slugs for static generation
  */
 export function getAllProjectSlugs(): string[] {
-  return projects.map((project) => project.slug);
+  // Hidden projects stay out of static params and the sitemap.
+  return projects.filter((p) => !p.hidden).map((project) => project.slug);
 }
