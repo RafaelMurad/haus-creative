@@ -53,7 +53,7 @@ export default function About() {
                 Based between London, Dubai and São Paulo.
               </p>
               <p>
-                Vitor Milito currently serves as Creative Director Consultant at OUI Agency, a Dubai-based boutique luxury branding and creative agency, where he leads creative strategy, brand development and campaign direction for leading regional and international clients.
+                Vitor Milito currently serves as Creative Director at OUI Agency, a Dubai-based boutique luxury branding and creative agency, where he leads creative strategy, brand development and campaign direction for leading regional and international clients.
               </p>
             </div>
           </div>
