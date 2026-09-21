@@ -3,6 +3,7 @@
 import type { ProjectMedia } from "@/config/projects";
 import {
   MOBILE_MEDIA_QUERY,
+  useMediaQuery,
   useResponsiveVideoSource,
 } from "@/hooks/useMediaQuery";
 import { useExclusiveAudio } from "@/hooks/useExclusiveAudio";
@@ -27,9 +28,13 @@ interface GalleryVideoProps {
  * when it enters the viewport instead of autoplaying at page load already
  * mid-film, and pauses/resumes as it leaves and re-enters.
  *
- * Clips flagged `hasAudio` get the Instagram-style treatment: they play
- * muted (autoplay policy) with a corner speaker button; clicking the video or
- * the button unmutes it and mutes every other clip on the page.
+ * Clips flagged `hasAudio` get the Instagram-style treatment: a corner
+ * speaker button, and clicking the video or the button unmutes it and mutes
+ * every other clip on the page. On mobile they additionally volunteer their
+ * soundtrack as they scroll in (auto-claim — Vitor 2026-09-20: "no mobile
+ * dentro de cada case os vídeos tocarem com música automático… no desktop
+ * manter como está"); where the browser refuses unmuted autoplay (iOS) they
+ * fall back to this same muted-plus-button behavior.
  */
 export function GalleryVideo({ item, index }: GalleryVideoProps) {
   const resolved = useResponsiveVideoSource(item.desktop, item.mobile);
@@ -43,7 +48,15 @@ export function GalleryVideo({ item, index }: GalleryVideoProps) {
         ? !!item.hasAudio.mobile
         : !!item.hasAudio.desktop
       : !!item.hasAudio;
-  const { videoRef, audible, toggle } = useExclusiveAudio(hasAudio, resolved);
+  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
+  const { videoRef, audible, toggle } = useExclusiveAudio(
+    hasAudio,
+    resolved,
+    // Auto sound is mobile-only and case-pages-only (Vitor 2026-09-20: "não
+    // na home nem no work") — GalleryGrid renders exclusively on
+    // /work/[slug], so the breakpoint is the one remaining gate here.
+    isMobile === true,
+  );
   useInViewPlayback(videoRef, resolved);
 
   const video = (
